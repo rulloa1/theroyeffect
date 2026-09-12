@@ -10,8 +10,10 @@ import {
 } from "@/lib/checkout-validation";
 
 import { SITE_URL } from "@/lib/site";
+// Every checkout here resolves the Stripe environment on the server with
+// resolvePaymentsEnv(). It is never a caller input: a caller-chosen sandbox
+// session paid with a test card would otherwise be recorded as a real payment.
 import {
-  type StripeEnv,
   createCheckoutSessionWithTaxFallback,
   createStripeClient,
   getStripeErrorMessage,
@@ -30,7 +32,6 @@ export const createCommissionCheckoutSession = createServerFn({ method: "POST" }
       tierLabel?: string | undefined;
       customerEmail?: string | undefined;
       returnUrl: string;
-      environment: StripeEnv;
     }) => {
       assertValidPriceId(data.priceId);
       if (data.addOnPriceIds) assertValidPriceIds(data.addOnPriceIds);
@@ -39,7 +40,7 @@ export const createCommissionCheckoutSession = createServerFn({ method: "POST" }
   )
   .handler(async ({ data }): Promise<CheckoutSessionResult> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(resolvePaymentsEnv());
 
       // Taken from the caller's verified token, never from the request body:
       // this id decides which account the resulting order is filed under.
@@ -127,13 +128,13 @@ export type CheckoutSummary =
  * brief pages render real data instead of trusting the URL.
  */
 export const getCheckoutSessionSummary = createServerFn({ method: "GET" })
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string }) => {
     assertValidSessionId(data.sessionId);
-    return data;
+    return { sessionId: data.sessionId };
   })
   .handler(async ({ data }): Promise<CheckoutSummary> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(resolvePaymentsEnv());
       const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
         expand: ["line_items"],
       });
@@ -187,9 +188,9 @@ export const listMyBalanceDue = createServerFn({ method: "GET" })
 /** Starts an embedded Stripe checkout for the remaining balance of one order. */
 export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { orderId: string; returnUrl: string; environment: StripeEnv }) => {
+  .inputValidator((data: { orderId: string; returnUrl: string }) => {
     if (!/^[0-9a-f-]{36}$/i.test(data.orderId)) throw new Error("Invalid order");
-    return data;
+    return { orderId: data.orderId, returnUrl: data.returnUrl };
   })
   .handler(async ({ data, context }): Promise<CheckoutSessionResult> => {
     try {
@@ -209,7 +210,7 @@ export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
         return { error: "This balance is already settled" };
       }
 
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(resolvePaymentsEnv());
       const label = String(order["tier_label"] || order["product_name"] || "Commission");
       const email = order["customer_email"] as string | null;
 
@@ -259,22 +260,26 @@ export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
 /** Confirms a balance checkout on return, so settlement doesn't depend on the webhook alone. */
 export const confirmBalancePayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string }) => {
     assertValidSessionId(data.sessionId);
-    return data;
+    return { sessionId: data.sessionId };
   })
-  .handler(async ({ data }): Promise<{ paid: boolean; error?: string }> => {
+  .handler(async ({ data, context }): Promise<{ paid: boolean; error?: string }> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const env = resolvePaymentsEnv();
+      const stripe = createStripeClient(env);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
       if (session.payment_status === "unpaid") return { paid: false };
       const { settleCommissionBalance } = await import("@/lib/booking/balance-payment.server");
-      await settleCommissionBalance({
+      const result = await settleCommissionBalance({
         sessionId: session.id,
         amountTotal: session.amount_total ?? 0,
+        env,
+        livemode: session.livemode,
         metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
+        expectedUserId: context.userId,
       });
-      return { paid: true };
+      return result.settled ? { paid: true } : { paid: false, error: result.reason ?? "Not settled" };
     } catch (error) {
       return { paid: false, error: getStripeErrorMessage(error) };
     }

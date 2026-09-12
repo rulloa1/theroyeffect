@@ -2,14 +2,17 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { assertValidSessionId } from "@/lib/checkout-validation";
 import {
-  type StripeEnv,
   createCheckoutSessionWithTaxFallback,
   createStripeClient,
   getStripeErrorMessage,
+  resolvePaymentsEnv,
 } from "@/lib/stripe.server";
 
 const DISCOVERY_PRICE_KEY = "discovery_call_fee";
 
+// No `environment` input: the Stripe environment is resolved on the server.
+// Taken from the caller, a sandbox checkout paid with a test card would book a
+// real slot on the live calendar.
 const checkoutInputSchema = z.object({
   full_name: z.string().trim().min(1, "Please add your name").max(120),
   email: z.string().trim().email("Enter a valid email").max(255),
@@ -20,7 +23,6 @@ const checkoutInputSchema = z.object({
   smsService: z.boolean().optional().default(false),
   smsMarketing: z.boolean().optional().default(false),
   returnUrl: z.string().trim().url().max(500),
-  environment: z.enum(["sandbox", "live"]),
 });
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -54,7 +56,7 @@ export const createDiscoveryCheckoutSession = createServerFn({ method: "POST" })
         .maybeSingle();
       if (clash?.id) return { error: "That time was just taken." };
 
-      const stripe = createStripeClient(data.environment as StripeEnv);
+      const stripe = createStripeClient(resolvePaymentsEnv());
       const prices = await stripe.prices.list({ lookup_keys: [DISCOVERY_PRICE_KEY] });
       const price = prices.data.find((p) => p.lookup_key === DISCOVERY_PRICE_KEY);
       if (!price) return { error: "The discovery call fee is not configured yet." };
@@ -103,17 +105,23 @@ export type DiscoveryConfirmation =
  * slot if the webhook has not landed yet. Idempotent on the session id.
  */
 export const confirmDiscoveryPayment = createServerFn({ method: "POST" })
-  .inputValidator((input: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((input: { sessionId: string }) => {
     assertValidSessionId(input.sessionId);
-    return input;
+    return { sessionId: input.sessionId };
   })
   .handler(async ({ data }): Promise<DiscoveryConfirmation> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const env = resolvePaymentsEnv();
+      const stripe = createStripeClient(env);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
 
       if (session.metadata?.["purpose"] !== "discovery_call") {
         return { status: "invalid", message: "That payment is not a discovery call." };
+      }
+      // Belt and braces on top of the server-resolved environment: a test-mode
+      // session must never reserve a live slot.
+      if (session.livemode !== (env === "live")) {
+        return { status: "invalid", message: "That payment was not made in this environment." };
       }
       if (session.payment_status === "unpaid") {
         return { status: "pending", message: "Payment is still processing." };
@@ -126,10 +134,12 @@ export const confirmDiscoveryPayment = createServerFn({ method: "POST" })
         amountTotal: session.amount_total ?? 0,
         currency: session.currency ?? "usd",
         email: session.customer_details?.email ?? session.customer_email ?? null,
+        paymentIntentId: typeof session.payment_intent === "string" ? session.payment_intent : null,
+        env,
         metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
       });
 
-      if (result.status === "invalid") {
+      if (result.status === "invalid" || result.status === "refunded") {
         return { status: "invalid", message: result.message ?? "Booking details were missing." };
       }
       return {

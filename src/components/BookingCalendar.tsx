@@ -9,7 +9,6 @@ import {
   createDiscoveryCheckoutSession,
   confirmDiscoveryPayment,
 } from "@/utils/booking-payment.functions";
-import { getStripeEnvironment } from "@/lib/stripe";
 import { EmbeddedCheckoutFrame } from "@/components/EmbeddedCheckoutFrame";
 import { SmsConsent } from "@/components/SmsConsent";
 
@@ -90,7 +89,7 @@ export function BookingCalendar() {
     if (!sessionId) return;
 
     setConfirming(true);
-    confirmPayment({ data: { sessionId, environment: getStripeEnvironment() } })
+    confirmPayment({ data: { sessionId } })
       .then((res) => {
         if (res.status === "booked" || res.status === "already_booked") {
           setResult({ spoken_time: res.spokenTime, time_zone: res.timeZone });
@@ -121,7 +120,6 @@ export function BookingCalendar() {
         ...pending,
         time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         returnUrl: `${window.location.origin}/book?session_id={CHECKOUT_SESSION_ID}`,
-        environment: getStripeEnvironment(),
       },
     });
     if ("error" in res) throw new Error(res.error);
@@ -262,7 +260,8 @@ export function BookingCalendar() {
               }`}
             >
               <span className="block font-mono text-[10px] uppercase tracking-wider opacity-70">
-                {formatDayLabel(day + "T00:00:00")}
+                {/* Midday UTC, not local midnight: local midnight east of Central is still the previous day in Chicago. */}
+                {formatDayLabel(day + "T12:00:00Z")}
               </span>
               <span className="block font-mono text-xs font-semibold">
                 {slotsByDay[day]?.length ?? 0} slots

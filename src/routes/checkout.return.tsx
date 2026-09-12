@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { getStripeEnvironment } from "@/lib/stripe";
 import { getCheckoutSessionSummary } from "@/utils/payments.functions";
 
 export const Route = createFileRoute("/checkout/return")({
@@ -36,12 +35,11 @@ const money = (cents: number, currency: string) =>
 
 function CheckoutReturn() {
   const { session_id: sessionId } = Route.useSearch();
-  const environment = getStripeEnvironment();
   const fetchSummary = useServerFn(getCheckoutSessionSummary);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["checkout-summary", sessionId, environment],
-    queryFn: () => fetchSummary({ data: { sessionId: sessionId as string, environment } }),
+    queryKey: ["checkout-summary", sessionId],
+    queryFn: () => fetchSummary({ data: { sessionId: sessionId as string } }),
     enabled: Boolean(sessionId),
     retry: false,
   });

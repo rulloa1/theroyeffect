@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Stripe from "stripe";
-import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
+import { type StripeEnv, createStripeClient, resolvePaymentsEnv } from "@/lib/stripe.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 
 const OWNER_EMAIL = "rory@theroyeffect.com";
@@ -454,14 +454,48 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
               // settle — wait for async_payment_succeeded before fulfilling.
               if (session.payment_status !== "unpaid") {
                 const purpose = session.metadata?.["purpose"];
+                // A test-mode checkout must never book a live slot, settle a live
+                // balance or onboard a client on a deployment that takes real money.
+                const deploymentEnv = resolvePaymentsEnv();
+                if (env !== deploymentEnv) {
+                  console.warn(
+                    `Ignoring ${env} checkout ${session.id} on a ${deploymentEnv} deployment`,
+                  );
+                  break;
+                }
                 if (purpose === "commission_balance") {
                   const { settleCommissionBalance } =
                     await import("@/lib/booking/balance-payment.server");
-                  await settleCommissionBalance({
+                  const settlement = await settleCommissionBalance({
                     sessionId: session.id,
                     amountTotal: session.amount_total ?? 0,
+                    env,
+                    livemode: session.livemode,
                     metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
                   });
+                  if (!settlement.settled) {
+                    console.error(`Balance not settled for ${session.id}: ${settlement.reason}`);
+                  }
+                  break;
+                }
+                if (purpose === "discovery_call") {
+                  // Book the slot before recording the order: if the slot was lost
+                  // the payment is refunded, and no order, onboarding or receipt
+                  // should go out for a call that isn't happening.
+                  const { fulfillPaidDiscoveryBooking } =
+                    await import("@/lib/booking/discovery-payment.server");
+                  const booking = await fulfillPaidDiscoveryBooking({
+                    id: session.id,
+                    amountTotal: session.amount_total ?? 0,
+                    currency: session.currency ?? "usd",
+                    email: session.customer_details?.email ?? session.customer_email ?? null,
+                    paymentIntentId:
+                      typeof session.payment_intent === "string" ? session.payment_intent : null,
+                    env,
+                    metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
+                  });
+                  if (booking.status === "refunded") break;
+                  await handleCheckoutCompleted(stripe, session, env);
                   break;
                 }
                 await handleCheckoutCompleted(stripe, session, env);
@@ -470,17 +504,6 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
                   await fulfillProposalDeposit({
                     id: session.id,
                     amountTotal: session.amount_total ?? 0,
-                    metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
-                  });
-                }
-                if (purpose === "discovery_call") {
-                  const { fulfillPaidDiscoveryBooking } =
-                    await import("@/lib/booking/discovery-payment.server");
-                  await fulfillPaidDiscoveryBooking({
-                    id: session.id,
-                    amountTotal: session.amount_total ?? 0,
-                    currency: session.currency ?? "usd",
-                    email: session.customer_details?.email ?? session.customer_email ?? null,
                     metadata: (session.metadata ?? {}) as Record<string, string | undefined>,
                   });
                 }

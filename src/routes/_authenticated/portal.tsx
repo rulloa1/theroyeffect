@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
 import { ClientProfileForm } from "@/components/portal/ClientProfileForm";
-import { getStripeEnvironment } from "@/lib/stripe";
 import { EmbeddedCheckoutFrame } from "@/components/EmbeddedCheckoutFrame";
 import { confirmBalancePayment, createBalanceCheckoutSession } from "@/utils/payments.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -412,7 +411,6 @@ function PortalPage() {
       data: {
         orderId: payingOrderId,
         returnUrl: `${window.location.origin}/portal?balance_session={CHECKOUT_SESSION_ID}`,
-        environment: getStripeEnvironment(),
       },
     });
     if ("error" in res) throw new Error(res.error);
@@ -428,7 +426,7 @@ function PortalPage() {
     window.history.replaceState({}, "", "/portal");
     void (async () => {
       const res = await confirmBalance({
-        data: { sessionId, environment: getStripeEnvironment() },
+        data: { sessionId },
       });
       if (res.paid) {
         toast.success("Balance paid — thank you!");

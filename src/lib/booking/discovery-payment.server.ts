@@ -5,8 +5,16 @@
  * webhook and the return page call `fulfillPaidDiscoveryBooking`, so it must be
  * idempotent — the Stripe checkout session id is the fulfilment key.
  */
-import { bookDiscoverySlot, formatSlot, BOOKING_TZ } from "@/utils/booking.server";
+import {
+  bookDiscoverySlot,
+  formatSlot,
+  BOOKING_TZ,
+  OWNER_EMAIL,
+  SLOT_TAKEN_MESSAGE,
+} from "@/utils/booking.server";
 import { escapeLikePattern } from "@/lib/sql-like";
+import { sendTemplateEmail } from "@/lib/email-templates/send-email";
+import type { StripeEnv } from "@/lib/stripe.server";
 
 export const DISCOVERY_PRICE_KEY = "discovery_call_fee";
 export const DISCOVERY_FEE_CENTS = 4900;
@@ -16,11 +24,15 @@ export interface DiscoveryPaymentSession {
   amountTotal: number;
   currency: string;
   email: string | null;
+  /** Needed to refund a payment whose slot could not be booked. */
+  paymentIntentId: string | null;
+  env: StripeEnv;
   metadata: Record<string, string | undefined>;
 }
 
 export interface DiscoveryFulfilmentResult {
-  status: "booked" | "already_booked" | "invalid";
+  /** "refunded": paid, but the slot could not be booked, so the fee was returned. */
+  status: "booked" | "already_booked" | "invalid" | "refunded";
   bookingId?: string;
   spokenTime?: string;
   timeZone?: string;
@@ -97,10 +109,68 @@ async function syncPortalDiscoveryMilestone(input: {
     .insert({ project_id: projectId, title, note, status: "done", position: 0 });
 }
 
+/** Errors from bookDiscoverySlot that no retry can fix: the client will never get this slot. */
+function isUnbookable(message: string): boolean {
+  return (
+    message === SLOT_TAKEN_MESSAGE ||
+    message === "That time is no longer available." ||
+    message === "That time isn't one of the slots on offer."
+  );
+}
+
+/**
+ * Refunds a discovery payment whose slot was lost (e.g. two clients paying for the
+ * same time at once) and tells Rory. Idempotent on the checkout session, so the
+ * webhook and the return page can both reach it without double-refunding.
+ */
+async function refundUnbookablePayment(
+  session: DiscoveryPaymentSession,
+  slotStart: string,
+  reason: string,
+): Promise<boolean> {
+  if (!session.paymentIntentId) return false;
+  try {
+    const { createStripeClient } = await import("@/lib/stripe.server");
+    const stripe = createStripeClient(session.env);
+    await stripe.refunds.create(
+      {
+        payment_intent: session.paymentIntentId,
+        reason: "requested_by_customer",
+        metadata: { purpose: "discovery_call_unbookable", checkout_session_id: session.id },
+      },
+      { idempotencyKey: `discovery-refund-${session.id}` },
+    );
+  } catch (error) {
+    console.error(`REFUND REQUIRED (automatic refund failed) for session ${session.id}:`, error);
+    return false;
+  }
+
+  const meta = session.metadata;
+  await sendTemplateEmail("booking-notification", OWNER_EMAIL, {
+    templateData: {
+      name: meta["full_name"] ?? "Unknown",
+      email: meta["email"] ?? session.email ?? "",
+      phone: meta["phone"],
+      when: `NOT BOOKED — ${formatSlot(new Date(slotStart))} (${BOOKING_TZ})`,
+      notes: `Payment was refunded automatically: ${reason} Reach out to offer another time.`,
+    },
+    idempotencyKey: `discovery-refund-notice-${session.id}`,
+  }).catch((e) => console.error("Refund notice email failed:", e));
+  return true;
+}
+
 export async function fulfillPaidDiscoveryBooking(
   session: DiscoveryPaymentSession,
 ): Promise<DiscoveryFulfilmentResult> {
   const db = await admin();
+
+  if (session.metadata["purpose"] !== "discovery_call") {
+    return { status: "invalid", message: "That payment is not a discovery call." };
+  }
+  if (session.amountTotal < DISCOVERY_FEE_CENTS) {
+    console.error(`Discovery session ${session.id} paid ${session.amountTotal}, below the fee`);
+    return { status: "invalid", message: "That payment does not cover the discovery call fee." };
+  }
 
   const { data: existing } = await db
     .from("voice_bookings")
@@ -114,7 +184,8 @@ export async function fulfillPaidDiscoveryBooking(
       status: "already_booked",
       bookingId: existing.id as string,
       spokenTime: formatSlot(new Date(existing.slot_start as string)),
-      timeZone: (existing.time_zone as string) ?? BOOKING_TZ,
+      // Always Central: spokenTime is formatted in BOOKING_TZ, not the stored browser zone.
+      timeZone: BOOKING_TZ,
     };
   }
 
@@ -149,9 +220,17 @@ export async function fulfillPaidDiscoveryBooking(
   } catch (err) {
     // Returning instead of throwing keeps the webhook from retrying for three
     // days on something no retry can fix — a taken slot, or a time that is no
-    // longer on offer. The message above says a refund is owed.
+    // longer on offer. Those are refunded straight away instead of left for a
+    // console line nobody reads.
     const message = err instanceof Error ? err.message : "Booking failed";
     console.error(`Discovery fulfilment failed for session ${session.id}: ${message}`);
+    if (isUnbookable(message) && (await refundUnbookablePayment(session, slotStart, message))) {
+      return {
+        status: "refunded",
+        message:
+          "That time was taken before your payment finished, so your $49 has been refunded. Please pick another time.",
+      };
+    }
     return { status: "invalid", message };
   }
 

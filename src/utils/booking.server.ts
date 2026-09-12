@@ -6,8 +6,12 @@ export const OWNER_EMAIL = "rory@theroyeffect.com";
 export const SITE = "https://www.theroyeffect.com";
 export const QUESTIONNAIRE_URL = `${SITE}/brief`;
 export const BOOKING_TZ = "America/Chicago";
-/** Discovery slots offered daily, expressed in UTC hours (10am / 1pm / 3pm Central). */
-export const SLOT_HOURS_UTC = [15, 18, 20] as const;
+/**
+ * Discovery slots offered each weekday, as Central wall-clock hours (10am / 1pm / 3pm).
+ * Stored as local hours, not UTC, so the offered times don't shift an hour when
+ * daylight saving time starts or ends.
+ */
+export const SLOT_HOURS_CENTRAL = [10, 13, 15] as const;
 export const SLOT_MINUTES = 15;
 /** Shared so a caller can tell a lost slot apart from a broken query. */
 export const SLOT_TAKEN_MESSAGE = "That time was just taken.";
@@ -32,6 +36,63 @@ export function formatSlot(date: Date) {
     minute: "2-digit",
     timeZone: BOOKING_TZ,
   }).format(date);
+}
+
+interface CentralParts {
+  year: number;
+  month: number;
+  day: number;
+  /** 0 = Sunday … 6 = Saturday */
+  weekday: number;
+  hour: number;
+  minute: number;
+  second: number;
+}
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const centralFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: BOOKING_TZ,
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  weekday: "short",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hourCycle: "h23",
+});
+
+/** Wall-clock date and time of an instant in Central time. */
+export function centralParts(date: Date): CentralParts {
+  const parts: Record<string, string> = {};
+  for (const part of centralFormatter.formatToParts(date)) parts[part.type] = part.value;
+  return {
+    year: Number(parts["year"]),
+    month: Number(parts["month"]),
+    day: Number(parts["day"]),
+    weekday: WEEKDAYS.indexOf(parts["weekday"] ?? ""),
+    hour: Number(parts["hour"]) % 24,
+    minute: Number(parts["minute"]),
+    second: Number(parts["second"]),
+  };
+}
+
+/** The UTC instant for a Central wall-clock time, correct on either side of a DST change. */
+export function centralWallClockToUtc(year: number, month: number, day: number, hour: number): Date {
+  const guess = Date.UTC(year, month - 1, day, hour);
+  const shown = centralParts(new Date(guess));
+  const shownAsUtc = Date.UTC(
+    shown.year,
+    shown.month - 1,
+    shown.day,
+    shown.hour,
+    shown.minute,
+    shown.second,
+  );
+  // Negative while Central is behind UTC (-5h in CDT, -6h in CST).
+  const offset = shownAsUtc - guess;
+  return new Date(guess - offset);
 }
 
 async function admin() {
@@ -108,14 +169,13 @@ export async function getAvailableSlots(count = 3) {
   const candidates: Date[] = [];
 
   for (let dayOffset = 1; dayOffset <= 10 && candidates.length < count * 4; dayOffset += 1) {
-    const day = new Date(now + dayOffset * 86_400_000);
-    const weekday = day.getUTCDay();
-    if (weekday === 0 || weekday === 6) continue;
-    for (const hour of SLOT_HOURS_UTC) {
-      const slot = new Date(
-        Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate(), hour, 0, 0),
-      );
-      if (slot.getTime() > now) candidates.push(slot);
+    const day = centralParts(new Date(now + dayOffset * 86_400_000));
+    if (day.weekday === 0 || day.weekday === 6) continue;
+    for (const hour of SLOT_HOURS_CENTRAL) {
+      const slot = centralWallClockToUtc(day.year, day.month, day.day, hour);
+      // A 23- or 25-hour DST day can map two offsets onto the same date.
+      const duplicate = candidates.some((c) => c.getTime() === slot.getTime());
+      if (slot.getTime() > now && !duplicate) candidates.push(slot);
     }
   }
 
@@ -154,10 +214,11 @@ export interface BookingResult {
  * inventing a time — a 3am booking, or a way to fill the calendar with junk.
  */
 export function isOfferedSlot(start: Date): boolean {
-  const weekday = start.getUTCDay();
-  if (weekday === 0 || weekday === 6) return false;
-  if (!(SLOT_HOURS_UTC as readonly number[]).includes(start.getUTCHours())) return false;
-  return start.getUTCMinutes() === 0 && start.getUTCSeconds() === 0;
+  if (Number.isNaN(start.getTime())) return false;
+  const local = centralParts(start);
+  if (local.weekday === 0 || local.weekday === 6) return false;
+  if (!(SLOT_HOURS_CENTRAL as readonly number[]).includes(local.hour)) return false;
+  return local.minute === 0 && local.second === 0;
 }
 
 export async function bookDiscoverySlot(
@@ -246,7 +307,9 @@ export async function bookDiscoverySlot(
         return {
           booking_id: mine.id as string,
           spoken_time: formatSlot(new Date(mine.slot_start as string)),
-          time_zone: (mine.time_zone as string) ?? BOOKING_TZ,
+          // spoken_time is always formatted in Central time, so the label must be too
+          // (the stored time_zone is the client's browser zone).
+          time_zone: BOOKING_TZ,
           already_booked: true,
         };
       }

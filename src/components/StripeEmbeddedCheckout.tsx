@@ -1,4 +1,3 @@
-import { getStripeEnvironment } from "@/lib/stripe";
 import { EmbeddedCheckoutFrame } from "@/components/EmbeddedCheckoutFrame";
 import { useAuth } from "@/hooks/useAuth";
 import { createCommissionCheckoutSession } from "@/utils/payments.functions";
@@ -34,7 +33,7 @@ export function StripeEmbeddedCheckout({
         customerEmail: customerEmail || user?.email || undefined,
         returnUrl:
           returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-        environment: getStripeEnvironment(),
+        // No environment either: the server decides live vs. test mode.
       },
     });
     if ("error" in result) throw new Error(result.error);
