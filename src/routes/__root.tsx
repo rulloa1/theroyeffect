@@ -254,8 +254,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <FirebaseProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[#FF3333] focus:px-4 focus:py-3 focus:font-mono focus:text-xs focus:font-bold focus:tracking-widest focus:text-black"
+          >
+            SKIP TO CONTENT
+          </a>
+          <div id="main-content" tabIndex={-1}>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </div>
           <SiteFooter />
           <VoiceConcierge />
         </FirebaseProvider>

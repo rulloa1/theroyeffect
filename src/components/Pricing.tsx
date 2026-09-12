@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Sparkles, Lock, Plus, Calculator, Layers } from "lucide-react";
 import { DepositCheckoutModal } from "@/components/DepositCheckoutModal";
@@ -18,6 +18,7 @@ interface ActivePurchase {
 export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: () => void; mode?: "homepage" | "checkout" }) {
   const [active, setActive] = useState<ActivePurchase | null>(null);
   const [viewMode, setViewMode] = useState<"TIERS" | "ESTIMATOR">("TIERS");
+  const reduceMotion = useReducedMotion();
 
   return (
     <section
@@ -35,7 +36,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
             </h2>
           </div>
           <div className="flex flex-col gap-3">
-            <p className="max-w-md font-mono text-xs leading-relaxed text-white/50">
+            <p className="max-w-md font-mono text-xs leading-relaxed text-white/70">
               {mode === "homepage" ? "Starting prices. A typical designed-and-built site lands at $7–9k depending on pages and integrations." : "Transparent starting points and custom scopes. Pay a 50% deposit or calculate a custom page count below."}
             </p>
             {mode === "checkout" && (
@@ -77,7 +78,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
               {PRICING_TIERS.map((tier, i) => (
                 <motion.div
                   key={tier.name}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}

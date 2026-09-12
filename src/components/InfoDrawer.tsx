@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Check, Menu, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -65,6 +65,29 @@ export function InfoDrawer({
     onClose();
   };
 
+  const reduceMotion = useReducedMotion();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  // Dialog keyboard behaviour: focus moves into the drawer on open, Escape closes it,
+  // and focus returns to whatever opened it.
+  useEffect(() => {
+    if (!open) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setActive(null);
+      onCloseRef.current();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      opener?.focus();
+    };
+  }, [open]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -111,6 +134,8 @@ export function InfoDrawer({
   });
 
   const allProjects = projectsData || DEFAULT_SHOWCASE_PROJECTS;
+  // Only offer filters that match at least one project, so no tab is ever empty.
+  const projectCategories = ["ALL", ...new Set(allProjects.map((p) => p.category))];
 
   const filteredProjects =
     projectFilter === "ALL" ? allProjects : allProjects.filter((p) => p.category === projectFilter);
@@ -128,11 +153,14 @@ export function InfoDrawer({
           />
           <motion.aside
             role="dialog"
+            aria-modal="true"
             aria-label="Site menu"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 260, damping: 32 }}
+            transition={
+              reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 32 }
+            }
             className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto border-l border-white/10 bg-[#0a0a14] sm:max-w-xl md:max-w-2xl"
           >
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/5 bg-[#0a0a14]/95 px-6 py-5 backdrop-blur">
@@ -146,6 +174,7 @@ export function InfoDrawer({
                 {active ? "BACK" : "MENU"}
               </button>
               <button
+                ref={closeButtonRef}
                 type="button"
                 aria-label="Close menu"
                 onClick={close}
@@ -372,7 +401,7 @@ export function InfoDrawer({
 
                   {/* Category Filter Pills */}
                   <div className="flex flex-wrap gap-2">
-                    {(["ALL", "Brand Identity", "UI/UX", "No-Code"] as const).map((cat) => (
+                    {projectCategories.map((cat) => (
                       <button
                         key={cat}
                         type="button"

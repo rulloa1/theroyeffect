@@ -48,7 +48,7 @@ export function SiteFooter() {
 
           {/* Quick links */}
           <div className="lg:col-span-2">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/40">
+            <h3 className="font-mono text-[11px] tracking-widest text-white/60">
               NAVIGATION
             </h3>
             <nav className="mt-4 flex flex-wrap gap-x-6 gap-y-3" aria-label="Footer">
@@ -73,7 +73,7 @@ export function SiteFooter() {
 
           {/* Guides */}
           <div className="lg:col-span-3">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/40">GUIDES</h3>
+            <h3 className="font-mono text-[11px] tracking-widest text-white/60">GUIDES</h3>
             <nav className="mt-4 flex flex-col gap-3" aria-label="Guides">
               {GUIDE_LINKS.map((link) => (
                 <Link
@@ -89,7 +89,7 @@ export function SiteFooter() {
 
           {/* Contact */}
           <div className="lg:col-span-3">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/40">
+            <h3 className="font-mono text-[11px] tracking-widest text-white/60">
               CONTACT
             </h3>
             <div className="mt-4 space-y-2 font-mono text-xs text-white/60">
@@ -105,17 +105,17 @@ export function SiteFooter() {
               >
                 (281) 323-0450
               </a>
-              <p className="text-white/40">Houston, Texas</p>
+              <p className="text-white/60">Houston, Texas</p>
             </div>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 md:flex-row">
-          <p className="font-mono text-[10px] text-white/40">
+          <p className="font-mono text-[10px] text-white/60">
             © {new Date().getFullYear()} THE ROY EFFECT. DIRT, REFINED INTO GOLD.
           </p>
-          <p className="font-mono text-[10px] text-white/40">
+          <p className="font-mono text-[10px] text-white/60">
             <Link to="/" className="transition-colors hover:text-[#FF3333]">
               HOME
             </Link>
