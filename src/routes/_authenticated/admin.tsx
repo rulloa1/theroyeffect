@@ -56,6 +56,7 @@ import { AdminAutopilotView } from "@/components/admin/AdminAutopilotView";
 import { AdminProspectsView } from "@/components/admin/AdminProspectsView";
 import { AdminPortalView } from "@/components/admin/AdminPortalView";
 import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
+import { AdminSignalView } from "@/components/admin/AdminSignalView";
 import {
   adminListOnboarding,
   adminRunOnboarding,
@@ -127,6 +128,7 @@ const date = (value: string | null) =>
     : "—";
 
 type MainView =
+  | "SIGNAL"
   | "PROJECTS"
   | "PIPELINE"
   | "AUTOPILOT"
@@ -187,7 +189,7 @@ function AdminPage() {
   const dismissOnboardingFn = useServerFn(adminDismissOnboarding);
 
 
-  const [currentView, setCurrentView] = useState<MainView>("PROJECTS");
+  const [currentView, setCurrentView] = useState<MainView>("SIGNAL");
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
