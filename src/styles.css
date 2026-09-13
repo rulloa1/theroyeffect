@@ -67,6 +67,12 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+    /* Keep in-page anchor targets clear of the fixed header. */
+    scroll-padding-top: 6rem;
+  }
+
   html,
   body {
     background-color: var(--color-background);

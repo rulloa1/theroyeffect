@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Compass, LayoutGrid, MessageSquareText, MousePointerClick, PenTool, Rocket, Smartphone } from "lucide-react";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const TITLE = "Case Study — Redesigning a Houston Service Business Site | The Roy Effect";
 const DESCRIPTION =
@@ -95,8 +95,9 @@ const OUTCOMES = [
 function CaseStudyPage() {
   return (
     <main className="min-h-screen bg-[#030014]">
-      <div className="mx-auto max-w-4xl px-5 pt-16 md:px-10 md:pt-24">
-        <Logo variant="compact" size="md" href="/" className="mb-10" />
+      <SiteHeader />
+      <div className="mx-auto max-w-4xl px-5 pt-28 md:px-10 md:pt-36">
+        
 
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">CASE STUDY</span>
         <h1 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">

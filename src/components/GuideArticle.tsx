@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 
 interface GuideCta {
   kicker: string;
@@ -41,8 +41,9 @@ export function GuideArticle({
 }: GuideArticleProps) {
   return (
     <main className="min-h-screen bg-[#030014]">
-      <div className="mx-auto max-w-4xl px-5 pt-16 md:px-10 md:pt-24">
-        <Logo variant="compact" size="md" href="/" className="mb-10" />
+      <SiteHeader />
+      <div className="mx-auto max-w-4xl px-5 pt-28 md:px-10 md:pt-36">
+        
 
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">{kicker}</span>
         <h1 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">

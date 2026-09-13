@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 import portraitAsset from "@/assets/rory-portrait-clean.png.asset.json";
 
 const TITLE = "About Rory Ulloa — Houston Creative Director";
@@ -12,8 +12,9 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#030014] px-5 py-16 md:px-10 md:py-24">
-      <div className="mx-auto max-w-6xl"><Logo variant="compact" size="md" href="/" className="mb-12" />
+    <main className="min-h-screen overflow-hidden bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
+      <SiteHeader />
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-10 md:grid-cols-[1fr_0.8fr] md:items-center">
           <div><span className="font-mono text-xs tracking-widest text-[#FF3333]">ABOUT</span><h1 className="mt-3 font-display text-5xl uppercase leading-[0.9] text-white md:text-7xl">Rory Ulloa</h1>
             <div className="mt-6 max-w-2xl space-y-4 font-mono text-sm leading-relaxed text-white/60"><p>I&apos;m a Houston-based creative director, UI/UX designer and no-code developer. I work solo, from the first audit through the finished build.</p><p>Dirt, refined into gold is a working principle: start with the unpolished offer, find what matters, and shape it into a clear brand and a site built to sell.</p><p>I design brand systems, marketing sites and product interfaces, then ship them in Webflow, Framer or TanStack. The thing you approve is the thing that goes live.</p></div>

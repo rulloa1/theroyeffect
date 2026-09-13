@@ -16,27 +16,46 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { VoiceConcierge } from "@/components/VoiceConcierge";
+import { SiteHeader } from "@/components/SiteHeader";
+import { ArrowUpRight } from "lucide-react";
 
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+    <>
+      <SiteHeader />
+      <div className="flex min-h-screen items-center bg-[#030014] px-5 pb-20 pt-28 md:px-10">
+        <div className="mx-auto w-full max-w-7xl">
+          <span className="font-mono text-xs tracking-widest text-[#FF3333]">ERROR 404</span>
+          <h1 className="mt-3 font-display text-[5rem] uppercase leading-[0.85] text-white sm:text-8xl md:text-9xl">
+            Wrong turn.
+          </h1>
+          <p className="mt-5 max-w-md font-mono text-sm leading-7 text-white/75">
+            That page doesn&apos;t exist or has moved. Here&apos;s where people usually want to go.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]"
+            >
+              BACK HOME <ArrowUpRight className="size-4" aria-hidden="true" />
+            </Link>
+            <Link
+              to="/work"
+              className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
+            >
+              SEE THE WORK
+            </Link>
+            <Link
+              to="/audit"
+              className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
+            >
+              FREE AUDIT
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -49,29 +68,31 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+    <div className="flex min-h-screen items-center bg-[#030014] px-5 py-20 md:px-10">
+      <div className="mx-auto w-full max-w-7xl">
+        <span className="font-mono text-xs tracking-widest text-[#FF3333]">SOMETHING BROKE</span>
+        <h1 className="mt-3 font-display text-5xl uppercase leading-[0.9] text-white md:text-7xl">
+          This page didn&apos;t load
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-5 max-w-md font-mono text-sm leading-7 text-white/75">
+          Something went wrong on my end. Try again, or head back home.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap gap-3">
           <button
+            type="button"
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex cursor-pointer items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]"
           >
-            Try again
+            TRY AGAIN
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
           >
-            Go home
+            GO HOME
           </a>
         </div>
       </div>

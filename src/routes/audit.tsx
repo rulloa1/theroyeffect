@@ -5,7 +5,7 @@ import { SmsConsent } from "@/components/SmsConsent";
 import { z } from "zod";
 import { Check, QrCode, Sparkles, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
@@ -110,12 +110,11 @@ export function AuditPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 text-white md:px-10 md:py-24">
+    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 text-white md:px-10 md:pb-24 md:pt-36">
+      <SiteHeader />
       <Toaster />
       <div className="mx-auto max-w-4xl">
-        {/* Top Header & Logo */}
         <div className="flex flex-col items-center justify-center text-center">
-          <Logo variant="stacked" size="lg" href="/" className="mb-6" />
           <div className="mt-2 inline-flex items-center gap-2 border border-[#DFBA73]/30 bg-[#DFBA73]/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.25em] text-[#F6DC9A] uppercase">
             <Sparkles className="size-3" />
             THE 5-MINUTE AUDIT &bull; COMPLIMENTARY TEARDOWN

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LEGAL_IDENTITY as L } from "@/lib/legal-identity";
@@ -46,11 +46,10 @@ function UL({ children }: { children: React.ReactNode }) {
 }
 
 function PrivacyPage() {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#030014]">
-      <SiteHeader onNavigate={() => void navigate({ to: "/" })} />
+      <SiteHeader />
       <main className="px-5 pb-16 pt-28 md:px-10 md:pt-36">
         <article className="mx-auto max-w-3xl">
           <h1 className="font-display text-4xl uppercase leading-[0.95] text-white md:text-6xl">

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 import { WorkGrid } from "@/components/WorkGrid";
 
 const TITLE = "Selected Work — The Roy Effect";
@@ -23,9 +23,10 @@ export const Route = createFileRoute("/work")({
 
 function WorkPage() {
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
+      <SiteHeader />
       <div className="mx-auto max-w-7xl">
-        <Logo variant="compact" size="md" href="/" className="mb-12" />
+        
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">WORK</span>
         <h1 className="mt-3 max-w-3xl font-display text-5xl uppercase leading-[0.9] text-white md:text-7xl">Work built around the next action</h1>
         <p className="mt-5 max-w-2xl font-mono text-sm leading-relaxed text-white/60">Live websites I&apos;ve designed and built for RV parks, hotels, contractors and local businesses. Every project below is online right now — open any of them.</p>

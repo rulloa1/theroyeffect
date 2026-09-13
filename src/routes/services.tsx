@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { Logo } from "@/components/Logo";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SERVICES, PROCESS_STEPS } from "@/lib/site-content";
 
 const TITLE = "Design Services — Brand, UI/UX & No-Code Build | The Roy Effect";
@@ -50,9 +50,10 @@ export const Route = createFileRoute("/services")({
 
 function ServicesPage() {
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
+      <SiteHeader />
       <div className="mx-auto max-w-5xl">
-        <Logo variant="compact" size="md" href="/" className="mb-10" />
+        
 
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">SERVICES</span>
         <h1 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">
