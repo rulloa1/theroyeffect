@@ -46,7 +46,7 @@ export const Route = createFileRoute("/pricing")({
 function PricingPage() {
   const navigate = useNavigate();
   return (
-    <main className="min-h-screen bg-[#030014]">
+    <main className="scene-floor min-h-screen bg-[#030014]">
       <SiteHeader />
       <Toaster />
       <div className="mx-auto max-w-7xl px-5 pt-28 md:px-10 md:pt-36">

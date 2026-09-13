@@ -232,6 +232,13 @@ export function ParticleBackground() {
         linesAttr.needsUpdate = true;
 
         points.rotation.y += 0.0004;
+
+        // Camera drifts toward the pointer so the whole field reads as a 3D volume.
+        if (Math.abs(pointer.x) <= 1 && Math.abs(pointer.y) <= 1) {
+          camera.position.x += (pointer.x * 7 - camera.position.x) * 0.035;
+          camera.position.y += (pointer.y * 4.5 - camera.position.y) * 0.035;
+          camera.lookAt(0, 0, 0);
+        }
         composer.render();
       };
 

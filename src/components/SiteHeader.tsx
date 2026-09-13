@@ -164,7 +164,10 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
               </div>
 
               <div className="mt-8 space-y-1 font-mono text-xs text-white/50">
-                <a href="mailto:rory@theroyeffect.com" className="block transition-colors hover:text-[#FF3333]">
+                <a
+                  href="mailto:rory@theroyeffect.com"
+                  className="block transition-colors hover:text-[#FF3333]"
+                >
                   rory@theroyeffect.com
                 </a>
                 <a href="tel:281-323-0450" className="block transition-colors hover:text-[#FF3333]">
@@ -185,7 +188,6 @@ function useScrolled(threshold = 24) {
   useScrollListener(() => setScrolled(window.scrollY > threshold));
   return scrolled;
 }
-
 
 function useScrollListener(handler: () => void) {
   useEffect(() => {

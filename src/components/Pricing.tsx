@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Sparkles, Lock, Plus, Calculator, Layers } from "lucide-react";
 import { DepositCheckoutModal } from "@/components/DepositCheckoutModal";
 import { ScopeEstimator } from "@/components/ScopeEstimator";
+import { Tilt3D } from "@/components/Tilt3D";
 import { PRICING_TIERS, ADD_ONS } from "@/lib/commerce-catalog";
 
 export { PRICING_TIERS };
@@ -76,13 +77,13 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {PRICING_TIERS.map((tier, i) => (
+                <Tilt3D key={tier.name}>
                 <motion.div
-                  key={tier.name}
                   initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className={`group relative flex flex-col justify-between border p-5 transition-colors hover:border-[#FF3333]/50 md:p-6 ${
+                  className={`group relative flex h-full flex-col justify-between border p-5 transition-colors hover:border-[#FF3333]/50 md:p-6 ${
                     tier.featured
                       ? "border-[#FF3333] bg-[#FF3333]/5"
                       : "border-white/10 bg-white/[0.02]"
@@ -177,6 +178,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
                     </button> : null}
                   </div>
                 </motion.div>
+                </Tilt3D>
               ))}
             </div>
 
@@ -186,7 +188,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
                 {ADD_ONS.map((addOn) => (
                   <div
                     key={addOn.priceId}
-                    className="flex flex-col justify-between border border-white/10 bg-white/[0.02] p-5 transition-colors hover:border-[#FF3333]/50"
+                    className="card-3d flex flex-col justify-between border border-white/10 bg-white/[0.02] p-5 transition-colors hover:border-[#FF3333]/50"
                   >
                     <div>
                       <h3 className="font-display text-lg uppercase text-white">{addOn.name}</h3>

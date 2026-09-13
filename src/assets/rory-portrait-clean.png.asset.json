@@ -2,10 +2,10 @@
   "version": 1,
   "asset_id": "6e94e6e1-bd18-45f2-9a0c-f4f243f05d1b",
   "project_id": "562bff25-798c-4deb-b966-1843715c88c5",
-  "url": "/__l5e/assets-v1/6e94e6e1-bd18-45f2-9a0c-f4f243f05d1b/rory-portrait-clean.png",
+  "url": "/images/rory-portrait-clean.webp",
   "r2_key": "a/v1/562bff25-798c-4deb-b966-1843715c88c5/6e94e6e1-bd18-45f2-9a0c-f4f243f05d1b/rory-portrait-clean.png",
   "original_filename": "rory-portrait-clean.png",
   "size": 1111279,
-  "content_type": "image/png",
+  "content_type": "image/webp",
   "created_at": "2026-08-15T12:56:34Z"
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { SHOWCASE_WORK, type ShowcaseWorkEntry } from "@/lib/site-content";
+import { Tilt3D } from "@/components/Tilt3D";
 
 function WorkCard({ entry, compact }: { entry: ShowcaseWorkEntry; compact: boolean }) {
   const [imageFailed, setImageFailed] = useState(false);
@@ -75,7 +76,9 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
       <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {entries.map((entry) => (
           <li key={entry.slug}>
-            <WorkCard entry={entry} compact={compact} />
+            <Tilt3D>
+              <WorkCard entry={entry} compact={compact} />
+            </Tilt3D>
           </li>
         ))}
       </ul>

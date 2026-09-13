@@ -17,8 +17,8 @@ import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { VoiceConcierge } from "@/components/VoiceConcierge";
 import { SiteHeader } from "@/components/SiteHeader";
+import { DepthController } from "@/components/DepthController";
 import { ArrowUpRight } from "lucide-react";
-
 
 function NotFoundComponent() {
   return (
@@ -220,7 +220,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
-
     ],
     scripts: [
       {
@@ -270,7 +269,6 @@ function RootComponent() {
     return () => window.clearTimeout(id);
   }, []);
 
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -281,6 +279,7 @@ function RootComponent() {
           >
             SKIP TO CONTENT
           </a>
+          <DepthController />
           <div id="main-content" tabIndex={-1}>
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
@@ -292,4 +291,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

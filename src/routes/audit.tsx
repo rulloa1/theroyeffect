@@ -110,7 +110,7 @@ export function AuditPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 text-white md:px-10 md:pb-24 md:pt-36">
+    <main className="scene-floor min-h-screen bg-[#030014] px-5 pb-16 pt-28 text-white md:px-10 md:pb-24 md:pt-36">
       <SiteHeader />
       <Toaster />
       <div className="mx-auto max-w-4xl">
@@ -156,7 +156,7 @@ export function AuditPage() {
           ].map((pillar) => (
             <div
               key={pillar.title}
-              className="border border-white/10 bg-white/[0.02] p-5 transition-all hover:border-[#DFBA73]/40"
+              className="card-3d border border-white/10 bg-white/[0.02] p-5 transition-all hover:border-[#DFBA73]/40"
             >
               <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">
                 {pillar.tag}
@@ -406,7 +406,7 @@ export function AuditPage() {
                 a: "Send the closest thing you have — a social profile, a directory listing, or a competitor you admire — and I'll review positioning instead of layout.",
               },
             ].map((faq) => (
-              <div key={faq.q} className="border border-white/10 bg-white/[0.02] p-5">
+              <div key={faq.q} className="card-3d border border-white/10 bg-white/[0.02] p-5">
                 <h3 className="font-display text-lg uppercase text-white">{faq.q}</h3>
                 <p className="mt-2 font-mono text-xs leading-relaxed text-white/60">{faq.a}</p>
               </div>

@@ -50,7 +50,7 @@ export const Route = createFileRoute("/services")({
 
 function ServicesPage() {
   return (
-    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
+    <main className="scene-floor min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
       <SiteHeader />
       <div className="mx-auto max-w-5xl">
         
@@ -71,7 +71,7 @@ function ServicesPage() {
             <article
               key={s.slug}
               id={s.slug}
-              className="border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-[#FF3333]/50"
+              className="card-3d border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-[#FF3333]/50"
             >
               <h2 className="font-display text-2xl uppercase tracking-wide text-white">{s.name}</h2>
               <p className="mt-2 font-mono text-[11px] tracking-widest text-[#DFBA73]">

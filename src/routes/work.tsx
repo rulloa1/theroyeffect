@@ -23,7 +23,7 @@ export const Route = createFileRoute("/work")({
 
 function WorkPage() {
   return (
-    <main className="min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
+    <main className="scene-floor min-h-screen bg-[#030014] px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-36">
       <SiteHeader />
       <div className="mx-auto max-w-7xl">
         

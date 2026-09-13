@@ -21,7 +21,7 @@ export function ApprovalPromise() {
         </p>
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {PROMISE_STEPS.map(({ step, title, body }) => (
-            <div key={step} className="relative border border-white/10 bg-white/[0.02] p-6">
+            <div key={step} className="card-3d relative border border-white/10 bg-white/[0.02] p-6">
               <span className="absolute right-4 top-3 font-display text-5xl text-white/5">{step}</span>
               <h3 className="font-display text-xl uppercase text-white">{title}</h3>
               <p className="mt-2 font-mono text-sm leading-6 text-white/75">{body}</p>

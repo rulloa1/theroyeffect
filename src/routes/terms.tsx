@@ -42,7 +42,7 @@ function TermsPage() {
   return (
     <div className="min-h-screen bg-[#030014]">
       <SiteHeader />
-      <main className="px-5 pb-16 pt-28 md:px-10 md:pt-36">
+      <main className="scene-floor px-5 pb-16 pt-28 md:px-10 md:pt-36">
         <article className="mx-auto max-w-3xl">
           <h1 className="font-display text-4xl uppercase leading-[0.95] text-white md:text-6xl">
             Terms of Service

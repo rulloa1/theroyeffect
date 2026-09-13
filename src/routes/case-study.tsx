@@ -94,7 +94,7 @@ const OUTCOMES = [
 
 function CaseStudyPage() {
   return (
-    <main className="min-h-screen bg-[#030014]">
+    <main className="scene-floor min-h-screen bg-[#030014]">
       <SiteHeader />
       <div className="mx-auto max-w-4xl px-5 pt-28 md:px-10 md:pt-36">
         
@@ -173,7 +173,7 @@ function CaseStudyPage() {
         </h2>
         <div className="mt-8 space-y-4">
           {STEPS.map(({ icon: Icon, title, body }) => (
-            <article key={title} className="border border-white/10 bg-white/[0.02] p-6 md:p-8">
+            <article key={title} className="card-3d border border-white/10 bg-white/[0.02] p-6 md:p-8">
               <Icon className="mb-3 size-5 text-[#FF3333]" />
               <h3 className="font-display text-xl uppercase text-white">{title}</h3>
               <p className="mt-2 font-mono text-xs leading-relaxed text-white/60 md:text-sm">
@@ -195,7 +195,7 @@ function CaseStudyPage() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {OUTCOMES.map((o) => (
-            <div key={o.title} className="border border-white/10 bg-white/[0.02] p-6">
+            <div key={o.title} className="card-3d border border-white/10 bg-white/[0.02] p-6">
               <h3 className="font-display text-lg uppercase text-white">{o.title}</h3>
               <p className="mt-2 font-mono text-xs leading-relaxed text-white/50">{o.body}</p>
             </div>

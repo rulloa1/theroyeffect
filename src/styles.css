@@ -37,6 +37,8 @@
 }
 
 :root {
+  --mx: 0;
+  --my: 0;
   --radius: 0.25rem;
   --background: #030014;
   --foreground: #ffffff;
@@ -89,6 +91,18 @@
     letter-spacing: 0.01em;
   }
 
+  /* Extruded 3D display headings. Offsets are in em so they scale with size. */
+  h1,
+  h2 {
+    text-shadow:
+      0 -1px 0 rgba(255, 255, 255, 0.14),
+      0.018em 0.018em 0 #5a0d0d,
+      0.036em 0.036em 0 #3a0808,
+      0.054em 0.054em 0 #220404,
+      0.07em 0.07em 0 #120202,
+      0.1em 0.12em 22px rgba(255, 51, 51, 0.28);
+  }
+
   ::selection {
     background: #ff3333;
     color: #000000;
@@ -135,13 +149,159 @@
 
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: perspective(1200px) translateY(32px) rotateX(9deg);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 800ms ease,
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .scroll-reveal-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: perspective(1200px) translateY(0) rotateX(0deg);
+}
+
+/* ---------------------------------------------------------------------------
+   3D system
+   --------------------------------------------------------------------------- */
+
+/* Mouse-tracked tilt card (driven by Tilt3D.tsx). */
+.tilt-3d {
+  --rx: 0deg;
+  --ry: 0deg;
+  --gx: 50%;
+  --gy: 50%;
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition:
+    transform 220ms ease-out,
+    box-shadow 320ms ease,
+    filter 320ms ease;
+  will-change: transform;
+}
+
+.tilt-3d:hover {
+  transition:
+    transform 60ms linear,
+    box-shadow 320ms ease,
+    filter 320ms ease;
+  box-shadow:
+    0 30px 70px -24px rgba(255, 51, 51, 0.4),
+    0 18px 40px -16px rgba(0, 0, 0, 0.7);
+  filter: brightness(1.05);
+}
+
+.tilt-3d > * {
+  transform: translateZ(1px);
+}
+
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    circle at var(--gx) var(--gy),
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 58%
+  );
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.tilt-3d:hover .tilt-glare {
+  opacity: 1;
+}
+
+/* Lightweight CSS-only depth for any card: lifts toward the viewer on hover. */
+.card-3d {
+  transform: perspective(900px) translateZ(0);
+  transform-style: preserve-3d;
+  transition:
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 450ms ease,
+    border-color 200ms ease;
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: perspective(900px) rotateX(2.5deg) rotateY(-2.5deg) translateY(-6px) translateZ(14px);
+  box-shadow:
+    0 26px 60px -22px rgba(255, 51, 51, 0.35),
+    0 14px 34px -12px rgba(0, 0, 0, 0.65);
+}
+
+/* Pointer parallax layers. --mx / --my are set by DepthController.tsx. */
+.parallax-near {
+  transform: translate3d(calc(var(--mx) * -10px), calc(var(--my) * -8px), 0);
+  transition: transform 300ms ease-out;
+}
+
+.parallax-mid {
+  transform: translate3d(calc(var(--mx) * -22px), calc(var(--my) * -14px), 0);
+  transition: transform 400ms ease-out;
+}
+
+.parallax-far {
+  transform: translate3d(calc(var(--mx) * 26px), calc(var(--my) * 16px), 0);
+  transition: transform 500ms ease-out;
+}
+
+/* Gentle hovering wobble for small accent elements. */
+@keyframes float-3d {
+  0%,
+  100% {
+    transform: perspective(600px) translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(600px) translateY(-5px) rotateX(6deg) rotateY(-6deg);
+  }
+}
+
+.float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* Perspective grid floor drawn at the bottom of a page. */
+.scene-floor {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.scene-floor::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(70vh, 640px);
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 51, 51, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 51, 51, 0.22) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: calc(var(--mx) * -12px) 0;
+  transform: perspective(640px) rotateX(64deg) scale(1.8);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent 80%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent 80%);
+}
+
+.scene-floor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 50% 100%, rgba(255, 51, 51, 0.16), transparent 70%),
+    radial-gradient(40% 30% at 85% 10%, rgba(223, 186, 115, 0.08), transparent 70%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -162,5 +322,22 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .tilt-3d,
+  .tilt-3d:hover,
+  .card-3d,
+  .card-3d:hover,
+  .parallax-near,
+  .parallax-mid,
+  .parallax-far,
+  .float-3d {
+    transform: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+
+  .scene-floor::before {
+    background-position: 0 0;
   }
 }

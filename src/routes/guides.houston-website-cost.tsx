@@ -157,7 +157,7 @@ function HoustonWebsiteCostGuide() {
       <GuideSection title="What actually drives the price">
         <div className="mt-4 space-y-4">
           {DRIVERS.map((d) => (
-            <article key={d.name} className="border border-white/10 bg-white/[0.02] p-6">
+            <article key={d.name} className="card-3d border border-white/10 bg-white/[0.02] p-6">
               <h3 className="font-display text-lg uppercase text-white">{d.name}</h3>
               <p className="mt-2 font-mono text-xs leading-relaxed text-white/60 md:text-sm">
                 {d.body}
@@ -174,7 +174,7 @@ function HoustonWebsiteCostGuide() {
         </GuideParagraph>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {MY_PRICES.map((p) => (
-            <div key={p.name} className="border border-white/10 bg-white/[0.02] p-6">
+            <div key={p.name} className="card-3d border border-white/10 bg-white/[0.02] p-6">
               <h3 className="font-display text-lg uppercase text-white">{p.name}</h3>
               <p className="mt-1 font-mono text-sm text-[#FF3333]">{p.price}</p>
               <p className="mt-2 font-mono text-xs leading-relaxed text-white/50">{p.note}</p>
