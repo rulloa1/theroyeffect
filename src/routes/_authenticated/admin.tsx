@@ -930,6 +930,7 @@ function AdminPage() {
         {/* View Switcher Tabs */}
         <div className="mt-10 flex flex-wrap gap-3 border-b border-white/10 pb-4">
           {[
+            { id: "SIGNAL", label: "SIGNAL HUB", icon: Radar },
             { id: "PROJECTS", label: "CURRENT PROJECTS", icon: Briefcase },
             {
               id: "PIPELINE",
@@ -998,6 +999,21 @@ function AdminPage() {
 
         {/* Dynamic Views */}
         <div className="mt-8">
+          {currentView === "SIGNAL" && (
+            <AdminSignalView
+              orders={ordersData?.orders ?? []}
+              inquiries={inquiriesData?.inquiries ?? []}
+              leads={pipelineData?.leads ?? []}
+              proposals={proposalsData ?? []}
+              onboardingRuns={onboardingData?.runs ?? []}
+              drafts={autopilotData?.drafts ?? []}
+              unreadChats={(chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length}
+              onNavigate={(view) => setCurrentView(view as MainView)}
+              onRunAutopilot={runAutopilotScan}
+              autopilotBusy={busy === "autopilot-run"}
+            />
+          )}
+
           {currentView === "PROJECTS" && (
             <AdminProjectsView
               orders={ordersData?.orders ?? []}
