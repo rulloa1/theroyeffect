@@ -104,6 +104,58 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Signal — studio hub & client portal design system
+   Scoped to .signal-root so the public site keeps Instrument Serif / Figtree.
+   --------------------------------------------------------------------------- */
+.signal-root {
+  --signal-ink: #030014;
+  --signal-red: #ff3333;
+  --signal-gold: #dfba73;
+  --signal-gold-lit: #f6dc9a;
+  --signal-green: #34d399;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+.signal-root h1,
+.signal-root h2,
+.signal-root h3,
+.signal-root h4,
+.signal-root .font-display {
+  font-family: Anton, Impact, "Arial Black", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.signal-root .font-sans {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+.signal-root .font-mono {
+  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+.signal-root ::selection {
+  background: var(--signal-red);
+  color: #000;
+}
+.signal-root :focus-visible {
+  outline: 2px solid var(--signal-gold);
+  outline-offset: 3px;
+}
+
+/* Perspective grid that fades up from the bottom of the viewport. */
+.signal-grid {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: min(60vh, 420px);
+  background-image:
+    linear-gradient(rgba(255, 51, 51, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 51, 51, 0.14) 1px, transparent 1px);
+  background-size: 72px 72px;
+  transform: perspective(640px) rotateX(64deg) scale(1.8);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 80%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 80%);
+  pointer-events: none;
+}
+
 .particle-background {
   background-color: var(--ink);
   background-image:

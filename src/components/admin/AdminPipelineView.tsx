@@ -1,33 +1,42 @@
 import { useState } from "react";
-import {
-  CalendarClock,
-  Mail,
-  Phone,
-  Search,
-  Globe,
-  AlertTriangle,
-  Users,
-  ArrowRight,
-  FileText,
-} from "lucide-react";
+import { AlertTriangle, CalendarClock, Globe, Mail, Phone, Search } from "lucide-react";
 import { toast } from "sonner";
 import { LEAD_STAGES, type CrmLead } from "@/utils/crm.functions";
 import { LeadDetailDrawer } from "@/components/admin/LeadDetailDrawer";
+import { relativeAge } from "@/lib/signals";
+import {
+  btnGhostSm,
+  emptyState,
+  input,
+  label,
+  panel,
+  select,
+} from "@/components/signal/signal-ui";
 
 const STAGE_LABELS: Record<string, string> = {
   new: "NEW",
   contacted: "CONTACTED",
   discovery_scheduled: "CALL BOOKED",
-  proposal_sent: "PROPOSAL SENT",
+  proposal_sent: "PROPOSAL OUT",
   won: "WON",
   lost: "LOST",
 };
 
-const STAGE_COLOR: Record<string, string> = {
-  new: "border-[#FF3333]/40 bg-[#FF3333]/10 text-[#FF3333]",
+/** Red = untouched, gold = waiting on them, green = closed, dim = dead. */
+const STAGE_COUNT_COLOR: Record<string, string> = {
+  new: "text-[#FF3333]",
+  contacted: "text-white",
+  discovery_scheduled: "text-white",
+  proposal_sent: "text-[#DFBA73]",
+  won: "text-[#34d399]",
+  lost: "text-white/40",
+};
+
+const STAGE_PILL: Record<string, string> = {
+  new: "border-[#FF3333]/50 bg-[#FF3333]/10 text-[#FF3333]",
   contacted: "border-amber-400/40 bg-amber-400/10 text-amber-300",
-  discovery_scheduled: "border-blue-400/40 bg-blue-400/10 text-blue-300",
-  proposal_sent: "border-purple-400/40 bg-purple-400/10 text-purple-300",
+  discovery_scheduled: "border-white/20 bg-white/5 text-white/70",
+  proposal_sent: "border-[#DFBA73]/40 bg-[#DFBA73]/10 text-[#DFBA73]",
   won: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
   lost: "border-white/15 bg-white/5 text-white/40",
 };
@@ -54,6 +63,17 @@ function nextAction(lead: CrmLead) {
   if (lead.stage === "lost") return "No action";
   if (lead.stage === "contacted") return "Book a discovery call";
   return "Reach out and qualify";
+}
+
+/** One-line card subtitle: where they came from, what they want, how stale. */
+function leadMeta(lead: CrmLead) {
+  return [
+    lead.source.replace(/_/g, " "),
+    lead.company_name || lead.project_type.replace(/_/g, " "),
+    relativeAge(lead.created_at).toLowerCase(),
+  ]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 export interface AdminPipelineViewProps {
@@ -88,11 +108,6 @@ export function AdminPipelineView({
     );
   });
 
-  const counts = LEAD_STAGES.map((stage) => ({
-    stage,
-    count: leads.filter((l) => l.stage === stage).length,
-  }));
-
   const run = async (key: string, fn: () => Promise<void>, message: string) => {
     setBusy(key);
     try {
@@ -116,87 +131,118 @@ export function AdminPipelineView({
     }).format(new Date(iso));
 
   return (
-    <div className="space-y-6">
-      {/* Stage summary */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {counts.map(({ stage, count }) => (
-          <button
-            key={stage}
-            type="button"
-            onClick={() => setStageFilter(stageFilter === stage ? "ALL" : stage)}
-            className={`border p-4 text-left transition-colors ${
-              stageFilter === stage
-                ? "border-[#FF3333] bg-[#FF3333]/10"
-                : "border-white/10 bg-white/[0.02] hover:border-white/30"
-            }`}
-          >
-            <span className="font-mono text-[9px] tracking-widest text-white/40">
-              {STAGE_LABELS[stage]}
-            </span>
-            <p className="mt-1 font-display text-2xl text-white">{count}</p>
-          </button>
-        ))}
+    <div className="flex flex-col gap-5">
+      {/* Board — every stage at a glance; a column header filters the list below. */}
+      <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
+        {LEAD_STAGES.map((stage) => {
+          const inStage = leads.filter((l) => l.stage === stage);
+          const active = stageFilter === stage;
+
+          return (
+            <div
+              key={stage}
+              className={`min-w-0 ${
+                active ? "border border-[#FF3333] bg-[#FF3333]/[0.06]" : panel
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => setStageFilter(active ? "ALL" : stage)}
+                aria-pressed={active}
+                className="flex w-full items-center justify-between gap-2 border-b border-white/[0.08] px-4 py-3.5 text-left transition-colors hover:bg-white/[0.03]"
+              >
+                <span className="font-mono text-[10px] tracking-[0.2em] text-white/55">
+                  {STAGE_LABELS[stage]}
+                </span>
+                <span
+                  className={`font-display text-[18px] ${STAGE_COUNT_COLOR[stage] ?? "text-white"}`}
+                >
+                  {inStage.length}
+                </span>
+              </button>
+
+              <div className="flex flex-col gap-2 px-4 py-3.5">
+                {inStage.length === 0 && (
+                  <p className="font-mono text-[10px] text-white/25">Empty</p>
+                )}
+                {inStage.map((lead) => (
+                  <button
+                    key={lead.id}
+                    type="button"
+                    onClick={() => setDetailLead(lead)}
+                    className="border border-white/[0.08] bg-white/[0.02] p-3 text-left transition-colors hover:border-[#FF3333]/40"
+                  >
+                    <p className="font-display text-[15px] uppercase text-white">
+                      {lead.full_name}
+                    </p>
+                    <p className="mt-1 font-mono text-[10px] leading-[1.7] text-white/45">
+                      {leadMeta(lead)}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-        <button
-          type="button"
-          onClick={() => setStageFilter("ALL")}
-          className={`px-3 py-1.5 font-mono text-[10px] tracking-widest transition-colors ${
-            stageFilter === "ALL"
-              ? "bg-[#FF3333] font-bold text-black"
-              : "border border-white/10 text-white/60 hover:border-white/30 hover:text-white"
-          }`}
-        >
-          ALL LEADS ({leads.length})
-        </button>
-        <div className="relative w-full max-w-xs sm:w-auto">
-          <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-white/40" />
+      {/* Detail list — where the bookings and follow-ups get worked. */}
+      <div className="flex flex-wrap items-center gap-3">
+        <span className={label}>
+          {stageFilter === "ALL"
+            ? `ALL LEADS (${filtered.length})`
+            : `${STAGE_LABELS[stageFilter]} (${filtered.length})`}
+        </span>
+        {stageFilter !== "ALL" && (
+          <button type="button" onClick={() => setStageFilter("ALL")} className={btnGhostSm}>
+            CLEAR FILTER
+          </button>
+        )}
+        <div className="relative ml-auto w-[min(100%,260px)]">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3 -translate-y-1/2 text-white/35" />
           <input
             type="text"
-            placeholder="Search leads..."
+            placeholder="Search leads"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full border border-white/10 bg-white/[0.02] py-1.5 pl-9 pr-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+            className={`${input} pl-[30px]`}
           />
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="border border-dashed border-white/10 py-16 text-center">
-          <Users className="mx-auto size-8 text-white/20" />
-          <p className="mt-3 font-mono text-xs text-white/40">No leads in this view yet.</p>
+        <div className={emptyState}>
+          <p className="font-display text-[22px] uppercase text-white/70">No leads here</p>
+          <p className="mt-2 font-mono text-[11px] text-white/40">Nothing matches this view yet.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="flex flex-col gap-3.5">
           {filtered.map((lead) => {
             const upcoming = lead.bookings.filter((b) => b.status === "scheduled");
             const openFollowups = lead.followups.filter((f) => f.status === "open");
 
             return (
-              <div
+              <article
                 key={lead.id}
-                className="border border-white/10 bg-white/[0.01] p-5 transition-colors hover:border-white/20"
+                className={`p-[22px] ${panel} transition-colors hover:border-white/20`}
               >
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-display text-xl uppercase tracking-wide text-white">
-                        {lead.full_name}
-                      </span>
+                <div className="flex flex-wrap items-start gap-4">
+                  <div className="min-w-0 flex-[1_1_260px]">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <h3 className="text-[22px] uppercase text-white">{lead.full_name}</h3>
                       <span
-                        className={`border px-2 py-0.5 font-mono text-[9px] tracking-widest ${
-                          STAGE_COLOR[lead.stage] ?? STAGE_COLOR["new"]
+                        className={`border px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] ${
+                          STAGE_PILL[lead.stage] ?? STAGE_PILL["new"]
                         }`}
                       >
                         {STAGE_LABELS[lead.stage] ?? lead.stage.toUpperCase()}
                       </span>
-                      <span className="border border-white/10 px-2 py-0.5 font-mono text-[9px] tracking-widest text-white/40">
-                        {lead.source.replace(/_/g, " ").toUpperCase()}
+                      <span className="font-mono text-[10px] tracking-[0.2em] text-white/40">
+                        {relativeAge(lead.created_at)}
                       </span>
                     </div>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-white/60">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-white/45">
                       {lead.email && (
                         <a
                           href={`mailto:${lead.email}`}
@@ -224,61 +270,49 @@ export function AdminPipelineView({
                       <span>{date(lead.created_at)}</span>
                     </div>
 
-                    <p className="mt-2 font-mono text-xs text-white/50">
-                      {lead.project_type.replace(/_/g, " ")}
-                      {lead.budget_range ? ` · ${lead.budget_range.replace(/_/g, " ")}` : ""}
-                      {lead.timeline ? ` · ${lead.timeline}` : ""}
-                    </p>
                     {lead.primary_goal && (
-                      <p className="mt-2 max-w-2xl font-mono text-xs leading-relaxed text-white/70">
+                      <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/60">
                         {lead.primary_goal}
                       </p>
                     )}
                   </div>
 
-                  <div className="text-right">
-                    <span className="font-mono text-[10px] tracking-widest text-white/40">
+                  <div className="flex-[0_0_200px]">
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">
                       NEXT ACTION
                     </span>
-                    <p className="mt-1 inline-flex items-center gap-1.5 font-mono text-xs font-bold text-[#FF3333]">
-                      <ArrowRight className="size-3" />
+                    <p className="mt-1 font-mono text-xs leading-[1.7] text-[#FF3333]">
                       {nextAction(lead)}
                     </p>
                     <button
                       type="button"
                       onClick={() => setDetailLead(lead)}
-                      className="mt-3 inline-flex items-center gap-1.5 border border-white/15 px-2.5 py-1 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+                      className={`mt-3 ${btnGhostSm}`}
                     >
-                      <FileText className="size-3" />
                       VIEW DETAIL
                     </button>
                   </div>
                 </div>
 
-                {/* Linked bookings */}
                 {upcoming.length > 0 && (
-                  <div className="mt-4 space-y-2 border-t border-white/10 pt-4">
+                  <div className="mt-4 flex flex-col gap-2 border-t border-white/[0.08] pt-4">
                     {upcoming.map((b) => (
                       <div
                         key={b.id}
                         className="flex flex-wrap items-center justify-between gap-3 border border-white/10 bg-white/[0.02] px-3 py-2"
                       >
-                        <span className="inline-flex items-center gap-2 font-mono text-xs text-white/80">
+                        <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white/80">
                           <CalendarClock className="size-3.5 text-[#FF3333]" />
                           {slotTime(b.slot_start, b.time_zone)} ({b.time_zone})
                         </span>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                           <button
                             type="button"
                             disabled={busy === b.id}
                             onClick={() =>
-                              run(
-                                b.id,
-                                () => onUpdateBooking(b.id, "completed"),
-                                "Call marked complete",
-                              )
+                              run(b.id, () => onUpdateBooking(b.id, "completed"), "Call marked complete")
                             }
-                            className="border border-white/15 px-2.5 py-1 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-emerald-400 hover:text-emerald-300 disabled:opacity-50"
+                            className={btnGhostSm}
                           >
                             COMPLETED
                           </button>
@@ -288,7 +322,7 @@ export function AdminPipelineView({
                             onClick={() =>
                               run(b.id, () => onUpdateBooking(b.id, "no_show"), "Marked no-show")
                             }
-                            className="border border-white/15 px-2.5 py-1 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-amber-400 hover:text-amber-300 disabled:opacity-50"
+                            className={btnGhostSm}
                           >
                             NO-SHOW
                           </button>
@@ -298,7 +332,7 @@ export function AdminPipelineView({
                             onClick={() =>
                               run(b.id, () => onUpdateBooking(b.id, "cancelled"), "Booking cancelled")
                             }
-                            className="border border-white/15 px-2.5 py-1 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333] disabled:opacity-50"
+                            className={btnGhostSm}
                           >
                             CANCEL
                           </button>
@@ -308,19 +342,20 @@ export function AdminPipelineView({
                   </div>
                 )}
 
-                {/* Open followups */}
                 {openFollowups.length > 0 && (
-                  <div className="mt-3 space-y-2">
+                  <div className="mt-3 flex flex-col gap-2">
                     {openFollowups.map((f) => (
                       <div
                         key={f.id}
                         className="flex flex-wrap items-center justify-between gap-3 border border-amber-400/20 bg-amber-400/[0.04] px-3 py-2"
                       >
-                        <span className="inline-flex items-start gap-2 font-mono text-xs text-white/80">
+                        <span className="inline-flex items-start gap-2 font-mono text-[11px] leading-[1.7] text-white/80">
                           <AlertTriangle className="mt-0.5 size-3.5 shrink-0 text-amber-300" />
                           <span>
-                            <strong className="text-amber-300">{f.urgency.toUpperCase()}</strong> ·{" "}
-                            {f.reason} — {f.summary}
+                            <strong className="font-normal text-amber-300">
+                              {f.urgency.toUpperCase()}
+                            </strong>{" "}
+                            · {f.reason} — {f.summary}
                           </span>
                         </span>
                         <button
@@ -329,7 +364,7 @@ export function AdminPipelineView({
                           onClick={() =>
                             run(f.id, () => onResolveFollowup(f.id, "resolved"), "Follow-up resolved")
                           }
-                          className="border border-white/15 px-2.5 py-1 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-emerald-400 hover:text-emerald-300 disabled:opacity-50"
+                          className={btnGhostSm}
                         >
                           RESOLVE
                         </button>
@@ -338,23 +373,23 @@ export function AdminPipelineView({
                   </div>
                 )}
 
-                {/* Audits */}
                 {lead.audits.length > 0 && (
                   <p className="mt-3 font-mono text-[11px] text-white/50">
-                    Audit requests: {lead.audits.map((a) => `${a.website_url} (${a.status})`).join(", ")}
+                    Audit requests:{" "}
+                    {lead.audits.map((a) => `${a.website_url} (${a.status})`).join(", ")}
                   </p>
                 )}
 
-                {/* Stage control */}
-                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/10 pt-4">
-                  <span className="font-mono text-[10px] tracking-widest text-white/50">STAGE:</span>
+                <div className="mt-4 flex flex-wrap items-center gap-2.5 border-t border-white/[0.08] pt-4">
+                  <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">STAGE</span>
                   <select
                     value={lead.stage}
                     disabled={busy === lead.id}
+                    aria-label={`Stage for ${lead.full_name}`}
                     onChange={(e) =>
                       run(lead.id, () => onUpdateStage(lead.id, e.target.value), "Stage updated")
                     }
-                    className="border border-white/15 bg-[#030014] px-2.5 py-1 font-mono text-xs text-white focus:border-[#FF3333] focus:outline-none"
+                    className={select}
                   >
                     {LEAD_STAGES.map((s) => (
                       <option key={s} value={s}>
@@ -368,7 +403,7 @@ export function AdminPipelineView({
                     </span>
                   )}
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

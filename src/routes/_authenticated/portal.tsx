@@ -2,24 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  CalendarDays,
-  CheckCircle2,
-  Circle,
-  ExternalLink,
-  FileSignature,
-  FileText,
-  LayoutDashboard,
-  Loader2,
-  LogOut,
-  ShieldCheck,
-  UserRound,
-} from "lucide-react";
+import { ExternalLink, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
 import { ClientProfileForm } from "@/components/portal/ClientProfileForm";
+import { SignalShell } from "@/components/signal/SignalShell";
+import {
+  btnGhost,
+  btnGhostSm,
+  btnGold,
+  btnPrimary,
+  emptyState,
+  label,
+  navPill,
+  panel,
+  panelGold,
+  panelUrgent,
+} from "@/components/signal/signal-ui";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { LEGAL_IDENTITY } from "@/lib/legal-identity";
 import { EmbeddedCheckoutFrame } from "@/components/EmbeddedCheckoutFrame";
 import { confirmBalancePayment, createBalanceCheckoutSession } from "@/utils/payments.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -79,7 +81,7 @@ function StatusPill({ status }: { status: string }) {
   const done = status === "complete" || status === "delivered";
   return (
     <span
-      className={`border px-3 py-1 font-mono text-[10px] tracking-widest ${
+      className={`border px-3 py-[5px] font-mono text-[10px] tracking-[0.2em] whitespace-nowrap ${
         done
           ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
           : "border-[#FF3333]/50 bg-[#FF3333]/10 text-[#FF3333]"
@@ -90,31 +92,16 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-function ProgressBar({ done, total }: { done: number; total: number }) {
-  const pct = total ? Math.round((done / total) * 100) : 0;
-  return (
-    <div>
-      <div className="h-1.5 w-full bg-white/10">
-        <div className="h-full bg-[#FF3333] transition-all" style={{ width: `${pct}%` }} />
-      </div>
-      <p className="mt-2 font-mono text-[10px] tracking-widest text-white/40">
-        {pct}% COMPLETE · {done}/{total} MILESTONES
-      </p>
-    </div>
-  );
-}
-
 function ProjectSummary({ project }: { project: PortalProject }) {
   const done = project.milestones.filter((m) => m.status === "done").length;
-  const active = project.milestones.find((m) => m.status === "active");
+  const total = project.milestones.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
 
   return (
-    <section className="border border-white/10 bg-white/[0.02] p-6">
+    <section className={`p-6 ${panel}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="font-display text-2xl uppercase leading-tight text-white">
-            {project.title}
-          </h2>
+          <h3 className="text-[22px] uppercase leading-[1.1] text-white">{project.title}</h3>
           <p className="mt-1 font-mono text-[11px] text-white/40">
             {project.start_date
               ? `Started ${date(project.start_date)}`
@@ -126,21 +113,17 @@ function ProjectSummary({ project }: { project: PortalProject }) {
       </div>
 
       {project.summary && (
-        <p className="mt-4 font-mono text-xs leading-relaxed text-white/60">{project.summary}</p>
+        <p className="mt-4 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/60">
+          {project.summary}
+        </p>
       )}
 
-      <div className="mt-5">
-        <ProgressBar done={done} total={project.milestones.length} />
+      <div className="mt-5 h-1.5 w-full bg-white/10">
+        <div className="h-full bg-[#FF3333] transition-all" style={{ width: `${pct}%` }} />
       </div>
-
-      {(project.next_step || active) && (
-        <div className="mt-5 border-l-2 border-[#FF3333] bg-[#FF3333]/5 px-4 py-3">
-          <p className="font-mono text-[10px] tracking-widest text-[#FF3333]">UP NEXT</p>
-          <p className="mt-1 font-mono text-xs text-white/80">
-            {project.next_step || active?.title}
-          </p>
-        </div>
-      )}
+      <p className="mt-2 font-mono text-[10px] tracking-[0.2em] text-white/40">
+        {pct}% COMPLETE · {done}/{total} MILESTONES
+      </p>
     </section>
   );
 }
@@ -155,55 +138,64 @@ function Timeline({ project }: { project: PortalProject }) {
   }
 
   return (
-    <ol className="relative space-y-6 border-l border-white/10 pl-6">
-      {project.milestones.map((m) => (
-        <li key={m.id} className="relative">
-          <span className="absolute -left-[31px] top-0.5 flex size-5 items-center justify-center rounded-full bg-[#030014]">
-            {m.status === "done" ? (
-              <CheckCircle2 className="size-4 text-emerald-400" />
-            ) : m.status === "active" ? (
-              <Loader2 className="size-4 animate-spin text-[#FF3333]" />
-            ) : (
-              <Circle className="size-4 text-white/25" />
-            )}
-          </span>
-          <div className="flex flex-wrap items-center gap-2">
+    <ol className="mt-6 flex flex-col gap-[22px] border-l border-white/[0.12] pl-6">
+      {project.milestones.map((m) => {
+        const done = m.status === "done";
+        const active = m.status === "active";
+
+        return (
+          <li key={m.id} className="relative">
             <span
-              className={`font-display text-sm uppercase ${
-                m.status === "pending" ? "text-white/40" : "text-white"
+              aria-hidden="true"
+              className={`absolute -left-[35px] top-px flex size-5 items-center justify-center rounded-full bg-[#030014] text-[13px] ${
+                done ? "text-emerald-400" : active ? "text-[#FF3333]" : "text-white/25"
               }`}
             >
-              {m.title}
+              {done ? "✓" : active ? "◍" : "○"}
             </span>
-            {m.status === "active" && (
-              <span className="bg-[#FF3333] px-1.5 py-0.5 font-mono text-[9px] tracking-widest text-black">
-                IN PROGRESS
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`font-display text-[15px] uppercase ${
+                  m.status === "pending" ? "text-white/40" : "text-white"
+                }`}
+              >
+                {m.title}
               </span>
+              {active && (
+                <span className="bg-[#FF3333] px-1.5 py-0.5 font-mono text-[9px] tracking-[0.2em] text-black">
+                  YOUR TURN
+                </span>
+              )}
+              {m.due_date && !done && (
+                <span className="font-mono text-[10px] tracking-[0.2em] text-white/40">
+                  DUE {date(m.due_date).toUpperCase()}
+                </span>
+              )}
+              {m.completed_at && done && (
+                <span className="font-mono text-[10px] tracking-[0.2em] text-emerald-400/70">
+                  DONE {date(m.completed_at).toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            {m.note && (
+              <p className="mt-1.5 font-mono text-xs leading-[1.8] text-white/55">{m.note}</p>
             )}
-            {m.due_date && m.status !== "done" && (
-              <span className="font-mono text-[10px] tracking-widest text-white/40">
-                DUE {date(m.due_date).toUpperCase()}
-              </span>
+
+            {m.link && (
+              <a
+                href={m.link}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2.5 inline-flex items-center gap-1.5 border border-[#FF3333]/40 bg-[#FF3333]/10 px-3.5 py-[7px] font-mono text-[10px] tracking-[0.2em] text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black"
+              >
+                VIEW DELIVERABLE <ExternalLink className="size-3" />
+              </a>
             )}
-            {m.completed_at && m.status === "done" && (
-              <span className="font-mono text-[10px] tracking-widest text-emerald-400/70">
-                DONE {date(m.completed_at).toUpperCase()}
-              </span>
-            )}
-          </div>
-          {m.note && <p className="mt-1 font-mono text-xs text-white/50">{m.note}</p>}
-          {m.link && (
-            <a
-              href={m.link}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2 inline-flex items-center gap-1.5 border border-[#FF3333]/40 bg-[#FF3333]/10 px-3 py-1.5 font-mono text-[11px] tracking-widest text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black"
-            >
-              VIEW DELIVERABLE <ExternalLink className="size-3" />
-            </a>
-          )}
-        </li>
-      ))}
+          </li>
+        );
+      })}
     </ol>
   );
 }
@@ -217,9 +209,12 @@ function Invoices({
 }) {
   if (invoices.length === 0) {
     return (
-      <p className="font-mono text-xs text-white/40">
-        No invoices yet. Payments and receipts will show up here automatically.
-      </p>
+      <div className={emptyState}>
+        <p className="font-display text-[22px] uppercase text-white/70">No invoices yet</p>
+        <p className="mt-2 font-mono text-[11px] text-white/40">
+          Payments and receipts show up here automatically.
+        </p>
+      </div>
     );
   }
 
@@ -228,16 +223,22 @@ function Invoices({
   const currency = invoices[0]?.currency ?? "usd";
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="border border-white/10 bg-white/[0.02] p-5">
-          <p className="font-mono text-[10px] tracking-widest text-white/40">TOTAL PAID</p>
-          <p className="mt-2 font-display text-3xl text-white">{money(totalPaid, currency)}</p>
+    <div className="flex max-w-[56rem] flex-col gap-[18px]">
+      <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))]">
+        <div className={`p-5 ${panel}`}>
+          <span className="font-mono text-[9px] tracking-[0.22em] text-white/40">TOTAL PAID</span>
+          <p className="mt-2 font-display text-[32px] text-white">{money(totalPaid, currency)}</p>
         </div>
-        <div className="border border-white/10 bg-white/[0.02] p-5">
-          <p className="font-mono text-[10px] tracking-widest text-white/40">BALANCE DUE</p>
+        <div
+          className={`p-5 ${
+            outstanding > 0
+              ? "border border-[#FF3333]/40 bg-[#FF3333]/[0.05]"
+              : "border border-emerald-400/30 bg-emerald-400/[0.05]"
+          }`}
+        >
+          <span className="font-mono text-[9px] tracking-[0.22em] text-white/40">BALANCE DUE</span>
           <p
-            className={`mt-2 font-display text-3xl ${
+            className={`mt-2 font-display text-[32px] ${
               outstanding > 0 ? "text-[#FF3333]" : "text-emerald-400"
             }`}
           >
@@ -246,12 +247,15 @@ function Invoices({
         </div>
       </div>
 
-      <div className="divide-y divide-white/10 border border-white/10">
+      <div className="border border-white/10">
         {invoices.map((inv) => (
-          <div key={`${inv.kind}-${inv.id}`} className="flex flex-wrap items-center gap-3 p-4">
+          <div
+            key={`${inv.kind}-${inv.id}`}
+            className="flex flex-wrap items-center gap-3 border-b border-white/[0.08] p-4 last:border-b-0"
+          >
             <div className="min-w-0 flex-1">
-              <p className="font-display text-sm uppercase text-white">{inv.description}</p>
-              <p className="mt-1 font-mono text-[11px] text-white/40">
+              <p className="font-display text-[15px] uppercase text-white">{inv.description}</p>
+              <p className="mt-1 font-mono text-[10px] text-white/40">
                 {date(inv.issued_at)} · {inv.kind === "retainer" ? "RETAINER" : "COMMISSION"} ·{" "}
                 {inv.status.replace(/_/g, " ").toUpperCase()}
                 {inv.balance_due_cents > 0
@@ -259,25 +263,23 @@ function Invoices({
                   : ""}
               </p>
             </div>
-            <span className="font-mono text-sm text-white">
+
+            <span className="font-mono text-[13px] text-white">
               {money(inv.amount_cents, inv.currency)}
             </span>
+
             {inv.kind === "commission" && inv.balance_due_cents > 0 && (
               <button
                 type="button"
                 onClick={() => onPayBalance(inv.id)}
-                className="inline-flex items-center gap-1.5 border border-[#FF3333] bg-[#FF3333]/10 px-3 py-1.5 font-mono text-[10px] tracking-widest text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black"
+                className="inline-flex items-center gap-1.5 border border-[#FF3333] bg-[#FF3333]/10 px-3.5 py-[7px] font-mono text-[10px] tracking-[0.2em] text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black whitespace-nowrap"
               >
                 PAY {money(inv.balance_due_cents, inv.currency)}
               </button>
             )}
+
             {inv.hosted_url && (
-              <a
-                href={inv.hosted_url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 border border-white/20 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
-              >
+              <a href={inv.hosted_url} target="_blank" rel="noreferrer" className={btnGhostSm}>
                 RECEIPT <ExternalLink className="size-3" />
               </a>
             )}
@@ -291,49 +293,52 @@ function Invoices({
 function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
   if (proposals.length === 0) {
     return (
-      <p className="font-mono text-xs text-white/40">
-        No proposals yet. When Rory sends you a scope agreement it will appear here to review and
-        sign.
-      </p>
+      <div className={emptyState}>
+        <p className="font-display text-[22px] uppercase text-white/70">No proposals yet</p>
+        <p className="mt-2 font-mono text-[11px] text-white/40">
+          When Rory sends a scope agreement it appears here to review and sign.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="divide-y divide-white/10 border border-white/10">
+    <div className="flex max-w-[56rem] flex-col gap-3">
       {proposals.map((p) => {
         const signed = p.status === "signed";
+
         return (
-          <div key={p.id} className="space-y-3 p-5">
+          <article key={p.id} className={`p-[22px] ${signed ? panel : panelUrgent}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-display text-lg uppercase text-white">{p.project_title}</p>
-                <p className="mt-1 font-mono text-[11px] text-white/40">
+                <h3 className="text-[19px] uppercase text-white">{p.project_title}</h3>
+                <p className="mt-1 font-mono text-[11px] text-white/45">
                   {date(p.created_at)} · TIMELINE {p.timeline_weeks.toUpperCase()}
                 </p>
               </div>
               <span
-                className={`px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest ${
-                  signed ? "bg-emerald-500 text-black" : "bg-[#FF3333] text-black"
+                className={`px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] whitespace-nowrap ${
+                  signed ? "bg-[#34d399] text-black" : "bg-[#FF3333] text-black"
                 }`}
               >
                 {signed ? "SIGNED" : "AWAITING SIGNATURE"}
               </span>
             </div>
 
-            <p className="whitespace-pre-line font-mono text-xs text-white/60">
+            <p className="mt-3 max-w-[44rem] whitespace-pre-line font-mono text-xs leading-[1.8] text-white/60">
               {p.scope_deliverables}
             </p>
 
-            <p className="font-mono text-xs text-white">
+            <p className="mt-3 font-mono text-xs text-white/80">
               Total {money(p.total_price_cents, "usd")} · Deposit to start{" "}
               {money(p.deposit_cents, "usd")}
             </p>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2.5">
               <Link
                 to="/proposals/$proposalId"
                 params={{ proposalId: p.id }}
-                className="inline-flex items-center gap-1.5 border border-[#FF3333] bg-[#FF3333]/10 px-3 py-1.5 font-mono text-[10px] tracking-widest text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black"
+                className={signed ? btnGhost : btnPrimary}
               >
                 {signed ? "VIEW AGREEMENT" : "REVIEW & SIGN"} <ExternalLink className="size-3" />
               </Link>
@@ -342,11 +347,10 @@ function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
                 type="button"
                 onClick={async () => {
                   try {
-                    const { downloadSignedProposalPdf } =
-                      await import("@/utils/proposals.functions");
-                    const res = await downloadSignedProposalPdf({
-                      data: { token: p.share_token },
-                    });
+                    const { downloadSignedProposalPdf } = await import(
+                      "@/utils/proposals.functions"
+                    );
+                    const res = await downloadSignedProposalPdf({ data: { token: p.share_token } });
                     if (!res.success || !res.pdfBase64) throw new Error(res.error || "Failed");
                     const link = document.createElement("a");
                     link.href = `data:application/pdf;base64,${res.pdfBase64}`;
@@ -357,12 +361,12 @@ function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
                     toast.error("Could not download the PDF");
                   }
                 }}
-                className="inline-flex items-center gap-1.5 border border-white/15 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white transition-colors hover:border-[#FF3333]"
+                className={btnGhost}
               >
                 DOWNLOAD PDF ↓
               </button>
             </div>
-          </div>
+          </article>
         );
       })}
     </div>
@@ -371,14 +375,23 @@ function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
 
 type Tab = "overview" | "approvals" | "timeline" | "proposals" | "invoices" | "profile";
 
-const TABS: { key: Tab; label: string; icon: typeof LayoutDashboard }[] = [
-  { key: "overview", label: "OVERVIEW", icon: LayoutDashboard },
-  { key: "approvals", label: "APPROVALS", icon: ShieldCheck },
-  { key: "timeline", label: "TIMELINE", icon: CalendarDays },
-  { key: "proposals", label: "PROPOSALS", icon: FileSignature },
-  { key: "invoices", label: "INVOICES", icon: FileText },
-  { key: "profile", label: "MY DETAILS", icon: UserRound },
+const TABS: { key: Tab; label: string }[] = [
+  { key: "overview", label: "OVERVIEW" },
+  { key: "approvals", label: "APPROVALS" },
+  { key: "timeline", label: "TIMELINE" },
+  { key: "proposals", label: "PROPOSALS" },
+  { key: "invoices", label: "INVOICES" },
+  { key: "profile", label: "MY DETAILS" },
 ];
+
+const TAB_TITLES: Record<Tab, string> = {
+  overview: "Your project",
+  approvals: "Sign-off queue",
+  timeline: "Timeline",
+  proposals: "Proposals",
+  invoices: "Invoices",
+  profile: "My details",
+};
 
 function PortalPage() {
   const fetchPortal = useServerFn(getMyPortal);
@@ -453,11 +466,19 @@ function PortalPage() {
         .map((approval) => ({ approval, milestone, project })),
     ),
   );
-  const awaitingApprovals = approvals.filter(({ approval }) => approval.status === "awaiting_review");
+  const awaitingApprovals = approvals.filter(
+    ({ approval }) => approval.status === "awaiting_review",
+  );
   const activeProject = useMemo(
     () => projects.find((p) => p.id === activeProjectId) ?? projects[0] ?? null,
     [projects, activeProjectId],
   );
+
+  const outstanding = invoices.reduce((sum, i) => sum + i.balance_due_cents, 0);
+  const payableInvoice = invoices.find((i) => i.kind === "commission" && i.balance_due_cents > 0);
+  const currency = invoices[0]?.currency ?? "usd";
+  const agreement = (proposalsData ?? []).find((p) => p.status === "signed");
+  const nextApproval = awaitingApprovals[0];
 
   const signOut = async () => {
     await queryClient.cancelQueries();
@@ -466,76 +487,62 @@ function PortalPage() {
     void navigate({ to: "/portal/login", search: {}, replace: true });
   };
 
+  // Stripe's embedded checkout owns the whole screen while it is open.
   if (payingOrderId) {
     return (
-      <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10">
+      <div className="signal-root min-h-screen bg-[#030014] px-5 py-16 md:px-10">
         <Toaster />
         <div className="mx-auto max-w-3xl">
-          <Logo variant="compact" size="md" href="/" className="mb-6" />
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <h1 className="font-display text-2xl uppercase text-white">PAY REMAINING BALANCE</h1>
-            <button
-              type="button"
-              onClick={() => setPayingOrderId(null)}
-              className="border border-white/20 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/70 hover:border-white/50"
-            >
+          <Logo size="sm" href="/" className="mb-6" />
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <h1 className="text-2xl uppercase text-white">Pay remaining balance</h1>
+            <button type="button" onClick={() => setPayingOrderId(null)} className={btnGhost}>
               CANCEL
             </button>
           </div>
           <EmbeddedCheckoutFrame fetchClientSecret={fetchClientSecret} />
         </div>
-      </main>
+      </div>
     );
   }
 
+  const headline =
+    tab === "overview" && activeProject ? activeProject.title : TAB_TITLES[tab];
+
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10">
+    <>
       <Toaster />
-      <div className="mx-auto max-w-5xl">
-        <Logo variant="compact" size="md" href="/" className="mb-6" />
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
-              CLIENT DASHBOARD
-            </span>
-            <h1 className="mt-3 font-display text-3xl uppercase leading-[0.9] text-white sm:text-5xl">
-              YOUR PROJECTS
-            </h1>
-            <p className="mt-2 font-mono text-xs text-white/40">
-              {data?.email ? `Signed in as ${data.email}` : "Live status, timeline and invoices."}
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <Link
-              to="/"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/60 transition-colors hover:text-white"
-            >
+      <SignalShell
+        eyebrow="CLIENT DASHBOARD"
+        headline={headline}
+        nav={TABS}
+        activeKey={tab}
+        onNavigate={setTab}
+        actions={
+          <>
+            {data?.email && (
+              <span className="self-center px-1 font-mono text-[9px] tracking-[0.2em] text-white/30">
+                {data.email.toUpperCase()}
+              </span>
+            )}
+            <Link to="/" className={navPill(false)}>
               BACK TO SITE
             </Link>
-            <button
-              type="button"
-              onClick={() => void signOut()}
-              className="inline-flex items-center gap-2 border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
-            >
-              <LogOut className="size-3" /> SIGN OUT
+            <button type="button" onClick={() => void signOut()} className={navPill(false)}>
+              <LogOut className="mr-1.5 inline size-3" />
+              SIGN OUT
             </button>
-          </div>
-        </div>
-
-        {isLoading && (
-          <p className="mt-12 font-mono text-xs text-white/40">Loading your dashboard…</p>
-        )}
+          </>
+        }
+      >
+        {isLoading && <p className="font-mono text-xs text-white/40">Loading your dashboard…</p>}
 
         {isError && (
-          <div className="mt-12 border border-[#FF3333]/40 bg-[#FF3333]/5 p-6">
-            <p className="font-mono text-xs tracking-widest text-[#FF3333]">
+          <div className="border border-[#FF3333]/40 bg-[#FF3333]/5 p-6">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#FF3333]">
               COULDN&apos;T LOAD YOUR DASHBOARD
             </p>
-            <button
-              type="button"
-              onClick={() => void refetch()}
-              className="mt-4 border border-white/20 px-4 py-2 font-mono text-[11px] tracking-widest text-white/80 transition-colors hover:border-white/50 hover:text-white"
-            >
+            <button type="button" onClick={() => void refetch()} className={`mt-4 ${btnGhost}`}>
               TRY AGAIN
             </button>
           </div>
@@ -544,50 +551,29 @@ function PortalPage() {
         {data && (
           <>
             {needsOnboarding && tab !== "profile" && (
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border border-[#FF3333]/40 bg-[#FF3333]/5 p-5">
-                <p className="font-mono text-xs text-white/70">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-4 border border-[#FF3333]/40 bg-[#FF3333]/5 p-5">
+                <p className="font-mono text-xs leading-[1.8] text-white/70">
                   Finish onboarding so I have your contact details and can reach you the way you
                   prefer.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setTab("profile")}
-                  className="bg-[#FF3333] px-4 py-2 font-mono text-[11px] tracking-widest text-black transition-opacity hover:opacity-90"
-                >
+                <button type="button" onClick={() => setTab("profile")} className={btnPrimary}>
                   COMPLETE MY DETAILS →
                 </button>
               </div>
             )}
 
-            <nav className="mt-10 flex flex-wrap gap-2 border-b border-white/10 pb-3">
-              {TABS.map(({ key, label, icon: Icon }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setTab(key)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 font-mono text-[11px] tracking-widest transition-colors ${
-                    tab === key
-                      ? "bg-[#FF3333] text-black"
-                      : "border border-white/15 text-white/60 hover:text-white"
-                  }`}
-                >
-                  <Icon className="size-3" /> {label}
-                </button>
-              ))}
-            </nav>
-
-            {projects.length > 1 && tab !== "invoices" && (
-              <div className="mt-6 flex flex-wrap gap-2">
+            {projects.length > 1 && tab !== "invoices" && tab !== "profile" && (
+              <div className="mb-5 flex flex-wrap gap-2">
                 {projects.map((p) => (
                   <button
                     key={p.id}
                     type="button"
                     onClick={() => setActiveProjectId(p.id)}
-                    className={`border px-3 py-2 font-mono text-[10px] tracking-widest transition-colors ${
+                    className={
                       activeProject?.id === p.id
-                        ? "border-[#FF3333] text-[#FF3333]"
-                        : "border-white/10 text-white/50 hover:text-white"
-                    }`}
+                        ? "border border-[#FF3333] px-3 py-2 font-mono text-[10px] tracking-[0.2em] text-[#FF3333]"
+                        : "border border-white/10 px-3 py-2 font-mono text-[10px] tracking-[0.2em] text-white/50 transition-colors hover:text-white"
+                    }
                   >
                     {p.title.toUpperCase()}
                   </button>
@@ -595,98 +581,225 @@ function PortalPage() {
               </div>
             )}
 
-            <div className="mt-8 space-y-8">
-              {tab === "overview" &&
-                (projects.length === 0 ? (
-                  <div className="border border-dashed border-white/10 py-16 text-center">
-                    <p className="font-mono text-xs text-white/50">
-                      No projects in your dashboard yet. Once your commission kicks off, live
-                      milestones and deliverables show up here.
-                    </p>
-                    <Link
-                      to="/book"
-                      className="mt-6 inline-block bg-[#FF3333] px-5 py-2.5 font-mono text-xs tracking-widest text-black transition-opacity hover:opacity-90"
-                    >
-                      BOOK A DISCOVERY CALL →
-                    </Link>
+            {tab === "overview" &&
+              (projects.length === 0 ? (
+                <div className={emptyState}>
+                  <p className="font-display text-[22px] uppercase text-white/70">
+                    Nothing here yet
+                  </p>
+                  <p className="mt-2 font-mono text-[11px] leading-[1.8] text-white/40">
+                    Once your commission kicks off, live milestones and deliverables show up here.
+                  </p>
+                  <Link to="/book" className={`mt-6 ${btnPrimary}`}>
+                    BOOK A DISCOVERY CALL →
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
+                  <div className="flex min-w-0 flex-col gap-3.5">
+                    {nextApproval && (
+                      <section className={`p-6 ${panelUrgent}`}>
+                        <span className="bg-[#FF3333] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black">
+                          YOUR TURN
+                        </span>
+                        <h2 className="mt-3.5 text-[clamp(1.5rem,3vw,2rem)] uppercase leading-[1.05] text-white">
+                          {nextApproval.milestone.title} is waiting on you
+                        </h2>
+                        <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/65">
+                          {nextApproval.approval.review_note ??
+                            "The screens are ready for your comments. Build continues the day you sign off — what you approve is what goes live."}
+                        </p>
+                        <div className="mt-[18px] flex flex-wrap gap-2.5">
+                          <Link
+                            to="/projects/$projectId"
+                            params={{ projectId: nextApproval.project.id }}
+                            search={{ approval: nextApproval.approval.id }}
+                            className="inline-flex items-center gap-1.5 bg-[#FF3333] px-5 py-[11px] font-mono text-[10px] font-bold tracking-[0.2em] text-black transition-opacity hover:opacity-90"
+                          >
+                            REVIEW &amp; SIGN OFF ↗
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => setTab("approvals")}
+                            className="inline-flex items-center gap-1.5 border border-white/20 px-5 py-[11px] font-mono text-[10px] tracking-[0.2em] text-white/75 transition-colors hover:border-white hover:text-white"
+                          >
+                            SEE ALL {awaitingApprovals.length} REQUEST
+                            {awaitingApprovals.length === 1 ? "" : "S"}
+                          </button>
+                        </div>
+                      </section>
+                    )}
+
+                    {projects.map((p) => (
+                      <div key={p.id} className="flex flex-col gap-2.5">
+                        <ProjectSummary project={p} />
+                        <Link
+                          to="/projects/$projectId"
+                          params={{ projectId: p.id }}
+                          search={{}}
+                          className={`self-start ${btnGhostSm}`}
+                        >
+                          OPEN PROJECT PAGE →
+                        </Link>
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  projects.map((p) => (
-                    <div key={p.id} className="space-y-3">
-                      <ProjectSummary project={p} />
-                      <Link
-                        to="/projects/$projectId"
-                        params={{ projectId: p.id }}
-                        search={{}}
-                        className="inline-flex items-center gap-1.5 border border-white/15 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+
+                  <aside className="flex min-w-0 max-w-[360px] flex-col gap-3">
+                    <div className={`p-4 ${panel}`}>
+                      <span className="font-mono text-[9px] tracking-[0.22em] text-white/40">
+                        BALANCE DUE
+                      </span>
+                      <p
+                        className={`mt-2 font-display text-[30px] ${
+                          outstanding > 0 ? "text-[#FF3333]" : "text-emerald-400"
+                        }`}
                       >
-                        OPEN PROJECT PAGE →
-                      </Link>
+                        {money(outstanding, currency)}
+                      </p>
+                      <p className="mt-1.5 font-mono text-[10px] leading-[1.7] text-white/40">
+                        {outstanding > 0
+                          ? "Invoiced when review closes. Refundable before kickoff."
+                          : "Nothing outstanding — you're all paid up."}
+                      </p>
+                      {payableInvoice && (
+                        <button
+                          type="button"
+                          onClick={() => setPayingOrderId(payableInvoice.id)}
+                          className="mt-3 w-full border border-[#FF3333] bg-[#FF3333]/10 py-[9px] font-mono text-[10px] tracking-[0.2em] text-[#FF3333] transition-colors hover:bg-[#FF3333] hover:text-black"
+                        >
+                          PAY {money(payableInvoice.balance_due_cents, payableInvoice.currency)}
+                        </button>
+                      )}
                     </div>
-                  ))
-                ))}
 
-              {tab === "timeline" &&
-                (activeProject ? (
-                  <section className="border border-white/10 bg-white/[0.02] p-6">
-                    <h2 className="mb-6 font-display text-xl uppercase text-white">
-                      {activeProject.title}
-                    </h2>
-                    <Timeline project={activeProject} />
-                  </section>
-                ) : (
-                  <p className="font-mono text-xs text-white/40">No timeline yet.</p>
-                ))}
+                    {agreement && (
+                      <div className={`p-4 ${panelGold}`}>
+                        <span className="font-mono text-[9px] tracking-[0.22em] text-[#F6DC9A]">
+                          YOUR AGREEMENT
+                        </span>
+                        <p className="mt-2 font-mono text-[11px] leading-[1.8] text-white/65">
+                          {agreement.project_title}, signed{" "}
+                          {date(agreement.client_signed_at ?? agreement.created_at)}. Total{" "}
+                          {money(agreement.total_price_cents, "usd")}, deposit paid.
+                        </p>
+                        <Link
+                          to="/proposals/$proposalId"
+                          params={{ proposalId: agreement.id }}
+                          className={`mt-3 w-full justify-center ${btnGold}`}
+                        >
+                          VIEW AGREEMENT ↗
+                        </Link>
+                      </div>
+                    )}
 
-              {tab === "approvals" && (
-                <section>
-                  <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-                    <div>
-                      <p className="font-mono text-[10px] tracking-widest text-[#DFBA73]">SIGN-OFF QUEUE</p>
-                      <h2 className="mt-2 font-display text-2xl uppercase text-white">{awaitingApprovals.length} NEED YOUR APPROVAL</h2>
+                    <div className={`p-4 ${panel}`}>
+                      <span className="font-mono text-[9px] tracking-[0.22em] text-white/40">
+                        YOUR DESIGNER
+                      </span>
+                      <p className="mt-2 font-mono text-[11px] leading-[1.8] text-white/65">
+                        Rory Ulloa
+                        <br />
+                        <a href={`mailto:${LEGAL_IDENTITY.email}`}>{LEGAL_IDENTITY.email}</a>
+                        <br />
+                        <a href={`tel:${LEGAL_IDENTITY.phone.replace(/[^\d+]/g, "")}`}>
+                          {LEGAL_IDENTITY.phone}
+                        </a>
+                      </p>
                     </div>
-                    <p className="max-w-md font-mono text-xs leading-relaxed text-white/60">Review each deliverable on its project page, then approve it or send me a written change request.</p>
+                  </aside>
+                </div>
+              ))}
+
+            {tab === "timeline" &&
+              (activeProject ? (
+                <section className={`max-w-[56rem] p-6 ${panel}`}>
+                  <h2 className="text-xl uppercase text-white">{activeProject.title}</h2>
+                  <Timeline project={activeProject} />
+                </section>
+              ) : (
+                <p className="font-mono text-xs text-white/40">No timeline yet.</p>
+              ))}
+
+            {tab === "approvals" && (
+              <section className="max-w-[56rem]">
+                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                  <span className={label}>
+                    {awaitingApprovals.length} NEED YOUR APPROVAL
+                  </span>
+                  <p className="max-w-md font-mono text-[11px] leading-[1.8] text-white/50">
+                    Review each deliverable on its project page, then approve it or send a written
+                    change request.
+                  </p>
+                </div>
+
+                {approvals.length === 0 ? (
+                  <div className={emptyState}>
+                    <p className="font-display text-[22px] uppercase text-white/70">
+                      Nothing to sign off
+                    </p>
+                    <p className="mt-2 font-mono text-[11px] text-white/40">
+                      Requests appear here when a design stage or build step is ready.
+                    </p>
                   </div>
-                  {approvals.length === 0 ? (
-                    <p className="border border-dashed border-white/10 p-8 font-mono text-xs text-white/50">No review requests yet. They will appear here when a design stage or build step is ready.</p>
-                  ) : (
-                    <div className="divide-y divide-white/10 border border-white/10">
-                      {approvals.map(({ approval, milestone, project }) => (
-                        <div key={approval.id} className="flex flex-wrap items-center gap-4 p-5">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <p className="font-display text-lg uppercase text-white">{milestone.title}</p>
-                              <span className="border border-white/15 px-2 py-0.5 font-mono text-[9px] tracking-widest text-white/50">{approval.stage_type.toUpperCase()}</span>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {approvals.map(({ approval, milestone, project }) => {
+                      const waiting = approval.status === "awaiting_review";
+                      return (
+                        <div
+                          key={approval.id}
+                          className={`flex flex-wrap items-center gap-4 p-[18px] ${
+                            waiting ? panelUrgent : panel
+                          }`}
+                        >
+                          <div className="min-w-0 flex-[1_1_240px]">
+                            <div className="flex flex-wrap items-center gap-2.5">
+                              <h3 className="text-[19px] uppercase text-white">
+                                {milestone.title}
+                              </h3>
+                              <span className="border border-white/15 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-white/50">
+                                {approval.stage_type.toUpperCase()}
+                              </span>
                             </div>
-                            <p className="mt-1 font-mono text-[11px] text-white/45">{project.title} · {approval.status.replace(/_/g, " ").toUpperCase()}</p>
-                            {approval.client_feedback && <p className="mt-2 font-mono text-xs text-white/70">{approval.client_feedback}</p>}
+                            <p className="mt-1 font-mono text-[11px] text-white/45">
+                              {project.title} · {approval.status.replace(/_/g, " ").toUpperCase()}
+                            </p>
+                            {approval.client_feedback && (
+                              <p className="mt-2 font-mono text-xs leading-[1.8] text-white/70">
+                                {approval.client_feedback}
+                              </p>
+                            )}
                           </div>
+
                           <Link
                             to="/projects/$projectId"
                             params={{ projectId: project.id }}
                             search={{ approval: approval.id }}
-                            className={`inline-flex min-h-11 items-center px-4 font-mono text-[10px] font-bold tracking-widest ${approval.status === "awaiting_review" ? "bg-[#DFBA73] text-black" : "border border-white/20 text-white"}`}
+                            className={waiting ? btnPrimary : btnGhost}
                           >
-                            {approval.status === "awaiting_review" ? "REVIEW & SIGN OFF" : "VIEW DECISION"} →
+                            {waiting ? "REVIEW & SIGN OFF" : "VIEW DECISION"} →
                           </Link>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </section>
-              )}
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            )}
 
-              {tab === "proposals" && <Proposals proposals={proposalsData ?? []} />}
+            {tab === "proposals" && <Proposals proposals={proposalsData ?? []} />}
 
-              {tab === "invoices" && (
-                <Invoices invoices={invoices} onPayBalance={setPayingOrderId} />
-              )}
+            {tab === "invoices" && <Invoices invoices={invoices} onPayBalance={setPayingOrderId} />}
 
-              {tab === "profile" && <ClientProfileForm email={data.email} />}
-            </div>
+            {tab === "profile" && (
+              <div className="max-w-[56rem]">
+                <ClientProfileForm email={data.email} />
+              </div>
+            )}
           </>
         )}
-      </div>
-    </main>
+      </SignalShell>
+    </>
   );
 }

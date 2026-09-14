@@ -2,24 +2,14 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  Bot,
-  Briefcase,
-  DollarSign,
-  Eye,
-  FileCheck,
-  FileText,
-  MessageSquare,
-  Users,
-  X,
-  Radar,
-  FolderKanban,
-  Rocket,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { getStripeEnvironment } from "@/lib/stripe";
-import { Logo } from "@/components/Logo";
+import { buildSignals, type Signal } from "@/lib/signals";
+import { SignalShell } from "@/components/signal/SignalShell";
+import { btnGhostSm, btnPrimary, navPill } from "@/components/signal/signal-ui";
+import { AdminSignalView, type SignalKpi } from "@/components/admin/AdminSignalView";
 
 import {
   adminDeletePortfolioProject,
@@ -127,6 +117,7 @@ const date = (value: string | null) =>
     : "—";
 
 type MainView =
+  | "SIGNAL"
   | "PROJECTS"
   | "PIPELINE"
   | "AUTOPILOT"
@@ -138,6 +129,24 @@ type MainView =
   | "PORTFOLIO"
   | "CLIENTPORTAL"
   | "FINANCIALS";
+
+/**
+ * Headline shown beside the logo for each view. SIGNAL is absent on purpose —
+ * its headline counts what is actually in the queue.
+ */
+const VIEW_TITLES: Record<Exclude<MainView, "SIGNAL">, string> = {
+  PROJECTS: "Current projects",
+  PIPELINE: "Lead pipeline",
+  AUTOPILOT: "Follow-up autopilot",
+  SETUP: "New purchase setup",
+  PROSPECTS: "Prospect finder",
+  INQUIRIES: "Client leads",
+  CHATS: "Website chat",
+  PROPOSALS: "Proposals & contracts",
+  PORTFOLIO: "Portfolio manager",
+  CLIENTPORTAL: "Client portal",
+  FINANCIALS: "Financials & stats",
+};
 
 function AdminPage() {
   const environment = getStripeEnvironment();
@@ -187,7 +196,8 @@ function AdminPage() {
   const dismissOnboardingFn = useServerFn(adminDismissOnboarding);
 
 
-  const [currentView, setCurrentView] = useState<MainView>("PROJECTS");
+  const [currentView, setCurrentView] = useState<MainView>("SIGNAL");
+  const [snoozedSignals, setSnoozedSignals] = useState<string[]>([]);
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
@@ -844,158 +854,140 @@ function AdminPage() {
     setIsProposalModalOpen(true);
   };
 
+  // The action queue: everything above that already needs a decision, ranked.
+  // Snoozing lives here rather than in the view so the header count agrees with it.
+  const allSignals = useMemo(
+    () =>
+      buildSignals({
+        orders: ordersData?.orders ?? [],
+        inquiries: inquiriesData?.inquiries ?? [],
+        leads: pipelineData?.leads ?? [],
+        proposals: proposalsData ?? [],
+      }),
+    [ordersData, inquiriesData, pipelineData, proposalsData],
+  );
+  const signals = allSignals.filter((s) => !snoozedSignals.includes(s.id));
+
+  const pendingDrafts = (autopilotData?.drafts ?? []).filter((d) => d.status === "draft").length;
+
+  const kpis: SignalKpi[] = [
+    {
+      label: "Active projects",
+      value: String(activeProjectsCount),
+      sub: "Commissions & retainers",
+      pct: Math.min(100, activeProjectsCount * 20),
+    },
+    {
+      label: "New inquiries",
+      value: String(unreadInquiriesCount),
+      sub: unreadInquiriesCount === 0 ? "Inbox up to date" : "Unread client messages",
+      alert: unreadInquiriesCount > 0,
+      pct: Math.min(100, unreadInquiriesCount * 20),
+    },
+    {
+      label: "Pending balances",
+      value: money(pendingBalanceTotal, "USD"),
+      sub: "Awaiting completion",
+      pct: pendingBalanceTotal > 0 ? 50 : 0,
+    },
+    {
+      label: "Showcase work",
+      value: String((portfolioData?.projects ?? []).length),
+      sub: "Live portfolio items",
+      pct: 100,
+    },
+  ];
+
+  const actOnSignal = (signal: Signal) => {
+    if (signal.target.kind === "invoice") {
+      void invoiceBalance(signal.target.orderId);
+      return;
+    }
+    setCurrentView(signal.target.view as MainView);
+    window.scrollTo(0, 0);
+  };
+
+  const navItems: { key: MainView; label: string }[] = [
+    { key: "SIGNAL", label: "SIGNAL" },
+    { key: "PROJECTS", label: "PROJECTS" },
+    { key: "PIPELINE", label: `PIPELINE (${(pipelineData?.leads ?? []).length})` },
+    {
+      key: "SETUP",
+      label: `SETUP (${
+        (onboardingData?.runs ?? []).filter((r) => r.status === "ready" || r.status === "failed")
+          .length
+      })`,
+    },
+    { key: "AUTOPILOT", label: `AUTOPILOT (${pendingDrafts})` },
+    {
+      key: "PROSPECTS",
+      label: `PROSPECTS (${
+        (prospectsData?.prospects ?? []).filter((p) => p.pain_score >= 20 && p.status === "new")
+          .length
+      })`,
+    },
+    { key: "INQUIRIES", label: `LEADS (${unreadInquiriesCount})` },
+    {
+      key: "CHATS",
+      label: `CHAT (${(chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length})`,
+    },
+    { key: "PROPOSALS", label: `PROPOSALS (${(proposalsData ?? []).length})` },
+    { key: "PORTFOLIO", label: "PORTFOLIO" },
+    { key: "CLIENTPORTAL", label: "CLIENT PORTAL" },
+    { key: "FINANCIALS", label: "FINANCIALS" },
+  ];
+
+  const headline =
+    currentView === "SIGNAL"
+      ? signals.length === 1
+        ? "1 thing needs you"
+        : `${signals.length} things need you`
+      : VIEW_TITLES[currentView];
+
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10">
+    <>
       <Toaster />
-      <div className="mx-auto max-w-6xl">
-        {/* Top Header */}
-        <Logo variant="compact" size="md" href="/" className="mb-6" />
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-8">
-          <div>
-            <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
-              STUDIO COMMAND HUB
-            </span>
-            <h1 className="mt-2 font-display text-3xl uppercase leading-[0.9] text-white sm:text-5xl md:text-6xl">
-              DASHBOARD
-            </h1>
-            <p className="mt-2 font-mono text-xs text-white/50">
-              Manage client projects, review inbound messages, update portfolio work & billing.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              to="/account"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-white hover:text-white"
-            >
-              ← CLIENT ACCOUNT
+      <SignalShell
+        eyebrow="STUDIO COMMAND HUB"
+        headline={headline}
+        nav={navItems}
+        activeKey={currentView}
+        onNavigate={setCurrentView}
+        actions={
+          <>
+            <Link to="/account" className={navPill(false)}>
+              ACCOUNT
             </Link>
-            <Link
-              to="/"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
-            >
+            <Link to="/" className={navPill(false)}>
               LIVE SITE ↗
             </Link>
-          </div>
-        </div>
-
-        {/* Quick KPI Stat Cards */}
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
-              Active Projects
-            </span>
-            <p className="mt-2 font-display text-3xl text-white">{activeProjectsCount}</p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
-              Commissions & Retainers
-            </span>
-          </div>
-
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
-              New Inquiries
-            </span>
-            <p className="mt-2 font-display text-3xl text-[#FF3333]">{unreadInquiriesCount}</p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
-              {unreadInquiriesCount === 0 ? "Inbox up to date" : "Unread client messages"}
-            </span>
-          </div>
-
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
-              Pending Balances
-            </span>
-            <p className="mt-2 font-display text-3xl text-white">
-              {money(pendingBalanceTotal, "USD")}
-            </p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
-              Awaiting project completion
-            </span>
-          </div>
-
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
-              Showcase Work
-            </span>
-            <p className="mt-2 font-display text-3xl text-white">
-              {(portfolioData?.projects ?? []).length}
-            </p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
-              Live portfolio items
-            </span>
-          </div>
-        </div>
-
-        {/* View Switcher Tabs */}
-        <div className="mt-10 flex flex-wrap gap-3 border-b border-white/10 pb-4">
-          {[
-            { id: "PROJECTS", label: "CURRENT PROJECTS", icon: Briefcase },
-            {
-              id: "PIPELINE",
-              label: `LEAD PIPELINE (${(pipelineData?.leads ?? []).length})`,
-              icon: Users,
-            },
-            {
-              id: "SETUP",
-              label: `NEW PURCHASE SETUP (${(onboardingData?.runs ?? []).filter((r) => r.status === "ready" || r.status === "failed").length})`,
-              icon: Rocket,
-            },
-            {
-              id: "AUTOPILOT",
-              label: `FOLLOW-UP AUTOPILOT (${(autopilotData?.drafts ?? []).filter((d) => d.status === "draft").length})`,
-              icon: Bot,
-            },
-            {
-              id: "PROSPECTS",
-              label: `PROSPECT FINDER (${(prospectsData?.prospects ?? []).filter((p) => p.pain_score >= 20 && p.status === "new").length})`,
-              icon: Radar,
-            },
-            {
-              id: "INQUIRIES",
-              label: `CLIENT LEADS (${unreadInquiriesCount})`,
-              icon: MessageSquare,
-            },
-            {
-              id: "CHATS",
-              label: `WEBSITE CHAT (${(chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length})`,
-              icon: MessageSquare,
-            },
-            {
-              id: "PROPOSALS",
-              label: `PROPOSALS & CONTRACTS (${(proposalsData ?? []).length})`,
-              icon: FileCheck,
-            },
-            { id: "PORTFOLIO", label: "PORTFOLIO MANAGER", icon: Eye },
-            { id: "CLIENTPORTAL", label: "CLIENT PORTAL", icon: FolderKanban },
-            { id: "FINANCIALS", label: "FINANCIALS & STATS", icon: DollarSign },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = currentView === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setCurrentView(tab.id as MainView)}
-                className={`flex items-center gap-2 px-5 py-3 font-mono text-xs tracking-widest transition-all ${
-                  isActive
-                    ? "bg-[#FF3333] font-bold text-black shadow-lg"
-                    : "border border-white/10 bg-white/[0.02] text-white/60 hover:border-white/30 hover:text-white"
-                }`}
-              >
-                <Icon className="size-3.5" />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-
+          </>
+        }
+      >
         {ordersError && (
-          <p className="mt-10 font-mono text-xs text-amber-300">
+          <p className="mb-6 border border-amber-300/40 bg-amber-300/[0.06] p-4 font-mono text-xs text-amber-300">
             You don’t have admin access on this account. Please sign in as an admin.
           </p>
         )}
 
         {/* Dynamic Views */}
-        <div className="mt-8">
+        <div>
+          {currentView === "SIGNAL" && (
+            <AdminSignalView
+              signals={signals}
+              kpis={kpis}
+              autopilotDrafts={pendingDrafts}
+              /* Invoicing is the only queue action that blocks; `busy` holds the order id. */
+              busy={busy ? `balance:${busy}` : null}
+              onAct={actOnSignal}
+              onSnooze={(id) => setSnoozedSignals((prev) => [...prev, id])}
+              onReviewDrafts={() => {
+                setCurrentView("AUTOPILOT");
+                window.scrollTo(0, 0);
+              }}
+            />
+          )}
+
           {currentView === "PROJECTS" && (
             <AdminProjectsView
               orders={ordersData?.orders ?? []}
@@ -1129,7 +1121,9 @@ function AdminPage() {
             <AdminFinancialsView orders={ordersData?.orders ?? []} money={money} date={date} />
           )}
         </div>
+      </SignalShell>
 
+      <div className="signal-root">
         {/* MODAL 1: BRIEF DETAIL VIEWER */}
         {selectedBrief && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
@@ -1187,13 +1181,13 @@ function AdminPage() {
               <div className="mt-8 flex justify-end gap-3 border-t border-white/10 pt-4">
                 <button
                   onClick={() => handleOpenProposalFromBrief(selectedBrief)}
-                  className="bg-[#FF3333] px-4 py-2 font-mono text-xs font-bold text-black hover:opacity-90"
+                  className={btnPrimary}
                 >
                   GENERATE PROPOSAL FROM BRIEF →
                 </button>
                 <button
                   onClick={() => setSelectedBrief(null)}
-                  className="border border-white/15 px-4 py-2 font-mono text-xs text-white/60 hover:text-white"
+                  className={btnGhostSm}
                 >
                   CLOSE
                 </button>
@@ -1303,14 +1297,14 @@ function AdminPage() {
                 <div className="mt-6 flex justify-end gap-3 border-t border-white/10 pt-4">
                   <button
                     type="submit"
-                    className="bg-[#FF3333] px-4 py-2 font-mono text-xs font-bold text-black hover:opacity-90"
+                    className={btnPrimary}
                   >
                     SAVE PROJECT →
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsNewProjectModalOpen(false)}
-                    className="border border-white/15 px-4 py-2 font-mono text-xs text-white/60 hover:text-white"
+                    className={btnGhostSm}
                   >
                     CANCEL
                   </button>
@@ -1441,13 +1435,13 @@ function AdminPage() {
                   <button
                     type="button"
                     onClick={() => void submitProposal("draft")}
-                    className="border border-white/20 px-4 py-2 font-mono text-xs text-white hover:border-[#FF3333]"
+                    className={btnGhostSm}
                   >
                     SAVE DRAFT
                   </button>
                   <button
                     type="submit"
-                    className="bg-[#FF3333] px-4 py-2 font-mono text-xs font-bold text-black hover:opacity-90"
+                    className={btnPrimary}
                   >
                     SEND TO CLIENT →
                   </button>
@@ -1457,7 +1451,7 @@ function AdminPage() {
                       setIsProposalModalOpen(false);
                       setEditingProposalId(null);
                     }}
-                    className="border border-white/15 px-4 py-2 font-mono text-xs text-white/60 hover:text-white"
+                    className={btnGhostSm}
                   >
                     CANCEL
                   </button>
@@ -1467,6 +1461,6 @@ function AdminPage() {
           </div>
         )}
       </div>
-    </main>
+    </>
   );
 }
