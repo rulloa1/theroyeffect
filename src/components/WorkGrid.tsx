@@ -142,17 +142,28 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
             ))}
           </div>
         )}
-        {!compact && canPreview && hoveredIndex !== null && SHOWCASE_WORK[hoveredIndex] ? (
+        {!compact && canPreview ? (
           <div
             ref={previewRef}
             aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-0 z-30 hidden h-[220px] w-[320px] border border-[#DFBA73]/40 bg-[#0a0620] shadow-[18px_18px_0_rgba(255,51,51,0.18)] md:block"
+            className="pointer-events-none absolute left-0 top-0 z-30 hidden h-[220px] w-[320px] md:block"
           >
-            <WorkImage
-              entry={SHOWCASE_WORK[hoveredIndex]}
-              index={hoveredIndex}
-              className="h-full w-full"
-            />
+            <div
+              className={`relative h-full w-full border border-[#DFBA73]/40 bg-[#0a0620] shadow-[18px_18px_0_rgba(255,51,51,0.18)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
+                hoveredIndex === null ? "scale-[0.92] opacity-0" : "scale-100 opacity-100"
+              }`}
+            >
+              {SHOWCASE_WORK.map((entry, index) => (
+                <WorkImage
+                  key={entry.slug}
+                  entry={entry}
+                  index={index}
+                  className={`absolute inset-0 h-full w-full transition-[opacity,filter] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
+                    hoveredIndex === index ? "opacity-100 blur-0" : "opacity-0 blur-[2px]"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         ) : null}
       </div>
