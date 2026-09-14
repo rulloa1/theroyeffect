@@ -5,6 +5,7 @@ import { ArrowRight, Check, Sparkles, Lock, Plus, Calculator, Layers } from "luc
 import { DepositCheckoutModal } from "@/components/DepositCheckoutModal";
 import { ScopeEstimator } from "@/components/ScopeEstimator";
 import { PRICING_TIERS, ADD_ONS } from "@/lib/commerce-catalog";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export { PRICING_TIERS };
 
@@ -81,12 +82,9 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className={`group relative flex flex-col justify-between border p-5 transition-colors hover:border-[#FF3333]/50 md:p-6 ${
-                    tier.featured
-                      ? "border-[#FF3333] bg-[#FF3333]/5"
-                      : "border-white/10 bg-white/[0.02]"
-                  }`}
+                  className="h-full"
                 >
+                  <SpotlightCard featured={tier.featured} className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}>
                   {tier.featured && (
                     <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
                       <Sparkles className="size-3" />
@@ -176,6 +174,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
                       <ArrowRight className="size-3" />
                     </button> : null}
                   </div>
+                  </SpotlightCard>
                 </motion.div>
               ))}
             </div>

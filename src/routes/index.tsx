@@ -9,6 +9,7 @@ import { Pricing } from "@/components/Pricing";
 import { WorkGrid } from "@/components/WorkGrid";
 import { ApprovalPromise } from "@/components/ApprovalPromise";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { ClosingMarqueeCta } from "@/components/ClosingMarqueeCta";
 import { ArrowUpRight, Check, SearchCheck, Zap, Smartphone, Timer } from "lucide-react";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
@@ -92,6 +93,8 @@ function Home() {
       <section className="relative z-20 w-full bg-[#030014] px-5 py-20 md:px-10 md:py-28"><div className="mx-auto max-w-7xl"><div className="grid gap-10 border border-white/10 bg-white/[0.02] p-8 md:grid-cols-2 md:items-center md:p-12 lg:p-16"><div><span className="font-mono text-xs tracking-widest text-[#FF3333]">FREE 15-MINUTE DISCOVERY CALL</span><h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">Book a discovery call</h2><p className="mt-4 max-w-md font-mono text-base leading-[1.6] text-white/90">Bring the goal, timeline, and budget. This free 15-minute call ends with a clear written recommendation.</p><Link to="/book" className="mt-8 inline-flex min-h-11 items-center gap-2 border border-white/40 px-6 py-4 font-mono text-xs font-bold tracking-widest text-white hover:border-[#DFBA73]">BOOK A DISCOVERY CALL <ArrowUpRight className="size-4" /></Link></div><ul className="space-y-4 border border-white/10 bg-[#030014] p-6 font-mono text-base leading-[1.6] text-white/90 md:p-8">{["Free 15-minute call, no pitch","Scope, timeline, budget","Leave with a written recommendation"].map((item)=><li key={item} className="flex items-start gap-3"><Check className="mt-1 size-4 shrink-0 text-[#FF3333]"/><span>{item}</span></li>)}</ul></div></div></section>
 
       <section className="relative z-20 border-t border-white/10 bg-[#0a0620] px-5 py-16 md:px-10 md:py-20"><div className="mx-auto max-w-7xl"><h2 className="font-display text-3xl uppercase text-white md:text-5xl">Web design in Houston</h2><p className="mt-4 max-w-3xl font-mono text-base leading-[1.6] text-white/90">I&apos;m based near Houston and work remotely with founders and service businesses. Most projects start with the free audit; starting investment is $2,500 for brand, $5,000 for UI/UX, and $8,000 for design + build.</p><div className="mt-5 flex flex-wrap gap-5"><Link to="/guides/houston-website-cost" className="inline-flex min-h-11 items-center py-2 font-mono text-[15px] text-[#DFBA73] hover:text-white">HOUSTON WEBSITE COST →</Link><Link to="/guides/squarespace-vs-custom-website" className="inline-flex min-h-11 items-center py-2 font-mono text-[15px] text-[#DFBA73] hover:text-white">SQUARESPACE VS CUSTOM →</Link></div></div></section>
+
+      <ClosingMarqueeCta />
 
       <InfoDrawer open={drawerOpen} section={drawerSection} onClose={() => { setDrawerOpen(false); setDrawerSection(null); }} />
       <Toaster />
