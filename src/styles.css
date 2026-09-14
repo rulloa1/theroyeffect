@@ -130,6 +130,19 @@
   animation: marquee-x 24s linear infinite;
 }
 
+@keyframes cta69-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-cta-marquee {
+  animation: cta69-marquee 40s linear infinite;
+}
+
 .scroll-reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -142,13 +155,24 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
+  .animate-marquee,
+  .animate-cta-marquee {
     animation: none !important;
+  }
+
+  .spotlight-overlay {
+    display: none;
   }
 
   .scroll-reveal {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .spotlight-overlay {
+    display: none;
   }
 }
