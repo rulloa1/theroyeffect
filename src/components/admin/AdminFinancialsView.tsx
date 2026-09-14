@@ -8,7 +8,20 @@ export interface AdminFinancialsViewProps {
   date: (value: string | null) => string;
 }
 
-const MONTH_LABELS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+const MONTH_LABELS = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+];
 
 /** Compact money for the chart's column captions — $6.5k rather than $6,500.00. */
 const compact = (cents: number) => {
@@ -140,7 +153,9 @@ export function AdminFinancialsView({ orders, money, date }: AdminFinancialsView
             <tbody className="divide-y divide-white/5">
               {orders.map((o) => (
                 <tr key={o.id} className="text-white/80 transition-colors hover:bg-white/[0.02]">
-                  <td className="py-3 text-white">{o.customer_name || o.customer_email || "Client"}</td>
+                  <td className="py-3 text-white">
+                    {o.customer_name || o.customer_email || "Client"}
+                  </td>
                   <td className="py-3 text-white/60">{o.product_name || "Commission"}</td>
                   <td className="py-3">
                     {o.is_deposit ? (
@@ -151,7 +166,9 @@ export function AdminFinancialsView({ orders, money, date }: AdminFinancialsView
                       "Full pay"
                     )}
                   </td>
-                  <td className="py-3 text-right text-white">{money(o.amount_total, o.currency)}</td>
+                  <td className="py-3 text-right text-white">
+                    {money(o.amount_total, o.currency)}
+                  </td>
                   <td className="py-3 text-right">
                     <span
                       className={

@@ -347,9 +347,8 @@ function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
                 type="button"
                 onClick={async () => {
                   try {
-                    const { downloadSignedProposalPdf } = await import(
-                      "@/utils/proposals.functions"
-                    );
+                    const { downloadSignedProposalPdf } =
+                      await import("@/utils/proposals.functions");
                     const res = await downloadSignedProposalPdf({ data: { token: p.share_token } });
                     if (!res.success || !res.pdfBase64) throw new Error(res.error || "Failed");
                     const link = document.createElement("a");
@@ -506,8 +505,7 @@ function PortalPage() {
     );
   }
 
-  const headline =
-    tab === "overview" && activeProject ? activeProject.title : TAB_TITLES[tab];
+  const headline = tab === "overview" && activeProject ? activeProject.title : TAB_TITLES[tab];
 
   return (
     <>
@@ -724,9 +722,7 @@ function PortalPage() {
             {tab === "approvals" && (
               <section className="max-w-[56rem]">
                 <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                  <span className={label}>
-                    {awaitingApprovals.length} NEED YOUR APPROVAL
-                  </span>
+                  <span className={label}>{awaitingApprovals.length} NEED YOUR APPROVAL</span>
                   <p className="max-w-md font-mono text-[11px] leading-[1.8] text-white/50">
                     Review each deliverable on its project page, then approve it or send a written
                     change request.

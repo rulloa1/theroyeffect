@@ -4,14 +4,7 @@ import { toast } from "sonner";
 import { LEAD_STAGES, type CrmLead } from "@/utils/crm.functions";
 import { LeadDetailDrawer } from "@/components/admin/LeadDetailDrawer";
 import { relativeAge } from "@/lib/signals";
-import {
-  btnGhostSm,
-  emptyState,
-  input,
-  label,
-  panel,
-  select,
-} from "@/components/signal/signal-ui";
+import { btnGhostSm, emptyState, input, label, panel, select } from "@/components/signal/signal-ui";
 
 const STAGE_LABELS: Record<string, string> = {
   new: "NEW",
@@ -310,7 +303,11 @@ export function AdminPipelineView({
                             type="button"
                             disabled={busy === b.id}
                             onClick={() =>
-                              run(b.id, () => onUpdateBooking(b.id, "completed"), "Call marked complete")
+                              run(
+                                b.id,
+                                () => onUpdateBooking(b.id, "completed"),
+                                "Call marked complete",
+                              )
                             }
                             className={btnGhostSm}
                           >
@@ -330,7 +327,11 @@ export function AdminPipelineView({
                             type="button"
                             disabled={busy === b.id}
                             onClick={() =>
-                              run(b.id, () => onUpdateBooking(b.id, "cancelled"), "Booking cancelled")
+                              run(
+                                b.id,
+                                () => onUpdateBooking(b.id, "cancelled"),
+                                "Booking cancelled",
+                              )
                             }
                             className={btnGhostSm}
                           >
@@ -362,7 +363,11 @@ export function AdminPipelineView({
                           type="button"
                           disabled={busy === f.id}
                           onClick={() =>
-                            run(f.id, () => onResolveFollowup(f.id, "resolved"), "Follow-up resolved")
+                            run(
+                              f.id,
+                              () => onResolveFollowup(f.id, "resolved"),
+                              "Follow-up resolved",
+                            )
                           }
                           className={btnGhostSm}
                         >

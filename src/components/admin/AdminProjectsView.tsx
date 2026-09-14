@@ -166,7 +166,8 @@ export function AdminProjectsView({
                   </div>
 
                   <p className="mt-1 font-mono text-[11px] text-white/45">
-                    {order.customer_email} · {(order.product_name || "Custom commission").toUpperCase()}
+                    {order.customer_email} ·{" "}
+                    {(order.product_name || "Custom commission").toUpperCase()}
                   </p>
 
                   <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/60">
@@ -177,7 +178,9 @@ export function AdminProjectsView({
 
                 <div className="flex-[0_0_200px]">
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">PAID</span>
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">
+                      PAID
+                    </span>
                     <span className="font-display text-[22px] text-white">
                       {money(order.amount_total, order.currency)}
                     </span>

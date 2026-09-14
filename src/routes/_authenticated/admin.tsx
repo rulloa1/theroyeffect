@@ -1185,10 +1185,7 @@ function AdminPage() {
                 >
                   GENERATE PROPOSAL FROM BRIEF →
                 </button>
-                <button
-                  onClick={() => setSelectedBrief(null)}
-                  className={btnGhostSm}
-                >
+                <button onClick={() => setSelectedBrief(null)} className={btnGhostSm}>
                   CLOSE
                 </button>
               </div>
@@ -1295,10 +1292,7 @@ function AdminPage() {
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3 border-t border-white/10 pt-4">
-                  <button
-                    type="submit"
-                    className={btnPrimary}
-                  >
+                  <button type="submit" className={btnPrimary}>
                     SAVE PROJECT →
                   </button>
                   <button
@@ -1439,10 +1433,7 @@ function AdminPage() {
                   >
                     SAVE DRAFT
                   </button>
-                  <button
-                    type="submit"
-                    className={btnPrimary}
-                  >
+                  <button type="submit" className={btnPrimary}>
                     SEND TO CLIENT →
                   </button>
                   <button

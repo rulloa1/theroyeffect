@@ -15,9 +15,7 @@ export const SIGNAL_CATEGORIES = ["MONEY", "CLIENTS", "LEADS"] as const;
 export type SignalCategory = (typeof SIGNAL_CATEGORIES)[number];
 
 /** Where a signal's primary action sends you. */
-export type SignalTarget =
-  | { kind: "invoice"; orderId: string }
-  | { kind: "view"; view: string };
+export type SignalTarget = { kind: "invoice"; orderId: string } | { kind: "view"; view: string };
 
 export interface Signal {
   /** Stable across refetches so snoozing survives a poll. */

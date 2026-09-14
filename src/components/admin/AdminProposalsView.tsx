@@ -66,8 +66,8 @@ export function AdminProposalsView({
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-3">
         <span className={label}>
-          {proposals.length} {proposals.length === 1 ? "AGREEMENT" : "AGREEMENTS"} ·{" "}
-          {unsigned} UNSIGNED
+          {proposals.length} {proposals.length === 1 ? "AGREEMENT" : "AGREEMENTS"} · {unsigned}{" "}
+          UNSIGNED
         </span>
         <button type="button" onClick={onCreateProposal} className={`ml-auto ${btnPrimary}`}>
           <Plus className="size-3.5" />
