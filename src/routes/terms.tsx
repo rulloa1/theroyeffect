@@ -19,10 +19,10 @@ export const Route = createFileRoute("/terms")({
           "Project scope, payment terms and the text messaging program for The Roy Effect.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://theroyeffect.com/terms" },
+      { property: "og:url", content: "https://www.theroyeffect.com/terms" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://theroyeffect.com/terms" }],
+    links: [{ rel: "canonical", href: "https://www.theroyeffect.com/terms" }],
   }),
   component: TermsPage,
 });

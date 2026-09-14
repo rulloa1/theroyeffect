@@ -8,6 +8,8 @@ function WorkCard({ entry, compact }: { entry: ShowcaseWorkEntry; compact: boole
   const [imageFailed, setImageFailed] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const showImage = entry.image !== null && !imageFailed;
+  // On the homepage the grid sits under an h2, so cards are h3; on /work they sit directly under the h1.
+  const Heading = compact ? "h3" : "h2";
 
   useEffect(() => {
     const img = imgRef.current;
@@ -53,9 +55,9 @@ function WorkCard({ entry, compact }: { entry: ShowcaseWorkEntry; compact: boole
         </span>
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-xl uppercase text-white transition-colors duration-200 group-hover:text-[#F5DC9E]">
+        <Heading className="font-display text-xl uppercase text-white transition-colors duration-200 group-hover:text-[#F5DC9E]">
           {entry.title}
-        </h3>
+        </Heading>
         <p className="mt-2 font-mono text-sm leading-6 text-white/75">{entry.result}</p>
         <span className="mt-auto inline-flex items-center gap-1 pt-5 font-mono text-[11px] tracking-widest text-[#DFBA73] transition-colors duration-200 group-hover:text-white">
           VISIT LIVE SITE

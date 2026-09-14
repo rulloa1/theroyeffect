@@ -48,9 +48,9 @@ export function SiteFooter() {
 
           {/* Quick links */}
           <div className="lg:col-span-2">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/60">
+            <h2 className="font-mono text-[11px] tracking-widest text-white/60">
               NAVIGATION
-            </h3>
+            </h2>
             <nav className="mt-4 flex flex-wrap gap-x-6 gap-y-3" aria-label="Footer">
               {FOOTER_LINKS.map((link) => (
                 <Link
@@ -73,7 +73,7 @@ export function SiteFooter() {
 
           {/* Guides */}
           <div className="lg:col-span-3">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/60">GUIDES</h3>
+            <h2 className="font-mono text-[11px] tracking-widest text-white/60">GUIDES</h2>
             <nav className="mt-4 flex flex-col gap-3" aria-label="Guides">
               {GUIDE_LINKS.map((link) => (
                 <Link
@@ -89,9 +89,9 @@ export function SiteFooter() {
 
           {/* Contact */}
           <div className="lg:col-span-3">
-            <h3 className="font-mono text-[11px] tracking-widest text-white/60">
+            <h2 className="font-mono text-[11px] tracking-widest text-white/60">
               CONTACT
-            </h3>
+            </h2>
             <div className="mt-4 space-y-2 font-mono text-xs text-white/60">
               <a
                 href="mailto:rory@theroyeffect.com"

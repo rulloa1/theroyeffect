@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { captureClientError, initSentryClient } from "../lib/sentry/client";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -99,6 +100,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     </div>
   );
 }
+
+const SITE_URL = "https://www.theroyeffect.com";
+const DEFAULT_OG_IMAGE = `${SITE_URL}${ogImageAsset.url}`;
 
 const STRUCTURED_DATA = {
   "@context": "https://schema.org",
@@ -202,9 +206,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Bold brand systems, high-contrast digital experiences and production-ready builds by Rory Ulloa.",
       },
-      { property: "og:site_name", content: "theroyeffect.com" },
+      { property: "og:site_name", content: "The Roy Effect" },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      // Site-wide social preview; routes with a better image override this.
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
+      { name: "theme-color", content: "#030014" },
       { name: "google-site-verification", content: "77GixI64Yh4THH1-qNE6EXBc87IRpeA76Jo1KHyaTCA" },
       { name: "google-site-verification", content: "abyZ_limkEmpSFo8qAaXN9SRvACJ8wTWriZNi-XPtAI" },
     ],

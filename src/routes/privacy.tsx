@@ -19,10 +19,10 @@ export const Route = createFileRoute("/privacy")({
           "How The Roy Effect collects, uses and protects your information, including text messaging consent.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://theroyeffect.com/privacy" },
+      { property: "og:url", content: "https://www.theroyeffect.com/privacy" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://theroyeffect.com/privacy" }],
+    links: [{ rel: "canonical", href: "https://www.theroyeffect.com/privacy" }],
   }),
   component: PrivacyPage,
 });

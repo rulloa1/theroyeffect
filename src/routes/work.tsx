@@ -13,10 +13,10 @@ export const Route = createFileRoute("/work")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://theroyeffect.com/work" },
+      { property: "og:url", content: "https://www.theroyeffect.com/work" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://theroyeffect.com/work" }],
+    links: [{ rel: "canonical", href: "https://www.theroyeffect.com/work" }],
   }),
   component: WorkPage,
 });
@@ -32,8 +32,8 @@ function WorkPage() {
         <p className="mt-5 max-w-2xl font-mono text-sm leading-relaxed text-white/60">Live websites I&apos;ve designed and built for RV parks, hotels, contractors and local businesses. Every project below is online right now — open any of them.</p>
         <div className="mt-12"><WorkGrid /></div>
         <div className="mt-10 flex flex-wrap gap-3">
-          <Link to="/audit" className="bg-[#FF3333] px-5 py-3 font-mono text-xs font-bold tracking-widest text-black">GET A FREE AUDIT</Link>
-          <Link to="/book" className="border border-white/20 px-5 py-3 font-mono text-xs tracking-widest text-white">BOOK A CALL</Link>
+          <Link to="/audit" className="inline-flex items-center bg-[#FF3333] px-5 py-3 font-mono text-xs font-bold tracking-widest text-black transition-colors duration-200 hover:bg-[#FF5555]">GET A FREE AUDIT</Link>
+          <Link to="/book" className="inline-flex items-center border border-white/20 px-5 py-3 font-mono text-xs tracking-widest text-white transition-colors duration-200 hover:border-[#DFBA73]">BOOK A CALL</Link>
         </div>
       </div>
     </main>
