@@ -98,7 +98,7 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
             ))}
           </div>
         )}
-        {!compact && canPreview && hoveredIndex !== null ? (
+        {!compact && canPreview && hoveredIndex !== null && SHOWCASE_WORK[hoveredIndex] ? (
           <div ref={previewRef} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 z-30 hidden h-[220px] w-[320px] border border-[#DFBA73]/40 bg-[#0a0620] shadow-[18px_18px_0_rgba(255,51,51,0.18)] md:block">
             <WorkImage entry={SHOWCASE_WORK[hoveredIndex]} index={hoveredIndex} className="h-full w-full" />
           </div>

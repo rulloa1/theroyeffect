@@ -84,7 +84,7 @@ export function Pricing({ onCommission, mode = "homepage" }: { onCommission?: ()
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                   className="h-full"
                 >
-                  <SpotlightCard featured={tier.featured} className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}>
+                  <SpotlightCard featured={tier.featured === true} className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}>
                   {tier.featured && (
                     <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
                       <Sparkles className="size-3" />

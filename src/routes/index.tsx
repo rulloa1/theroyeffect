@@ -71,7 +71,7 @@ function Home() {
       </section>
 
       <section id="work" className="relative z-20 bg-[#030014] px-5 py-20 md:px-10 md:py-28">
-<ScrollReveal className="mx-auto max-w-7xl"><span className="font-mono text-xs tracking-widest text-[#FF3333]">SELECTED WORK</span><h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">Recent work</h2><div className="mt-10"><WorkGrid compact /></div></ScrollReveal>
+<ScrollReveal className="mx-auto max-w-7xl"><span className="font-mono text-xs tracking-widest text-[#FF3333]">SELECTED WORK</span><h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">Recent work</h2><div className="mt-10"><WorkGrid /></div></ScrollReveal>
       </section>
 
       <ApprovalPromise />
