@@ -12,3 +12,6 @@
 - [x] Complete the approved eight-item homepage conversion, accessibility, and performance pass
 - [x] Keep the 15-minute discovery call described as free while distinguishing it from the video audit
 - [x] Refine the shared footer hierarchy, navigation, contact details, and mobile usability
+- [ ] Replace the homepage work cards with a guarded cursor-preview project index
+- [ ] Add pointer-tracking spotlight treatment to pricing package cards
+- [ ] Add and verify the preview-only closing marquee CTA before the homepage footer
