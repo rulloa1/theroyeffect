@@ -329,7 +329,7 @@ export function BookingCalendar() {
                 placeholder="Full name"
                 required
                 maxLength={120}
-                className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+                className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#FF3333] focus:outline-none"
               />
               <input
                 name="email"
@@ -337,7 +337,7 @@ export function BookingCalendar() {
                 placeholder="Email address"
                 required
                 maxLength={255}
-                className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+                className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#FF3333] focus:outline-none"
               />
             </div>
             <input
@@ -345,14 +345,14 @@ export function BookingCalendar() {
               type="tel"
               placeholder="Phone (optional)"
               maxLength={40}
-              className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+              className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#FF3333] focus:outline-none"
             />
             <textarea
               name="notes"
               rows={3}
               placeholder="What would you like to discuss? (optional)"
               maxLength={2000}
-              className="w-full resize-none border-0 border-b border-white/20 bg-transparent px-0 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+              className="w-full resize-none border-0 border-b border-white/20 bg-transparent px-0 py-3 text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#FF3333] focus:outline-none"
             />
             <SmsConsent
               smsService={smsService}

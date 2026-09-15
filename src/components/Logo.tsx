@@ -54,7 +54,7 @@ export function Logo({
 
   if (href) {
     return (
-      <Link to={href} className={`inline-flex shrink-0 outline-none ${className}`} aria-label="The Roy Effect home">
+      <Link to={href} className={`inline-flex shrink-0 ${className}`} aria-label="The Roy Effect home">
         {content}
       </Link>
     );

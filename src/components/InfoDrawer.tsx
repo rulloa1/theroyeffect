@@ -28,7 +28,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Logo } from "@/components/Logo";
 
 const fieldClass =
-  "w-full border-0 border-b border-white/30 bg-transparent px-0 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#FF3333] focus:outline-none focus:ring-0";
+  "w-full border-0 border-b border-white/30 bg-transparent px-0 py-3 text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#FF3333] focus:outline-none focus:ring-0";
 
 const briefSchema = z.object({
   name: z.string().trim().min(1, "Please add your name").max(100, "Name is too long"),

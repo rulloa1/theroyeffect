@@ -208,7 +208,7 @@ export function AuditPage() {
                 <div>
                   <label
                     htmlFor="audit-url"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
+                    className="block font-mono text-xs uppercase tracking-wider text-white/80"
                   >
                     Your Website URL *
                   </label>
@@ -219,14 +219,14 @@ export function AuditPage() {
                     value={websiteUrl}
                     onChange={(e) => setWebsiteUrl(e.target.value)}
                     placeholder="https://yourbusiness.com"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#DFBA73] focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="audit-name"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
+                    className="block font-mono text-xs uppercase tracking-wider text-white/80"
                   >
                     Your Name *
                   </label>
@@ -237,14 +237,14 @@ export function AuditPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Jane Doe"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#DFBA73] focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="audit-email"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
+                    className="block font-mono text-xs uppercase tracking-wider text-white/80"
                   >
                     Your Work Email * (Where we send the audit)
                   </label>
@@ -255,14 +255,14 @@ export function AuditPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="jane@yourbusiness.com"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#DFBA73] focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="audit-bottleneck"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
+                    className="block font-mono text-xs uppercase tracking-wider text-white/80"
                   >
                     Biggest Challenge / Goal *
                   </label>
@@ -270,7 +270,7 @@ export function AuditPage() {
                     id="audit-bottleneck"
                     value={bottleneck}
                     onChange={(e) => setBottleneck(e.target.value)}
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-[#DFBA73] focus:border-[#DFBA73] focus:outline-none"
+                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-base sm:text-sm text-[#DFBA73] focus:border-[#DFBA73] focus:outline-none"
                   >
                     <option value="Conversion Rate & Inbound Leads">
                       Low conversion rate & few inquiries
@@ -294,7 +294,7 @@ export function AuditPage() {
               <div>
                 <label
                   htmlFor="audit-notes"
-                  className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
+                  className="block font-mono text-xs uppercase tracking-wider text-white/80"
                 >
                   Any specific pages or competitors we should look at? (Optional)
                 </label>
@@ -304,7 +304,7 @@ export function AuditPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Please look at our services page. Our main competitor is..."
-                  className="mt-2 w-full resize-none border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                  className="mt-2 w-full resize-none border border-white/15 bg-[#030014] p-3 font-mono text-base sm:text-sm text-white placeholder:text-white/45 focus:border-[#DFBA73] focus:outline-none"
                 />
               </div>
 

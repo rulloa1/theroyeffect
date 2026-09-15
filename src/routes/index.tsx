@@ -92,7 +92,7 @@ function Home() {
           fetchPriority="high"
           width={896}
           height={1078}
-          className="pointer-events-none absolute bottom-0 right-[-18%] z-10 h-[38%] w-auto max-w-none object-contain object-bottom opacity-40 grayscale contrast-125 sm:right-0 sm:h-[55%] sm:opacity-55 md:right-[-3%] md:h-[72%] md:opacity-70 lg:right-[2%] lg:h-[78%]"
+          className="pointer-events-none absolute bottom-0 right-[-18%] z-10 h-[38%] w-auto max-w-none object-contain object-bottom opacity-30 grayscale contrast-125 [mask-image:linear-gradient(to_left,black_35%,transparent_85%)] sm:[mask-image:none] sm:right-0 sm:h-[55%] sm:opacity-55 md:right-[-3%] md:h-[72%] md:opacity-70 lg:right-[2%] lg:h-[78%]"
         />
       </section>
 
