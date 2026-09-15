@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
+import { cta } from "@/components/ui/button";
 
 export function HeroContent() {
   return (
@@ -14,10 +15,10 @@ export function HeroContent() {
         I&apos;m Rory Ulloa. I design and ship high-contrast sites for founders and local service businesses in Houston and remote.
       </p>
       <div className="pointer-events-auto mt-6 flex flex-wrap gap-3">
-        <Link to="/audit" className="inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]">
+        <Link to="/audit" className={cta()}>
           GET A FREE 5-MINUTE AUDIT <ArrowUpRight className="size-4" />
         </Link>
-        <Link to="/work" className="hidden items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73] sm:inline-flex">
+        <Link to="/work" className={cta({ intent: "secondary" }, "hidden sm:inline-flex")}>
           SEE THE WORK
         </Link>
       </div>

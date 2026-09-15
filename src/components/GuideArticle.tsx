@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { cta as ctaClass } from "@/components/ui/button";
 
 interface GuideCta {
   kicker: string;
@@ -72,7 +73,7 @@ export function GuideArticle({
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to={cta.primary.to}
-              className="inline-flex items-center gap-2 bg-[#FF3333] px-6 py-4 font-mono text-xs font-bold tracking-widest text-black transition-all hover:bg-[#FF5555]"
+              className={ctaClass({ size: "lg" })}
             >
               {cta.primary.label}
               <ArrowUpRight className="size-4" />
@@ -80,7 +81,7 @@ export function GuideArticle({
             {cta.secondary ? (
               <Link
                 to={cta.secondary.to}
-                className="inline-flex items-center gap-2 border border-white/20 px-6 py-4 font-mono text-xs tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+                className={ctaClass({ intent: "secondary", size: "lg" })}
               >
                 {cta.secondary.label}
               </Link>

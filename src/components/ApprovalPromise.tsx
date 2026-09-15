@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { cta } from "@/components/ui/button";
 
 const PROMISE_STEPS = [
   { step: "01", title: "Design first", body: "You see the full design before a single page is built." },
@@ -29,7 +30,7 @@ export function ApprovalPromise() {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap items-center gap-5">
-          <Link to="/audit" className="inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]">
+          <Link to="/audit" className={cta()}>
             START WITH THE FREE AUDIT <ArrowUpRight className="size-4" />
           </Link>
           <a href="/#pricing" className="font-mono text-xs tracking-widest text-[#DFBA73] hover:text-white">

@@ -16,10 +16,6 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        neon: "text-primary-foreground [background:var(--gradient-neon)] shadow-[var(--shadow-glow)] hover:brightness-110 hover:-translate-y-0.5",
-        glass:
-          "panel text-foreground hover:border-neon/60 hover:shadow-[var(--shadow-glow)] rounded-full",
-        pill: "bg-surface-2 text-foreground border border-border hover:bg-secondary",
       },
       size: {
         default: "h-10 px-5 py-2",
@@ -51,4 +47,34 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+/**
+ * Brand call-to-action styling for links and buttons on the public site.
+ * Square, mono, uppercase, with a 44px minimum height for touch. Keyboard focus
+ * uses the site-wide gold :focus-visible outline defined in styles.css.
+ */
+const ctaVariants = cva(
+  "inline-flex min-h-11 cursor-pointer select-none items-center justify-center gap-2 font-mono uppercase tracking-widest transition-colors duration-200 motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      intent: {
+        primary:
+          "bg-primary font-bold text-primary-foreground hover:bg-primary-hover active:bg-primary-active",
+        secondary: "border border-white/20 text-white hover:border-gold hover:text-gold",
+      },
+      size: {
+        md: "px-5 py-3 text-[11px] sm:text-xs",
+        lg: "min-h-12 px-6 py-4 text-xs",
+      },
+    },
+    defaultVariants: { intent: "primary", size: "md" },
+  },
+);
+
+export type CtaVariantProps = VariantProps<typeof ctaVariants>;
+
+/** Class string for a brand CTA, merged with any extra classes such as margins. */
+function cta(options: CtaVariantProps = {}, className?: string) {
+  return cn(ctaVariants(options), className);
+}
+
+export { Button, buttonVariants, ctaVariants, cta };

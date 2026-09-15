@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, SearchCheck } from "lucide-react";
+import { cta } from "@/components/ui/button";
 
 const FOOTER_LINKS = [
   { label: "WORK", to: "/work" },
@@ -38,7 +39,7 @@ export function SiteFooter() {
             </p>
             <Link
               to="/audit"
-              className="mt-6 inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-all hover:bg-[#FF5555]"
+              className={cta({}, "mt-6")}
             >
               <SearchCheck className="size-4" />
               FREE 5-MINUTE AUDIT

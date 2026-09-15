@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Compass, LayoutGrid, MessageSquareText, MousePointerClick, PenTool, Rocket, Smartphone } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { cta } from "@/components/ui/button";
 
 const TITLE = "Case Study — Redesigning a Houston Service Business Site | The Roy Effect";
 const DESCRIPTION =
@@ -113,14 +114,14 @@ function CaseStudyPage() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             to="/audit"
-            className="inline-flex items-center gap-2 bg-[#FF3333] px-6 py-4 font-mono text-xs font-bold tracking-widest text-black transition-all hover:bg-[#FF5555]"
+            className={cta({ size: "lg" })}
           >
             GET THE SAME AUDIT, FREE
             <ArrowUpRight className="size-4" />
           </Link>
           <Link
             to="/pricing"
-            className="inline-flex items-center gap-2 border border-white/20 px-6 py-4 font-mono text-xs tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+            className={cta({ intent: "secondary", size: "lg" })}
           >
             SEE PRICING
           </Link>
@@ -219,14 +220,14 @@ function CaseStudyPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/audit"
-              className="inline-flex items-center gap-2 bg-[#FF3333] px-6 py-4 font-mono text-xs font-bold tracking-widest text-black transition-all hover:bg-[#FF5555]"
+              className={cta({ size: "lg" })}
             >
               CLAIM YOUR FREE AUDIT
               <ArrowUpRight className="size-4" />
             </Link>
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 border border-white/20 px-6 py-4 font-mono text-xs tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+              className={cta({ intent: "secondary", size: "lg" })}
             >
               SEE SERVICES
             </Link>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { cta } from "@/components/ui/button";
 import { SERVICES, PROCESS_STEPS } from "@/lib/site-content";
 
 const TITLE = "Design Services — Brand, UI/UX & No-Code | The Roy Effect";
@@ -114,13 +115,13 @@ function ServicesPage() {
         <div className="mt-16 flex flex-wrap gap-3">
           <Link
             to="/pricing"
-            className="inline-flex items-center bg-[#FF3333] px-5 py-3 font-mono text-xs tracking-widest text-black transition-opacity hover:opacity-90"
+            className={cta()}
           >
             SEE PRICING
           </Link>
           <Link
             to="/brief"
-            className="inline-flex items-center border border-white/20 px-5 py-3 font-mono text-xs tracking-widest text-white transition-colors hover:border-[#FF3333]"
+            className={cta({ intent: "secondary" })}
           >
             START A BRIEF
           </Link>

@@ -19,6 +19,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { VoiceConcierge } from "@/components/VoiceConcierge";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DepthController } from "@/components/DepthController";
+import { cta } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 
 function NotFoundComponent() {
@@ -37,19 +38,19 @@ function NotFoundComponent() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]"
+              className={cta()}
             >
               BACK HOME <ArrowUpRight className="size-4" aria-hidden="true" />
             </Link>
             <Link
               to="/work"
-              className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
+              className={cta({ intent: "secondary" })}
             >
               SEE THE WORK
             </Link>
             <Link
               to="/audit"
-              className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
+              className={cta({ intent: "secondary" })}
             >
               FREE AUDIT
             </Link>
@@ -85,13 +86,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex cursor-pointer items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555]"
+            className={cta()}
           >
             TRY AGAIN
           </button>
           <a
             href="/"
-            className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 font-mono text-[11px] tracking-widest text-white transition-colors hover:border-[#DFBA73]"
+            className={cta({ intent: "secondary" })}
           >
             GO HOME
           </a>

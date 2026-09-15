@@ -31,6 +31,9 @@
   --color-acid: var(--acid);
   --color-drawer: var(--drawer);
   --color-energy: var(--energy);
+  --color-gold: var(--gold);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
   --font-display: "Anton", "Impact", "Arial Black", sans-serif;
   --font-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
@@ -62,6 +65,9 @@
   --acid: #ff3333;
   --drawer: #333333;
   --energy: #88aaff;
+  --gold: #dfba73;
+  --primary-hover: #ff5555;
+  --primary-active: #e62e2e;
 }
 
 @layer base {

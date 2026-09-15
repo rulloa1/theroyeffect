@@ -131,6 +131,8 @@ export function InfoDrawer({
     queryKey: ["public-showcase-projects"],
     queryFn: () => fetchProjects(),
     initialData: DEFAULT_SHOWCASE_PROJECTS,
+    // Only hit the server once the drawer is actually opened.
+    enabled: open,
   });
 
   const allProjects = projectsData || DEFAULT_SHOWCASE_PROJECTS;

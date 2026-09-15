@@ -1,11 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
 
 /**
  * Three.js WebGL particle + energy-line field with bloom post-processing.
  * Everything is imported dynamically inside the effect so it never runs on the server.
  */
-export function ParticleBackground() {
+export function ParticleBackground({
+  pauseWhenOffscreen,
+}: {
+  /** Stop rendering while this element is out of view, e.g. once opaque sections cover the hero. */
+  pauseWhenOffscreen?: RefObject<HTMLElement | null>;
+} = {}) {
   const holder = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -242,23 +247,44 @@ export function ParticleBackground() {
         composer.render();
       };
 
-      animate();
-
-      // Pause rendering when tab is hidden to conserve battery/GPU
-      const onVisibilityChange = () => {
-        if (document.hidden) {
-          isRunning = false;
-          cancelAnimationFrame(raf);
-        } else if (!isRunning) {
+      // Render only while the tab is visible and the tracked section is on screen, so the
+      // WebGL loop stops burning CPU/GPU under the opaque sections below the hero.
+      let tabHidden = document.hidden;
+      let offscreen = false;
+      const syncRunning = () => {
+        const shouldRun = !tabHidden && !offscreen;
+        if (shouldRun && !isRunning) {
           isRunning = true;
           animate();
+        } else if (!shouldRun && isRunning) {
+          isRunning = false;
+          cancelAnimationFrame(raf);
         }
       };
+
+      animate();
+      syncRunning();
+
+      const onVisibilityChange = () => {
+        tabHidden = document.hidden;
+        syncRunning();
+      };
       document.addEventListener("visibilitychange", onVisibilityChange);
+
+      const observed = pauseWhenOffscreen?.current;
+      const observer =
+        observed && typeof IntersectionObserver !== "undefined"
+          ? new IntersectionObserver(([entry]) => {
+              offscreen = !entry?.isIntersecting;
+              syncRunning();
+            })
+          : null;
+      if (observed) observer?.observe(observed);
 
       cleanup = () => {
         isRunning = false;
         cancelAnimationFrame(raf);
+        observer?.disconnect();
         document.removeEventListener("visibilitychange", onVisibilityChange);
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("resize", onResize);
@@ -279,7 +305,7 @@ export function ParticleBackground() {
       disposed = true;
       cleanup?.();
     };
-  }, []);
+  }, [pauseWhenOffscreen]);
 
   return (
     <div
