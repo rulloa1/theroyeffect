@@ -102,6 +102,17 @@
   background-size: 44px 44px;
 }
 
+.services-texture {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(223, 186, 115, 0.035) 0,
+    rgba(223, 186, 115, 0.035) 1px,
+    transparent 1px,
+    transparent 9px
+  );
+  mask-image: radial-gradient(ellipse 80% 52% at 50% 0%, #000 28%, transparent 82%);
+}
+
 @utility text-stroke-thin {
   -webkit-text-stroke: 1px #ffffff;
   color: transparent;
