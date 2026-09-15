@@ -4,7 +4,7 @@ import { PROCESS_STEPS } from "@/lib/site-content";
 export function ProcessTimeline() {
   return (
     <section id="process" className="relative z-20 bg-[#0a0620] px-5 py-20 md:px-10 md:py-28">
-      <ScrollReveal className="mx-auto max-w-7xl">
+      <ScrollReveal respectEffectsGuard className="mx-auto max-w-7xl">
         <span className="font-mono text-xs tracking-widest text-[#DFBA73]">HOW IT WORKS</span>
         <h2 className="mt-3 max-w-4xl font-display text-4xl uppercase leading-[0.95] text-white md:text-6xl">
           FIVE STEPS FROM BRIEF TO LIVE.

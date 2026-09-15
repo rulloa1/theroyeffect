@@ -12,7 +12,7 @@ export function ServicesSection() {
       className="relative z-20 overflow-hidden bg-[#030014] px-5 py-20 md:px-10 md:py-28"
     >
       <div className="services-texture pointer-events-none absolute inset-0" aria-hidden="true" />
-      <ScrollReveal className="relative z-10 mx-auto max-w-7xl">
+      <ScrollReveal respectEffectsGuard className="relative z-10 mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end md:justify-between md:gap-12 md:pb-12">
           <div>
             <span className="font-mono text-xs tracking-widest text-[#DFBA73]">SERVICES</span>
