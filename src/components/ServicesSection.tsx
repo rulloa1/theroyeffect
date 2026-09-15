@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { BadgePalette, Blocks, PanelsTopLeft, RefreshCw } from "lucide-react";
+import { Blocks, Palette, PanelsTopLeft, RefreshCw } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { SERVICES } from "@/lib/site-content";
 
-const SERVICE_ICONS = [BadgePalette, PanelsTopLeft, Blocks, RefreshCw] as const;
+const SERVICE_ICONS = [Palette, PanelsTopLeft, Blocks, RefreshCw] as const;
 
 export function ServicesSection() {
   return (
