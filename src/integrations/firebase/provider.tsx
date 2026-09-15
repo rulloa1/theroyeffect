@@ -18,12 +18,12 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
     let cancelled = false;
 
-    void import("./client")
+    // Analytics is the only Firebase feature used site-wide, so load just that
+    // module rather than ./client, which also pulls in auth, Firestore and storage.
+    void import("./analytics")
       .then(async (mod) => {
-        const app = mod.initializeFirebase();
-        if (cancelled) return;
-        setReady(!!app);
-        if (app) await mod.getFirebaseAnalytics().catch(() => null);
+        const analytics = await mod.startFirebaseAnalytics().catch(() => null);
+        if (!cancelled) setReady(!!analytics);
       })
       .catch(() => {
         if (!cancelled) setReady(false);
