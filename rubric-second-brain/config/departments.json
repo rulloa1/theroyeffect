@@ -1,0 +1,77 @@
+{
+  "_note": "Five departments derived from the real structure of the theroyeffect repo. Colours are saturated and kept off the four ARMS layer hues. 'platform' is the catch-all.",
+  "departments": [
+    { "key": "site",       "label": "Site & Brand",     "color": "#ff2d78", "icon": "visual" },
+    { "key": "automation", "label": "Automation & CRM", "color": "#00d68f", "icon": "pulse" },
+    { "key": "voice",      "label": "Voice Agent",      "color": "#17e0e0", "icon": "people" },
+    { "key": "commerce",   "label": "Commerce",         "color": "#c6f429", "icon": "coin" },
+    { "key": "platform",   "label": "Platform",         "color": "#ff4e3d", "icon": "data" }
+  ],
+  "layers": [
+    { "key": "A", "label": "Applications", "color": "#3f8fd4", "shape": "hex",     "blurb": "MCP servers, CLIs and APIs the agents can reach" },
+    { "key": "R", "label": "Routines",     "color": "#d99a1f", "shape": "ringdot", "blurb": "Scheduled automations that run without being asked" },
+    { "key": "M", "label": "Memory",       "color": "#9a66e0", "shape": "chip",    "blurb": "Every file of context, clustered by department" },
+    { "key": "S", "label": "Skills",       "color": "#ff6b1a", "shape": "diamond", "blurb": "Capabilities the agents can run on demand" }
+  ],
+  "projectPrefixes": {},
+  "pathRules": [
+    { "prefix": "docs/voice-agent/",                "dept": "voice" },
+    { "prefix": "docs/vapi-setup.md",               "dept": "voice" },
+    { "prefix": "src/lib/vapi/",                    "dept": "voice" },
+    { "prefix": "src/components/VoiceConcierge",    "dept": "voice" },
+    { "prefix": "tests/regression/",                "dept": "voice" },
+
+    { "prefix": "src/lib/automation/",              "dept": "automation" },
+    { "prefix": "src/lib/prospecting/",             "dept": "automation" },
+    { "prefix": "src/lib/ghl/",                     "dept": "automation" },
+    { "prefix": "src/lib/slack/",                   "dept": "automation" },
+    { "prefix": "src/lib/gsc/",                     "dept": "automation" },
+    { "prefix": "src/routes/api/public/automation/", "dept": "automation" },
+
+    { "prefix": "src/lib/proposals/",               "dept": "commerce" },
+    { "prefix": "src/lib/booking/",                 "dept": "commerce" },
+    { "prefix": "src/lib/email-templates/",         "dept": "commerce" },
+    { "prefix": "src/lib/stripe",                   "dept": "commerce" },
+    { "prefix": "src/lib/commerce-catalog",         "dept": "commerce" },
+    { "prefix": "src/lib/checkout-validation",      "dept": "commerce" },
+    { "prefix": "src/lib/scope-estimate",           "dept": "commerce" },
+    { "prefix": "src/lib/proposal-pdf",             "dept": "commerce" },
+    { "prefix": "src/lib/brief-pdf",                "dept": "commerce" },
+    { "prefix": "src/components/portal/",           "dept": "commerce" },
+    { "prefix": "src/components/BookingCalendar",   "dept": "commerce" },
+    { "prefix": "src/components/Pricing",           "dept": "commerce" },
+    { "prefix": "src/components/ScopeEstimator",    "dept": "commerce" },
+    { "prefix": "src/components/DepositCheckout",   "dept": "commerce" },
+    { "prefix": "src/components/EmbeddedCheckout",  "dept": "commerce" },
+    { "prefix": "src/components/StripeEmbedded",    "dept": "commerce" },
+    { "prefix": "src/components/ApprovalPromise",   "dept": "commerce" },
+    { "prefix": "src/components/PaymentTestMode",   "dept": "commerce" },
+    { "prefix": "src/routes/_authenticated/",       "dept": "commerce" },
+    { "prefix": "src/routes/checkout",              "dept": "commerce" },
+    { "prefix": "src/routes/book",                  "dept": "commerce" },
+    { "prefix": "src/routes/pricing",               "dept": "commerce" },
+    { "prefix": "src/routes/proposal",              "dept": "commerce" },
+    { "prefix": "src/routes/clients",               "dept": "commerce" },
+    { "prefix": "src/routes/portal",                "dept": "commerce" },
+
+    { "prefix": "src/components/",                  "dept": "site" },
+    { "prefix": "src/assets/",                      "dept": "site" },
+    { "prefix": "src/routes/",                      "dept": "site" },
+    { "prefix": "src/styles.css",                   "dept": "site" },
+    { "prefix": "src/lib/site",                     "dept": "site" },
+    { "prefix": "src/lib/brand-logo",               "dept": "site" },
+    { "prefix": "src/lib/effects-guard",            "dept": "site" },
+    { "prefix": "src/lib/legal-identity",           "dept": "site" },
+    { "prefix": "public/",                          "dept": "site" },
+    { "prefix": ".lovable/",                        "dept": "site" },
+    { "prefix": "roadmap.md",                       "dept": "site" }
+  ],
+  "memoryKeywords": [
+    { "match": ["voice", "vapi", "call", "concierge", "assistant", "transcript"], "dept": "voice" },
+    { "match": ["followup", "follow_up", "prospect", "crm", "ghl", "gohighlevel", "slack", "cron", "gsc", "index_watch", "outreach", "automation"], "dept": "automation" },
+    { "match": ["stripe", "price", "pricing", "proposal", "booking", "checkout", "client", "invoice", "payment", "deposit", "retainer"], "dept": "commerce" },
+    { "match": ["design", "brand", "copy", "page", "homepage", "logo", "footer", "hero", "seo", "content"], "dept": "site" },
+    { "match": ["supabase", "cloudflare", "deploy", "ci", "sentry", "auth", "migration", "firebase", "env"], "dept": "platform" }
+  ],
+  "default": "platform"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "rubric-second-brain",
+  "private": true,
+  "type": "commonjs",
+  "description": "Vendored workspace map + brain.js retrieval engine. CommonJS, zero dependencies. This file exists only to opt out of the repo's root \"type\": \"module\" so the engine runs unmodified.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
