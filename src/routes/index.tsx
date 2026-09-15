@@ -10,6 +10,8 @@ import { WorkGrid } from "@/components/WorkGrid";
 import { ApprovalPromise } from "@/components/ApprovalPromise";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ClosingMarqueeCta } from "@/components/ClosingMarqueeCta";
+import { ServicesSection } from "@/components/ServicesSection";
+import { ProcessTimeline } from "@/components/ProcessTimeline";
 import { ArrowUpRight, Check, SearchCheck, Zap, Smartphone, Timer } from "lucide-react";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
@@ -99,6 +101,8 @@ function Home() {
         </ScrollReveal>
       </section>
 
+      <ServicesSection />
+
       <ApprovalPromise />
 
       <section className="relative z-20 border-y border-white/10 bg-[#0a0620] px-5 py-20 md:px-10 md:py-28">
@@ -125,6 +129,8 @@ function Home() {
           </div>
         </ScrollReveal>
       </section>
+
+      <ProcessTimeline />
 
       <Pricing />
 
