@@ -98,10 +98,20 @@ export function AdminProposalsView({
                     className={
                       signed
                         ? "bg-[#34d399] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black whitespace-nowrap"
-                        : "border border-[#FF3333]/50 bg-[#FF3333]/10 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-[#FF3333] whitespace-nowrap"
+                        : prop.status === "archived"
+                          ? "border border-white/15 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-white/50 whitespace-nowrap"
+                          : "border border-[#FF3333]/50 bg-[#FF3333]/10 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-[#FF3333] whitespace-nowrap"
                     }
                   >
-                    {signed ? "SIGNED" : prop.status === "sent" ? "AWAITING SIGNATURE" : "DRAFT"}
+                    {/* `viewed` and `archived` are declared statuses too — neither is a
+                        draft, and calling a delivered agreement DRAFT is worse than verbose. */}
+                    {signed
+                      ? "SIGNED"
+                      : prop.status === "sent" || prop.status === "viewed"
+                        ? "AWAITING SIGNATURE"
+                        : prop.status === "archived"
+                          ? "ARCHIVED"
+                          : "DRAFT"}
                   </span>
                 </div>
                 <p className="mt-1 font-mono text-[11px] text-white/45">

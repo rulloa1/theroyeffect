@@ -31,7 +31,18 @@ const compact = (cents: number) => {
   return `$${Math.round(dollars)}`;
 };
 
-/** Collected per calendar month for the trailing year, oldest first. */
+/**
+ * Collected per calendar month for the trailing year, oldest first.
+ *
+ * Counts only money actually taken: unpaid orders are excluded, and refunds are
+ * netted off the month the order landed in.
+ *
+ * Ceiling to be aware of: `adminListOrders` returns the 100 newest orders, so
+ * past that volume the oldest months here understate — and because the bars are
+ * scaled to the tallest month, that skews the shape as well as the totals. The
+ * stat cards above share the same ceiling. Fixing it properly means aggregating
+ * server-side rather than in the browser.
+ */
 function collectedByMonth(orders: AdminOrder[], now = new Date()) {
   const buckets: { key: string; label: string; cents: number }[] = [];
   for (let i = 11; i >= 0; i--) {
@@ -45,6 +56,8 @@ function collectedByMonth(orders: AdminOrder[], now = new Date()) {
 
   const index = new Map(buckets.map((b, i) => [b.key, i]));
   for (const order of orders) {
+    // "Collected", not "invoiced" — an unpaid order is not revenue yet.
+    if (order.payment_status !== "paid") continue;
     const d = new Date(order.created_at);
     if (Number.isNaN(d.getTime())) continue;
     const at = index.get(`${d.getFullYear()}-${d.getMonth()}`);
@@ -59,22 +72,51 @@ function collectedByMonth(orders: AdminOrder[], now = new Date()) {
 export function AdminFinancialsView({ orders, money, date }: AdminFinancialsViewProps) {
   const months = useMemo(() => collectedByMonth(orders), [orders]);
 
-  const totalRevenueCents = orders.reduce((sum, o) => sum + (o.amount_total || 0), 0);
+  // Same definition of "collected" as the chart below, so the headline number and
+  // the bars can never disagree: paid only, net of refunds.
+  const paid = orders.filter((o) => o.payment_status === "paid");
+  const totalRevenueCents = paid.reduce(
+    (sum, o) => sum + (o.amount_total || 0) - (o.amount_refunded || 0),
+    0,
+  );
   const pendingBalanceCents = orders
     .filter((o) => o.balance_status === "pending")
     .reduce((sum, o) => sum + (o.balance_due_cents || 0), 0);
   const pendingCount = orders.filter(
     (o) => o.balance_status === "pending" && o.balance_due_cents > 0,
   ).length;
-  const retainers = orders.filter((o) => o.stripe_subscription_id);
-  const retainerMrrCents = retainers.reduce((sum, o) => sum + (o.amount_total || 0), 0);
-  const avgProjectCents = orders.length ? Math.round(totalRevenueCents / orders.length) : 0;
+  // MRR is per subscription, not per payment: a retainer that has billed four
+  // times is still one monthly figure. Keep the most recent charge per
+  // subscription and sum those. "Active" here means it has billed inside the
+  // window we can see — a cancelled subscription's last charge still counts
+  // until it ages out, which is the best this endpoint's data supports.
+  const latestPerSubscription = new Map<string, AdminOrder>();
+  for (const o of paid) {
+    const id = o.stripe_subscription_id;
+    if (!id) continue;
+    const seen = latestPerSubscription.get(id);
+    if (!seen || new Date(o.created_at) > new Date(seen.created_at)) {
+      latestPerSubscription.set(id, o);
+    }
+  }
+  const retainerCount = latestPerSubscription.size;
+  const retainerMrrCents = [...latestPerSubscription.values()].reduce(
+    (sum, o) => sum + (o.amount_total || 0),
+    0,
+  );
+
+  const commissions = paid.filter((o) => !o.stripe_subscription_id);
+  const avgProjectCents = commissions.length
+    ? Math.round(
+        commissions.reduce((sum, o) => sum + (o.amount_total || 0), 0) / commissions.length,
+      )
+    : 0;
 
   const stats = [
     {
       label: "Collected",
       value: money(totalRevenueCents, "usd"),
-      sub: `${orders.length} transaction${orders.length === 1 ? "" : "s"}`,
+      sub: `${paid.length} paid transaction${paid.length === 1 ? "" : "s"}`,
       tone: "text-white",
     },
     {
@@ -86,13 +128,13 @@ export function AdminFinancialsView({ orders, money, date }: AdminFinancialsView
     {
       label: "Retainer MRR",
       value: money(retainerMrrCents, "usd"),
-      sub: `${retainers.length} active retainer${retainers.length === 1 ? "" : "s"}`,
+      sub: `${retainerCount} active retainer${retainerCount === 1 ? "" : "s"}`,
       tone: "text-[#DFBA73]",
     },
     {
       label: "Avg. project",
       value: money(avgProjectCents, "usd"),
-      sub: "Across all commissions",
+      sub: `${commissions.length} commission${commissions.length === 1 ? "" : "s"}, retainers excluded`,
       tone: "text-white",
     },
   ];

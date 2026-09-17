@@ -73,7 +73,10 @@ export const adminListOrders = createServerFn({ method: "GET" })
       context.supabase
         .from("orders")
         .select(
-          "id, stripe_session_id, customer_email, customer_name, product_name, amount_total, currency, payment_status, purchase_kind, is_deposit, balance_due_cents, balance_status, balance_invoice_url, amount_refunded, created_at",
+          // stripe_subscription_id is what marks an order as a retainer. AdminOrder has
+          // always declared it, but it was missing here, so every retainer read as
+          // undefined: the RETAINERS filter matched nothing and retainer MRR read zero.
+          "id, stripe_session_id, customer_email, customer_name, product_name, amount_total, currency, payment_status, purchase_kind, is_deposit, balance_due_cents, balance_status, balance_invoice_url, stripe_subscription_id, amount_refunded, created_at",
         )
         .eq("environment", data.environment)
         .order("created_at", { ascending: false })

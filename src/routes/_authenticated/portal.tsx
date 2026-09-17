@@ -588,21 +588,36 @@ function PortalPage() {
               ) : (
                 <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
                   <div className="flex min-w-0 flex-col gap-3.5">
-                    {activeMilestone && (
-                      <section className={`p-6 ${panelUrgent}`}>
-                        <span className="bg-[#FF3333] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black">
-                          YOUR TURN
+                    {/* Two states in one card. With an active milestone it is the
+                        design's YOUR TURN hero. With only a next_step — an onboarding
+                        project whose milestones are all still pending — it degrades to
+                        the quieter UP NEXT the old dashboard showed, so next_step never
+                        goes unsurfaced. */}
+                    {(activeMilestone || activeProject?.next_step) && (
+                      <section className={`p-6 ${activeMilestone ? panelUrgent : panel}`}>
+                        <span
+                          className={
+                            activeMilestone
+                              ? "bg-[#FF3333] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black"
+                              : "border border-[#DFBA73]/50 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-[#DFBA73]"
+                          }
+                        >
+                          {activeMilestone ? "YOUR TURN" : "UP NEXT"}
                         </span>
                         <h2 className="mt-3.5 text-[clamp(1.5rem,3vw,2rem)] uppercase leading-[1.05] text-white">
-                          {activeMilestone.title} is waiting on you
+                          {activeMilestone
+                            ? `${activeMilestone.title} is waiting on you`
+                            : activeProject!.next_step}
                         </h2>
-                        <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/65">
-                          {activeMilestone.note ??
-                            activeProject?.next_step ??
-                            "This step is in your hands. Build continues the day you come back on it — what you approve is what goes live."}
-                        </p>
+                        {activeMilestone && (
+                          <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/65">
+                            {activeMilestone.note ??
+                              activeProject?.next_step ??
+                              "This step is in your hands. Build continues the day you come back on it — what you approve is what goes live."}
+                          </p>
+                        )}
                         <div className="mt-[18px] flex flex-wrap gap-2.5">
-                          {activeMilestone.link && (
+                          {activeMilestone?.link && (
                             <a
                               href={activeMilestone.link}
                               target="_blank"

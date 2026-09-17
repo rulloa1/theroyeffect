@@ -192,16 +192,23 @@ export function AdminProjectsView({
                     </span>
                     <span
                       className={`font-mono text-xs ${
-                        order.balance_status === "pending"
-                          ? "text-amber-400"
-                          : order.balance_status === "paid"
-                            ? "text-emerald-400"
-                            : "text-white/50"
+                        order.amount_refunded > 0
+                          ? "text-white/50"
+                          : order.balance_status === "pending"
+                            ? "text-amber-400"
+                            : order.balance_status === "paid"
+                              ? "text-emerald-400"
+                              : "text-white/50"
                       }`}
                     >
-                      {order.is_deposit
-                        ? `${money(order.balance_due_cents, order.currency)} ${order.balance_status.toUpperCase()}`
-                        : "PAID IN FULL"}
+                      {/* A refund outranks the balance: never claim PAID IN FULL on money
+                          that went back. amount_refunded is selected; payment_status only
+                          ever carries "paid"/"unpaid" here, so it cannot express this. */}
+                      {order.amount_refunded > 0
+                        ? `${money(order.amount_refunded, order.currency)} REFUNDED`
+                        : order.is_deposit
+                          ? `${money(order.balance_due_cents, order.currency)} ${order.balance_status.toUpperCase()}`
+                          : "PAID IN FULL"}
                     </span>
                   </div>
 
