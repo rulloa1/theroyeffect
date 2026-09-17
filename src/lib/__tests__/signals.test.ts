@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSignals, daysSince, relativeAge } from "@/lib/signals";
+import { buildSignals, daysAgoPhrase, daysSince, relativeAge } from "@/lib/signals";
 import type { AdminInquiry, AdminOrder } from "@/utils/admin.functions";
 import type { CrmLead } from "@/utils/crm.functions";
 import type { ProjectProposal } from "@/utils/proposals.functions";
@@ -96,6 +96,14 @@ describe("relativeAge", () => {
   });
 });
 
+describe("daysAgoPhrase", () => {
+  it("reads as prose, so it can be followed by nothing or preceded by 'went out'", () => {
+    expect(daysAgoPhrase(daysAgo(0), NOW)).toBe("today");
+    expect(daysAgoPhrase(daysAgo(1), NOW)).toBe("yesterday");
+    expect(daysAgoPhrase(daysAgo(9), NOW)).toBe("9 days ago");
+  });
+});
+
 describe("buildSignals", () => {
   it("returns nothing when there is nothing to decide", () => {
     expect(buildSignals(empty)).toEqual([]);
@@ -145,6 +153,8 @@ describe("buildSignals", () => {
     });
     expect(stale[0]).toMatchObject({ amount: "$16,000", urgent: true });
     expect(stale[0]!.title).toBe("2 proposals are awaiting signature");
+    // Prose, not the mono stamp — "went out THIS WEEK ago" read wrong.
+    expect(stale[0]!.body).toContain("went out 10 days ago");
   });
 
   it("skips proposals that are still drafts or already signed", () => {

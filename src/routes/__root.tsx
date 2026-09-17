@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -249,6 +250,8 @@ function RootComponent() {
     return () => window.clearTimeout(id);
   }, []);
 
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isSignedInTool = pathname.startsWith("/admin") || pathname.startsWith("/portal");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -256,8 +259,10 @@ function RootComponent() {
         <FirebaseProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
-          <SiteFooter />
-          <VoiceConcierge />
+          {/* The studio hub and client portal are signed-in tools, not marketing
+              surfaces: the public footer and the sales voice agent stay off them. */}
+          {!isSignedInTool && <SiteFooter />}
+          {!isSignedInTool && <VoiceConcierge />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>

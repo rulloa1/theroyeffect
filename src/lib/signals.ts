@@ -45,6 +45,17 @@ export function daysSince(iso: string | null | undefined, now: number = Date.now
   return Math.max(0, Math.floor((now - then) / DAY_MS));
 }
 
+/**
+ * Sentence-shaped age, for prose rather than the mono stamp. `relativeAge`
+ * returns labels like THIS WEEK that read wrong followed by "ago".
+ */
+export function daysAgoPhrase(iso: string | null | undefined, now: number = Date.now()): string {
+  const days = daysSince(iso, now);
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
+  return `${days} days ago`;
+}
+
 /** Mono age stamp in the queue's voice. */
 export function relativeAge(iso: string | null | undefined, now: number = Date.now()): string {
   const days = daysSince(iso, now);
@@ -132,10 +143,10 @@ export function buildSignals({
         unsigned.length === 1
           ? `${unsigned[0]!.client_name} hasn't signed yet`
           : `${unsigned.length} proposals are awaiting signature`,
-      body: `${usd(total)} of scope is sitting unsigned. The oldest went out ${relativeAge(
+      body: `${usd(total)} of scope is sitting unsigned. The oldest went out ${daysAgoPhrase(
         oldest.created_at,
         now,
-      ).toLowerCase()} ago — a nudge is usually all it takes.`,
+      )} — a nudge is usually all it takes.`,
       action: "OPEN PROPOSALS",
       target: { kind: "view", view: "PROPOSALS" },
       weight: 1,
