@@ -10,9 +10,19 @@ import { WorkGrid } from "@/components/WorkGrid";
 import { ApprovalPromise } from "@/components/ApprovalPromise";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ClosingMarqueeCta } from "@/components/ClosingMarqueeCta";
+import { ServicesSection } from "@/components/ServicesSection";
+import { ProcessTimeline } from "@/components/ProcessTimeline";
+import { Odometer } from "@/components/cinematic/Odometer";
+import { DrawUnderline } from "@/components/cinematic/DrawUnderline";
 import { ArrowUpRight, Check, SearchCheck, Zap, Smartphone, Timer } from "lucide-react";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
+
+const WORK_STATS = [
+  { value: "$2,500", label: "Starting investment" },
+  { value: "15", label: "Minute discovery call" },
+  { value: "5", label: "Minute video audit" },
+];
 
 const HERO_IMAGE = portraitAsset.url;
 const HERO_IMAGE_ABSOLUTE = `https://theroyeffect.com${ogImageAsset.url}`;
@@ -69,7 +79,8 @@ function Home() {
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#030014]">
+    // overflow-x-clip, not -hidden: hidden makes <main> a scroll container and breaks position:sticky.
+    <main className="relative flex min-h-screen flex-col overflow-x-clip bg-[#030014]">
       <ParticleBackground />
       <SiteHeader onNavigate={openDrawer} />
 
@@ -93,11 +104,25 @@ function Home() {
           <h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">
             Recent work
           </h2>
+          <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-white/10 py-6 md:max-w-3xl md:gap-10">
+            {WORK_STATS.map(({ value, label }) => (
+              <div key={label} className="flex flex-col-reverse">
+                <dt className="mt-2 font-mono text-[11px] uppercase tracking-widest text-white/70 md:text-xs">
+                  {label}
+                </dt>
+                <dd className="font-display text-3xl text-white sm:text-4xl md:text-6xl">
+                  <Odometer value={value} />
+                </dd>
+              </div>
+            ))}
+          </dl>
           <div className="mt-10">
             <WorkGrid />
           </div>
         </ScrollReveal>
       </section>
+
+      <ServicesSection />
 
       <ApprovalPromise />
 
@@ -107,6 +132,7 @@ function Home() {
           <h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">
             Who it&apos;s for
           </h2>
+          <DrawUnderline className="mt-3" />
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <div className="border-l-2 border-[#FF3333] pl-6">
               <h3 className="font-display text-2xl uppercase text-white">I take</h3>
@@ -125,6 +151,8 @@ function Home() {
           </div>
         </ScrollReveal>
       </section>
+
+      <ProcessTimeline />
 
       <Pricing />
 

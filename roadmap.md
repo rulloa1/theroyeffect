@@ -15,3 +15,5 @@
 - [x] Replace the homepage work cards with a guarded cursor-preview project index
 - [x] Add pointer-tracking spotlight treatment to pricing package cards
 - [x] Add and verify the preview-only closing marquee CTA before the homepage footer
+- [x] Add and verify the data-driven homepage services section
+- [x] Add and verify the data-driven homepage process timeline
