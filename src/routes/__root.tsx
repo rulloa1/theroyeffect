@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -192,7 +193,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300..700&family=IBM+Plex+Mono:wght@300;400;500&display=swap",
+        // Plex Mono 600/700 are requested because the hub's pills and status
+        // flags set font-bold on mono; without them the browser fakes it.
+        href: "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300..700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap",
       },
       {
         rel: "stylesheet",
@@ -249,6 +252,8 @@ function RootComponent() {
     return () => window.clearTimeout(id);
   }, []);
 
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isSignedInTool = pathname.startsWith("/admin") || pathname.startsWith("/portal");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -256,8 +261,10 @@ function RootComponent() {
         <FirebaseProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
-          <SiteFooter />
-          <VoiceConcierge />
+          {/* The studio hub and client portal are signed-in tools, not marketing
+              surfaces: the public footer and the sales voice agent stay off them. */}
+          {!isSignedInTool && <SiteFooter />}
+          {!isSignedInTool && <VoiceConcierge />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>

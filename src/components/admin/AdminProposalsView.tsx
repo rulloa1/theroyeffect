@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { Copy, Download, ExternalLink, FileCheck, Pencil, Plus, Send, Trash2, Check } from "lucide-react";
+import { Check, Copy, Download, ExternalLink, Plus, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ProjectProposal } from "@/utils/proposals.functions";
+import {
+  btnGhostSm,
+  btnPrimary,
+  btnPrimarySm,
+  emptyState,
+  label,
+  panel,
+} from "@/components/signal/signal-ui";
 
 export interface AdminProposalsViewProps {
   proposals: ProjectProposal[];
@@ -34,183 +42,174 @@ export function AdminProposalsView({
     setTimeout(() => setCopiedToken(null), 2500);
   };
 
+  const downloadPdf = async (prop: ProjectProposal) => {
+    setPdfId(prop.id);
+    try {
+      const { adminDownloadProposalPdf } = await import("@/utils/proposals.functions");
+      const res = await adminDownloadProposalPdf({ data: { id: prop.id } });
+      if (!res.success || !res.pdfBase64) throw new Error(res.error || "Failed");
+      const link = document.createElement("a");
+      link.href = `data:application/pdf;base64,${res.pdfBase64}`;
+      link.download = res.filename || "proposal.pdf";
+      link.click();
+      toast.success("Proposal PDF downloaded");
+    } catch {
+      toast.error("Could not generate the PDF");
+    } finally {
+      setPdfId(null);
+    }
+  };
+
+  const unsigned = proposals.filter((p) => p.status !== "signed").length;
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
-        <div>
-          <h2 className="font-display text-xl uppercase text-white">Project Scope Proposals</h2>
-          <p className="mt-1 font-mono text-xs text-white/50">
-            Generate 1-click custom scope agreements & digital signatures for clients.
-          </p>
-        </div>
-        <button
-          onClick={onCreateProposal}
-          className="inline-flex items-center gap-2 bg-[#FF3333] px-4 py-2 font-mono text-xs font-bold tracking-widest text-black transition-opacity hover:opacity-90"
-        >
-          <Plus className="size-4" />
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className={label}>
+          {proposals.length} {proposals.length === 1 ? "AGREEMENT" : "AGREEMENTS"} · {unsigned}{" "}
+          UNSIGNED
+        </span>
+        <button type="button" onClick={onCreateProposal} className={`ml-auto ${btnPrimary}`}>
+          <Plus className="size-3.5" />
           CREATE PROPOSAL
         </button>
       </div>
 
       {proposals.length === 0 ? (
-        <div className="border border-dashed border-white/10 py-16 text-center">
-          <FileCheck className="mx-auto size-8 text-white/20" />
-          <p className="mt-3 font-mono text-xs text-white/40">No client proposals generated yet.</p>
+        <div className={emptyState}>
+          <p className="font-display text-[22px] uppercase text-white/70">No agreements yet</p>
+          <p className="mt-2 font-mono text-[11px] text-white/40">
+            Scope agreements you generate show up here to send, sign and track.
+          </p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
-          {proposals.map((prop) => {
-            const isSigned = prop.status === "signed";
+        proposals.map((prop) => {
+          const signed = prop.status === "signed";
 
-            return (
-              <div
-                key={prop.id}
-                className="flex flex-col justify-between border border-white/10 bg-white/[0.01] p-5 transition-colors hover:border-white/20"
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <span className="font-display text-lg uppercase tracking-wide text-white">
-                        {prop.client_name}
-                      </span>
-                      {prop.client_company && (
-                        <p className="font-mono text-xs text-white/50">{prop.client_company}</p>
-                      )}
-                    </div>
-                    <span
-                      className={`px-2 py-0.5 font-mono text-[9px] tracking-widest uppercase font-bold ${
-                        isSigned
-                          ? "bg-emerald-500 text-black font-bold"
-                          : prop.status === "sent"
-                            ? "bg-blue-500 text-black"
-                            : "border border-white/20 text-white/50"
-                      }`}
-                    >
-                      {prop.status}
-                    </span>
-                  </div>
-
-                  <p className="mt-3 font-mono text-xs font-semibold text-[#FF3333]">
-                    {prop.project_title}
-                  </p>
-                  <p className="mt-1 font-mono text-xs text-white/60">
-                    Total: {money(prop.total_price_cents, "usd")} · Deposit:{" "}
-                    {money(prop.deposit_cents, "usd")}
-                  </p>
-                  <p className="mt-1 font-mono text-[11px] text-white/40">
-                    Timeline: {prop.timeline_weeks}
-                  </p>
-
-                  {isSigned && (
-                    <div className="mt-3 border-t border-white/10 pt-2 font-mono text-[10px] text-emerald-400">
-                      Signed by {prop.client_signature_name} on{" "}
-                      {date(prop.client_signed_at ?? null)}
-                    </div>
-                  )}
+          return (
+            <article
+              key={prop.id}
+              className={`flex flex-wrap items-center gap-4 p-[18px] ${panel} transition-colors hover:border-white/20`}
+            >
+              <div className="min-w-0 flex-[1_1_240px]">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <h3 className="text-[19px] uppercase text-white">{prop.client_name}</h3>
+                  <span
+                    className={
+                      signed
+                        ? "bg-[#34d399] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black whitespace-nowrap"
+                        : prop.status === "archived"
+                          ? "border border-white/15 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-white/50 whitespace-nowrap"
+                          : "border border-[#FF3333]/50 bg-[#FF3333]/10 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-[#FF3333] whitespace-nowrap"
+                    }
+                  >
+                    {/* `viewed` and `archived` are declared statuses too — neither is a
+                        draft, and calling a delivered agreement DRAFT is worse than verbose. */}
+                    {signed
+                      ? "SIGNED"
+                      : prop.status === "sent" || prop.status === "viewed"
+                        ? "AWAITING SIGNATURE"
+                        : prop.status === "archived"
+                          ? "ARCHIVED"
+                          : "DRAFT"}
+                  </span>
                 </div>
+                <p className="mt-1 font-mono text-[11px] text-white/45">
+                  {prop.project_title} · {date(prop.created_at)} · timeline {prop.timeline_weeks}
+                  {signed && prop.client_signature_name
+                    ? ` · signed by ${prop.client_signature_name}`
+                    : ""}
+                </p>
+              </div>
 
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3">
-                  <div className="flex gap-2">
+              <span className="font-display text-2xl text-white">
+                {money(prop.total_price_cents, "usd")}
+              </span>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => copyProposalLink(prop.share_token)}
+                  className={btnGhostSm}
+                >
+                  {copiedToken === prop.share_token ? (
+                    <Check className="size-3 text-emerald-400" />
+                  ) : (
+                    <Copy className="size-3" />
+                  )}
+                  {copiedToken === prop.share_token ? "COPIED" : "LINK"}
+                </button>
+
+                <button
+                  type="button"
+                  disabled={pdfId === prop.id}
+                  onClick={() => void downloadPdf(prop)}
+                  className={btnGhostSm}
+                >
+                  <Download className="size-3" />
+                  {pdfId === prop.id ? "BUILDING…" : "PDF"}
+                </button>
+
+                {signed ? (
+                  <a
+                    href={`/proposal/${prop.share_token}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={btnGhostSm}
+                  >
+                    VIEW AGREEMENT
+                    <ExternalLink className="size-3" />
+                  </a>
+                ) : (
+                  <>
                     <button
-                      onClick={() => copyProposalLink(prop.share_token)}
-                      className="inline-flex items-center gap-1.5 border border-white/15 px-2.5 py-1.5 font-mono text-[10px] tracking-widest text-white hover:border-[#FF3333]"
+                      type="button"
+                      onClick={() => onEditProposal(prop)}
+                      className={btnGhostSm}
                     >
-                      {copiedToken === prop.share_token ? (
-                        <Check className="size-3 text-emerald-400" />
-                      ) : (
-                        <Copy className="size-3 text-[#FF3333]" />
-                      )}
-                      {copiedToken === prop.share_token ? "COPIED" : "COPY LINK"}
+                      EDIT
                     </button>
-
-                    {!isSigned && (
-                      <button
-                        onClick={() => onEditProposal(prop)}
-                        className="inline-flex items-center gap-1.5 border border-white/15 px-2.5 py-1.5 font-mono text-[10px] tracking-widest text-white hover:border-[#FF3333]"
-                      >
-                        <Pencil className="size-3" />
-                        EDIT
-                      </button>
-                    )}
-
-                    {!isSigned && (
-                      <button
-                        disabled={sendingId === prop.id}
-                        onClick={async () => {
-                          setSendingId(prop.id);
-                          try {
-                            await onSendProposal(prop.id);
-                          } finally {
-                            setSendingId(null);
-                          }
-                        }}
-                        className="inline-flex items-center gap-1.5 bg-[#FF3333] px-2.5 py-1.5 font-mono text-[10px] font-bold tracking-widest text-black disabled:opacity-50"
-                      >
-                        <Send className="size-3" />
-                        {sendingId === prop.id
-                          ? "SENDING…"
-                          : prop.status === "draft"
-                            ? "SEND TO CLIENT"
-                            : "RESEND TO CLIENT"}
-                      </button>
-                    )}
-
                     <button
-                      disabled={pdfId === prop.id}
+                      type="button"
+                      disabled={sendingId === prop.id}
                       onClick={async () => {
-                        setPdfId(prop.id);
+                        setSendingId(prop.id);
                         try {
-                          const { adminDownloadProposalPdf } = await import(
-                            "@/utils/proposals.functions"
-                          );
-                          const res = await adminDownloadProposalPdf({ data: { id: prop.id } });
-                          if (!res.success || !res.pdfBase64)
-                            throw new Error(res.error || "Failed");
-                          const link = document.createElement("a");
-                          link.href = `data:application/pdf;base64,${res.pdfBase64}`;
-                          link.download = res.filename || "proposal.pdf";
-                          link.click();
-                          toast.success("Proposal PDF downloaded");
-                        } catch {
-                          toast.error("Could not generate the PDF");
+                          await onSendProposal(prop.id);
                         } finally {
-                          setPdfId(null);
+                          setSendingId(null);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 border border-white/15 px-2.5 py-1.5 font-mono text-[10px] tracking-widest text-white hover:border-[#FF3333] disabled:opacity-50"
+                      className={btnPrimarySm}
                     >
-                      <Download className="size-3 text-[#FF3333]" />
-                      {pdfId === prop.id ? "BUILDING…" : "PDF"}
+                      <Send className="size-3" />
+                      {sendingId === prop.id
+                        ? "SENDING…"
+                        : prop.status === "draft"
+                          ? "FINISH & SEND"
+                          : "NUDGE CLIENT"}
                     </button>
+                  </>
+                )}
 
-                    <a
-                      href={`/proposal/${prop.share_token}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 font-mono text-[10px] tracking-widest text-white hover:bg-white/20"
-                    >
-                      <ExternalLink className="size-3" />
-                      VIEW
-                    </a>
-                  </div>
-
-                  <button
-                    onClick={async () => {
-                      if (confirm("Delete this proposal?")) {
-                        await onDeleteProposal(prop.id);
-                        toast.success("Proposal deleted");
-                      }
-                    }}
-                    className="p-1.5 text-white/40 transition-colors hover:text-red-400"
-                    title="Delete proposal"
-                  >
-                    <Trash2 className="size-3.5" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (confirm("Delete this proposal?")) {
+                      await onDeleteProposal(prop.id);
+                      toast.success("Proposal deleted");
+                    }
+                  }}
+                  className="p-1.5 text-white/40 transition-colors hover:text-[#FF3333]"
+                  title="Delete proposal"
+                  aria-label={`Delete proposal for ${prop.client_name}`}
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
               </div>
-            );
-          })}
-        </div>
+            </article>
+          );
+        })
       )}
     </div>
   );
