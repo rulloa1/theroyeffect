@@ -3,7 +3,7 @@ import { AlertTriangle, CalendarClock, Globe, Mail, Phone, Search } from "lucide
 import { toast } from "sonner";
 import { LEAD_STAGES, type CrmLead } from "@/utils/crm.functions";
 import { LeadDetailDrawer } from "@/components/admin/LeadDetailDrawer";
-import { relativeAge } from "@/lib/signals";
+import { relativeAge } from "@/lib/relative-time";
 import { btnGhostSm, emptyState, input, label, panel, select } from "@/components/signal/signal-ui";
 
 const STAGE_LABELS: Record<string, string> = {

@@ -1,0 +1,33 @@
+{
+  "_note": "Mapped for the theroyeffect repo (TanStack Start site + Supabase/Cloudflare backend). Paths relative to root; root is relative to this folder.",
+  "root": "..",
+  "memoryDir": "docs/memory",
+  "memoryIndex": "MEMORY.md",
+  "skillDirs": [
+    ".claude/skills",
+    ".claude/commands"
+  ],
+  "projectsDir": "docs/projects",
+  "_sharedNote": "In this repo everything in the working tree is committed and syncs onward (git -> Lovable editor -> Cloudflare). So the default is 'both' and the genuinely machine-local paths are listed in access-overrides.json. Secrets (.env*) are forced machine-only by the engine regardless.",
+  "sharedPrefixes": [
+    ""
+  ],
+  "visibleRoots": [
+    "",
+    "src",
+    "src/lib",
+    "src/routes",
+    "src/components",
+    "docs",
+    "docs/memory",
+    "docs/voice-agent",
+    "supabase",
+    ".github"
+  ],
+  "routing": {
+    "CLAUDE.md": ["rule", "rules", "convention", "conventions", "memory", "brain", "recall", "store", "workspace", "map"],
+    "README.md": ["setup", "install", "dev", "integration", "integrations", "webhook", "ghl", "gohighlevel", "lovable", "secret", "secrets", "live"],
+    "roadmap.md": ["roadmap", "shipped", "milestone", "backlog", "next", "done", "plan"],
+    "AGENTS.md": ["lovable", "history", "rebase", "force", "push", "sync", "branch"]
+  }
+}

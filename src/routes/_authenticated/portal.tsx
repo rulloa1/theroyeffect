@@ -372,11 +372,10 @@ function Proposals({ proposals }: { proposals: ProjectProposal[] }) {
   );
 }
 
-type Tab = "overview" | "approvals" | "timeline" | "proposals" | "invoices" | "profile";
+type Tab = "overview" | "timeline" | "proposals" | "invoices" | "profile";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "overview", label: "OVERVIEW" },
-  { key: "approvals", label: "APPROVALS" },
   { key: "timeline", label: "TIMELINE" },
   { key: "proposals", label: "PROPOSALS" },
   { key: "invoices", label: "INVOICES" },
@@ -385,7 +384,6 @@ const TABS: { key: Tab; label: string }[] = [
 
 const TAB_TITLES: Record<Tab, string> = {
   overview: "Your project",
-  approvals: "Sign-off queue",
   timeline: "Timeline",
   proposals: "Proposals",
   invoices: "Invoices",
@@ -458,16 +456,6 @@ function PortalPage() {
 
   const projects = data?.projects ?? [];
   const invoices = data?.invoices ?? [];
-  const approvals = projects.flatMap((project) =>
-    project.milestones.flatMap((milestone) =>
-      milestone.approvals
-        .filter((approval) => approval.status !== "superseded")
-        .map((approval) => ({ approval, milestone, project })),
-    ),
-  );
-  const awaitingApprovals = approvals.filter(
-    ({ approval }) => approval.status === "awaiting_review",
-  );
   const activeProject = useMemo(
     () => projects.find((p) => p.id === activeProjectId) ?? projects[0] ?? null,
     [projects, activeProjectId],
@@ -477,13 +465,18 @@ function PortalPage() {
   const payableInvoice = invoices.find((i) => i.kind === "commission" && i.balance_due_cents > 0);
   const currency = invoices[0]?.currency ?? "usd";
   const agreement = (proposalsData ?? []).find((p) => p.status === "signed");
-  const nextApproval = awaitingApprovals[0];
+
+  // The design's "YOUR TURN" card. It was originally driven by the approvals
+  // queue, which has since been removed from the product, so it now keys off
+  // the milestone the project is actually sitting on — the same signal the
+  // timeline uses to stamp a step YOUR TURN.
+  const activeMilestone = activeProject?.milestones.find((m) => m.status === "active");
 
   const signOut = async () => {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    void navigate({ to: "/portal/login", search: {}, replace: true });
+    void navigate({ to: "/portal/login", replace: true });
   };
 
   // Stripe's embedded checkout owns the whole screen while it is open.
@@ -595,34 +588,36 @@ function PortalPage() {
               ) : (
                 <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
                   <div className="flex min-w-0 flex-col gap-3.5">
-                    {nextApproval && (
+                    {activeMilestone && (
                       <section className={`p-6 ${panelUrgent}`}>
                         <span className="bg-[#FF3333] px-2 py-[3px] font-mono text-[9px] font-bold tracking-[0.2em] text-black">
                           YOUR TURN
                         </span>
                         <h2 className="mt-3.5 text-[clamp(1.5rem,3vw,2rem)] uppercase leading-[1.05] text-white">
-                          {nextApproval.milestone.title} is waiting on you
+                          {activeMilestone.title} is waiting on you
                         </h2>
                         <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/65">
-                          {nextApproval.approval.review_note ??
-                            "The screens are ready for your comments. Build continues the day you sign off — what you approve is what goes live."}
+                          {activeMilestone.note ??
+                            activeProject?.next_step ??
+                            "This step is in your hands. Build continues the day you come back on it — what you approve is what goes live."}
                         </p>
                         <div className="mt-[18px] flex flex-wrap gap-2.5">
-                          <Link
-                            to="/projects/$projectId"
-                            params={{ projectId: nextApproval.project.id }}
-                            search={{ approval: nextApproval.approval.id }}
-                            className="inline-flex items-center gap-1.5 bg-[#FF3333] px-5 py-[11px] font-mono text-[10px] font-bold tracking-[0.2em] text-black transition-opacity hover:opacity-90"
-                          >
-                            REVIEW &amp; SIGN OFF ↗
-                          </Link>
+                          {activeMilestone.link && (
+                            <a
+                              href={activeMilestone.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 bg-[#FF3333] px-5 py-[11px] font-mono text-[10px] font-bold tracking-[0.2em] text-black transition-opacity hover:opacity-90"
+                            >
+                              OPEN THE SCREENS ↗
+                            </a>
+                          )}
                           <button
                             type="button"
-                            onClick={() => setTab("approvals")}
+                            onClick={() => setTab("timeline")}
                             className="inline-flex items-center gap-1.5 border border-white/20 px-5 py-[11px] font-mono text-[10px] tracking-[0.2em] text-white/75 transition-colors hover:border-white hover:text-white"
                           >
-                            SEE ALL {awaitingApprovals.length} REQUEST
-                            {awaitingApprovals.length === 1 ? "" : "S"}
+                            SEE THE TIMELINE
                           </button>
                         </div>
                       </section>
@@ -634,7 +629,6 @@ function PortalPage() {
                         <Link
                           to="/projects/$projectId"
                           params={{ projectId: p.id }}
-                          search={{}}
                           className={`self-start ${btnGhostSm}`}
                         >
                           OPEN PROJECT PAGE →
@@ -718,71 +712,6 @@ function PortalPage() {
               ) : (
                 <p className="font-mono text-xs text-white/40">No timeline yet.</p>
               ))}
-
-            {tab === "approvals" && (
-              <section className="max-w-[56rem]">
-                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                  <span className={label}>{awaitingApprovals.length} NEED YOUR APPROVAL</span>
-                  <p className="max-w-md font-mono text-[11px] leading-[1.8] text-white/50">
-                    Review each deliverable on its project page, then approve it or send a written
-                    change request.
-                  </p>
-                </div>
-
-                {approvals.length === 0 ? (
-                  <div className={emptyState}>
-                    <p className="font-display text-[22px] uppercase text-white/70">
-                      Nothing to sign off
-                    </p>
-                    <p className="mt-2 font-mono text-[11px] text-white/40">
-                      Requests appear here when a design stage or build step is ready.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-3">
-                    {approvals.map(({ approval, milestone, project }) => {
-                      const waiting = approval.status === "awaiting_review";
-                      return (
-                        <div
-                          key={approval.id}
-                          className={`flex flex-wrap items-center gap-4 p-[18px] ${
-                            waiting ? panelUrgent : panel
-                          }`}
-                        >
-                          <div className="min-w-0 flex-[1_1_240px]">
-                            <div className="flex flex-wrap items-center gap-2.5">
-                              <h3 className="text-[19px] uppercase text-white">
-                                {milestone.title}
-                              </h3>
-                              <span className="border border-white/15 px-2 py-[3px] font-mono text-[9px] tracking-[0.2em] text-white/50">
-                                {approval.stage_type.toUpperCase()}
-                              </span>
-                            </div>
-                            <p className="mt-1 font-mono text-[11px] text-white/45">
-                              {project.title} · {approval.status.replace(/_/g, " ").toUpperCase()}
-                            </p>
-                            {approval.client_feedback && (
-                              <p className="mt-2 font-mono text-xs leading-[1.8] text-white/70">
-                                {approval.client_feedback}
-                              </p>
-                            )}
-                          </div>
-
-                          <Link
-                            to="/projects/$projectId"
-                            params={{ projectId: project.id }}
-                            search={{ approval: approval.id }}
-                            className={waiting ? btnPrimary : btnGhost}
-                          >
-                            {waiting ? "REVIEW & SIGN OFF" : "VIEW DECISION"} →
-                          </Link>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            )}
 
             {tab === "proposals" && <Proposals proposals={proposalsData ?? []} />}
 

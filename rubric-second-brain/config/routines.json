@@ -1,0 +1,32 @@
+{
+  "_note": "Real schedules only. The two pg_cron jobs are defined in supabase/migrations; gsc-index-watch is registered in automation_jobs with its trigger function in the repo, but its cron.schedule is not in any migration - confirm the cadence in the Supabase dashboard.",
+  "routines": [
+    {
+      "id": "rt:followup-autopilot",
+      "label": "Follow-up autopilot",
+      "schedule": "hourly at :17",
+      "runner": "pg_cron",
+      "access": "both",
+      "desc": "Bounded, single-flight follow-up batch + pending-onboarding sweep. Self-pauses on billing blocks.",
+      "links": ["src/routes/api/public/automation/followups.ts", "src/lib/automation/followups.server.ts"]
+    },
+    {
+      "id": "rt:prospect-crm-sync",
+      "label": "Prospect CRM sync",
+      "schedule": "hourly at :47",
+      "runner": "pg_cron",
+      "access": "both",
+      "desc": "Pushes discovered prospects into the CRM and reconciles outreach state.",
+      "links": ["src/routes/api/public/automation/prospect-sync.ts", "src/lib/prospecting/crm.server.ts"]
+    },
+    {
+      "id": "rt:gsc-index-watch",
+      "label": "GSC index watch",
+      "schedule": "cadence set outside migrations - verify",
+      "runner": "pg_cron",
+      "access": "both",
+      "desc": "Re-reads URL Inspection data for watched guide URLs; alerts to email with a Slack mirror.",
+      "links": ["src/routes/api/public/automation/gsc-index-watch.ts", "src/lib/gsc/index-watch.server.ts"]
+    }
+  ]
+}

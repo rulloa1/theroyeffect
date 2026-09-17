@@ -1,0 +1,135 @@
+{
+  "_note": "Repo-evidenced outside connections only. Every entry is backed by a dependency, a config file or an env key in theroyeffect. Local runtimes (node, bun, vite, python) are deliberately excluded.",
+  "apps": [
+    {
+      "id": "app:supabase",
+      "label": "Supabase",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Postgres, auth, pg_cron - the app's database of record",
+      "links": ["supabase/migrations", "src/integrations/supabase"],
+      "iconSlug": "supabase"
+    },
+    {
+      "id": "app:stripe",
+      "label": "Stripe",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Deposits, embedded checkout, purchase webhooks",
+      "links": ["src/lib/stripe.server.ts", "src/lib/commerce-catalog.ts"],
+      "iconSlug": "stripe"
+    },
+    {
+      "id": "app:ghl",
+      "label": "GoHighLevel",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Inbound lead sync via GHL workflow webhook",
+      "links": ["src/lib/ghl"],
+      "iconSlug": "ghl"
+    },
+    {
+      "id": "app:vapi",
+      "label": "Vapi",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Voice concierge - calls, transcripts, tool handlers",
+      "links": ["src/lib/vapi", "docs/voice-agent"],
+      "iconSlug": "vapi"
+    },
+    {
+      "id": "app:gsc",
+      "label": "Google Search Console",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "URL Inspection API - indexing watch on guide pages",
+      "links": ["src/lib/gsc/index-watch.server.ts"],
+      "iconSlug": "googlesearchconsole"
+    },
+    {
+      "id": "app:slack",
+      "label": "Slack",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Alert mirror for automation runs and index warnings",
+      "links": ["src/lib/slack/notify.server.ts"],
+      "iconSlug": "slack"
+    },
+    {
+      "id": "app:firebase",
+      "label": "Firebase",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Client SDK - auth/analytics, configured per environment",
+      "links": ["src/integrations/firebase"],
+      "iconSlug": "firebase"
+    },
+    {
+      "id": "app:sentry",
+      "label": "Sentry",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Error tracking and source-mapped release uploads",
+      "links": ["src/lib/sentry", "docs/ci-cd-and-error-tracking.md"],
+      "iconSlug": "sentry"
+    },
+    {
+      "id": "app:cloudflare",
+      "label": "Cloudflare Workers",
+      "kind": "cli",
+      "access": "both",
+      "status": "live",
+      "desc": "wrangler - staging and production worker deploys",
+      "links": ["wrangler.toml", ".github/workflows/deploy.yml"],
+      "iconSlug": "cloudflare"
+    },
+    {
+      "id": "app:lovable",
+      "label": "Lovable",
+      "kind": "api",
+      "access": "both",
+      "status": "live",
+      "desc": "Editor sync, transactional email, AI gateway",
+      "links": [".lovable", "src/lib/ai-gateway.server.ts", "src/lib/email-templates/send-email.ts"],
+      "iconSlug": "lovable"
+    },
+    {
+      "id": "app:github-actions",
+      "label": "GitHub Actions",
+      "kind": "cli",
+      "access": "both",
+      "status": "live",
+      "desc": "CI verify gate and deploy pipeline",
+      "links": [".github/workflows"],
+      "iconSlug": "githubactions"
+    },
+    {
+      "id": "app:gemini",
+      "label": "Gemini",
+      "kind": "api",
+      "access": "both",
+      "status": "fallback",
+      "desc": "Direct OpenAI-compatible endpoint - used only if the Lovable gateway key is absent",
+      "links": ["src/lib/ai-gateway.server.ts"],
+      "iconSlug": "gemini"
+    },
+    {
+      "id": "app:site-mcp",
+      "label": "theroyeffect MCP",
+      "kind": "mcp",
+      "access": "both",
+      "status": "live",
+      "desc": "This site's OWN MCP server at /mcp - services, pricing, inquiries (OAuth via Supabase)",
+      "links": [".lovable/mcp/manifest.json", "src/routes/mcp.ts", "src/lib/mcp"],
+      "iconSlug": "mcp"
+    }
+  ]
+}

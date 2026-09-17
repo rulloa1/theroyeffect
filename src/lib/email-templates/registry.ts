@@ -12,8 +12,6 @@ import { template as proposalReady } from "./proposal-ready";
 import { template as subscriptionNotification } from "./subscription-notification";
 import { template as voiceAgentFollowup } from "./voice-agent-followup";
 import { template as voiceAgentNotification } from "./voice-agent-notification";
-import { template as approvalReviewReady } from "./approval-review-ready";
-import { template as approvalDecision } from "./approval-decision";
 
 export interface TemplateEntry {
   component: ComponentType<any>;
@@ -46,6 +44,4 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "subscription-notification": subscriptionNotification,
   "voice-agent-followup": voiceAgentFollowup,
   "voice-agent-notification": voiceAgentNotification,
-  "approval-review-ready": approvalReviewReady,
-  "approval-decision": approvalDecision,
 };

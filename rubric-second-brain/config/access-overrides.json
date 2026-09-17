@@ -1,0 +1,9 @@
+{
+  "_note": "Everything committed in this repo syncs onward, so 'both' is the default (see workspace.json). These prefixes are local machine state that never leaves the machine. .env* and other secret-shaped files are forced machine-only by the engine's own regex.",
+  "overrides": [
+    { "prefix": ".claude/", "access": "claude" },
+    { "prefix": ".hurc-harness/", "access": "claude" },
+    { "prefix": "rubric-second-brain/.cache/", "access": "claude" },
+    { "prefix": "product-data/claude-auth/", "access": "claude" }
+  ]
+}

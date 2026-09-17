@@ -1,0 +1,4 @@
+{
+  "_note": "No VPS or scoped helper agents in this workspace. Scheduled work runs as pg_cron inside Supabase (see routines.json), not as an agent.",
+  "agents": []
+}
