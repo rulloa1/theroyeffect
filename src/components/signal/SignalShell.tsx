@@ -3,6 +3,13 @@ import { Link } from "@tanstack/react-router";
 import { LogoMark } from "@/components/Logo";
 import { navPill } from "@/components/signal/signal-ui";
 
+/**
+ * The design is full-bleed with 24px gutters, authored at a 1280px preview.
+ * Past ~1400px the money columns drift away from the copy they belong to, so
+ * the content caps and centres while the header rule still spans the viewport.
+ */
+const CONTAINER = "mx-auto w-full max-w-[1400px]";
+
 export interface SignalNavItem<T extends string = string> {
   key: T;
   label: string;
@@ -38,34 +45,39 @@ export function SignalShell<T extends string = string>({
     <div className="signal-root relative min-h-screen overflow-hidden bg-[#030014]">
       <div className="signal-grid" aria-hidden="true" />
 
-      <header className="relative z-10 flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#030014]/85 px-6 py-4 backdrop-blur-md">
-        <Link to="/" aria-label="The Roy Effect home" className="group shrink-0 outline-none">
-          <LogoMark className="size-10" />
-        </Link>
-        <div className="min-w-0">
-          <span className="font-mono text-[9px] tracking-[0.26em] text-[#FF3333]">{eyebrow}</span>
-          <h1 className="text-[22px] uppercase leading-[1.1] text-white">{headline}</h1>
+      {/* The border and blur run full width; the contents line up with `main`. */}
+      <header className="relative z-10 border-b border-white/10 bg-[#030014]/85 px-6 py-4 backdrop-blur-md">
+        <div className={`${CONTAINER} flex flex-wrap items-center gap-4`}>
+          <Link to="/" aria-label="The Roy Effect home" className="group shrink-0 outline-none">
+            <LogoMark className="size-10" />
+          </Link>
+          <div className="min-w-0">
+            <span className="font-mono text-[9px] tracking-[0.26em] text-[#FF3333]">{eyebrow}</span>
+            <h1 className="text-[22px] uppercase leading-[1.1] text-white">{headline}</h1>
+          </div>
+          <nav className="ml-auto flex flex-wrap gap-2">
+            {nav.map((item) => (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => {
+                  onNavigate(item.key);
+                  window.scrollTo(0, 0);
+                }}
+                aria-current={item.key === activeKey ? "page" : undefined}
+                className={navPill(item.key === activeKey)}
+              >
+                {item.label}
+              </button>
+            ))}
+            {actions}
+          </nav>
         </div>
-        <nav className="ml-auto flex flex-wrap gap-2">
-          {nav.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => {
-                onNavigate(item.key);
-                window.scrollTo(0, 0);
-              }}
-              aria-current={item.key === activeKey ? "page" : undefined}
-              className={navPill(item.key === activeKey)}
-            >
-              {item.label}
-            </button>
-          ))}
-          {actions}
-        </nav>
       </header>
 
-      <main className="relative z-10 px-6 pb-20 pt-7">{children}</main>
+      <main className="relative z-10 px-6 pb-20 pt-7">
+        <div className={CONTAINER}>{children}</div>
+      </main>
     </div>
   );
 }
