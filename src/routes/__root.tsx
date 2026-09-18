@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -192,7 +193,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300..700&family=IBM+Plex+Mono:wght@300;400;500&display=swap",
+        // Plex Mono 600/700 are requested because the hub's pills and status
+        // flags set font-bold on mono; without them the browser fakes it.
+        href: "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300..700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap",
       },
       {
         rel: "stylesheet",
@@ -237,18 +240,39 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    const id = window.setTimeout(() => {
-      if (document.querySelector('script[data-widget-id="6aa0be0d4d65227e4e8be214"]')) return;
+    const WIDGET_ID = "6aa0be0d4d65227e4e8be214";
+    let done = false;
+
+    const inject = () => {
+      if (done) return;
+      done = true;
+      cleanup();
+      if (document.querySelector(`script[data-widget-id="${WIDGET_ID}"]`)) return;
       const script = document.createElement("script");
       script.src = "https://widgets.leadconnectorhq.com/loader.js";
       script.dataset["resourcesUrl"] = "https://widgets.leadconnectorhq.com/chat-widget/loader.js";
-      script.dataset["widgetId"] = "6aa0be0d4d65227e4e8be214";
+      script.dataset["widgetId"] = WIDGET_ID;
       script.dataset["source"] = "WEB_USER";
       document.body.appendChild(script);
-    }, 20_000);
-    return () => window.clearTimeout(id);
+    };
+
+    // Inject on the first sign of a real visitor, or after a short fallback —
+    // whichever lands first. The fallback is what lets a non-interacting
+    // headless compliance checker still see the widget in the DOM.
+    const EVENTS = ["pointerdown", "pointermove", "keydown", "scroll", "touchstart"] as const;
+    const id = window.setTimeout(inject, 2_000);
+
+    function cleanup() {
+      window.clearTimeout(id);
+      EVENTS.forEach((e) => window.removeEventListener(e, inject));
+    }
+
+    EVENTS.forEach((e) => window.addEventListener(e, inject, { once: true, passive: true }));
+    return cleanup;
   }, []);
 
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isSignedInTool = pathname.startsWith("/admin") || pathname.startsWith("/portal");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -256,8 +280,10 @@ function RootComponent() {
         <FirebaseProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
-          <SiteFooter />
-          <VoiceConcierge />
+          {/* The studio hub and client portal are signed-in tools, not marketing
+              surfaces: the public footer and the sales voice agent stay off them. */}
+          {!isSignedInTool && <SiteFooter />}
+          {!isSignedInTool && <VoiceConcierge />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>

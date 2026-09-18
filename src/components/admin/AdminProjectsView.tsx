@@ -1,7 +1,19 @@
 import { useState } from "react";
-import { Briefcase, Clock, FileText, Mail, Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 import type { AdminBrief, AdminOrder } from "@/utils/admin.functions";
+import {
+  btnGhostSm,
+  btnPrimarySm,
+  chip,
+  emptyState,
+  flagNeutral,
+  flagUrgent,
+  input,
+  label,
+  panel,
+  select,
+} from "@/components/signal/signal-ui";
 
 export type FilterTab = "ALL" | "PENDING_BALANCE" | "PAID_IN_FULL" | "RETAINERS" | "REFUNDED";
 
@@ -12,6 +24,27 @@ export const MILESTONES = [
   { id: "in_review", label: "4. Review Rounds" },
   { id: "completed", label: "5. Completed & Live" },
 ];
+
+const FILTERS: { id: FilterTab; label: string }[] = [
+  { id: "ALL", label: "ALL" },
+  { id: "PENDING_BALANCE", label: "PENDING BALANCE" },
+  { id: "PAID_IN_FULL", label: "PAID IN FULL" },
+  { id: "RETAINERS", label: "RETAINERS" },
+  { id: "REFUNDED", label: "REFUNDED" },
+];
+
+/** Milestone index → completion, so the hairline bar tracks real progress. */
+const progressOf = (milestone: string) => {
+  const index = MILESTONES.findIndex((m) => m.id === milestone);
+  return index < 0 ? 20 : ((index + 1) / MILESTONES.length) * 100;
+};
+
+const milestoneCaption = (milestone: string) => {
+  const index = MILESTONES.findIndex((m) => m.id === milestone);
+  const step = index < 0 ? 1 : index + 1;
+  const name = (MILESTONES[index] ?? MILESTONES[0]!).label.replace(/^\d+\.\s*/, "");
+  return `${step} / ${MILESTONES.length} ${name.toUpperCase()}`;
+};
 
 export interface AdminProjectsViewProps {
   orders: AdminOrder[];
@@ -62,183 +95,194 @@ export function AdminProjectsView({
   });
 
   return (
-    <div className="space-y-6">
-      {/* Header & Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
-        <div className="flex flex-wrap gap-2">
-          {(
-            [
-              { id: "ALL", label: "ALL COMMISSIONS" },
-              { id: "PENDING_BALANCE", label: "PENDING BALANCE" },
-              { id: "PAID_IN_FULL", label: "PAID IN FULL" },
-              { id: "RETAINERS", label: "RETAINERS" },
-              { id: "REFUNDED", label: "REFUNDED" },
-            ] as const
-          ).map((tab) => (
+    <div className="flex flex-col gap-3.5">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className={label}>
+          {filteredOrders.length} {filteredOrders.length === 1 ? "COMMISSION" : "COMMISSIONS"}
+        </span>
+
+        <div className="flex flex-wrap gap-1.5">
+          {FILTERS.map((tab) => (
             <button
               key={tab.id}
+              type="button"
               onClick={() => setFilterTab(tab.id)}
-              className={`px-3 py-1.5 font-mono text-[10px] tracking-widest transition-colors ${
-                filterTab === tab.id
-                  ? "bg-[#FF3333] font-bold text-black"
-                  : "border border-white/10 text-white/60 hover:border-white/30 hover:text-white"
-              }`}
+              aria-pressed={filterTab === tab.id}
+              className={chip(filterTab === tab.id)}
             >
               {tab.label}
             </button>
           ))}
         </div>
 
-        <div className="relative w-full max-w-xs sm:w-auto">
-          <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-white/40" />
+        <div className="relative ml-auto w-[min(100%,260px)]">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3 -translate-y-1/2 text-white/35" />
           <input
             type="text"
-            placeholder="Search clients, emails..."
+            placeholder="Search clients, emails"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full border border-white/10 bg-white/[0.02] py-1.5 pl-9 pr-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none"
+            className={`${input} pl-[30px]`}
           />
         </div>
       </div>
 
-      {/* Orders List */}
       {filteredOrders.length === 0 ? (
-        <div className="border border-dashed border-white/10 py-16 text-center">
-          <Briefcase className="mx-auto size-8 text-white/20" />
-          <p className="mt-3 font-mono text-xs text-white/40">No commissions matching this view.</p>
+        <div className={emptyState}>
+          <p className="font-display text-[22px] uppercase text-white/70">Nothing here</p>
+          <p className="mt-2 font-mono text-[11px] text-white/40">
+            No commissions match this view.
+          </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {filteredOrders.map((order) => {
-            const isDepositPending = order.is_deposit && order.balance_status === "pending";
-            const currentMilestone = order.brief?.project_status ?? "brief_received";
+        filteredOrders.map((order) => {
+          const isDepositPending = order.is_deposit && order.balance_status === "pending";
+          const currentMilestone = order.brief?.project_status ?? "brief_received";
+          const progress = progressOf(currentMilestone);
+          const complete = currentMilestone === "completed";
 
-            return (
-              <div
-                key={order.id}
-                className="border border-white/10 bg-white/[0.01] p-5 transition-colors hover:border-white/20"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-display text-xl uppercase tracking-wide text-white">
-                        {order.customer_name || "Client"}
-                      </span>
-                      {order.is_deposit && (
-                        <span className="border border-[#FF3333]/40 bg-[#FF3333]/10 px-2 py-0.5 font-mono text-[9px] tracking-widest text-[#FF3333]">
-                          50% DEPOSIT
-                        </span>
-                      )}
-                      {order.stripe_subscription_id && (
-                        <span className="border border-blue-500/40 bg-blue-500/10 px-2 py-0.5 font-mono text-[9px] tracking-widest text-blue-400">
-                          RETAINER
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 font-mono text-xs text-white/60">
-                      {order.customer_email} · {date(order.created_at)}
-                    </p>
-                    <p className="mt-2 font-mono text-xs font-semibold text-white/90">
-                      {order.product_name || "Custom Commission"}
-                    </p>
+          return (
+            <article
+              key={order.id}
+              className={`p-[22px] ${
+                isDepositPending
+                  ? "border border-[#FF3333]/45 bg-[#FF3333]/[0.05]"
+                  : `${panel} transition-colors hover:border-white/20`
+              }`}
+            >
+              <div className="flex flex-wrap items-start gap-4">
+                <div className="min-w-0 flex-[1_1_260px]">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <h3 className="text-[22px] uppercase text-white">
+                      {order.customer_name || "Client"}
+                    </h3>
+                    {isDepositPending ? (
+                      <span className={flagUrgent}>NEEDS YOU</span>
+                    ) : order.stripe_subscription_id ? (
+                      <span className={flagNeutral}>RETAINER</span>
+                    ) : complete ? (
+                      <span className={flagNeutral}>LIVE</span>
+                    ) : null}
                   </div>
 
-                  {/* Financial Details Badge */}
-                  <div className="text-right font-mono text-xs">
-                    <div className="text-white">
-                      Paid:{" "}
-                      <span className="font-bold text-[#FF3333]">
-                        {money(order.amount_total, order.currency)}
-                      </span>
-                    </div>
-                    {order.is_deposit && (
-                      <div className="mt-1 text-white/60">
-                        Balance:{" "}
-                        <span
-                          className={
-                            order.balance_status === "paid"
-                              ? "text-emerald-400"
-                              : order.balance_status === "pending"
-                                ? "text-amber-400 font-bold"
-                                : "text-white/40"
-                          }
-                        >
-                          {money(order.balance_due_cents, order.currency)} (
-                          {order.balance_status.toUpperCase()})
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <p className="mt-1 font-mono text-[11px] text-white/45">
+                    {order.customer_email} ·{" "}
+                    {(order.product_name || "Custom commission").toUpperCase()}
+                  </p>
+
+                  <p className="mt-2.5 max-w-[40rem] font-mono text-xs leading-[1.8] text-white/60">
+                    {order.brief?.goals ??
+                      `Ordered ${date(order.created_at)}. No project brief attached yet.`}
+                  </p>
                 </div>
 
-                {/* Milestone & Actions Bar */}
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4">
-                  {/* Milestone Select */}
-                  <div className="flex items-center gap-2">
-                    <Clock className="size-3.5 text-white/40" />
-                    <span className="font-mono text-[10px] text-white/50">MILESTONE:</span>
-                    <select
-                      value={currentMilestone}
-                      disabled={updatingMilestone === order.id}
-                      onChange={async (e) => {
-                        setUpdatingMilestone(order.id);
-                        try {
-                          await onUpdateMilestone(order.id, e.target.value);
-                          toast.success("Milestone updated");
-                        } catch {
-                          toast.error("Failed to update milestone");
-                        } finally {
-                          setUpdatingMilestone(null);
-                        }
-                      }}
-                      className="border border-white/15 bg-[#030014] px-2.5 py-1 font-mono text-xs text-white focus:border-[#FF3333] focus:outline-none"
+                <div className="flex-[0_0_200px]">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">
+                      PAID
+                    </span>
+                    <span className="font-display text-[22px] text-white">
+                      {money(order.amount_total, order.currency)}
+                    </span>
+                  </div>
+
+                  <div className="mt-1.5 flex items-baseline justify-between gap-2">
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/40">
+                      BALANCE
+                    </span>
+                    <span
+                      className={`font-mono text-xs ${
+                        order.amount_refunded > 0
+                          ? "text-white/50"
+                          : order.balance_status === "pending"
+                            ? "text-amber-400"
+                            : order.balance_status === "paid"
+                              ? "text-emerald-400"
+                              : "text-white/50"
+                      }`}
                     >
-                      {MILESTONES.map((m) => (
-                        <option key={m.id} value={m.id}>
-                          {m.label}
-                        </option>
-                      ))}
-                    </select>
+                      {/* A refund outranks the balance: never claim PAID IN FULL on money
+                          that went back. amount_refunded is selected; payment_status only
+                          ever carries "paid"/"unpaid" here, so it cannot express this. */}
+                      {order.amount_refunded > 0
+                        ? `${money(order.amount_refunded, order.currency)} REFUNDED`
+                        : order.is_deposit
+                          ? `${money(order.balance_due_cents, order.currency)} ${order.balance_status.toUpperCase()}`
+                          : "PAID IN FULL"}
+                    </span>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {order.brief && (
-                      <button
-                        onClick={() => onViewBrief(order.brief!)}
-                        className="inline-flex items-center gap-1.5 border border-white/15 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/80 transition-colors hover:border-white hover:text-white"
-                      >
-                        <FileText className="size-3 text-[#FF3333]" />
-                        VIEW BRIEF
-                      </button>
-                    )}
-
-                    {onCreateProposalFromBrief && order.brief && (
-                      <button
-                        onClick={() => onCreateProposalFromBrief(order.brief!)}
-                        className="inline-flex items-center gap-1.5 border border-white/15 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/80 transition-colors hover:border-[#FF3333] hover:text-white"
-                      >
-                        <Plus className="size-3 text-[#FF3333]" />
-                        NEW PROPOSAL
-                      </button>
-                    )}
-
-                    {isDepositPending && (
-                      <button
-                        disabled={busy === order.id}
-                        onClick={() => onSendInvoice(order.id)}
-                        className="inline-flex items-center gap-1.5 bg-[#FF3333] px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest text-black transition-opacity hover:opacity-90 disabled:opacity-50"
-                      >
-                        <Mail className="size-3" />
-                        {busy === order.id ? "SENDING..." : "INVOICE BALANCE (50%)"}
-                      </button>
-                    )}
+                  <div className="mt-3.5 h-[3px] w-full bg-white/10">
+                    <div
+                      className={`h-full ${complete ? "bg-emerald-400" : "bg-[#FF3333]"}`}
+                      style={{ width: `${progress}%` }}
+                    />
                   </div>
+                  <p className="mt-2 font-mono text-[9px] tracking-[0.16em] text-white/50">
+                    {milestoneCaption(currentMilestone)}
+                  </p>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              <div className="mt-[18px] flex flex-wrap items-center gap-2.5 border-t border-white/[0.08] pt-4">
+                <select
+                  value={currentMilestone}
+                  disabled={updatingMilestone === order.id}
+                  aria-label={`Milestone for ${order.customer_name || "client"}`}
+                  onChange={async (e) => {
+                    setUpdatingMilestone(order.id);
+                    try {
+                      await onUpdateMilestone(order.id, e.target.value);
+                      toast.success("Milestone updated");
+                    } catch {
+                      toast.error("Failed to update milestone");
+                    } finally {
+                      setUpdatingMilestone(null);
+                    }
+                  }}
+                  className={select}
+                >
+                  {MILESTONES.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.label}
+                    </option>
+                  ))}
+                </select>
+
+                {order.brief && (
+                  <button
+                    type="button"
+                    onClick={() => onViewBrief(order.brief!)}
+                    className={btnGhostSm}
+                  >
+                    VIEW BRIEF
+                  </button>
+                )}
+
+                {onCreateProposalFromBrief && order.brief && (
+                  <button
+                    type="button"
+                    onClick={() => onCreateProposalFromBrief(order.brief!)}
+                    className={btnGhostSm}
+                  >
+                    NEW PROPOSAL
+                  </button>
+                )}
+
+                {isDepositPending && (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => onSendInvoice(order.id)}
+                    className={`ml-auto ${btnPrimarySm}`}
+                  >
+                    {busy === order.id ? "SENDING…" : "SEND BALANCE INVOICE"}
+                  </button>
+                )}
+              </div>
+            </article>
+          );
+        })
       )}
     </div>
   );
