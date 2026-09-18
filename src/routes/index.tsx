@@ -198,7 +198,9 @@ function Home() {
                   <li key={title} className="flex items-start gap-3 py-3">
                     <Icon className="mt-0.5 size-4 shrink-0 text-[#FF3333]" />
                     <p className="min-w-0 font-mono text-sm leading-[1.6] text-white/90">
-                      <strong className="font-display text-base uppercase text-white">{title}</strong>
+                      <strong className="font-display text-base uppercase text-white">
+                        {title}
+                      </strong>
                       <span className="block">{copy}</span>
                     </p>
                   </li>
