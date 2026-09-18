@@ -17,3 +17,4 @@
 - [x] Add and verify the preview-only closing marquee CTA before the homepage footer
 - [x] Add and verify the data-driven homepage services section
 - [x] Add and verify the data-driven homepage process timeline
+- [ ] Deduplicate homepage offers, promises, pricing references, CTAs, labels, and positioning copy
