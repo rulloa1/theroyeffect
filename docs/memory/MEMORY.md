@@ -36,3 +36,4 @@ fact needs rich structure (a table, a Why, several links).
 _Preferences and working style — nothing filed yet._
 
 ## New / Unsorted (filed by brain store — sort into a section when touched)
+- [Env Files Tracked](reference_env_files_tracked.md) — 2026-09-17 Env files (.env, .env.development, .env.staging, .env.production) are tracked in git on purpose for now: Vi...
