@@ -5,6 +5,7 @@ import { ArrowRight, Check, Sparkles, Lock, Plus, Calculator, Layers } from "luc
 import { DepositCheckoutModal } from "@/components/DepositCheckoutModal";
 import { ScopeEstimator } from "@/components/ScopeEstimator";
 import { PRICING_TIERS, ADD_ONS } from "@/lib/commerce-catalog";
+import { SERVICES } from "@/lib/site-content";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export { PRICING_TIERS };
@@ -31,6 +32,7 @@ export function Pricing({
       id="pricing"
       className="relative z-20 w-full bg-[#030014] px-5 py-20 md:px-10 md:py-32"
     >
+      <span id="services" className="absolute top-0" aria-hidden="true" />
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div>
@@ -38,7 +40,7 @@ export function Pricing({
               INVESTMENT &amp; SCOPE
             </span>
             <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl lg:text-7xl">
-              INVESTMENT
+              Choose the scope that moves the business.
             </h2>
           </div>
           <div className="flex flex-col gap-3">
@@ -83,7 +85,11 @@ export function Pricing({
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {PRICING_TIERS.map((tier, i) => (
+              {PRICING_TIERS.map((tier, i) => {
+                const description = mode === "homepage" ? SERVICES[i]?.summary : tier.description;
+                const features = mode === "homepage" ? tier.features.slice(0, 4) : tier.features;
+
+                return (
                 <motion.div
                   key={tier.name}
                   initial={{ opacity: 0, y: 24 }}
@@ -119,10 +125,10 @@ export function Pricing({
                         ) : null}
                       </div>
                       <p className="mt-3 font-mono text-base leading-[1.6] text-white/90">
-                        {tier.description}
+                        {description ?? tier.description}
                       </p>
                       <ul className="mt-6 space-y-3">
-                        {tier.features.map((feature) => (
+                        {features.map((feature) => (
                           <li
                             key={feature}
                             className="flex items-start gap-2 font-mono text-[15px] leading-[1.6] text-white/90"
@@ -196,7 +202,8 @@ export function Pricing({
                     </div>
                   </SpotlightCard>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="mt-16 opacity-70">
@@ -236,11 +243,9 @@ export function Pricing({
             </div>
 
             <p className="mt-10 max-w-3xl font-mono text-[15px] leading-[1.6] text-white/90">
-              All projects begin with a free 15-minute discovery call. Deposits are 50% of the
-              tier&apos;s starting price: Brand Sprint $1,250, Website / UI-UX $2,500, and Design +
-              Build $4,000. Each deposit is credited against your final invoice and fully refundable
-              before kickoff. Retainers bill monthly and can be paused or cancelled anytime. No
-              account needed — you’ll get a receipt and a brief link by email right after checkout.
+              {mode === "homepage"
+                ? "Every project starts with a free discovery call and a scope agreed in writing. Full deposit, payment, and retainer details are available on the pricing page."
+                : "All projects begin with a free 15-minute discovery call. Deposits are 50% of the tier’s starting price: Brand Sprint $1,250, Website / UI-UX $2,500, and Design + Build $4,000. Each deposit is credited against your final invoice and fully refundable before kickoff. Retainers bill monthly and can be paused or cancelled anytime. No account needed — you’ll get a receipt and a brief link by email right after checkout."}
             </p>
             {mode === "homepage" ? (
               <Link

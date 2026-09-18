@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Mail, MapPin, Phone, SearchCheck } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const STUDIO_LINKS = [
@@ -34,20 +34,6 @@ export function SiteFooter() {
             <p className="mt-6 max-w-lg font-sans text-base leading-[1.6] text-white/90">
               I shape clear brands, useful digital experiences, and no-code websites for owner-run businesses ready to stand out online.
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Link
-                to="/audit"
-                className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-xs font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                <SearchCheck className="size-4" /> GET YOUR FREE AUDIT <ArrowUpRight className="size-4" />
-              </Link>
-              <Link
-                to="/book"
-                className="inline-flex min-h-11 items-center justify-center gap-2 border border-white/40 px-5 py-3 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]"
-              >
-                BOOK A DISCOVERY CALL <ArrowUpRight className="size-4" />
-              </Link>
-            </div>
           </div>
 
           <div className="lg:col-span-2">

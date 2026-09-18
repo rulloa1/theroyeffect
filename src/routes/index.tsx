@@ -10,19 +10,14 @@ import { WorkGrid } from "@/components/WorkGrid";
 import { ApprovalPromise } from "@/components/ApprovalPromise";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ClosingMarqueeCta } from "@/components/ClosingMarqueeCta";
-import { ServicesSection } from "@/components/ServicesSection";
 import { ProcessTimeline } from "@/components/ProcessTimeline";
 import { Odometer } from "@/components/cinematic/Odometer";
 import { DrawUnderline } from "@/components/cinematic/DrawUnderline";
-import { ArrowUpRight, Check, SearchCheck, Zap, Smartphone, Timer } from "lucide-react";
+import { ArrowUpRight, Check, SearchCheck, Zap, Smartphone } from "lucide-react";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 
-const WORK_STATS = [
-  { value: "$2,500", label: "Starting investment" },
-  { value: "15", label: "Minute discovery call" },
-  { value: "5", label: "Minute video audit" },
-];
+const WORK_STATS = [{ value: "$2,500", label: "Starting investment" }];
 
 const HERO_IMAGE = portraitAsset.url;
 const HERO_IMAGE_ABSOLUTE = `https://theroyeffect.com${ogImageAsset.url}`;
@@ -102,9 +97,9 @@ function Home() {
         <ScrollReveal className="mx-auto max-w-7xl">
           <span className="font-mono text-xs tracking-widest text-[#FF3333]">SELECTED WORK</span>
           <h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">
-            Recent work
+            Built to make the offer clear.
           </h2>
-          <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-white/10 py-6 md:max-w-3xl md:gap-10">
+          <dl className="mt-8 border-y border-white/10 py-6 md:max-w-sm">
             {WORK_STATS.map(({ value, label }) => (
               <div key={label} className="flex flex-col-reverse">
                 <dt className="mt-2 font-mono text-[11px] uppercase tracking-widest text-white/70 md:text-xs">
@@ -122,23 +117,21 @@ function Home() {
         </ScrollReveal>
       </section>
 
-      <ServicesSection />
-
       <ApprovalPromise />
 
       <section className="relative z-20 border-y border-white/10 bg-[#0a0620] px-5 py-20 md:px-10 md:py-28">
         <ScrollReveal className="mx-auto max-w-7xl">
           <span className="font-mono text-xs tracking-widest text-[#DFBA73]">FIT</span>
           <h2 className="mt-3 font-display text-4xl uppercase text-white md:text-6xl">
-            Who it&apos;s for
+            A fit when the offer is proven.
           </h2>
           <DrawUnderline className="mt-3" />
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <div className="border-l-2 border-[#FF3333] pl-6">
               <h3 className="font-display text-2xl uppercase text-white">I take</h3>
               <p className="mt-3 max-w-lg font-mono text-base leading-[1.6] text-white/90">
-                Houston and remote founders, personal brands, and service businesses that already
-                have demand and a weak site.
+                Founders, personal brands, and service businesses that already have demand and a
+                weak site.
               </p>
             </div>
             <div className="border-l border-white/20 pl-6">
@@ -158,8 +151,8 @@ function Home() {
 
       <section className="relative z-20 w-full bg-[#030014] px-5 py-20 md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 border border-[#FF3333]/30 bg-[#FF3333]/5 p-8 md:grid-cols-2 md:items-center md:p-12 lg:p-16">
-            <div>
+          <div className="grid gap-10 border border-[#FF3333]/30 bg-[#FF3333]/5 p-8 md:grid-cols-2 md:items-start md:p-12 lg:p-16">
+            <div className="min-w-0">
               <span className="font-mono text-xs tracking-widest text-[#FF3333]">
                 FREE VIDEO WEBSITE AUDIT
               </span>
@@ -176,9 +169,8 @@ function Home() {
               >
                 GET YOUR FREE AUDIT <ArrowUpRight className="size-4" />
               </Link>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
+              <div className="mt-8 grid gap-4 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+                {[
                 [
                   SearchCheck,
                   "Conversion audit",
@@ -186,7 +178,6 @@ function Home() {
                 ],
                 [Smartphone, "Mobile UX review", "See where friction kills enquiries on phones."],
                 [Zap, "Quick wins", "Actionable fixes you can implement this week."],
-                [Timer, "About 5 minutes", "Your personalised video teardown arrives by email."],
               ].map(([Icon, title, copy]) => {
                 const AuditIcon = Icon as typeof SearchCheck;
                 return (
@@ -199,44 +190,36 @@ function Home() {
                   </div>
                 );
               })}
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative z-20 w-full bg-[#030014] px-5 py-20 md:px-10 md:py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 border border-white/10 bg-white/[0.02] p-8 md:grid-cols-2 md:items-center md:p-12 lg:p-16">
-            <div>
-              <span className="font-mono text-xs tracking-widest text-[#FF3333]">
-                FREE 15-MINUTE DISCOVERY CALL
-              </span>
-              <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">
-                Book a discovery call
-              </h2>
+            <div className="min-w-0 border-t border-white/10 pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-0 lg:pl-14">
+              <span className="font-mono text-xs tracking-widest text-[#DFBA73]">DISCOVERY CALL</span>
+              <h3 className="mt-3 font-display text-3xl uppercase leading-[0.95] text-white md:text-5xl">
+                Leave with a clear next move.
+              </h3>
               <p className="mt-4 max-w-md font-mono text-base leading-[1.6] text-white/90">
                 Bring the goal, timeline, and budget. This free 15-minute call ends with a clear
                 written recommendation.
               </p>
+              <ul className="mt-7 space-y-4 border border-white/10 bg-[#030014] p-6 font-mono text-base leading-[1.6] text-white/90">
+                {[
+                  "Free 15-minute call, no pitch",
+                  "Scope, timeline, budget",
+                  "Leave with a written recommendation",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <Check className="mt-1 size-4 shrink-0 text-[#FF3333]" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
               <Link
                 to="/book"
                 className="mt-8 inline-flex min-h-11 items-center gap-2 border border-white/40 px-6 py-4 font-mono text-xs font-bold tracking-widest text-white hover:border-[#DFBA73]"
               >
-                BOOK A DISCOVERY CALL <ArrowUpRight className="size-4" />
+                CHOOSE A TIME <ArrowUpRight className="size-4" />
               </Link>
             </div>
-            <ul className="space-y-4 border border-white/10 bg-[#030014] p-6 font-mono text-base leading-[1.6] text-white/90 md:p-8">
-              {[
-                "Free 15-minute call, no pitch",
-                "Scope, timeline, budget",
-                "Leave with a written recommendation",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <Check className="mt-1 size-4 shrink-0 text-[#FF3333]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>
@@ -247,9 +230,8 @@ function Home() {
             Web design in Houston
           </h2>
           <p className="mt-4 max-w-3xl font-mono text-base leading-[1.6] text-white/90">
-            I&apos;m based near Houston and work remotely with founders and service businesses. Most
-            projects start with the free audit; starting investment is $2,500 for brand, $5,000 for
-            UI/UX, and $8,000 for design + build.
+            I&apos;m based near Houston and work with founders and service businesses across the area
+            on brand systems, digital product design, and conversion-focused websites.
           </p>
           <div className="mt-5 flex flex-wrap gap-5">
             <Link

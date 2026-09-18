@@ -51,9 +51,6 @@ export function ClosingMarqueeCta() {
         >
           or book a discovery call
         </Link>
-        <p className="mt-8 font-mono text-[15px] leading-[1.6] text-white/90">
-          Houston-based. Working remote with founders and service businesses.
-        </p>
       </div>
     </section>
   );

@@ -15,7 +15,8 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
       <nav aria-label="Primary" className="hidden shrink-0 items-center gap-5 lg:flex xl:gap-7">
         <Link to="/work" className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/90 transition-colors hover:text-[#FF3333]">WORK</Link>
         <Link
-          to="/services"
+          to="/"
+          hash="services"
           className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
         >
           SERVICES
