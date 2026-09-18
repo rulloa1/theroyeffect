@@ -171,29 +171,31 @@ function Home() {
               </Link>
               <div className="mt-8 grid gap-4 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
                 {[
-                [
-                  SearchCheck,
-                  "Conversion audit",
-                  "Find the leaks in your funnel and fix your messaging.",
-                ],
-                [Smartphone, "Mobile UX review", "See where friction kills enquiries on phones."],
-                [Zap, "Quick wins", "Actionable fixes you can implement this week."],
-              ].map(([Icon, title, copy]) => {
-                const AuditIcon = Icon as typeof SearchCheck;
-                return (
-                  <div key={String(title)} className="border border-white/10 bg-white/[0.02] p-5">
-                    <AuditIcon className="mb-3 size-5 text-[#FF3333]" />
-                    <h3 className="font-display text-lg uppercase text-white">{String(title)}</h3>
-                    <p className="mt-1 font-mono text-[15px] leading-[1.6] text-white/90">
-                      {String(copy)}
-                    </p>
-                  </div>
-                );
-              })}
+                  [
+                    SearchCheck,
+                    "Conversion audit",
+                    "Find the leaks in your funnel and fix your messaging.",
+                  ],
+                  [Smartphone, "Mobile UX review", "See where friction kills enquiries on phones."],
+                  [Zap, "Quick wins", "Actionable fixes you can implement this week."],
+                ].map(([Icon, title, copy]) => {
+                  const AuditIcon = Icon as typeof SearchCheck;
+                  return (
+                    <div key={String(title)} className="border border-white/10 bg-white/[0.02] p-5">
+                      <AuditIcon className="mb-3 size-5 text-[#FF3333]" />
+                      <h3 className="font-display text-lg uppercase text-white">{String(title)}</h3>
+                      <p className="mt-1 font-mono text-[15px] leading-[1.6] text-white/90">
+                        {String(copy)}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="min-w-0 border-t border-white/10 pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-0 lg:pl-14">
-              <span className="font-mono text-xs tracking-widest text-[#DFBA73]">DISCOVERY CALL</span>
+              <span className="font-mono text-xs tracking-widest text-[#DFBA73]">
+                DISCOVERY CALL
+              </span>
               <h3 className="mt-3 font-display text-3xl uppercase leading-[0.95] text-white md:text-5xl">
                 Leave with a clear next move.
               </h3>
@@ -230,8 +232,8 @@ function Home() {
             Web design in Houston
           </h2>
           <p className="mt-4 max-w-3xl font-mono text-base leading-[1.6] text-white/90">
-            I&apos;m based near Houston and work with founders and service businesses across the area
-            on brand systems, digital product design, and conversion-focused websites.
+            I&apos;m based near Houston and work with founders and service businesses across the
+            area on brand systems, digital product design, and conversion-focused websites.
           </p>
           <div className="mt-5 flex flex-wrap gap-5">
             <Link

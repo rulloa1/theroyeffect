@@ -90,118 +90,118 @@ export function Pricing({
                 const features = mode === "homepage" ? tier.features.slice(0, 4) : tier.features;
 
                 return (
-                <motion.div
-                  key={tier.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="h-full"
-                >
-                  <SpotlightCard
-                    featured={tier.featured === true}
-                    className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}
+                  <motion.div
+                    key={tier.name}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    className="h-full"
                   >
-                    {tier.featured && (
-                      <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
-                        <Sparkles className="size-3" />
-                        POPULAR
-                      </div>
-                    )}
-
-                    <div>
-                      <h3 className="font-display text-xl uppercase tracking-wide text-white md:text-2xl">
-                        {tier.name}
-                      </h3>
-                      <div className="mt-4 flex items-baseline gap-2">
-                        {tier.note !== "/mo" ? (
-                          <span className="font-mono text-[15px] text-white/90">{tier.note}</span>
-                        ) : null}
-                        <span className="font-display text-4xl text-[#FF3333] md:text-5xl">
-                          {tier.price}
-                        </span>
-                        {tier.note === "/mo" ? (
-                          <span className="font-mono text-[15px] text-white/90">/mo</span>
-                        ) : null}
-                      </div>
-                      <p className="mt-3 font-mono text-base leading-[1.6] text-white/90">
-                        {description ?? tier.description}
-                      </p>
-                      <ul className="mt-6 space-y-3">
-                        {features.map((feature) => (
-                          <li
-                            key={feature}
-                            className="flex items-start gap-2 font-mono text-[15px] leading-[1.6] text-white/90"
-                          >
-                            <Check className="mt-0.5 size-3 shrink-0 text-[#FF3333]" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="mt-8 flex flex-col gap-2">
-                      {mode === "checkout" ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActive({
-                                name: tier.name,
-                                priceId: tier.deposit.priceId,
-                                label: `${tier.deposit.amountLabel} — ${tier.deposit.label}`,
-                                kicker: "SECURE DEPOSIT",
-                              })
-                            }
-                            className={`flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${
-                              tier.featured
-                                ? "bg-[#FF3333] text-black hover:bg-[#FF3333]/90"
-                                : "border border-white/20 text-white hover:border-[#FF3333] hover:bg-[#FF3333] hover:text-black"
-                            }`}
-                          >
-                            <Lock className="size-3" />
-                            PAY {tier.deposit.amountLabel}{" "}
-                            {tier.name === "RETAINER" ? "FIRST MONTH" : "DEPOSIT"}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActive({
-                                name: tier.name,
-                                priceId: tier.full.priceId,
-                                label: `${tier.full.amountLabel} — ${tier.full.label}`,
-                                kicker: tier.full.recurring ? "MONTHLY RETAINER" : "PAY IN FULL",
-                              })
-                            }
-                            className="flex w-full items-center justify-center gap-2 border border-white/10 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
-                          >
-                            {tier.full.recurring
-                              ? `SUBSCRIBE ${tier.full.amountLabel}`
-                              : `PAY IN FULL ${tier.full.amountLabel}`}
-                          </button>
-                        </>
-                      ) : (
-                        <Link
-                          to="/book"
-                          className={`flex min-h-11 w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${tier.featured ? "bg-[#FF3333] font-bold text-black hover:bg-[#FF5555]" : "border border-white/40 text-white hover:border-[#DFBA73]"}`}
-                        >
-                          {tier.cta}
-                          <ArrowRight className="size-3" />
-                        </Link>
+                    <SpotlightCard
+                      featured={tier.featured === true}
+                      className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}
+                    >
+                      {tier.featured && (
+                        <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
+                          <Sparkles className="size-3" />
+                          POPULAR
+                        </div>
                       )}
-                      {mode === "checkout" ? (
-                        <button
-                          type="button"
-                          onClick={onCommission}
-                          className="flex min-h-11 w-full items-center justify-center gap-2 px-4 py-2 font-mono text-[15px] tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
-                        >
-                          {tier.cta}
-                          <ArrowRight className="size-3" />
-                        </button>
-                      ) : null}
-                    </div>
-                  </SpotlightCard>
-                </motion.div>
+
+                      <div>
+                        <h3 className="font-display text-xl uppercase tracking-wide text-white md:text-2xl">
+                          {tier.name}
+                        </h3>
+                        <div className="mt-4 flex items-baseline gap-2">
+                          {tier.note !== "/mo" ? (
+                            <span className="font-mono text-[15px] text-white/90">{tier.note}</span>
+                          ) : null}
+                          <span className="font-display text-4xl text-[#FF3333] md:text-5xl">
+                            {tier.price}
+                          </span>
+                          {tier.note === "/mo" ? (
+                            <span className="font-mono text-[15px] text-white/90">/mo</span>
+                          ) : null}
+                        </div>
+                        <p className="mt-3 font-mono text-base leading-[1.6] text-white/90">
+                          {description ?? tier.description}
+                        </p>
+                        <ul className="mt-6 space-y-3">
+                          {features.map((feature) => (
+                            <li
+                              key={feature}
+                              className="flex items-start gap-2 font-mono text-[15px] leading-[1.6] text-white/90"
+                            >
+                              <Check className="mt-0.5 size-3 shrink-0 text-[#FF3333]" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="mt-8 flex flex-col gap-2">
+                        {mode === "checkout" ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActive({
+                                  name: tier.name,
+                                  priceId: tier.deposit.priceId,
+                                  label: `${tier.deposit.amountLabel} — ${tier.deposit.label}`,
+                                  kicker: "SECURE DEPOSIT",
+                                })
+                              }
+                              className={`flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${
+                                tier.featured
+                                  ? "bg-[#FF3333] text-black hover:bg-[#FF3333]/90"
+                                  : "border border-white/20 text-white hover:border-[#FF3333] hover:bg-[#FF3333] hover:text-black"
+                              }`}
+                            >
+                              <Lock className="size-3" />
+                              PAY {tier.deposit.amountLabel}{" "}
+                              {tier.name === "RETAINER" ? "FIRST MONTH" : "DEPOSIT"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActive({
+                                  name: tier.name,
+                                  priceId: tier.full.priceId,
+                                  label: `${tier.full.amountLabel} — ${tier.full.label}`,
+                                  kicker: tier.full.recurring ? "MONTHLY RETAINER" : "PAY IN FULL",
+                                })
+                              }
+                              className="flex w-full items-center justify-center gap-2 border border-white/10 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+                            >
+                              {tier.full.recurring
+                                ? `SUBSCRIBE ${tier.full.amountLabel}`
+                                : `PAY IN FULL ${tier.full.amountLabel}`}
+                            </button>
+                          </>
+                        ) : (
+                          <Link
+                            to="/book"
+                            className={`flex min-h-11 w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${tier.featured ? "bg-[#FF3333] font-bold text-black hover:bg-[#FF5555]" : "border border-white/40 text-white hover:border-[#DFBA73]"}`}
+                          >
+                            {tier.cta}
+                            <ArrowRight className="size-3" />
+                          </Link>
+                        )}
+                        {mode === "checkout" ? (
+                          <button
+                            type="button"
+                            onClick={onCommission}
+                            className="flex min-h-11 w-full items-center justify-center gap-2 px-4 py-2 font-mono text-[15px] tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
+                          >
+                            {tier.cta}
+                            <ArrowRight className="size-3" />
+                          </button>
+                        ) : null}
+                      </div>
+                    </SpotlightCard>
+                  </motion.div>
                 );
               })}
             </div>
