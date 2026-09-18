@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { ArrowUpRight, Mail, MapPin, Phone, SearchCheck } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const STUDIO_LINKS = [
@@ -18,6 +18,8 @@ const GUIDE_LINKS = [
 ];
 
 export function SiteFooter() {
+  const showCtas = useRouterState({ select: (state) => state.location.pathname !== "/" });
+
   return (
     <footer className="relative z-20 w-full overflow-hidden border-t border-white/10 bg-[#030014] px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20">
       <div
@@ -44,6 +46,23 @@ export function SiteFooter() {
               I shape clear brands, useful digital experiences, and no-code websites for owner-run
               businesses ready to stand out online.
             </p>
+            {showCtas ? (
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  to="/audit"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-xs font-bold tracking-widest text-black transition-colors hover:bg-[#FF5555] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  <SearchCheck className="size-4" /> GET YOUR FREE AUDIT{" "}
+                  <ArrowUpRight className="size-4" />
+                </Link>
+                <Link
+                  to="/book"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-white/40 px-5 py-3 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]"
+                >
+                  BOOK A DISCOVERY CALL <ArrowUpRight className="size-4" />
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           <div className="lg:col-span-2">

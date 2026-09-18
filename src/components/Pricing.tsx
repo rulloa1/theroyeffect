@@ -46,7 +46,7 @@ export function Pricing({
           <div className="flex flex-col gap-3">
             <p className="max-w-md font-mono text-base leading-[1.6] text-white/90">
               {mode === "homepage"
-                ? "Starting prices. A typical designed-and-built site lands at $7–9k depending on pages and integrations."
+                ? "Starting points for focused brand, product, and website work."
                 : "Transparent starting points and custom scopes. Pay a 50% deposit or calculate a custom page count below."}
             </p>
             {mode === "checkout" && (
