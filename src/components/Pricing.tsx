@@ -5,6 +5,7 @@ import { ArrowRight, Check, Sparkles, Lock, Plus, Calculator, Layers } from "luc
 import { DepositCheckoutModal } from "@/components/DepositCheckoutModal";
 import { ScopeEstimator } from "@/components/ScopeEstimator";
 import { PRICING_TIERS, ADD_ONS } from "@/lib/commerce-catalog";
+import { SERVICES } from "@/lib/site-content";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export { PRICING_TIERS };
@@ -31,6 +32,7 @@ export function Pricing({
       id="pricing"
       className="relative z-20 w-full bg-[#030014] px-5 py-20 md:px-10 md:py-32"
     >
+      <span id="services" className="absolute top-0" aria-hidden="true" />
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div>
@@ -38,13 +40,13 @@ export function Pricing({
               INVESTMENT &amp; SCOPE
             </span>
             <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl lg:text-7xl">
-              INVESTMENT
+              Choose the scope that moves the business.
             </h2>
           </div>
           <div className="flex flex-col gap-3">
             <p className="max-w-md font-mono text-base leading-[1.6] text-white/90">
               {mode === "homepage"
-                ? "Starting prices. A typical designed-and-built site lands at $7–9k depending on pages and integrations."
+                ? "Starting points for focused brand, product, and website work."
                 : "Transparent starting points and custom scopes. Pay a 50% deposit or calculate a custom page count below."}
             </p>
             {mode === "checkout" && (
@@ -83,120 +85,125 @@ export function Pricing({
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {PRICING_TIERS.map((tier, i) => (
-                <motion.div
-                  key={tier.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="h-full"
-                >
-                  <SpotlightCard
-                    featured={tier.featured === true}
-                    className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}
+              {PRICING_TIERS.map((tier, i) => {
+                const description = mode === "homepage" ? SERVICES[i]?.summary : tier.description;
+                const features = mode === "homepage" ? tier.features.slice(0, 4) : tier.features;
+
+                return (
+                  <motion.div
+                    key={tier.name}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    className="h-full"
                   >
-                    {tier.featured && (
-                      <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
-                        <Sparkles className="size-3" />
-                        POPULAR
-                      </div>
-                    )}
-
-                    <div>
-                      <h3 className="font-display text-xl uppercase tracking-wide text-white md:text-2xl">
-                        {tier.name}
-                      </h3>
-                      <div className="mt-4 flex items-baseline gap-2">
-                        {tier.note !== "/mo" ? (
-                          <span className="font-mono text-[15px] text-white/90">{tier.note}</span>
-                        ) : null}
-                        <span className="font-display text-4xl text-[#FF3333] md:text-5xl">
-                          {tier.price}
-                        </span>
-                        {tier.note === "/mo" ? (
-                          <span className="font-mono text-[15px] text-white/90">/mo</span>
-                        ) : null}
-                      </div>
-                      <p className="mt-3 font-mono text-base leading-[1.6] text-white/90">
-                        {tier.description}
-                      </p>
-                      <ul className="mt-6 space-y-3">
-                        {tier.features.map((feature) => (
-                          <li
-                            key={feature}
-                            className="flex items-start gap-2 font-mono text-[15px] leading-[1.6] text-white/90"
-                          >
-                            <Check className="mt-0.5 size-3 shrink-0 text-[#FF3333]" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="mt-8 flex flex-col gap-2">
-                      {mode === "checkout" ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActive({
-                                name: tier.name,
-                                priceId: tier.deposit.priceId,
-                                label: `${tier.deposit.amountLabel} — ${tier.deposit.label}`,
-                                kicker: "SECURE DEPOSIT",
-                              })
-                            }
-                            className={`flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${
-                              tier.featured
-                                ? "bg-[#FF3333] text-black hover:bg-[#FF3333]/90"
-                                : "border border-white/20 text-white hover:border-[#FF3333] hover:bg-[#FF3333] hover:text-black"
-                            }`}
-                          >
-                            <Lock className="size-3" />
-                            PAY {tier.deposit.amountLabel}{" "}
-                            {tier.name === "RETAINER" ? "FIRST MONTH" : "DEPOSIT"}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActive({
-                                name: tier.name,
-                                priceId: tier.full.priceId,
-                                label: `${tier.full.amountLabel} — ${tier.full.label}`,
-                                kicker: tier.full.recurring ? "MONTHLY RETAINER" : "PAY IN FULL",
-                              })
-                            }
-                            className="flex w-full items-center justify-center gap-2 border border-white/10 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
-                          >
-                            {tier.full.recurring
-                              ? `SUBSCRIBE ${tier.full.amountLabel}`
-                              : `PAY IN FULL ${tier.full.amountLabel}`}
-                          </button>
-                        </>
-                      ) : (
-                        <Link
-                          to="/book"
-                          className={`flex min-h-11 w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${tier.featured ? "bg-[#FF3333] font-bold text-black hover:bg-[#FF5555]" : "border border-white/40 text-white hover:border-[#DFBA73]"}`}
-                        >
-                          {tier.cta}
-                          <ArrowRight className="size-3" />
-                        </Link>
+                    <SpotlightCard
+                      featured={tier.featured === true}
+                      className={`flex h-full flex-col justify-between p-5 md:p-6 ${tier.featured ? "bg-[#FF3333]/5" : "bg-white/[0.02]"}`}
+                    >
+                      {tier.featured && (
+                        <div className="absolute -top-3 left-5 flex items-center gap-1 bg-[#FF3333] px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-black">
+                          <Sparkles className="size-3" />
+                          POPULAR
+                        </div>
                       )}
-                      {mode === "checkout" ? (
-                        <button
-                          type="button"
-                          onClick={onCommission}
-                          className="flex min-h-11 w-full items-center justify-center gap-2 px-4 py-2 font-mono text-[15px] tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
-                        >
-                          {tier.cta}
-                          <ArrowRight className="size-3" />
-                        </button>
-                      ) : null}
-                    </div>
-                  </SpotlightCard>
-                </motion.div>
-              ))}
+
+                      <div>
+                        <h3 className="font-display text-xl uppercase tracking-wide text-white md:text-2xl">
+                          {tier.name}
+                        </h3>
+                        <div className="mt-4 flex items-baseline gap-2">
+                          {tier.note !== "/mo" ? (
+                            <span className="font-mono text-[15px] text-white/90">{tier.note}</span>
+                          ) : null}
+                          <span className="font-display text-4xl text-[#FF3333] md:text-5xl">
+                            {tier.price}
+                          </span>
+                          {tier.note === "/mo" ? (
+                            <span className="font-mono text-[15px] text-white/90">/mo</span>
+                          ) : null}
+                        </div>
+                        <p className="mt-3 font-mono text-base leading-[1.6] text-white/90">
+                          {description ?? tier.description}
+                        </p>
+                        <ul className="mt-6 space-y-3">
+                          {features.map((feature) => (
+                            <li
+                              key={feature}
+                              className="flex items-start gap-2 font-mono text-[15px] leading-[1.6] text-white/90"
+                            >
+                              <Check className="mt-0.5 size-3 shrink-0 text-[#FF3333]" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="mt-8 flex flex-col gap-2">
+                        {mode === "checkout" ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActive({
+                                  name: tier.name,
+                                  priceId: tier.deposit.priceId,
+                                  label: `${tier.deposit.amountLabel} — ${tier.deposit.label}`,
+                                  kicker: "SECURE DEPOSIT",
+                                })
+                              }
+                              className={`flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${
+                                tier.featured
+                                  ? "bg-[#FF3333] text-black hover:bg-[#FF3333]/90"
+                                  : "border border-white/20 text-white hover:border-[#FF3333] hover:bg-[#FF3333] hover:text-black"
+                              }`}
+                            >
+                              <Lock className="size-3" />
+                              PAY {tier.deposit.amountLabel}{" "}
+                              {tier.name === "RETAINER" ? "FIRST MONTH" : "DEPOSIT"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActive({
+                                  name: tier.name,
+                                  priceId: tier.full.priceId,
+                                  label: `${tier.full.amountLabel} — ${tier.full.label}`,
+                                  kicker: tier.full.recurring ? "MONTHLY RETAINER" : "PAY IN FULL",
+                                })
+                              }
+                              className="flex w-full items-center justify-center gap-2 border border-white/10 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+                            >
+                              {tier.full.recurring
+                                ? `SUBSCRIBE ${tier.full.amountLabel}`
+                                : `PAY IN FULL ${tier.full.amountLabel}`}
+                            </button>
+                          </>
+                        ) : (
+                          <Link
+                            to="/book"
+                            className={`flex min-h-11 w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs tracking-widest transition-all ${tier.featured ? "bg-[#FF3333] font-bold text-black hover:bg-[#FF5555]" : "border border-white/40 text-white hover:border-[#DFBA73]"}`}
+                          >
+                            {tier.cta}
+                            <ArrowRight className="size-3" />
+                          </Link>
+                        )}
+                        {mode === "checkout" ? (
+                          <button
+                            type="button"
+                            onClick={onCommission}
+                            className="flex min-h-11 w-full items-center justify-center gap-2 px-4 py-2 font-mono text-[15px] tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
+                          >
+                            {tier.cta}
+                            <ArrowRight className="size-3" />
+                          </button>
+                        ) : null}
+                      </div>
+                    </SpotlightCard>
+                  </motion.div>
+                );
+              })}
             </div>
 
             <div className="mt-16 opacity-70">
@@ -236,11 +243,9 @@ export function Pricing({
             </div>
 
             <p className="mt-10 max-w-3xl font-mono text-[15px] leading-[1.6] text-white/90">
-              All projects begin with a free 15-minute discovery call. Deposits are 50% of the
-              tier&apos;s starting price: Brand Sprint $1,250, Website / UI-UX $2,500, and Design +
-              Build $4,000. Each deposit is credited against your final invoice and fully refundable
-              before kickoff. Retainers bill monthly and can be paused or cancelled anytime. No
-              account needed — you’ll get a receipt and a brief link by email right after checkout.
+              {mode === "homepage"
+                ? "Every project starts with a free discovery call and a scope agreed in writing. Full deposit, payment, and retainer details are available on the pricing page."
+                : "All projects begin with a free 15-minute discovery call. Deposits are 50% of the tier’s starting price: Brand Sprint $1,250, Website / UI-UX $2,500, and Design + Build $4,000. Each deposit is credited against your final invoice and fully refundable before kickoff. Retainers bill monthly and can be paused or cancelled anytime. No account needed — you’ll get a receipt and a brief link by email right after checkout."}
             </p>
             {mode === "homepage" ? (
               <Link
