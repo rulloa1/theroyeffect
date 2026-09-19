@@ -4,12 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { HeroContent } from "@/components/HeroContent";
 import { PortfolioWorkGallery } from "@/components/PortfolioWorkGallery";
 import { PortfolioSections } from "@/components/PortfolioSections";
+import { SITE_URL } from "@/lib/site";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 
-const HERO_IMAGE_ABSOLUTE = `https://theroyeffect.com${ogImageAsset.url}`;
-const TITLE = "Rory Ulloa — Design Developer & Web Developer | The Roy Effect";
+const HERO_IMAGE_ABSOLUTE = `${SITE_URL}${ogImageAsset.url}`;
+const TITLE = "Houston Web Design — Rory Ulloa | The Roy Effect";
 const DESCRIPTION =
-  "Design developer and web developer Rory Ulloa creates memorable, conversion-focused websites, UI/UX, motion and interactive digital experiences from Houston, Texas.";
+  "Houston web design, UI/UX, brand systems and no-code builds by independent creative director Rory Ulloa. Free personalised video website audit.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,12 +20,12 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://theroyeffect.com/" },
+      { property: "og:url", content: `${SITE_URL}/` },
       { property: "og:image", content: HERO_IMAGE_ABSOLUTE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: HERO_IMAGE_ABSOLUTE },
     ],
-    links: [{ rel: "canonical", href: "https://theroyeffect.com/" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
   }),
   component: Home,
 });

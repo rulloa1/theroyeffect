@@ -178,7 +178,7 @@ export function PortfolioSections() {
                 variant="outline"
                 className="rounded-none border-[#030014]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[#030014] hover:bg-[#030014] hover:text-white"
               >
-                <a href="mailto:rory@theroyeffect.com">CONTACT ME</a>
+                <Link to="/book">CONTACT ME</Link>
               </Button>
             </div>
           </div>

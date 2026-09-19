@@ -38,12 +38,12 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
               {link.label}
             </Link>
           ))}
-          <a
-            href="mailto:rory@theroyeffect.com"
+          <Link
+            to="/book"
             className="inline-flex min-h-11 items-center font-mono text-[10px] font-bold tracking-widest text-white/75 transition-colors hover:text-[#DFBA73]"
           >
             CONTACT
-          </a>
+          </Link>
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -81,7 +81,7 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
           aria-label="Mobile primary"
           className="border-t border-white/10 bg-[#030014] px-5 py-5 lg:hidden"
         >
-          {[...links, { label: "CONTACT", to: "/brief" as const }].map((link) => (
+          {[...links, { label: "CONTACT", to: "/book" as const }].map((link) => (
             <Link
               key={link.label}
               to={link.to}
