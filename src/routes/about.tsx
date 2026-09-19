@@ -99,7 +99,7 @@ function AboutPage() {
                 ) : null}
               </div>
             </div>
-          </dl>
+          </div>
 
           <div className="relative order-2 min-h-[24rem] overflow-hidden border-t border-border lg:order-3 lg:min-h-0 lg:border-l lg:border-t-0">
             <img src={portraitAsset.url} alt="Rory Ulloa, creative director in Houston" width={896} height={1078} loading="eager" decoding="async" fetchPriority="high" className="absolute inset-0 h-full w-full object-contain object-bottom grayscale contrast-125 lg:object-cover lg:object-[52%_center]" />
@@ -110,7 +110,7 @@ function AboutPage() {
             <div className="p-5 lg:p-6"><dt className="font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">BASED IN</dt><dd className="mt-2 font-portfolio text-lg font-semibold text-foreground">Houston, Texas</dd></div>
             <div className="p-5 lg:p-6"><dt className="font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">SPECIALIZING IN</dt><dd className="mt-2 font-portfolio text-lg font-semibold text-foreground">Creative development</dd></div>
             <div className="p-5 lg:p-6"><dt className="font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">FEATURED WORK</dt><dd className="mt-2"><Link to="/case-study" className="inline-flex min-h-11 items-center gap-2 font-portfolio text-lg font-semibold text-foreground transition-colors hover:text-[#DFBA73]">View case study <ArrowUpRight className="size-4" /></Link></dd></div>
-          </div>
+          </dl>
         </div>
       </section>
 
