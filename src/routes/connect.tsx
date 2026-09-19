@@ -18,6 +18,7 @@ export const Route = createFileRoute("/connect")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "https://theroyeffect.com/connect" }],
   }),
   component: ConnectPage,
 });
