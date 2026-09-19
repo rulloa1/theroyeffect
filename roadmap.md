@@ -21,3 +21,4 @@
 - [x] Reposition the homepage as Rory's design-developer portfolio with work leading before services
 - [x] Replace homepage pricing and process detail with concise capabilities and philosophy sections
 - [x] Verify the redesigned homepage across navigation, media, motion, forms, and responsive breakpoints
+- [x] Rebuild the About page to match the architectural-noir homepage system
