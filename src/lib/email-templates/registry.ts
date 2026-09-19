@@ -12,6 +12,13 @@ import { template as proposalReady } from "./proposal-ready";
 import { template as subscriptionNotification } from "./subscription-notification";
 import { template as voiceAgentFollowup } from "./voice-agent-followup";
 import { template as voiceAgentNotification } from "./voice-agent-notification";
+import { template as auditDelivered } from "./audit-delivered";
+import { template as discoveryRecap } from "./discovery-recap";
+import { template as designApprovalRequest } from "./design-approval-request";
+import { template as launchReady } from "./launch-ready";
+import { template as postLaunchHandover } from "./post-launch-handover";
+import { template as retainerWeeklySync } from "./retainer-weekly-sync";
+import { template as supportWindowClosing } from "./support-window-closing";
 
 export interface TemplateEntry {
   component: ComponentType<any>;
@@ -44,4 +51,11 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "subscription-notification": subscriptionNotification,
   "voice-agent-followup": voiceAgentFollowup,
   "voice-agent-notification": voiceAgentNotification,
+  "audit-delivered": auditDelivered,
+  "discovery-recap": discoveryRecap,
+  "design-approval-request": designApprovalRequest,
+  "launch-ready": launchReady,
+  "post-launch-handover": postLaunchHandover,
+  "retainer-weekly-sync": retainerWeeklySync,
+  "support-window-closing": supportWindowClosing,
 };
