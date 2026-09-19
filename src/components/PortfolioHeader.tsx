@@ -19,7 +19,10 @@ export function PortfolioHeader() {
       <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:flex sm:justify-between md:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Logo variant="responsive" size="sm" href="/" className="inline-flex shrink-0" />
-          <Link to="/" className="hidden min-w-0 font-portfolio text-sm font-bold text-white sm:block">
+          <Link
+            to="/"
+            className="hidden min-w-0 font-portfolio text-sm font-bold text-white sm:block"
+          >
             THE ROY EFFECT
           </Link>
         </div>
@@ -38,8 +41,14 @@ export function PortfolioHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Button asChild size="sm" className="rounded-none px-4 font-mono text-[10px] font-bold tracking-widest sm:px-5">
-            <Link to="/brief">START A PROJECT <ArrowUpRight className="hidden sm:block" /></Link>
+          <Button
+            asChild
+            size="sm"
+            className="rounded-none px-4 font-mono text-[10px] font-bold tracking-widest sm:px-5"
+          >
+            <Link to="/brief">
+              START A PROJECT <ArrowUpRight className="hidden sm:block" />
+            </Link>
           </Button>
           <Button
             type="button"
@@ -56,7 +65,10 @@ export function PortfolioHeader() {
       </div>
 
       {menuOpen ? (
-        <nav aria-label="Mobile primary" className="border-t border-white/10 bg-[#030014] px-5 py-5 lg:hidden">
+        <nav
+          aria-label="Mobile primary"
+          className="border-t border-white/10 bg-[#030014] px-5 py-5 lg:hidden"
+        >
           {LINKS.map((link) => (
             <Link
               key={link.label}
@@ -65,7 +77,8 @@ export function PortfolioHeader() {
               onClick={() => setMenuOpen(false)}
               className="flex min-h-12 items-center justify-between border-b border-white/10 font-portfolio text-xl font-semibold text-white last:border-0"
             >
-              {link.label}<ArrowUpRight className="size-4 text-[#DFBA73]" />
+              {link.label}
+              <ArrowUpRight className="size-4 text-[#DFBA73]" />
             </Link>
           ))}
         </nav>
