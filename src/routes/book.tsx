@@ -56,8 +56,8 @@ function BookPage() {
           </h1>
           <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-white/60">
             Pick a time that works. I&apos;ll call you then to talk through your project, scope,
-            budget and timeline. You&apos;ll leave with a written recommendation, and there&apos;s no
-            pitch.
+            budget and timeline. You&apos;ll leave with a written recommendation, and there&apos;s
+            no pitch.
           </p>
           <div className="mt-10">
             <BookingCalendar />
