@@ -32,7 +32,7 @@
   --color-drawer: var(--drawer);
   --color-energy: var(--energy);
   --font-display: "Anton", "Impact", "Arial Black", sans-serif;
-  --font-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-sans: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-portfolio: "Space Grotesk", system-ui, sans-serif;
   --font-portfolio-body: "Space Grotesk", system-ui, sans-serif;
