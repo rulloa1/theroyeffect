@@ -5,10 +5,9 @@ import { Logo } from "@/components/Logo";
 const STUDIO_LINKS = [
   { label: "WORK", to: "/work" },
   { label: "SERVICES", to: "/services" },
-  { label: "PRICING", to: "/pricing" },
   { label: "ABOUT", to: "/about" },
-  { label: "PROCESS", to: "/process" },
-  { label: "CASE STUDY", to: "/case-study" },
+  { label: "CONTACT", to: "/brief" },
+  { label: "PRICING", to: "/pricing" },
 ];
 
 const GUIDE_LINKS = [
@@ -39,13 +38,12 @@ export function SiteFooter() {
               <div>
                 <p className="font-display text-2xl uppercase text-white">The Roy Effect</p>
                 <p className="font-mono text-xs uppercase tracking-widest text-[#DFBA73]">
-                  Rory Ulloa · Houston, Texas
+                  Design Developer + Web Developer
                 </p>
               </div>
             </div>
             <p className="mt-6 max-w-lg font-sans text-base leading-[1.6] text-white/90">
-              I shape clear brands, useful digital experiences, and no-code websites for owner-run
-              businesses ready to stand out online.
+              I design and build distinctive digital experiences from Houston, Texas.
             </p>
             {showCtas ? (
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
