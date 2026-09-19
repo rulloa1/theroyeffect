@@ -63,7 +63,7 @@ function AboutPage() {
       <PortfolioHeader />
 
       <section className="relative z-20 px-2 pb-2 pt-20 md:px-4 md:pb-4 md:pt-24">
-        <div className="relative mx-auto grid min-h-[calc(100svh-6rem)] max-w-[96rem] overflow-hidden border border-border bg-card lg:grid-cols-[4rem_minmax(0,1.05fr)_minmax(18rem,0.72fr)_minmax(14rem,0.55fr)]">
+        <div className="relative mx-auto grid max-w-[96rem] overflow-hidden border border-border bg-card lg:min-h-[calc(100svh-6rem)] lg:grid-cols-[4rem_minmax(0,1.05fr)_minmax(18rem,0.72fr)_minmax(14rem,0.55fr)]">
           <div className="order-2 flex items-center gap-2 border-t border-border px-5 py-5 lg:order-1 lg:flex-col lg:justify-center lg:border-r lg:border-t-0 lg:px-0">
             {LINKEDIN_URL ? (
               <a
