@@ -18,6 +18,7 @@ export const Route = createFileRoute("/connect")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "https://theroyeffect.com/connect" }],
   }),
   component: ConnectPage,
 });
@@ -76,7 +77,7 @@ function ConnectPage() {
     setMcpUrl(new URL("/mcp", window.location.origin).toString());
   }, []);
 
-  const shownUrl = mcpUrl || "https://www.theroyeffect.com/mcp";
+  const shownUrl = mcpUrl || "https://theroyeffect.com/mcp";
   const claudeLink = `https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=${encodeURIComponent(
     APP_NAME,
   )}&connectorUrl=${encodeURIComponent(shownUrl)}`;

@@ -12,13 +12,13 @@ import { OWNER_EMAIL } from "@/utils/booking.server";
  */
 export const JOB_KEY = "gsc_index_watch";
 const LEASE_MINUTES = 5;
-const SITE_TARGET = "https://www.theroyeffect.com/";
+const SITE_TARGET = "https://theroyeffect.com/";
 const GATEWAY = "https://connector-gateway.lovable.dev/google_search_console";
 
 export const WATCHED_URLS = [
-  "https://www.theroyeffect.com/guides/website-audit-checklist",
-  "https://www.theroyeffect.com/guides/houston-website-cost",
-  "https://www.theroyeffect.com/guides/squarespace-vs-custom-website",
+  "https://theroyeffect.com/guides/website-audit-checklist",
+  "https://theroyeffect.com/guides/houston-website-cost",
+  "https://theroyeffect.com/guides/squarespace-vs-custom-website",
 ] as const;
 
 /** Discoverability ladder used to decide when an alert is worth sending. */
@@ -111,7 +111,7 @@ async function resolveSiteUrl(): Promise<string> {
     (entry) => entry.permissionLevel !== "siteUnverifiedUser" && coversTarget(entry.siteUrl, target),
   );
   if (matches.length === 0) {
-    throw new Error("No verified Search Console property covers www.theroyeffect.com");
+    throw new Error("No verified Search Console property covers theroyeffect.com");
   }
   const exact = matches.find((entry) => entry.siteUrl === SITE_TARGET);
   const chosen = exact ?? (matches.length === 1 ? matches[0] : undefined);

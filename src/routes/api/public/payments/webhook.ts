@@ -4,7 +4,7 @@ import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 
 const OWNER_EMAIL = "rory@theroyeffect.com";
-const BRIEF_BASE_URL = "https://www.theroyeffect.com/brief";
+const BRIEF_BASE_URL = "https://theroyeffect.com/brief";
 
 const money = (amount: number | null | undefined, currency: string | null | undefined) =>
   new Intl.NumberFormat("en-US", {

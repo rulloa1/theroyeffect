@@ -50,7 +50,7 @@ export const template = {
     heading: "Your free audit request is in",
     body: "Rory will review your site and send your audit shortly.",
     ctaLabel: "See what the audit covers",
-    ctaUrl: "https://www.theroyeffect.com/audit",
+    ctaUrl: "https://theroyeffect.com/audit",
   },
 } satisfies TemplateEntry;
 

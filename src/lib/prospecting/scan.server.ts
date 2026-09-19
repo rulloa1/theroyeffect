@@ -196,7 +196,7 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
         response = await fetch(url.toString(), {
           redirect: "manual",
           signal: controller.signal,
-          headers: { "User-Agent": "TheRoyEffect-SiteCheck/1.0 (+https://www.theroyeffect.com)" },
+          headers: { "User-Agent": "TheRoyEffect-SiteCheck/1.0 (+https://theroyeffect.com)" },
         });
       } finally {
         clearTimeout(timer);

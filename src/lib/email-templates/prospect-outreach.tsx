@@ -76,7 +76,7 @@ export const template = {
     businessName: "Bayou City Roofing",
     subject: "Your site is not secure on phones",
     body: "I checked Bayou City Roofing's site this morning. It loads without HTTPS, so Chrome shows a 'Not secure' warning before anyone reads a word.\n\nFor a roofer competing on trust, that warning turns away the exact homeowner who was ready to call.\n\nI put together a short report on what I found and what I would fix first. No charge, nothing to sign up for.",
-    reportUrl: "https://www.theroyeffect.com/site-report/example",
+    reportUrl: "https://theroyeffect.com/site-report/example",
     topIssue: "Not secure (no HTTPS)",
   },
 } satisfies TemplateEntry;

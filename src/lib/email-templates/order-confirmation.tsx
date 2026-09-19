@@ -37,7 +37,7 @@ const Email = ({ productName, amountLabel, briefUrl, recurring }: Props) => (
           reply personally within one business day.
         </Text>
         <Section style={{ marginTop: "24px" }}>
-          <Button style={button} href={briefUrl ?? "https://www.theroyeffect.com/#contact"}>
+          <Button style={button} href={briefUrl ?? "https://theroyeffect.com/#contact"}>
             Send your project brief
           </Button>
         </Section>
@@ -59,7 +59,7 @@ export const template = {
   previewData: {
     productName: "Website / UI-UX — 50% Deposit",
     amountLabel: "$2,500.00",
-    briefUrl: "https://www.theroyeffect.com/#contact",
+    briefUrl: "https://theroyeffect.com/#contact",
   },
 };
 

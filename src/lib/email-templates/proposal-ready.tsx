@@ -28,8 +28,8 @@ const Email = ({
   timeline_weeks = "2–3 Weeks",
   total_price = "$5,000",
   deposit_price = "$2,500",
-  proposal_url = "https://www.theroyeffect.com/portal",
-  portal_url = "https://www.theroyeffect.com/portal",
+  proposal_url = "https://theroyeffect.com/portal",
+  portal_url = "https://theroyeffect.com/portal",
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -85,8 +85,8 @@ export const template: TemplateEntry = {
     timeline_weeks: "3 Weeks",
     total_price: "$6,500",
     deposit_price: "$3,250",
-    proposal_url: "https://www.theroyeffect.com/proposal/example",
-    portal_url: "https://www.theroyeffect.com/portal",
+    proposal_url: "https://theroyeffect.com/proposal/example",
+    portal_url: "https://theroyeffect.com/portal",
   },
 };
 
