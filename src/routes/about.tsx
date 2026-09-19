@@ -77,7 +77,7 @@ function AboutPage() {
             <a href={`mailto:${CONTACT_EMAIL}`} aria-label={`Email Rory Ulloa at ${CONTACT_EMAIL}`} className="inline-flex size-11 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]">
               <Mail className="size-4" aria-hidden="true" />
             </a>
-          </div>
+          </dl>
 
           <div className="relative order-1 flex flex-col justify-center px-5 py-12 sm:px-8 md:px-12 lg:order-2 lg:py-20 xl:px-16">
             <div aria-hidden="true" className="portfolio-dot-grid absolute inset-0 opacity-40" />
