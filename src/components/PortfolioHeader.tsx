@@ -29,7 +29,7 @@ export function PortfolioHeader() {
             <Link
               key={link.label}
               to={link.to}
-              hash={"hash" in link ? link.hash : undefined}
+              {...("hash" in link ? { hash: link.hash } : {})}
               className="inline-flex min-h-11 items-center font-mono text-[10px] font-bold tracking-widest text-white/75 transition-colors hover:text-[#DFBA73]"
             >
               {link.label}
@@ -61,7 +61,7 @@ export function PortfolioHeader() {
             <Link
               key={link.label}
               to={link.to}
-              hash={"hash" in link ? link.hash : undefined}
+              {...("hash" in link ? { hash: link.hash } : {})}
               onClick={() => setMenuOpen(false)}
               className="flex min-h-12 items-center justify-between border-b border-white/10 font-portfolio text-xl font-semibold text-white last:border-0"
             >
