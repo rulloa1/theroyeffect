@@ -236,7 +236,13 @@ export async function bookDiscoverySlot(
             sms_marketing_consent: payment.sms_marketing_consent,
             consent_captured_at: new Date().toISOString(),
           }
-        : {}),
+        : consent
+          ? {
+              sms_service_consent: consent.sms_service_consent,
+              sms_marketing_consent: consent.sms_marketing_consent,
+              consent_captured_at: new Date().toISOString(),
+            }
+          : {}),
     })
     .select("id")
     .single();
