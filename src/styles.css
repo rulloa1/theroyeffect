@@ -35,7 +35,7 @@
   --font-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-portfolio: "Space Grotesk", system-ui, sans-serif;
-  --font-portfolio-body: "DM Sans", system-ui, sans-serif;
+  --font-portfolio-body: "Space Grotesk", system-ui, sans-serif;
 }
 
 :root {
