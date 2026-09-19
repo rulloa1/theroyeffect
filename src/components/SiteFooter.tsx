@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowUpRight, Mail, MapPin, Phone, SearchCheck } from "lucide-react";
+import { ArrowUpRight, Linkedin, Mail, MapPin, Phone, SearchCheck, Twitter } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { CONTACT_EMAIL, LINKEDIN_URL, X_URL } from "@/lib/site";
 
 const STUDIO_LINKS = [
   { label: "WORK", to: "/work" },
@@ -102,10 +103,10 @@ export function SiteFooter() {
             <h3 className="font-mono text-xs font-bold tracking-widest text-[#FF3333]">CONTACT</h3>
             <div className="mt-4 font-mono text-[15px] text-white/90">
               <a
-                href="mailto:rory@theroyeffect.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="flex min-h-11 items-center gap-3 border-b border-white/5 transition-colors hover:text-[#FF3333] focus-visible:outline-none focus-visible:text-[#FF3333]"
               >
-                <Mail className="size-4 shrink-0 text-[#DFBA73]" /> rory@theroyeffect.com
+                <Mail className="size-4 shrink-0 text-[#DFBA73]" /> {CONTACT_EMAIL}
               </a>
               <a
                 href="tel:281-323-0450"
@@ -117,6 +118,32 @@ export function SiteFooter() {
                 <MapPin className="size-4 shrink-0 text-[#DFBA73]" /> Houston, Texas
               </p>
             </div>
+            {LINKEDIN_URL || X_URL ? (
+              <div className="mt-4 flex items-center gap-2" aria-label="Social profiles">
+                {LINKEDIN_URL ? (
+                  <a
+                    href={LINKEDIN_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Rory Ulloa on LinkedIn"
+                    className="inline-flex size-11 items-center justify-center border border-white/15 text-white/70 transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]"
+                  >
+                    <Linkedin className="size-4" aria-hidden="true" />
+                  </a>
+                ) : null}
+                {X_URL ? (
+                  <a
+                    href={X_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Rory Ulloa on X"
+                    className="inline-flex size-11 items-center justify-center border border-white/15 text-white/70 transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]"
+                  >
+                    <Twitter className="size-4" aria-hidden="true" />
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
             <Link
               to="/portal/login"
               className="mt-5 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[#DFBA73] transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
