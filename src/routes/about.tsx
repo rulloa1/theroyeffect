@@ -64,7 +64,7 @@ function AboutPage() {
 
       <section className="relative z-20 px-2 pb-2 pt-20 md:px-4 md:pb-4 md:pt-24">
         <div className="relative mx-auto grid min-h-[calc(100svh-6rem)] max-w-[96rem] overflow-hidden border border-border bg-card lg:grid-cols-[4rem_minmax(0,1.05fr)_minmax(18rem,0.72fr)_minmax(14rem,0.55fr)]">
-          <div className="order-4 flex items-center gap-2 border-t border-border px-5 py-5 lg:order-1 lg:flex-col lg:justify-center lg:border-r lg:border-t-0 lg:px-0">
+          <div className="order-2 flex items-center gap-2 border-t border-border px-5 py-5 lg:order-1 lg:flex-col lg:justify-center lg:border-r lg:border-t-0 lg:px-0">
             {LINKEDIN_URL ? (
               <a
                 href={LINKEDIN_URL}
@@ -135,7 +135,7 @@ function AboutPage() {
             </div>
           </div>
 
-          <div className="relative order-2 min-h-[24rem] overflow-hidden border-t border-border lg:order-3 lg:min-h-0 lg:border-l lg:border-t-0">
+          <div className="relative order-3 min-h-[24rem] overflow-hidden border-t border-border lg:min-h-0 lg:border-l lg:border-t-0">
             <img
               src={portraitAsset.url}
               alt="Rory Ulloa, creative director in Houston"
@@ -152,7 +152,7 @@ function AboutPage() {
             />
           </div>
 
-          <dl className="order-3 grid divide-y divide-border border-t border-border lg:order-4 lg:flex lg:flex-col lg:justify-end lg:border-l lg:border-t-0">
+          <dl className="order-4 grid divide-y divide-border border-t border-border lg:flex lg:flex-col lg:justify-end lg:border-l lg:border-t-0">
             <div className="p-5 lg:p-6">
               <dt className="font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">
                 BASED IN
