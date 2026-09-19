@@ -34,7 +34,7 @@ export function PortfolioWorkGallery() {
                 className={`grid gap-7 lg:grid-cols-12 lg:items-end ${index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}
               >
                 <Link
-                  to="/case-study"
+                  to="/work"
                   aria-label={`View ${project.title}`}
                   className="group relative block aspect-[4/3] overflow-hidden border border-white/10 bg-[#0a0620] lg:col-span-8"
                 >
@@ -64,7 +64,7 @@ export function PortfolioWorkGallery() {
                     {project.result}
                   </p>
                   <Link
-                    to="/case-study"
+                    to="/work"
                     className="group mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[#DFBA73]/60 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:border-[#FF3333] hover:text-[#DFBA73]"
                   >
                     VIEW PROJECT

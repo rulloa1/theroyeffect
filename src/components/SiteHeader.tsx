@@ -45,8 +45,11 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => {
+              if (onNavigate) {
+                onNavigate("MENU");
+                return;
+              }
               setMenuOpen((open) => !open);
-              onNavigate?.("MENU");
             }}
             className="rounded-none border-white/20 bg-transparent text-white hover:border-[#DFBA73] hover:bg-white/5 lg:hidden"
           >

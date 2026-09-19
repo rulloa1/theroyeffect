@@ -48,10 +48,6 @@ export function HeroContent() {
               <Link to="/brief">START A PROJECT</Link>
             </Button>
           </div>
-          <div className="mt-8 flex items-center gap-3 font-mono text-[10px] tracking-widest text-white/55">
-            <span className="size-2 bg-[#FF3333] shadow-[0_0_14px_rgba(255,51,51,0.7)]" />
-            AVAILABLE FOR SELECT PROJECTS
-          </div>
         </div>
       </div>
     </div>
