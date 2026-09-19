@@ -85,9 +85,9 @@ const STRUCTURED_DATA = {
   "@graph": [
     {
       "@type": "Person",
-      "@id": "https://www.theroyeffect.com/#person",
+      "@id": "https://theroyeffect.com/#person",
       name: "Rory Ulloa",
-      url: "https://www.theroyeffect.com",
+      url: "https://theroyeffect.com",
       jobTitle: "Creative Director & UI/UX Designer",
       email: "rory@theroyeffect.com",
       telephone: "281-323-0450",
@@ -107,12 +107,12 @@ const STRUCTURED_DATA = {
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://www.theroyeffect.com/#service",
+      "@id": "https://theroyeffect.com/#service",
       name: "The Roy Effect",
       slogan: "Design With Purpose",
-      url: "https://www.theroyeffect.com",
+      url: "https://theroyeffect.com",
       telephone: "281-323-0450",
-      founder: { "@id": "https://www.theroyeffect.com/#person" },
+      founder: { "@id": "https://theroyeffect.com/#person" },
       priceRange: "$$$$",
       hasOfferCatalog: {
         "@type": "OfferCatalog",

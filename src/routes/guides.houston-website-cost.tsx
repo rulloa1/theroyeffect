@@ -4,7 +4,7 @@ import { GuideArticle, GuideParagraph, GuideSection } from "@/components/GuideAr
 const TITLE = "Houston Website Cost in 2026: Real Prices | The Roy Effect";
 const DESCRIPTION =
   "What a website actually costs in Houston in 2026 — DIY builders, freelancers and custom studios compared, with real published prices from a working Houston designer.";
-const URL = "https://www.theroyeffect.com/guides/houston-website-cost";
+const URL = "https://theroyeffect.com/guides/houston-website-cost";
 const PUBLISHED = "2026-08-23";
 
 export const Route = createFileRoute("/guides/houston-website-cost")({
@@ -30,8 +30,8 @@ export const Route = createFileRoute("/guides/houston-website-cost")({
           url: URL,
           datePublished: PUBLISHED,
           dateModified: PUBLISHED,
-          author: { "@id": "https://www.theroyeffect.com/#person" },
-          publisher: { "@id": "https://www.theroyeffect.com/#service" },
+          author: { "@id": "https://theroyeffect.com/#person" },
+          publisher: { "@id": "https://theroyeffect.com/#service" },
           isAccessibleForFree: true,
         }),
       },

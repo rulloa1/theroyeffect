@@ -28,8 +28,8 @@ const Email = ({
   amountLabel = "",
   nextStep = "",
   milestones = [],
-  portalUrl = "https://www.theroyeffect.com/portal",
-  briefUrl = "https://www.theroyeffect.com/brief",
+  portalUrl = "https://theroyeffect.com/portal",
+  briefUrl = "https://theroyeffect.com/brief",
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -97,8 +97,8 @@ export const template = {
     amountLabel: "$2,500.00",
     nextStep: "Fill in the project brief so I can start on direction.",
     milestones: ["Brief received", "Design direction", "Design sign-off", "Build", "Launch"],
-    portalUrl: "https://www.theroyeffect.com/portal",
-    briefUrl: "https://www.theroyeffect.com/brief",
+    portalUrl: "https://theroyeffect.com/portal",
+    briefUrl: "https://theroyeffect.com/brief",
   },
 } satisfies TemplateEntry;
 

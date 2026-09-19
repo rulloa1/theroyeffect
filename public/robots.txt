@@ -13,5 +13,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.theroyeffect.com/sitemap.xml
+Sitemap: https://theroyeffect.com/sitemap.xml
 

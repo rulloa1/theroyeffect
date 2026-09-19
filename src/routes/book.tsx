@@ -25,7 +25,7 @@ export const Route = createFileRoute("/book")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://www.theroyeffect.com/book" }],
+    links: [{ rel: "canonical", href: "https://theroyeffect.com/book" }],
   }),
   component: BookPage,
 });

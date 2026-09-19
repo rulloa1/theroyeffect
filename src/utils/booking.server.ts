@@ -3,7 +3,7 @@ import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { escapeLikePattern } from "@/lib/sql-like";
 
 export const OWNER_EMAIL = "rory@theroyeffect.com";
-export const SITE = "https://www.theroyeffect.com";
+export const SITE = "https://theroyeffect.com";
 export const QUESTIONNAIRE_URL = `${SITE}/brief`;
 export const BOOKING_TZ = "America/Chicago";
 /** Discovery slots offered daily, expressed in UTC hours (10am / 1pm / 3pm Central). */

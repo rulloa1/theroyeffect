@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 const TITLE = "Case Study — Redesigning a Houston Service Business Site | The Roy Effect";
 const DESCRIPTION =
   "A walkthrough of how I take a Houston service business from a cluttered, hard-to-use website to a clear brand system and a fast, mobile-first site — problem, approach, design decisions and outcome.";
-const URL = "https://www.theroyeffect.com/case-study";
+const URL = "https://theroyeffect.com/case-study";
 
 export const Route = createFileRoute("/case-study")({
   head: () => ({
@@ -28,8 +28,8 @@ export const Route = createFileRoute("/case-study")({
           headline: "Redesigning a Houston service business website: problem to result",
           description: DESCRIPTION,
           url: URL,
-          author: { "@id": "https://www.theroyeffect.com/#person" },
-          publisher: { "@id": "https://www.theroyeffect.com/#service" },
+          author: { "@id": "https://theroyeffect.com/#person" },
+          publisher: { "@id": "https://theroyeffect.com/#service" },
           isAccessibleForFree: true,
         }),
       },

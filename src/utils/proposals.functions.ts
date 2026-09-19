@@ -301,7 +301,7 @@ export const downloadSignedProposalPdf = createServerFn({ method: "POST" })
     },
   );
 
-const SITE_URL = "https://www.theroyeffect.com";
+const SITE_URL = "https://theroyeffect.com";
 
 const updateInput = z.object({
   id: z.string().uuid(),

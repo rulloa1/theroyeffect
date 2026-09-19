@@ -76,7 +76,7 @@ function ConnectPage() {
     setMcpUrl(new URL("/mcp", window.location.origin).toString());
   }, []);
 
-  const shownUrl = mcpUrl || "https://www.theroyeffect.com/mcp";
+  const shownUrl = mcpUrl || "https://theroyeffect.com/mcp";
   const claudeLink = `https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=${encodeURIComponent(
     APP_NAME,
   )}&connectorUrl=${encodeURIComponent(shownUrl)}`;
