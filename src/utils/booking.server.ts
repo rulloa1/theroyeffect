@@ -162,9 +162,16 @@ export function isOfferedSlot(start: Date): boolean {
   return start.getUTCMinutes() === 0 && start.getUTCSeconds() === 0;
 }
 
+/** SMS consents captured on the booking form when no payment step is involved. */
+export interface BookingConsent {
+  sms_service_consent: boolean;
+  sms_marketing_consent: boolean;
+}
+
 export async function bookDiscoverySlot(
   input: BookingSlotInput,
   payment?: BookingPaymentDetails,
+  consent?: BookingConsent,
 ): Promise<BookingResult> {
   const data = bookingSlotSchema.parse(input);
   const start = new Date(data.slot_start);
