@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Compass, LayoutGrid, MessageSquareText, MousePointerClick, PenTool, Rocket, Smartphone } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
-const TITLE = "Case Study — Redesigning a Houston Service Business Site | The Roy Effect";
+const TITLE = "Case Study: Redesigning a Houston Service Business Site";
 const DESCRIPTION =
-  "A walkthrough of how I take a Houston service business from a cluttered, hard-to-use website to a clear brand system and a fast, mobile-first site — problem, approach, design decisions and outcome.";
+  "How a Houston service business went from a cluttered, hard-to-use website to a clear brand system and a fast, mobile-first site.";
 const URL = "https://theroyeffect.com/case-study";
 
 export const Route = createFileRoute("/case-study")({

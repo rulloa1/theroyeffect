@@ -6,7 +6,7 @@ import { PRICING_TIERS } from "@/lib/commerce-catalog";
 
 const TITLE = "Pricing — Brand, Web Design & Retainer Rates | The Roy Effect";
 const DESCRIPTION =
-  "Transparent design pricing from Rory Ulloa: brand sprints from $2,500, web design and UI/UX from $5,000, full design + no-code builds from $8,000 and monthly retainers from $3,000. Pay a 50% deposit to start.";
+  "Transparent design pricing: brand sprints from $2,500, web design from $5,000, design + no-code build from $8,000, and retainers at $3,000 a month.";
 
 const OFFER_SCHEMA = {
   "@context": "https://schema.org",

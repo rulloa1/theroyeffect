@@ -3,7 +3,7 @@ import { GuideArticle, GuideParagraph, GuideSection } from "@/components/GuideAr
 
 const TITLE = "Houston Website Cost in 2026: Real Prices | The Roy Effect";
 const DESCRIPTION =
-  "What a website actually costs in Houston in 2026 — DIY builders, freelancers and custom studios compared, with real published prices from a working Houston designer.";
+  "What a website really costs in Houston in 2026: DIY builders, freelancers and custom studios compared, with real published prices.";
 const URL = "https://theroyeffect.com/guides/houston-website-cost";
 const PUBLISHED = "2026-08-23";
 

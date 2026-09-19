@@ -5,7 +5,7 @@ import { SERVICES, PROCESS_STEPS } from "@/lib/site-content";
 
 const TITLE = "Design Services — Brand, UI/UX & No-Code Build | The Roy Effect";
 const DESCRIPTION =
-  "Freelance design services by Rory Ulloa: brand identity systems, web design and UI/UX, end-to-end no-code builds and monthly design retainers. Houston-based, working remotely across the US.";
+  "Brand identity, web design and UI/UX, no-code builds and monthly design retainers from Rory Ulloa, a Houston-based independent creative director.";
 
 const SERVICE_SCHEMA = {
   "@context": "https://schema.org",
