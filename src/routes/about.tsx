@@ -77,7 +77,7 @@ function AboutPage() {
             <a href={`mailto:${CONTACT_EMAIL}`} aria-label={`Email Rory Ulloa at ${CONTACT_EMAIL}`} className="inline-flex size-11 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-[#DFBA73] hover:text-[#DFBA73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFBA73]">
               <Mail className="size-4" aria-hidden="true" />
             </a>
-          </dl>
+          </div>
 
           <div className="relative order-1 flex flex-col justify-center px-5 py-12 sm:px-8 md:px-12 lg:order-2 lg:py-20 xl:px-16">
             <div aria-hidden="true" className="portfolio-dot-grid absolute inset-0 opacity-40" />
@@ -99,7 +99,7 @@ function AboutPage() {
                 ) : null}
               </div>
             </div>
-          </div>
+          </dl>
 
           <div className="relative order-2 min-h-[24rem] overflow-hidden border-t border-border lg:order-3 lg:min-h-0 lg:border-l lg:border-t-0">
             <img src={portraitAsset.url} alt="Rory Ulloa, creative director in Houston" width={896} height={1078} loading="eager" decoding="async" fetchPriority="high" className="absolute inset-0 h-full w-full object-contain object-bottom grayscale contrast-125 lg:object-cover lg:object-[52%_center]" />
