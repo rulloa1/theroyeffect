@@ -18,6 +18,7 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as BriefRouteImport } from './routes/brief'
 import { Route as CaseStudyRouteImport } from './routes/case-study'
 import { Route as ClientsRouteImport } from './routes/clients'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -93,6 +94,11 @@ const CaseStudyRoute = CaseStudyRouteImport.update({
 const ClientsRoute = ClientsRouteImport.update({
   id: '/clients',
   path: '/clients',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McpRoute = McpRouteImport.update({
@@ -278,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -408,6 +417,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -493,6 +504,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -537,6 +549,7 @@ export interface RootRouteChildren {
   BriefRoute: typeof BriefRoute
   CaseStudyRoute: typeof CaseStudyRoute
   ClientsRoute: typeof ClientsRoute
+  ConnectRoute: typeof ConnectRoute
   McpRoute: typeof McpRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -629,6 +642,13 @@ declare module '@tanstack/react-router' {
       path: '/clients'
       fullPath: '/clients'
       preLoaderRoute: typeof ClientsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcp': {
@@ -887,6 +907,7 @@ const rootRouteChildren: RootRouteChildren = {
   BriefRoute: BriefRoute,
   CaseStudyRoute: CaseStudyRoute,
   ClientsRoute: ClientsRoute,
+  ConnectRoute: ConnectRoute,
   McpRoute: McpRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
