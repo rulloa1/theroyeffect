@@ -22,7 +22,7 @@ const OFFER_SCHEMA = {
       "@type": "Service",
       name: tier.name,
       description: tier.description,
-      provider: { "@id": "https://theroyeffect.com/#service" },
+      provider: { "@id": "https://theroyeffect.com/#business" },
     },
   })),
 };

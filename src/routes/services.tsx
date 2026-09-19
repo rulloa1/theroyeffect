@@ -20,7 +20,7 @@ const SERVICE_SCHEMA = {
       description: s.summary,
       serviceType: s.name,
       url: `https://theroyeffect.com/services#${s.slug}`,
-      provider: { "@id": "https://theroyeffect.com/#service" },
+      provider: { "@id": "https://theroyeffect.com/#business" },
       areaServed: { "@type": "Country", name: "United States" },
       offers: {
         "@type": "Offer",

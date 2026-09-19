@@ -29,7 +29,7 @@ export const Route = createFileRoute("/case-study")({
           description: DESCRIPTION,
           url: URL,
           author: { "@id": "https://theroyeffect.com/#person" },
-          publisher: { "@id": "https://theroyeffect.com/#service" },
+          publisher: { "@id": "https://theroyeffect.com/#business" },
           isAccessibleForFree: true,
         }),
       },

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/guides/houston-website-cost")({
           datePublished: PUBLISHED,
           dateModified: PUBLISHED,
           author: { "@id": "https://theroyeffect.com/#person" },
-          publisher: { "@id": "https://theroyeffect.com/#service" },
+          publisher: { "@id": "https://theroyeffect.com/#business" },
           isAccessibleForFree: true,
         }),
       },
