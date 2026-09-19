@@ -3,7 +3,7 @@ import { GuideArticle, GuideParagraph, GuideSection } from "@/components/GuideAr
 
 const TITLE = "Squarespace vs Custom Website: True Cost | The Roy Effect";
 const DESCRIPTION =
-  "Squarespace plans run about $19–$99/month in 2026 — but subscription fees are the smallest part of the real cost. An honest 3-year comparison for Houston small businesses.";
+  "Squarespace runs about $19–$99 a month, but the plan is the smallest cost. An honest three-year comparison for Houston small businesses.";
 const URL = "https://theroyeffect.com/guides/squarespace-vs-custom-website";
 const PUBLISHED = "2026-08-23";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/guides/squarespace-vs-custom-website")({
           datePublished: PUBLISHED,
           dateModified: PUBLISHED,
           author: { "@id": "https://theroyeffect.com/#person" },
-          publisher: { "@id": "https://theroyeffect.com/#service" },
+          publisher: { "@id": "https://theroyeffect.com/#business" },
           isAccessibleForFree: true,
         }),
       },

@@ -14,17 +14,22 @@ export const Route = createFileRoute("/audit")({
       {
         name: "description",
         content:
-          "Get a free 5-minute website audit: a personal video teardown of your conversion rate, mobile experience and brand positioning, for Houston small businesses and service providers.",
+          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
       },
       { property: "og:title", content: "Free Website Audit for Houston Small Businesses" },
       {
         property: "og:description",
         content:
-          "A free 5-minute video teardown of your website's conversion rate, mobile UX and brand positioning — by Houston designer Rory Ulloa.",
+          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theroyeffect.com/audit" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:description",
+        content:
+          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://theroyeffect.com/audit" }],
     scripts: [
@@ -35,13 +40,7 @@ export const Route = createFileRoute("/audit")({
           "@type": "Service",
           name: "Free Website Audit",
           serviceType: "Website audit and conversion review",
-          provider: {
-            "@type": "LocalBusiness",
-            name: "The Roy Effect",
-            email: "rory@theroyeffect.com",
-            areaServed: "Houston, Texas",
-            url: "https://theroyeffect.com",
-          },
+          provider: { "@id": "https://theroyeffect.com/#business" },
           areaServed: { "@type": "City", name: "Houston" },
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           url: "https://theroyeffect.com/audit",

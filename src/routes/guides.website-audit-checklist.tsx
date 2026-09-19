@@ -4,7 +4,7 @@ import { GuideArticle, GuideParagraph, GuideSection } from "@/components/GuideAr
 
 const TITLE = "Website Audit Checklist (2026): 15 Checks | The Roy Effect";
 const DESCRIPTION =
-  "A 15-point website audit checklist covering messaging, mobile speed, conversion paths, SEO basics and trust signals — the same checks I run on Houston small-business sites before any redesign.";
+  "A 15-point website audit checklist: messaging, mobile speed, conversion paths, SEO basics and trust signals. The same checks I run for clients.";
 const URL = "https://theroyeffect.com/guides/website-audit-checklist";
 const PUBLISHED = "2026-08-23";
 
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/guides/website-audit-checklist")({
           datePublished: PUBLISHED,
           dateModified: PUBLISHED,
           author: { "@id": "https://theroyeffect.com/#person" },
-          publisher: { "@id": "https://theroyeffect.com/#service" },
+          publisher: { "@id": "https://theroyeffect.com/#business" },
           isAccessibleForFree: true,
         }),
       },
