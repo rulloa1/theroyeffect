@@ -19,8 +19,12 @@ export function HeroContent() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-transparent to-transparent" />
         <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8">
-          <p className="font-portfolio text-3xl font-bold leading-none text-white md:text-5xl">RORY ULLOA</p>
-          <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">THE ROY EFFECT · HOUSTON</p>
+          <p className="font-portfolio text-3xl font-bold leading-none text-white md:text-5xl">
+            RORY ULLOA
+          </p>
+          <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[#DFBA73]">
+            THE ROY EFFECT · HOUSTON
+          </p>
         </div>
       </div>
 
@@ -41,10 +45,21 @@ export function HeroContent() {
             build digital experiences that look exceptional and help businesses stand out.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild size="lg" className="rounded-none px-7 font-mono text-xs font-bold tracking-widest">
-              <Link to="/" hash="work">VIEW MY WORK <ArrowUpRight /></Link>
+            <Button
+              asChild
+              size="lg"
+              className="rounded-none px-7 font-mono text-xs font-bold tracking-widest"
+            >
+              <Link to="/" hash="work">
+                VIEW MY WORK <ArrowUpRight />
+              </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[#DFBA73] hover:bg-white/5">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[#DFBA73] hover:bg-white/5"
+            >
               <Link to="/brief">START A PROJECT</Link>
             </Button>
           </div>

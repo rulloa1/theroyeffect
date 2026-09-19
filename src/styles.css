@@ -143,15 +143,28 @@
 }
 
 .portfolio-dot-grid {
-  background-image: radial-gradient(circle at 1px 1px, rgba(223, 186, 115, 0.16) 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(223, 186, 115, 0.16) 1px,
+    transparent 0
+  );
   background-size: 36px 36px;
   mask-image: linear-gradient(to left, #000, transparent 86%);
 }
 
 .portfolio-crosshair {
   background:
-    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(223, 186, 115, 0.35) 50%, transparent calc(50% + 0.5px)),
-    linear-gradient(transparent calc(50% - 0.5px), rgba(223, 186, 115, 0.35) 50%, transparent calc(50% + 0.5px));
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 0.5px),
+      rgba(223, 186, 115, 0.35) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      transparent calc(50% - 0.5px),
+      rgba(223, 186, 115, 0.35) 50%,
+      transparent calc(50% + 0.5px)
+    );
 }
 
 @utility text-stroke-thin {
