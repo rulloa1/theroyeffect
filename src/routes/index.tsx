@@ -39,28 +39,6 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: HERO_IMAGE_ABSOLUTE },
     ],
     links: [{ rel: "canonical", href: "https://theroyeffect.com/" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "@id": "https://theroyeffect.com/#business",
-          name: "The Roy Effect",
-          url: "https://theroyeffect.com",
-          email: "rory@theroyeffect.com",
-          telephone: "+1-281-323-0450",
-          founder: { "@type": "Person", name: "Rory Ulloa" },
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Houston",
-            addressRegion: "TX",
-            addressCountry: "US",
-          },
-          areaServed: { "@type": "City", name: "Houston" },
-        }),
-      },
-    ],
   }),
   component: Home,
 });
