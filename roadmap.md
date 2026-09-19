@@ -18,3 +18,6 @@
 - [x] Add and verify the data-driven homepage services section
 - [x] Add and verify the data-driven homepage process timeline
 - [x] Deduplicate homepage offers, promises, pricing references, CTAs, labels, and positioning copy
+- [x] Reposition the homepage as Rory's design-developer portfolio with work leading before services
+- [x] Replace homepage pricing and process detail with concise capabilities and philosophy sections
+- [x] Verify the redesigned homepage across navigation, media, motion, forms, and responsive breakpoints
