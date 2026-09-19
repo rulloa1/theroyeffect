@@ -1,0 +1,30 @@
+# The Roy Effect
+
+> Independent brand, web design, UI/UX and no-code build studio run by
+> Rory Ulloa, a creative director based in Houston, Texas. Works solo with
+> owner-run businesses, founders and service companies, from first audit
+> through the finished build.
+
+## Services and starting prices
+- Brand Sprint, from $2,500: brand strategy workshop, logo system, color and type, basic guidelines
+- Website / UI-UX, from $5,000: full visual design and clickable prototype
+- Design + Build, from $8,000: end-to-end design plus a production no-code build (Webflow, Framer or TanStack)
+- Design Retainer, $3,000/month: ongoing creative direction and UI/UX
+- Deposits are 50% of the tier's starting price and are credited against the final invoice
+
+## Free website audit
+A personal video teardown of a site's conversion, mobile experience and
+brand positioning, for Houston small businesses.
+https://theroyeffect.com/audit
+
+## Contact
+- Email: rory@theroyeffect.com
+- Phone: (281) 323-0450
+- Book a free 15-minute discovery call: https://theroyeffect.com/book
+
+## Key pages
+- Services: https://theroyeffect.com/services
+- Pricing: https://theroyeffect.com/pricing
+- Process: https://theroyeffect.com/process
+- Case study: https://theroyeffect.com/case-study
+- Houston website cost guide: https://theroyeffect.com/guides/houston-website-cost
