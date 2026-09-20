@@ -13,12 +13,14 @@ export const Route = createFileRoute("/brief")({
   ): {
     session_id?: string | undefined;
     scope_type?: string | undefined;
-    scope_estimate?: string | undefined;
+    scope_estimate?: string | number | undefined;
   } => ({
     session_id: typeof search["session_id"] === "string" ? search["session_id"] : undefined,
     scope_type: typeof search["scope_type"] === "string" ? search["scope_type"] : undefined,
     scope_estimate:
-      typeof search["scope_estimate"] === "string" ? search["scope_estimate"] : undefined,
+      typeof search["scope_estimate"] === "string" || typeof search["scope_estimate"] === "number"
+        ? search["scope_estimate"]
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -118,9 +120,12 @@ function projectTypeFromScope(scopeType?: string) {
   return "Other";
 }
 
-function budgetFromEstimate(scopeEstimate?: string) {
-  if (!scopeEstimate) return "";
-  const estimate = Number(scopeEstimate.replace(/[^0-9.]/g, ""));
+function budgetFromEstimate(scopeEstimate?: string | number) {
+  if (scopeEstimate === undefined || scopeEstimate === "") return "";
+  const estimate =
+    typeof scopeEstimate === "number"
+      ? scopeEstimate
+      : Number(scopeEstimate.replace(/[^0-9.]/g, ""));
   if (!Number.isFinite(estimate) || estimate < 0) return "";
   if (estimate < 2500) return "Under $2.5k";
   if (estimate <= 5000) return "$2.5k – $5k";
@@ -128,7 +133,7 @@ function budgetFromEstimate(scopeEstimate?: string) {
   return "$10k+";
 }
 
-function initialForm(scopeType?: string, scopeEstimate?: string, paid = false): Form {
+function initialForm(scopeType?: string, scopeEstimate?: string | number, paid = false): Form {
   return {
     ...EMPTY,
     projectType: projectTypeFromScope(scopeType),
