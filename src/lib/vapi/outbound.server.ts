@@ -79,7 +79,7 @@ async function resolveCallerNumberId(apiKey: string): Promise<string> {
 
 export async function placeColdCall(input: OutboundCallInput): Promise<OutboundCallResult> {
   const apiKey = requireEnv("VAPI_PRIVATE_KEY");
-  const phoneNumberId = requireEnv("VAPI_PHONE_NUMBER_ID");
+  const phoneNumberId = await resolveCallerNumberId(apiKey);
   const assistantId = process.env["VAPI_OUTBOUND_ASSISTANT_ID"] ?? requireEnv("VAPI_ASSISTANT_ID");
 
   const number = normalisePhone(input.phone);
