@@ -47,4 +47,4 @@
 
 - [x] Increment 9a — Redesign & Pitch admin tab (URL -> scan -> AI pitch + outreach, saved in redesign_runs).
 - [x] Increment 9b — Cold calls admin tab: outbound Vapi calls in cold_calls, transcript/summary joined from voice_call_records. Needs VAPI_PRIVATE_KEY, VAPI_PHONE_NUMBER_ID, VAPI_OUTBOUND_ASSISTANT_ID.
-- [ ] Increment 9c — architecture-index.svg + coffee-identity.svg study artwork; single-column approach sequence on /work/$slug.
+- [x] Increment 9c — architecture-index.svg + coffee-identity.svg study artwork; single-column approach sequence on /work/$slug.
