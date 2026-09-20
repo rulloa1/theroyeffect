@@ -981,6 +981,12 @@ function AdminPage() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
+              to="/briefs"
+              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-white hover:text-white"
+            >
+              PROJECT BRIEFS
+            </Link>
+            <Link
               to="/account"
               className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-white hover:text-white"
             >
