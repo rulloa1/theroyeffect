@@ -165,18 +165,18 @@ export function SiteFooter() {
             <MotionToggle />
           </div>
           <nav className="flex items-center gap-5" aria-label="Legal">
-              <Link
-                to="/privacy"
-                className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
-              >
-                PRIVACY
-              </Link>
-              <Link
-                to="/terms"
-                className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
-              >
-                TERMS
-              </Link>
+            <Link
+              to="/privacy"
+              className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
+            >
+              PRIVACY
+            </Link>
+            <Link
+              to="/terms"
+              className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
+            >
+              TERMS
+            </Link>
           </nav>
         </div>
       </div>
