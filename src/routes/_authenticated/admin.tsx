@@ -57,6 +57,16 @@ import { AdminProspectsView } from "@/components/admin/AdminProspectsView";
 import { AdminPortalView } from "@/components/admin/AdminPortalView";
 import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
 import { AdminSignalView } from "@/components/admin/AdminSignalView";
+import { AdminRedesignView } from "@/components/admin/AdminRedesignView";
+import {
+  adminListRedesignRuns,
+  adminRunRedesign,
+  adminUpdateRedesignRun,
+  adminDeleteRedesignRun,
+  type RedesignAngle,
+  type RedesignStatus,
+  type RedesignTreatment,
+} from "@/utils/redesign.functions";
 import {
   adminListOnboarding,
   adminRunOnboarding,
@@ -139,6 +149,7 @@ type MainView =
   | "PROPOSALS"
   | "PORTFOLIO"
   | "CLIENTPORTAL"
+  | "REDESIGN"
   | "FINANCIALS";
 
 function AdminPage() {
@@ -436,6 +447,56 @@ function AdminPage() {
     }
   };
 
+
+  const listRedesignRuns = useServerFn(adminListRedesignRuns);
+  const runRedesignFn = useServerFn(adminRunRedesign);
+  const updateRedesignFn = useServerFn(adminUpdateRedesignRun);
+  const deleteRedesignFn = useServerFn(adminDeleteRedesignRun);
+
+  const { data: redesignData } = useQuery({
+    queryKey: ["admin-redesign"],
+    queryFn: () => listRedesignRuns(),
+    retry: false,
+  });
+
+  const refreshRedesign = () => queryClient.invalidateQueries({ queryKey: ["admin-redesign"] });
+
+  const startRedesign = async (input: {
+    url: string;
+    treatment: RedesignTreatment;
+    angle: RedesignAngle;
+  }) => {
+    setBusy("redesign-run");
+    try {
+      const { run } = await runRedesignFn({ data: input });
+      toast.success(`Pitch ready for ${run.host}`);
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "That redesign run failed");
+      await refreshRedesign();
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const setRedesignStatus = async (id: string, status: RedesignStatus) => {
+    try {
+      await updateRedesignFn({ data: { id, status } });
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not update that run");
+    }
+  };
+
+  const removeRedesignRun = async (id: string) => {
+    try {
+      await deleteRedesignFn({ data: { id } });
+      toast.success("Run deleted");
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not delete that run");
+    }
+  };
 
   const { data: prospectsData } = useQuery({
     queryKey: ["admin-prospects"],
@@ -969,6 +1030,11 @@ function AdminPage() {
             },
             { id: "PORTFOLIO", label: "PORTFOLIO MANAGER", icon: Eye },
             { id: "CLIENTPORTAL", label: "CLIENT PORTAL", icon: FolderKanban },
+            {
+              id: "REDESIGN",
+              label: `REDESIGN & PITCH (${(redesignData?.runs ?? []).length})`,
+              icon: Rocket,
+            },
             { id: "FINANCIALS", label: "FINANCIALS & STATS", icon: DollarSign },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -999,6 +1065,17 @@ function AdminPage() {
 
         {/* Dynamic Views */}
         <div className="mt-8">
+          {currentView === "REDESIGN" && (
+            <AdminRedesignView
+              runs={redesignData?.runs ?? []}
+              busy={busy}
+              onRun={startRedesign}
+              onSetStatus={setRedesignStatus}
+              onDelete={removeRedesignRun}
+              date={date}
+            />
+          )}
+
           {currentView === "SIGNAL" && (
             <AdminSignalView
               orders={ordersData?.orders ?? []}
