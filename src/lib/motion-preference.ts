@@ -37,7 +37,8 @@ export function getMotionPaused() {
 
 export function subscribeMotionPreference(listener: () => void) {
   listeners.add(listener);
-  if (hydratePreference()) queueMicrotask(listener);
+  hydratePreference();
+  queueMicrotask(listener);
   return () => listeners.delete(listener);
 }
 
