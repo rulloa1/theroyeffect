@@ -39,6 +39,20 @@
 }
 
 :root {
+  --ground: #0a0a0a;
+  --ground-raised: #121212;
+  --ink: #f2eee6;
+  --ink-muted: rgb(242 238 230 / 0.7);
+  --line: rgb(255 255 255 / 0.1);
+  --gold: #dfba73;
+  --furnace: #ff3333;
+  --ease-refine: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-draw: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-press: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-micro: 160ms;
+  --dur-reveal: 420ms;
+  --dur-state: 800ms;
+  --stagger: 70ms;
   --radius: 0.25rem;
   --background: #030014;
   --foreground: #ffffff;
@@ -165,6 +179,24 @@
       rgba(223, 186, 115, 0.35) 50%,
       transparent calc(50% + 0.5px)
     );
+}
+
+.refinery-scene canvas {
+  opacity: 0;
+  transition: opacity var(--dur-state) var(--ease-draw);
+}
+
+.refinery-scene-ready canvas {
+  opacity: 1;
+}
+
+.refinery-ember {
+  background: radial-gradient(
+    circle at 78% 40%,
+    rgb(223 186 115 / 0.12) 0,
+    rgb(223 186 115 / 0.04) 18%,
+    transparent 42%
+  );
 }
 
 @utility text-stroke-thin {

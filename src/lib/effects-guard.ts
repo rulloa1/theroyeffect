@@ -15,10 +15,10 @@ let cached: boolean | null = null;
 function webglAvailable(): boolean {
   try {
     const canvas = document.createElement("canvas");
-    const gl =
-      (canvas.getContext("webgl2") as unknown) ||
-      (canvas.getContext("webgl") as unknown);
-    return Boolean(gl);
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+    const available = Boolean(gl);
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+    return available;
   } catch {
     return false;
   }

@@ -53,8 +53,8 @@ export function RefineryScene() {
       scene.fog = new THREE.FogExp2(0x0a0a0a, 0.08);
 
       const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-      camera.position.set(ORE_X, -0.4, 6);
-      camera.lookAt(ORE_X, ORE_Y, 0);
+      camera.position.set(0, -0.4, 6);
+      camera.lookAt(0, ORE_Y, 0);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
@@ -151,15 +151,15 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
           )
           .replace(
             "#include <roughnessmap_fragment>",
-            "#include <roughnessmap_fragment>\nroughnessFactor = mix(0.85, 0.25, oreMask);",
+            "#include <roughnessmap_fragment>\nroughnessFactor = mix(0.85, 0.25, oreVeinMask());",
           )
           .replace(
             "#include <metalnessmap_fragment>",
-            "#include <metalnessmap_fragment>\nmetalnessFactor = mix(0.0, 1.0, oreMask);",
+            "#include <metalnessmap_fragment>\nmetalnessFactor = mix(0.0, 1.0, oreVeinMask());",
           )
           .replace(
             "#include <emissivemap_fragment>",
-            "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(0.738, 0.491, 0.171) * oreMask * uVeinGlow;",
+            "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(0.738, 0.491, 0.171) * oreVeinMask() * uVeinGlow;",
           );
       };
       oreMaterial.customProgramCacheKey = () => "refinery-ore-v1";
@@ -331,15 +331,19 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       };
     };
 
-    if ("requestIdleCallback" in window) {
-      idleHandle = window.requestIdleCallback(() => void initialise());
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    if (typeof idleWindow.requestIdleCallback === "function") {
+      idleHandle = idleWindow.requestIdleCallback(() => void initialise());
     } else {
-      timeoutHandle = window.setTimeout(() => void initialise(), 200);
+      timeoutHandle = globalThis.setTimeout(() => void initialise(), 200);
     }
 
     return () => {
       disposed = true;
-      if (idleHandle !== undefined) window.cancelIdleCallback(idleHandle);
+      if (idleHandle !== undefined) idleWindow.cancelIdleCallback?.(idleHandle);
       if (timeoutHandle !== undefined) window.clearTimeout(timeoutHandle);
       cleanup?.();
     };
