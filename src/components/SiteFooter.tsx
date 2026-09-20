@@ -15,7 +15,7 @@ const STUDIO_LINKS = [
     to: "/work/$slug",
     params: { slug: "marlow-sons-cabinetry" },
   },
-];
+] as const;
 
 const GUIDE_LINKS = [
   { label: "Website audit checklist", to: "/guides/website-audit-checklist" },
