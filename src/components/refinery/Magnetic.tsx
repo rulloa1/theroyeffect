@@ -66,7 +66,11 @@ export function Magnetic({ children, className = "" }: MagneticProps) {
   }, [paused, reduceMotion]);
 
   return (
-    <span ref={rootRef} className={`magnetic inline-flex ${className}`} data-magnetic-active="false">
+    <span
+      ref={rootRef}
+      className={`magnetic inline-flex ${className}`}
+      data-magnetic-active="false"
+    >
       {children}
     </span>
   );

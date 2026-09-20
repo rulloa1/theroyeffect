@@ -55,7 +55,10 @@ export function HeroContent() {
           >
             <span aria-hidden="true">
               {HEADLINE.split(" ").map((word, index, words) => (
-                <span key={`${word}-${index}`} className="inline-block overflow-hidden align-bottom">
+                <span
+                  key={`${word}-${index}`}
+                  className="inline-block overflow-hidden align-bottom"
+                >
                   <span
                     className="hero-word inline-block"
                     style={{ "--word-index": index } as CSSProperties}
