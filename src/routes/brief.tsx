@@ -356,7 +356,11 @@ function BriefPage() {
   const handleSingleLineKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== "Enter") return;
     event.preventDefault();
-    if (step < STEPS.length - 1) next();
+    if (step < STEPS.length - 1) {
+      next();
+      return;
+    }
+    formRef.current?.requestSubmit();
   };
 
   const submit = async (event: React.FormEvent) => {

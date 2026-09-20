@@ -331,7 +331,8 @@
 
 .homepage-root :is(a, button, input, select, textarea):focus-visible,
 .homepage-footer :is(a, button, input, select, textarea):focus-visible,
-.brief-root :is(a, button, input, textarea):focus-visible {
+.brief-root :is(a, button, input, textarea):focus-visible,
+.brief-root [tabindex="-1"]:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
   --tw-ring-shadow: 0 0 #0000;
