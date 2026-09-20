@@ -28,11 +28,14 @@ interface Props {
   pdfUrl?: string;
 }
 
-const Row = ({ label, value }: { label: string; value?: string | undefined }) => (
-  <Text style={row}>
-    <strong>{label}:</strong> {value && value.trim() ? value : "—"}
-  </Text>
-);
+const Row = ({ label, value }: { label: string; value?: string | undefined }) => {
+  if (!value?.trim()) return null;
+  return (
+    <Text style={row}>
+      <strong>{label}:</strong> {value}
+    </Text>
+  );
+};
 
 const Email = (props: Props) => (
   <Html lang="en" dir="ltr">
@@ -74,7 +77,8 @@ const Email = (props: Props) => (
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => `Project brief — ${data["name"] || "new client"}`,
+  subject: (data: Record<string, unknown>) =>
+    `Project brief — ${typeof data["name"] === "string" ? data["name"] : "new client"}`,
   displayName: "Project brief intake",
   previewData: {
     name: "Jane Doe",

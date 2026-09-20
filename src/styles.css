@@ -330,11 +330,32 @@
 }
 
 .homepage-root :is(a, button, input, select, textarea):focus-visible,
-.homepage-footer :is(a, button, input, select, textarea):focus-visible {
+.homepage-footer :is(a, button, input, select, textarea):focus-visible,
+.brief-root :is(a, button, input, textarea):focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
   --tw-ring-shadow: 0 0 #0000;
   box-shadow: none;
+}
+
+.brief-root .brief-consent {
+  border-color: var(--line);
+}
+
+.brief-root .brief-consent input[type="checkbox"] {
+  accent-color: var(--gold);
+}
+
+.brief-root .brief-consent > label > span {
+  color: var(--ink-muted);
+}
+
+.brief-root .brief-consent > p {
+  color: var(--ink-faint);
+}
+
+.brief-root .brief-consent a:hover {
+  color: var(--gold);
 }
 
 .homepage-root #contact :is(a, button, input, select, textarea):focus-visible {

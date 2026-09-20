@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { SmsConsent } from "@/components/SmsConsent";
 import { z } from "zod";
 import { Logo } from "@/components/Logo";
+import { SmsConsent } from "@/components/SmsConsent";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/brief")({
@@ -12,12 +13,14 @@ export const Route = createFileRoute("/brief")({
   ): {
     session_id?: string | undefined;
     scope_type?: string | undefined;
-    scope_estimate?: string | undefined;
+    scope_estimate?: string | number | undefined;
   } => ({
     session_id: typeof search["session_id"] === "string" ? search["session_id"] : undefined,
     scope_type: typeof search["scope_type"] === "string" ? search["scope_type"] : undefined,
     scope_estimate:
-      typeof search["scope_estimate"] === "string" ? search["scope_estimate"] : undefined,
+      typeof search["scope_estimate"] === "string" || typeof search["scope_estimate"] === "number"
+        ? search["scope_estimate"]
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -42,7 +45,7 @@ export const Route = createFileRoute("/brief")({
 });
 
 const PROJECT_TYPES = ["Brand identity", "Website / UI-UX", "Design + Build", "Retainer", "Other"];
-const BUDGETS = ["Under $2.5k", "$2.5k – $5k", "$5k – $10k", "$10k+", "Already paid"];
+const BUDGETS = ["Under $2.5k", "$2.5k – $5k", "$5k – $10k", "$10k+"];
 const TIMELINES = ["ASAP", "2–4 weeks", "1–2 months", "Flexible"];
 
 const schema = z.object({
@@ -60,6 +63,16 @@ const schema = z.object({
 });
 
 type Form = z.infer<typeof schema>;
+type VisibleField =
+  | "name"
+  | "email"
+  | "company"
+  | "projectType"
+  | "goals"
+  | "referencesLinks"
+  | "budget"
+  | "timeline";
+type Errors = Partial<Record<VisibleField, string>>;
 
 const EMPTY: Form = {
   name: "",
@@ -75,16 +88,120 @@ const EMPTY: Form = {
   extra: "",
 };
 
-const STEPS = [
-  { title: "Who you are", fields: ["name", "email", "company"] as const },
-  { title: "The project", fields: ["projectType", "goals", "audience"] as const },
-  { title: "Scope & references", fields: ["deliverables", "referencesLinks"] as const },
-  { title: "Budget & timing", fields: ["budget", "timeline", "extra"] as const },
+const STEPS: ReadonlyArray<{ title: string; fields: readonly VisibleField[] }> = [
+  { title: "You", fields: ["name", "email", "company"] },
+  {
+    title: "The project",
+    fields: ["projectType", "goals", "budget", "timeline", "referencesLinks"],
+  },
 ];
 
+const FIELD_IDS: Record<VisibleField, string> = {
+  name: "brief-name",
+  email: "brief-email",
+  company: "brief-company",
+  projectType: "brief-projectType-0",
+  goals: "brief-goals",
+  referencesLinks: "brief-references",
+  budget: "brief-budget-0",
+  timeline: "brief-timeline-0",
+};
+
 const inputClass =
-  "w-full border-b border-white/15 bg-transparent py-3 font-mono text-sm text-white placeholder:text-white/30 focus:border-[#FF3333] focus:outline-none";
-const labelClass = "block font-mono text-[10px] tracking-widest text-white/40";
+  "w-full border-b border-[var(--line)] bg-transparent py-3 font-mono text-sm text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus:border-[var(--gold)] focus:outline-none";
+const labelClass = "block font-mono text-[10px] tracking-widest text-[var(--ink-muted)]";
+
+function projectTypeFromScope(scopeType?: string) {
+  if (!scopeType) return "";
+  const normalized = scopeType.toLowerCase();
+  if (normalized.includes("landing") || normalized.includes("website")) return "Website / UI-UX";
+  if (normalized.includes("retainer")) return "Retainer";
+  if (normalized.includes("brand")) return "Brand identity";
+  return "Other";
+}
+
+function budgetFromEstimate(scopeEstimate?: string | number) {
+  if (scopeEstimate === undefined || scopeEstimate === "") return "";
+  const estimate =
+    typeof scopeEstimate === "number"
+      ? scopeEstimate
+      : Number(scopeEstimate.replace(/[^0-9.]/g, ""));
+  if (!Number.isFinite(estimate) || estimate < 0) return "";
+  if (estimate < 2500) return "Under $2.5k";
+  if (estimate <= 5000) return "$2.5k – $5k";
+  if (estimate <= 10000) return "$5k – $10k";
+  return "$10k+";
+}
+
+function initialForm(scopeType?: string, scopeEstimate?: string | number, paid = false): Form {
+  return {
+    ...EMPTY,
+    projectType: projectTypeFromScope(scopeType),
+    budget: paid ? "Already paid" : budgetFromEstimate(scopeEstimate),
+  };
+}
+
+function FieldError({ field, errors }: { field: VisibleField; errors: Errors }) {
+  const message = errors[field];
+  if (!message) return null;
+  return (
+    <p id={`${FIELD_IDS[field]}-error`} className="mt-2 font-mono text-xs text-[var(--furnace)]">
+      {message}
+    </p>
+  );
+}
+
+interface ChoiceGroupProps {
+  field: "projectType" | "budget" | "timeline";
+  legend: string;
+  options: readonly string[];
+  value: string;
+  error?: string | undefined;
+  onChange: (value: string) => void;
+  onBlur: (event: FocusEvent<HTMLFieldSetElement>) => void;
+}
+
+function ChoiceGroup({ field, legend, options, value, error, onChange, onBlur }: ChoiceGroupProps) {
+  return (
+    <fieldset onBlur={onBlur} aria-describedby={error ? `${FIELD_IDS[field]}-error` : undefined}>
+      <legend className="sr-only">{legend}</legend>
+      <p aria-hidden="true" className={labelClass}>
+        {legend}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {options.map((option, index) => {
+          const id = `brief-${field}-${index}`;
+          const selected = value === option;
+          return (
+            <div key={option}>
+              <input
+                id={id}
+                type="radio"
+                name={field}
+                value={option}
+                checked={selected}
+                onChange={() => onChange(option)}
+                aria-invalid={error ? true : undefined}
+                className="peer sr-only"
+              />
+              <label
+                htmlFor={id}
+                className={`flex min-h-11 cursor-pointer items-center border px-4 py-2 font-mono text-xs ${
+                  selected
+                    ? "border-[var(--gold)] bg-[var(--ground-raised)] text-[var(--gold)]"
+                    : "border-[var(--line)] text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                } peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-[var(--gold)]`}
+              >
+                {option}
+              </label>
+            </div>
+          );
+        })}
+      </div>
+      <FieldError field={field} errors={error ? { [field]: error } : {}} />
+    </fieldset>
+  );
+}
 
 function BriefPage() {
   const {
@@ -92,98 +209,180 @@ function BriefPage() {
     scope_type: scopeType,
     scope_estimate: scopeEstimate,
   } = Route.useSearch();
+  const paid = Boolean(sessionId);
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<Form>(() => ({
-    ...EMPTY,
-    projectType: scopeType
-      ? scopeType.includes("Landing") || scopeType.includes("Website")
-        ? "Design + Build"
-        : scopeType.includes("Retainer")
-          ? "Retainer"
-          : "Brand identity"
-      : "",
-    budget: scopeEstimate ? `$${Number(scopeEstimate).toLocaleString()}` : "",
-  }));
+  const [form, setForm] = useState<Form>(() => initialForm(scopeType, scopeEstimate, paid));
+  const [errors, setErrors] = useState<Errors>({});
   const [smsService, setSmsService] = useState(false);
   const [smsMarketing, setSmsMarketing] = useState(false);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const initialStepRender = useRef(true);
 
-  const STORAGE_KEY = `theroy_brief_draft_${sessionId || "general"}`;
+  const storageKey = `theroy_brief_draft_${sessionId || "general"}`;
 
-  // Restore draft from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(storageKey);
       if (saved) {
-        const parsed = JSON.parse(saved);
+        const parsed = JSON.parse(saved) as Partial<Form>;
         if (parsed && typeof parsed === "object") {
-          setForm((prev) => ({ ...prev, ...parsed }));
+          setForm((previous) => ({
+            ...previous,
+            name: typeof parsed.name === "string" ? parsed.name : previous.name,
+            email: typeof parsed.email === "string" ? parsed.email : previous.email,
+            company: typeof parsed.company === "string" ? parsed.company : previous.company,
+            projectType: scopeType
+              ? previous.projectType
+              : typeof parsed.projectType === "string" && PROJECT_TYPES.includes(parsed.projectType)
+                ? parsed.projectType
+                : previous.projectType,
+            goals: typeof parsed.goals === "string" ? parsed.goals : previous.goals,
+            referencesLinks:
+              typeof parsed.referencesLinks === "string"
+                ? parsed.referencesLinks
+                : previous.referencesLinks,
+            budget: paid
+              ? "Already paid"
+              : scopeEstimate
+                ? previous.budget
+                : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
+                  ? parsed.budget
+                  : previous.budget,
+            timeline:
+              typeof parsed.timeline === "string" && TIMELINES.includes(parsed.timeline)
+                ? parsed.timeline
+                : previous.timeline,
+            audience: "",
+            deliverables: "",
+            extra: "",
+          }));
           setLastSaved("Draft restored");
         }
       }
-    } catch (_err) {
-      // Storage unavailable or blocked
+    } catch {
+      // Storage unavailable or blocked.
     }
-  }, [STORAGE_KEY]);
+  }, [paid, scopeEstimate, scopeType, storageKey]);
 
-  // Debounced auto-save to localStorage
   useEffect(() => {
     if (done) return;
-    const isDirty = Object.values(form).some((v) => v !== "");
+    const isDirty = Object.values(form).some((value) => value !== "");
     if (!isDirty) return;
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+        localStorage.setItem(storageKey, JSON.stringify(form));
         setLastSaved(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-      } catch (_err) {
-        // Storage write failed
+      } catch {
+        // Storage write failed.
       }
     }, 400);
 
-    return () => clearTimeout(timer);
-  }, [form, done, STORAGE_KEY]);
+    return () => window.clearTimeout(timer);
+  }, [form, done, storageKey]);
+
+  useEffect(() => {
+    if (initialStepRender.current) {
+      initialStepRender.current = false;
+      return;
+    }
+    stepHeadingRef.current?.focus();
+  }, [step]);
 
   const clearDraft = () => {
     try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (_err) {
-      // Storage remove failed
+      localStorage.removeItem(storageKey);
+    } catch {
+      // Storage remove failed.
     }
-    setForm(EMPTY);
+    setForm(initialForm(scopeType, scopeEstimate, paid));
+    setErrors({});
     setStep(0);
     setLastSaved(null);
-    toast.info("Brief draft reset.");
   };
 
-  const set = (key: keyof Form) => (value: string) =>
-    setForm((prev) => ({ ...prev, [key]: value }));
+  const set = (key: VisibleField) => (value: string) => {
+    setForm((previous) => ({ ...previous, [key]: value }));
+    if (errors[key]) setErrors((previous) => ({ ...previous, [key]: undefined }));
+  };
 
-  const validateStep = () => {
-    const fields = STEPS[step]!.fields as readonly string[];
+  const validateFields = (fields: readonly VisibleField[]) => {
     const result = schema.safeParse(form);
-    if (result.success) return true;
-    const issue = result.error.issues.find((i) => fields.includes(String(i.path[0])));
-    if (issue) {
-      toast.error(issue.message);
-      return false;
+    const nextErrors: Errors = { ...errors };
+    for (const field of fields) delete nextErrors[field];
+
+    let firstInvalid: VisibleField | undefined;
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        const field = String(issue.path[0]) as VisibleField;
+        if (!fields.includes(field) || nextErrors[field]) continue;
+        nextErrors[field] = issue.message;
+        firstInvalid ??= field;
+      }
     }
-    return true;
+    setErrors(nextErrors);
+    return firstInvalid;
   };
+
+  const focusField = (field: VisibleField) => {
+    window.requestAnimationFrame(() => document.getElementById(FIELD_IDS[field])?.focus());
+  };
+
+  const validateField = (field: VisibleField) => {
+    validateFields([field]);
+  };
+
+  const handleChoiceBlur =
+    (field: "projectType" | "budget" | "timeline") => (event: FocusEvent<HTMLFieldSetElement>) => {
+      const nextTarget = event.relatedTarget;
+      if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) return;
+      validateField(field);
+    };
 
   const next = () => {
-    if (validateStep()) setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    const current = STEPS[step];
+    if (!current) return;
+    const firstInvalid = validateFields(current.fields);
+    if (firstInvalid) {
+      focusField(firstInvalid);
+      return;
+    }
+    setStep((currentStep) => Math.min(currentStep + 1, STEPS.length - 1));
+  };
+
+  const handleSingleLineKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    if (step < STEPS.length - 1) next();
   };
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const result = schema.safeParse(form);
+    const result = schema.safeParse({
+      ...form,
+      audience: "",
+      deliverables: "",
+      extra: "",
+      budget: paid ? "Already paid" : form.budget,
+    });
     if (!result.success) {
-      toast.error(result.error.issues[0]?.message ?? "Please check the form");
+      const allFields = STEPS.flatMap((item) => item.fields);
+      const firstIssue = result.error.issues.find((issue) =>
+        allFields.includes(String(issue.path[0]) as VisibleField),
+      );
+      if (firstIssue) {
+        const field = String(firstIssue.path[0]) as VisibleField;
+        const targetStep = STEPS.findIndex((item) => item.fields.includes(field));
+        setErrors((previous) => ({ ...previous, [field]: firstIssue.message }));
+        if (targetStep >= 0 && targetStep !== step) setStep(targetStep);
+        focusField(field);
+      }
       return;
     }
+
     setSending(true);
     try {
       const response = await fetch("/api/public/brief-intake", {
@@ -197,13 +396,11 @@ function BriefPage() {
         }),
       });
       const data = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error ?? "Something went wrong");
-      }
+      if (!response.ok || !data.ok) throw new Error(data.error ?? "Something went wrong");
       try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch (_err) {
-        // Storage clean failed
+        localStorage.removeItem(storageKey);
+      } catch {
+        // Storage clean failed.
       }
       setDone(true);
       toast.success("Brief received — I'll reply within one business day.");
@@ -216,67 +413,98 @@ function BriefPage() {
 
   if (done) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#030014] px-5 py-24">
-        <div className="w-full max-w-lg border border-white/10 bg-white/[0.02] p-8">
-          <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
+      <main className="brief-root flex min-h-screen items-center justify-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32">
+        <Toaster />
+        <div className="w-full max-w-lg border border-[var(--line)] bg-[var(--card)] p-6 sm:p-8">
+          <span className="font-mono text-[10px] tracking-widest text-[var(--gold)]">
             BRIEF RECEIVED
           </span>
-          <h1 className="mt-4 font-display text-4xl uppercase leading-[0.9] text-white">
+          <h1 className="mt-4 text-[length:var(--type-display)] uppercase leading-[0.9] text-[var(--ink)]">
             THANK YOU
           </h1>
-          <p className="mt-4 font-mono text-xs leading-relaxed text-white/60">
+          <p className="mt-4 max-w-[68ch] text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
             Your brief is with me. I&apos;ll review it and reply within one business day with scope,
             schedule and next steps. A copy is in your inbox.
           </p>
-          <Link
-            to="/"
-            className="mt-8 inline-flex items-center gap-2 bg-[#FF3333] px-5 py-3 font-mono text-xs tracking-widest text-black transition-opacity hover:opacity-90"
+          <Button
+            asChild
+            className="mt-8 min-h-11 rounded-none bg-[var(--gold)] px-5 py-3 font-mono text-xs tracking-widest text-[var(--ground)] hover:bg-[var(--gold)] hover:opacity-90"
           >
-            BACK TO SITE
-          </Link>
+            <Link to="/">BACK TO SITE</Link>
+          </Button>
         </div>
       </main>
     );
   }
 
-  const current = STEPS[step]!;
+  const current = STEPS[step] ?? STEPS[0];
+  if (!current) return null;
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-20">
+    <main className="brief-root min-h-screen bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32 sm:pb-36">
       <Toaster />
       <div className="mx-auto max-w-2xl">
         <Logo variant="compact" size="md" href="/" className="mb-8" />
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="font-mono text-[10px] tracking-widest text-[var(--gold)]">
             {sessionId ? "POST-PURCHASE INTAKE" : "PROJECT INTAKE"}
           </span>
           {lastSaved && (
-            <span className="font-mono text-[10px] text-white/40">
-              ● {lastSaved.startsWith("Draft") ? lastSaved : `Auto-saved at ${lastSaved}`}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] text-[var(--ink-faint)]">
+                ● {lastSaved.startsWith("Draft") ? lastSaved : `Auto-saved at ${lastSaved}`}
+              </span>
+              <Button
+                key="brief-next"
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={clearDraft}
+                className="h-auto min-h-11 rounded-none px-1 font-mono text-[10px] tracking-widest text-[var(--ink-muted)] hover:bg-transparent hover:text-[var(--gold)]"
+              >
+                RESET DRAFT
+              </Button>
+            </div>
           )}
         </div>
-        <h1 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white sm:text-5xl md:text-6xl">
+        <h1 className="mt-3 text-[length:var(--type-display)] uppercase leading-[0.9] text-[var(--ink)]">
           PROJECT BRIEF
         </h1>
-        <p className="mt-4 max-w-lg font-mono text-xs leading-relaxed text-white/50">
-          Four short steps. Your progress is saved automatically. The more detail you share, the
-          faster we lock scope and kick off your build.
+        <p className="mt-4 max-w-[68ch] text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+          Two short steps. Your progress is saved automatically. The more detail you share, the
+          faster I can lock scope and kick off your build.
         </p>
 
-        <div className="mt-8 flex gap-2">
-          {STEPS.map((s, index) => (
-            <div
-              key={s.title}
-              className={`h-[3px] flex-1 ${index <= step ? "bg-[#FF3333]" : "bg-white/10"}`}
+        <div
+          className="mt-8 flex gap-2"
+          role="progressbar"
+          aria-label="Project brief progress"
+          aria-valuenow={step + 1}
+          aria-valuemin={1}
+          aria-valuemax={STEPS.length}
+        >
+          {STEPS.map((item, index) => (
+            <span
+              key={item.title}
+              aria-hidden="true"
+              className={`h-[3px] flex-1 ${index <= step ? "bg-[var(--gold)]" : "bg-[var(--line)]"}`}
             />
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-10 space-y-6">
-          <h2 className="font-display text-2xl uppercase text-white">
-            {step + 1}. {current.title}
-          </h2>
+        <form onSubmit={submit} className="mt-10 space-y-7" noValidate>
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h2
+              ref={stepHeadingRef}
+              tabIndex={-1}
+              className="text-[length:var(--type-h3)] uppercase leading-[0.92] text-[var(--ink)]"
+            >
+              {current.title}
+            </h2>
+            <span className="font-mono text-[10px] tracking-widest text-[var(--ink-faint)]">
+              STEP {step + 1} OF {STEPS.length}
+            </span>
+          </div>
 
           {step === 0 && (
             <>
@@ -286,12 +514,19 @@ function BriefPage() {
                 </label>
                 <input
                   id="brief-name"
+                  name="name"
+                  autoComplete="name"
                   className={inputClass}
                   value={form.name}
-                  onChange={(e) => set("name")(e.target.value)}
+                  onChange={(event) => set("name")(event.target.value)}
+                  onBlur={() => validateField("name")}
+                  onKeyDown={handleSingleLineKeyDown}
                   placeholder="Jane Doe"
                   maxLength={100}
+                  aria-invalid={errors.name ? true : undefined}
+                  aria-describedby={errors.name ? "brief-name-error" : undefined}
                 />
+                <FieldError field="name" errors={errors} />
               </div>
               <div>
                 <label className={labelClass} htmlFor="brief-email">
@@ -299,13 +534,20 @@ function BriefPage() {
                 </label>
                 <input
                   id="brief-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   className={inputClass}
                   value={form.email}
-                  onChange={(e) => set("email")(e.target.value)}
+                  onChange={(event) => set("email")(event.target.value)}
+                  onBlur={() => validateField("email")}
+                  onKeyDown={handleSingleLineKeyDown}
                   placeholder="you@company.com"
                   maxLength={255}
+                  aria-invalid={errors.email ? true : undefined}
+                  aria-describedby={errors.email ? "brief-email-error" : undefined}
                 />
+                <FieldError field="email" errors={errors} />
               </div>
               <div>
                 <label className={labelClass} htmlFor="brief-company">
@@ -313,206 +555,141 @@ function BriefPage() {
                 </label>
                 <input
                   id="brief-company"
+                  name="company"
+                  autoComplete="organization"
                   className={inputClass}
                   value={form.company}
-                  onChange={(e) => set("company")(e.target.value)}
+                  onChange={(event) => set("company")(event.target.value)}
+                  onBlur={() => validateField("company")}
+                  onKeyDown={handleSingleLineKeyDown}
                   placeholder="Northwind"
                   maxLength={120}
+                  aria-invalid={errors.company ? true : undefined}
+                  aria-describedby={errors.company ? "brief-company-error" : undefined}
                 />
+                <FieldError field="company" errors={errors} />
               </div>
             </>
           )}
 
           {step === 1 && (
             <>
+              <ChoiceGroup
+                field="projectType"
+                legend="PROJECT TYPE"
+                options={PROJECT_TYPES}
+                value={form.projectType}
+                error={errors.projectType}
+                onChange={set("projectType")}
+                onBlur={handleChoiceBlur("projectType")}
+              />
               <div>
-                <label className={labelClass} htmlFor="brief-type">
-                  PROJECT TYPE
-                </label>
-                <select
-                  id="brief-type"
-                  className={`${inputClass} appearance-none`}
-                  value={form.projectType}
-                  onChange={(e) => set("projectType")(e.target.value)}
-                >
-                  <option value="" className="bg-[#030014]">
-                    Select…
-                  </option>
-                  {PROJECT_TYPES.map((type) => (
-                    <option key={type} value={type} className="bg-[#030014]">
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                   <label className={labelClass} htmlFor="brief-goals">
                     WHAT ARE WE TRYING TO ACHIEVE?
                   </label>
-                  <span className="font-mono text-[10px] text-white/30">
+                  <span className="shrink-0 font-mono text-[10px] text-[var(--ink-faint)]">
                     {form.goals.length}/2000
                   </span>
                 </div>
                 <textarea
                   id="brief-goals"
-                  rows={4}
-                  className={`${inputClass} resize-none`}
+                  name="goals"
+                  rows={5}
+                  className={`${inputClass} resize-y`}
                   value={form.goals}
-                  onChange={(e) => set("goals")(e.target.value)}
+                  onChange={(event) => set("goals")(event.target.value)}
+                  onBlur={() => validateField("goals")}
                   placeholder="Goals, problems to solve, what success looks like…"
                   maxLength={2000}
+                  aria-invalid={errors.goals ? true : undefined}
+                  aria-describedby={errors.goals ? "brief-goals-error" : undefined}
                 />
+                <FieldError field="goals" errors={errors} />
               </div>
-              <div>
-                <label className={labelClass} htmlFor="brief-audience">
-                  WHO IS IT FOR? (OPTIONAL)
-                </label>
-                <textarea
-                  id="brief-audience"
-                  rows={2}
-                  className={`${inputClass} resize-none`}
-                  value={form.audience}
-                  onChange={(e) => set("audience")(e.target.value)}
-                  placeholder="Audience, market, competitors"
-                  maxLength={1000}
+              {!paid && (
+                <ChoiceGroup
+                  field="budget"
+                  legend="BUDGET (OPTIONAL)"
+                  options={BUDGETS}
+                  value={form.budget}
+                  error={errors.budget}
+                  onChange={set("budget")}
+                  onBlur={handleChoiceBlur("budget")}
                 />
-              </div>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <div>
-                <label className={labelClass} htmlFor="brief-deliverables">
-                  DELIVERABLES YOU EXPECT (OPTIONAL)
-                </label>
-                <textarea
-                  id="brief-deliverables"
-                  rows={3}
-                  className={`${inputClass} resize-none`}
-                  value={form.deliverables}
-                  onChange={(e) => set("deliverables")(e.target.value)}
-                  placeholder="Logo suite, 6-page site, design system, build & launch…"
-                  maxLength={1000}
-                />
-              </div>
+              )}
+              <ChoiceGroup
+                field="timeline"
+                legend="TIMELINE (OPTIONAL)"
+                options={TIMELINES}
+                value={form.timeline}
+                error={errors.timeline}
+                onChange={set("timeline")}
+                onBlur={handleChoiceBlur("timeline")}
+              />
               <div>
                 <label className={labelClass} htmlFor="brief-references">
-                  REFERENCES, FIGMA OR ASSET LINKS (OPTIONAL)
+                  CURRENT SITE OR REFERENCE LINKS
                 </label>
-                <textarea
+                <input
                   id="brief-references"
-                  rows={3}
-                  className={`${inputClass} resize-none`}
+                  name="referencesLinks"
+                  type="text"
+                  className={inputClass}
                   value={form.referencesLinks}
-                  onChange={(e) => set("referencesLinks")(e.target.value)}
+                  onChange={(event) => set("referencesLinks")(event.target.value)}
+                  onBlur={() => validateField("referencesLinks")}
                   placeholder="Figma links, Google Drive / Dropbox assets, inspiration URLs, current website..."
                   maxLength={1000}
+                  aria-invalid={errors.referencesLinks ? true : undefined}
+                  aria-describedby={errors.referencesLinks ? "brief-references-error" : undefined}
                 />
+                <FieldError field="referencesLinks" errors={errors} />
               </div>
-            </>
-          )}
 
-          {step === 3 && (
-            <>
-              <div>
-                <label className={labelClass} htmlFor="brief-budget">
-                  BUDGET (OPTIONAL)
-                </label>
-                <select
-                  id="brief-budget"
-                  className={`${inputClass} appearance-none`}
-                  value={form.budget}
-                  onChange={(e) => set("budget")(e.target.value)}
-                >
-                  <option value="" className="bg-[#030014]">
-                    Select…
-                  </option>
-                  {BUDGETS.map((b) => (
-                    <option key={b} value={b} className="bg-[#030014]">
-                      {b}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="brief-timeline">
-                  TIMELINE (OPTIONAL)
-                </label>
-                <select
-                  id="brief-timeline"
-                  className={`${inputClass} appearance-none`}
-                  value={form.timeline}
-                  onChange={(e) => set("timeline")(e.target.value)}
-                >
-                  <option value="" className="bg-[#030014]">
-                    Select…
-                  </option>
-                  {TIMELINES.map((t) => (
-                    <option key={t} value={t} className="bg-[#030014]">
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="brief-extra">
-                  ANYTHING ELSE? (OPTIONAL)
-                </label>
-                <textarea
-                  id="brief-extra"
-                  rows={3}
-                  className={`${inputClass} resize-none`}
-                  value={form.extra}
-                  onChange={(e) => set("extra")(e.target.value)}
-                  placeholder="Stakeholders, constraints, hard deadlines"
-                  maxLength={2000}
-                />
-              </div>
+              <SmsConsent
+                className="brief-consent"
+                smsService={smsService}
+                smsMarketing={smsMarketing}
+                onChange={(field, value) =>
+                  field === "smsService" ? setSmsService(value) : setSmsMarketing(value)
+                }
+              />
             </>
-          )}
-
-          {step === STEPS.length - 1 && (
-            <SmsConsent
-              smsService={smsService}
-              smsMarketing={smsMarketing}
-              onChange={(field, value) =>
-                field === "smsService" ? setSmsService(value) : setSmsMarketing(value)
-              }
-            />
           )}
 
           <div className="flex items-center justify-between gap-4 pt-4">
-            <button
+            <Button
               type="button"
-              onClick={() => setStep((s) => Math.max(s - 1, 0))}
+              variant="ghost"
+              onClick={() => setStep((currentStep) => Math.max(currentStep - 1, 0))}
               disabled={step === 0}
-              className="font-mono text-xs tracking-widest text-white/40 transition-colors hover:text-white disabled:opacity-30"
+              className="min-h-11 rounded-none px-0 font-mono text-xs tracking-widest text-[var(--ink-muted)] hover:bg-transparent hover:text-[var(--ink)] disabled:opacity-30"
             >
               ← BACK
-            </button>
+            </Button>
             {step < STEPS.length - 1 ? (
-              <button
+              <Button
                 type="button"
                 onClick={next}
-                className="bg-[#FF3333] px-6 py-4 font-mono text-xs tracking-widest text-black transition-opacity hover:opacity-90"
+                className="min-h-11 rounded-none bg-[var(--furnace)] px-6 py-4 font-mono text-xs tracking-widest text-[var(--ground)] hover:bg-[var(--furnace)] hover:opacity-90"
               >
                 NEXT STEP
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
+                key="brief-submit"
                 type="submit"
                 disabled={sending}
-                className="bg-[#FF3333] px-6 py-4 font-mono text-xs tracking-widest text-black transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="min-h-11 rounded-none bg-[var(--furnace)] px-6 py-4 font-mono text-xs tracking-widest text-[var(--ground)] hover:bg-[var(--furnace)] hover:opacity-90 disabled:opacity-50"
               >
                 {sending ? "SENDING…" : "SEND BRIEF"}
-              </button>
+              </Button>
             )}
           </div>
 
           {sessionId && (
-            <p className="break-all font-mono text-[10px] text-white/25">
+            <p className="break-all font-mono text-[10px] text-[var(--ink-faint)]">
               Linked to payment reference: {sessionId}
             </p>
           )}

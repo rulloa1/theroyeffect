@@ -29,8 +29,10 @@
 - [x] Add a periodically rotating word to The Cut headline
 - [x] Unify the homepage Refinery typography, warm ink, type scale, spacing, and ignition accents
 - [x] Add Refinery chapter seams, staggered reveals, a stronger Work chapter, and a type-led About chapter
+- [x] Simplify the project brief into an accessible two-step Refinery intake
 
 ## Increment 7 — studio polish pass (preview only)
+
 - Tightened `--section-y` to clamp(3.5rem, 5.5vw, 6.5rem) for one vertical rhythm.
 - The Cut h2 keeps a clean aria-label; rotating words stay aria-hidden.
 - Anton dropped from the font request; `--font-display` now Space Grotesk; footer wordmark uses `--ink`.
