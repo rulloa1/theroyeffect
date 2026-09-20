@@ -37,6 +37,7 @@ import { Route as GuidesSquarespaceVsCustomWebsiteRouteImport } from './routes/g
 import { Route as GuidesWebsiteAuditChecklistRouteImport } from './routes/guides.website-audit-checklist'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as ProposalTokenRouteImport } from './routes/proposal.$token'
+import { Route as RedesignTokenRouteImport } from './routes/redesign.$token'
 import { Route as SiteReportTokenRouteImport } from './routes/site-report.$token'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
@@ -198,6 +199,11 @@ const ProposalTokenRoute = ProposalTokenRouteImport.update({
   path: '/proposal/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedesignTokenRoute = RedesignTokenRouteImport.update({
+  id: '/redesign/$token',
+  path: '/redesign/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SiteReportTokenRoute = SiteReportTokenRouteImport.update({
   id: '/site-report/$token',
   path: '/site-report/$token',
@@ -316,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/guides/website-audit-checklist': typeof GuidesWebsiteAuditChecklistRoute
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
+  '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -361,6 +368,7 @@ export interface FileRoutesByTo {
   '/guides/website-audit-checklist': typeof GuidesWebsiteAuditChecklistRoute
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
+  '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
@@ -408,6 +416,7 @@ export interface FileRoutesById {
   '/guides/website-audit-checklist': typeof GuidesWebsiteAuditChecklistRoute
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
+  '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/guides/website-audit-checklist'
     | '/portal/login'
     | '/proposal/$token'
+    | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
     | '/work/'
@@ -500,6 +510,7 @@ export interface FileRouteTypes {
     | '/guides/website-audit-checklist'
     | '/portal/login'
     | '/proposal/$token'
+    | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
     | '/work'
@@ -546,6 +557,7 @@ export interface FileRouteTypes {
     | '/guides/website-audit-checklist'
     | '/portal/login'
     | '/proposal/$token'
+    | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
     | '/work/'
@@ -590,6 +602,7 @@ export interface RootRouteChildren {
   GuidesWebsiteAuditChecklistRoute: typeof GuidesWebsiteAuditChecklistRoute
   PortalLoginRoute: typeof PortalLoginRoute
   ProposalTokenRoute: typeof ProposalTokenRoute
+  RedesignTokenRoute: typeof RedesignTokenRoute
   SiteReportTokenRoute: typeof SiteReportTokenRoute
   WorkSlugRoute: typeof WorkSlugRoute
   WorkIndexRoute: typeof WorkIndexRoute
@@ -804,6 +817,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProposalTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/redesign/$token': {
+      id: '/redesign/$token'
+      path: '/redesign/$token'
+      fullPath: '/redesign/$token'
+      preLoaderRoute: typeof RedesignTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/site-report/$token': {
       id: '/site-report/$token'
       path: '/site-report/$token'
@@ -965,6 +985,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesWebsiteAuditChecklistRoute: GuidesWebsiteAuditChecklistRoute,
   PortalLoginRoute: PortalLoginRoute,
   ProposalTokenRoute: ProposalTokenRoute,
+  RedesignTokenRoute: RedesignTokenRoute,
   SiteReportTokenRoute: SiteReportTokenRoute,
   WorkSlugRoute: WorkSlugRoute,
   WorkIndexRoute: WorkIndexRoute,
