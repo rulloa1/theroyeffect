@@ -230,7 +230,9 @@ function BriefPage() {
             email: typeof parsed.email === "string" ? parsed.email : previous.email,
             company: typeof parsed.company === "string" ? parsed.company : previous.company,
             projectType:
-              typeof parsed.projectType === "string" && PROJECT_TYPES.includes(parsed.projectType)
+              scopeType
+                ? previous.projectType
+                : typeof parsed.projectType === "string" && PROJECT_TYPES.includes(parsed.projectType)
                 ? parsed.projectType
                 : previous.projectType,
             goals: typeof parsed.goals === "string" ? parsed.goals : previous.goals,
@@ -240,6 +242,8 @@ function BriefPage() {
                 : previous.referencesLinks,
             budget: paid
               ? "Already paid"
+              : scopeEstimate
+                ? previous.budget
               : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
                 ? parsed.budget
                 : previous.budget,
@@ -257,7 +261,7 @@ function BriefPage() {
     } catch {
       // Storage unavailable or blocked.
     }
-  }, [paid, storageKey]);
+  }, [paid, scopeEstimate, scopeType, storageKey]);
 
   useEffect(() => {
     if (done) return;
