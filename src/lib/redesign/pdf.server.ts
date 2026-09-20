@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib";
-import type { RedesignRun } from "./types";
-import { treatmentLabel } from "./types";
+import { TREATMENT_LABEL } from "./redesign.server";
+import type { RedesignRun } from "@/utils/redesign.functions";
 
 const PAGE_W = 595.28;
 const PAGE_H = 841.89;
@@ -10,7 +10,28 @@ const GOLD = rgb(0.87, 0.73, 0.45);
 const INK = rgb(0.09, 0.09, 0.11);
 const MUTED = rgb(0.42, 0.42, 0.46);
 
-function wrap(text: string, font: PDFFont, size: number, maxWidth: number): string[] {
+/** Splits a single token too wide for one line into pieces that fit. */
+function breakLongWord(word: string, font: PDFFont, size: number, maxWidth: number): string[] {
+  const pieces: string[] = [];
+  let piece = "";
+  for (const char of word) {
+    if (piece && font.widthOfTextAtSize(piece + char, size) > maxWidth) {
+      pieces.push(piece);
+      piece = char;
+    } else {
+      piece += char;
+    }
+  }
+  if (piece) pieces.push(piece);
+  return pieces;
+}
+
+/**
+ * Greedy word wrap. Exported for test: this copy renders model-written copy,
+ * which can contain a long unbroken token (a URL, a run-on string), so an
+ * over-wide word is hard-broken rather than left to overflow the margin.
+ */
+export function wrap(text: string, font: PDFFont, size: number, maxWidth: number): string[] {
   const lines: string[] = [];
   for (const paragraph of text.split(/\r?\n/)) {
     if (!paragraph.trim()) {
@@ -22,10 +43,17 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number): stri
       const candidate = line ? `${line} ${word}` : word;
       if (font.widthOfTextAtSize(candidate, size) <= maxWidth) {
         line = candidate;
-      } else {
-        if (line) lines.push(line);
-        line = word;
+        continue;
       }
+      if (line) lines.push(line);
+      if (font.widthOfTextAtSize(word, size) <= maxWidth) {
+        line = word;
+        continue;
+      }
+      // The word alone overflows: emit full pieces, carry the remainder.
+      const pieces = breakLongWord(word, font, size, maxWidth);
+      lines.push(...pieces.slice(0, -1));
+      line = pieces.at(-1) ?? "";
     }
     if (line) lines.push(line);
   }
@@ -33,15 +61,12 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number): stri
 }
 
 /**
- * The audit notes that ship with the pitch: what was found on their site, what
- * the rebuild changed, and where the live page is.
+ * The redesign pitch as a sendable PDF: what the scan measured, the pitch
+ * itself, and where the concept page lives.
  */
-export async function buildRedesignAuditPdf(
-  run: RedesignRun,
-  shareUrl: string,
-): Promise<Uint8Array> {
+export async function buildRedesignPdf(run: RedesignRun, shareUrl: string): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
-  pdf.setTitle(`Website audit — ${run.business_name ?? run.host}`);
+  pdf.setTitle(`Redesign concept — ${run.host}`);
   pdf.setAuthor("The Roy Effect");
 
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
@@ -71,16 +96,18 @@ export async function buildRedesignAuditPdf(
       y -= leading;
     }
   };
+  const heading = (labelText: string) => {
+    ensure(48);
+    drawLines(labelText.toUpperCase(), bold, 9, CRIMSON, 16);
+  };
 
   page.drawRectangle({ x: 0, y: PAGE_H - 10, width: PAGE_W, height: 10, color: CRIMSON });
   y -= 6;
   drawLines("THE ROY EFFECT", bold, 10, CRIMSON, 16);
-  drawLines("WEBSITE AUDIT", bold, 26, INK, 32);
-  drawLines(run.business_name ?? run.host, bold, 14, INK, 22);
+  drawLines("REDESIGN CONCEPT", bold, 26, INK, 32);
+  drawLines(run.host, bold, 14, INK, 22);
   drawLines(
-    `${run.host}  ·  ${treatmentLabel(run.treatment)}  ·  ${new Date(run.created_at)
-      .toISOString()
-      .slice(0, 10)}`,
+    `${TREATMENT_LABEL[run.treatment]}  ·  ${new Date(run.created_at).toISOString().slice(0, 10)}`,
     regular,
     9,
     MUTED,
@@ -88,60 +115,46 @@ export async function buildRedesignAuditPdf(
   );
   y -= 8;
 
-  const heading = (label: string) => {
-    ensure(48);
-    drawLines(label.toUpperCase(), bold, 9, CRIMSON, 16);
-  };
-
-  if (run.audit) {
-    const grade =
-      run.audit.score >= 40
-        ? "Critical"
-        : run.audit.score >= 20
-          ? "Needs work"
-          : run.audit.score > 0
-            ? "Minor issues"
-            : "Looks solid";
-    heading("Verdict");
-    drawLines(`${grade} — pain score ${run.audit.score} of 100`, bold, 13, INK, 20);
+  if (run.headline) {
+    heading("The idea");
+    drawLines(run.headline, bold, 15, INK, 22);
+    if (run.subheadline) drawLines(run.subheadline, regular, 11, MUTED, 16);
     y -= 8;
-
-    heading("What we found");
-    for (const signal of run.audit.signals.slice().sort((a, b) => b.weight - a.weight)) {
-      ensure(44);
-      drawLines(signal.label, bold, 11, INK, 16);
-      drawLines(signal.detail, regular, 10, MUTED, 15);
-      y -= 6;
-    }
-    y -= 4;
   }
 
-  if (run.changes?.length) {
-    heading("What the rebuild changed");
-    for (const change of run.changes) {
-      ensure(30);
-      drawLines(`${change.index}  ${change.text}`, regular, 11, INK, 16);
-      y -= 4;
-    }
-    y -= 4;
+  for (const section of run.sections) {
+    ensure(60);
+    heading(section.title);
+    drawLines(section.body, regular, 11, INK, 16);
+    y -= 6;
   }
 
-  if (run.capture) {
+  // What the scan actually measured, so nothing in the pitch is unsupported.
+  const scan = run.scan ?? {};
+  const facts = [
+    typeof scan.loadMs === "number" ? `Load time: ${(scan.loadMs / 1000).toFixed(1)}s` : null,
+    scan.https !== undefined ? `Secure (HTTPS): ${scan.https ? "yes" : "no"}` : null,
+    scan.mobileFriendly !== undefined
+      ? `Built for phones: ${scan.mobileFriendly ? "yes" : "no"}`
+      : null,
+    scan.hasPhoneLink !== undefined ? `Tap-to-call: ${scan.hasPhoneLink ? "yes" : "no"}` : null,
+    scan.hasContactForm !== undefined
+      ? `Contact form: ${scan.hasContactForm ? "yes" : "no"}`
+      : null,
+    scan.hasBookingCta !== undefined
+      ? `Clear next step: ${scan.hasBookingCta ? "yes" : "no"}`
+      : null,
+    scan.copyrightYear ? `Footer copyright: ${scan.copyrightYear}` : null,
+  ].filter(Boolean) as string[];
+
+  if (facts.length > 0) {
+    ensure(60);
     heading("Measured on the live page");
-    const facts = [
-      run.capture.loadMs !== null ? `Load time: ${(run.capture.loadMs / 1000).toFixed(1)}s` : null,
-      `Secure (HTTPS): ${run.capture.https ? "yes" : "no"}`,
-      `Built for phones: ${run.capture.mobileFriendly ? "yes" : "no"}`,
-      `Tap-to-call: ${run.capture.hasPhoneLink ? "yes" : "no"}`,
-      `Contact form: ${run.capture.hasContactForm ? "yes" : "no"}`,
-      `Clear next step: ${run.capture.hasBookingCta ? "yes" : "no"}`,
-      run.capture.copyrightYear ? `Footer copyright: ${run.capture.copyrightYear}` : null,
-    ].filter(Boolean) as string[];
     drawLines(facts.join("\n"), regular, 10, MUTED, 15);
     y -= 8;
   }
 
-  heading("The rebuilt page");
+  heading("The concept page");
   drawLines(shareUrl, bold, 11, GOLD, 18);
 
   ensure(40);

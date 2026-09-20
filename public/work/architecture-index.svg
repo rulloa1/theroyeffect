@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="ai-title ai-desc">
+  <title id="ai-title">Architecture practice project index</title>
+  <desc id="ai-desc">A concept mockup of a residential architecture practice's website: a full-bleed project plate above a three-up index of projects.</desc>
+  <rect width="1200" height="900" fill="#0a0a0a"/>
+  <rect x="70" y="60" width="1060" height="780" rx="10" fill="#121212" stroke="#f2eee6" stroke-opacity=".12" stroke-width="2"/>
+  <path d="M70 118h1060" stroke="#f2eee6" stroke-opacity=".12" stroke-width="2"/>
+  <circle cx="104" cy="89" r="6" fill="#f2eee6" fill-opacity=".22"/>
+  <circle cx="126" cy="89" r="6" fill="#f2eee6" fill-opacity=".22"/>
+  <circle cx="148" cy="89" r="6" fill="#f2eee6" fill-opacity=".22"/>
+  <rect x="470" y="81" width="260" height="16" rx="8" fill="#0a0a0a"/>
+  <rect x="112" y="152" width="150" height="14" fill="#f2eee6" fill-opacity=".85"/>
+  <rect x="820" y="155" width="60" height="9" fill="#f2eee6" fill-opacity=".35"/>
+  <rect x="900" y="155" width="46" height="9" fill="#f2eee6" fill-opacity=".35"/>
+  <rect x="966" y="155" width="52" height="9" fill="#f2eee6" fill-opacity=".35"/>
+  <rect x="1038" y="155" width="50" height="9" fill="#dfba73"/>
+  <rect x="112" y="196" width="976" height="352" fill="#060606"/>
+  <path d="M112 196h976v352H112z" fill="#0d0d0d"/>
+  <rect x="112" y="196" width="976" height="352" fill="#dfba73" fill-opacity=".05"/>
+  <path d="M300 430l260-150 260 150v118H300z" fill="#161616"/>
+  <path d="M300 430l260-150 260 150" fill="none" stroke="#dfba73" stroke-opacity=".55" stroke-width="3"/>
+  <rect x="560" y="280" width="260" height="150" fill="#101010" fill-opacity=".6"/>
+  <path d="M360 430v118M420 430v118M480 430v118M540 430v118M600 430v118M660 430v118M720 430v118M780 430v118" stroke="#f2eee6" stroke-opacity=".10" stroke-width="2"/>
+  <rect x="366" y="452" width="48" height="72" fill="#dfba73" fill-opacity=".30"/>
+  <rect x="606" y="452" width="48" height="72" fill="#dfba73" fill-opacity=".18"/>
+  <rect x="726" y="452" width="48" height="72" fill="#dfba73" fill-opacity=".24"/>
+  <path d="M170 548h860" stroke="#f2eee6" stroke-opacity=".16" stroke-width="2"/>
+  <rect x="140" y="502" width="128" height="8" fill="#f2eee6" fill-opacity=".45"/>
+  <rect x="140" y="520" width="84" height="8" fill="#f2eee6" fill-opacity=".22"/>
+  <path d="M112 590h976" stroke="#dfba73" stroke-opacity=".5" stroke-width="2"/>
+  <text x="112" y="578" fill="#dfba73" font-family="monospace" font-size="17" letter-spacing="4">PROJECT INDEX</text>
+  <g>
+    <rect x="112" y="614" width="306" height="150" fill="#060606"/>
+    <path d="M150 742l70-56 70 56z" fill="#1a1a1a"/>
+    <path d="M150 742l70-56 70 56" fill="none" stroke="#dfba73" stroke-opacity=".4" stroke-width="2"/>
+    <rect x="300" y="700" width="86" height="42" fill="#141414"/>
+    <rect x="112" y="778" width="150" height="9" fill="#f2eee6" fill-opacity=".75"/>
+    <rect x="112" y="798" width="96" height="7" fill="#f2eee6" fill-opacity=".3"/>
+  </g>
+  <g>
+    <rect x="447" y="614" width="306" height="150" fill="#060606"/>
+    <rect x="487" y="672" width="106" height="70" fill="#1a1a1a"/>
+    <rect x="613" y="694" width="102" height="48" fill="#141414"/>
+    <path d="M487 672h106" stroke="#dfba73" stroke-opacity=".4" stroke-width="2"/>
+    <rect x="447" y="778" width="128" height="9" fill="#f2eee6" fill-opacity=".75"/>
+    <rect x="447" y="798" width="108" height="7" fill="#f2eee6" fill-opacity=".3"/>
+  </g>
+  <g>
+    <rect x="782" y="614" width="306" height="150" fill="#060606"/>
+    <path d="M822 742v-64h60v64M902 742v-44h70v44" fill="#1a1a1a" stroke="#dfba73" stroke-opacity=".4" stroke-width="2"/>
+    <rect x="782" y="778" width="166" height="9" fill="#f2eee6" fill-opacity=".75"/>
+    <rect x="782" y="798" width="88" height="7" fill="#f2eee6" fill-opacity=".3"/>
+  </g>
+  <text x="70" y="876" fill="#dfba73" font-family="monospace" font-size="19" letter-spacing="5">PORTFOLIO ARCHITECTURE / PROJECT TEMPLATE</text>
+</svg>

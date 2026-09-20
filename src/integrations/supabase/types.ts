@@ -248,6 +248,62 @@ export type Database = {
         }
         Relationships: []
       }
+      cold_calls: {
+        Row: {
+          business_name: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          id: string
+          phone: string
+          prospect_id: string | null
+          redesign_run_id: string | null
+          status: string
+          talking_points: string | null
+          updated_at: string
+          vapi_call_id: string | null
+          website: string | null
+        }
+        Insert: {
+          business_name: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          phone: string
+          prospect_id?: string | null
+          redesign_run_id?: string | null
+          status?: string
+          talking_points?: string | null
+          updated_at?: string
+          vapi_call_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          business_name?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          phone?: string
+          prospect_id?: string | null
+          redesign_run_id?: string | null
+          status?: string
+          talking_points?: string | null
+          updated_at?: string
+          vapi_call_id?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cold_calls_redesign_run_id_fkey"
+            columns: ["redesign_run_id"]
+            isOneToOne: false
+            referencedRelation: "redesign_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_inquiries: {
         Row: {
           bottleneck: string | null
@@ -931,6 +987,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      redesign_runs: {
+        Row: {
+          angle: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          headline: string | null
+          host: string
+          id: string
+          outreach_body: string | null
+          outreach_subject: string | null
+          scan: Json
+          sections: Json
+          status: string
+          subheadline: string | null
+          treatment: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          angle?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          headline?: string | null
+          host: string
+          id?: string
+          outreach_body?: string | null
+          outreach_subject?: string | null
+          scan?: Json
+          sections?: Json
+          status?: string
+          subheadline?: string | null
+          treatment?: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          angle?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          headline?: string | null
+          host?: string
+          id?: string
+          outreach_body?: string | null
+          outreach_subject?: string | null
+          scan?: Json
+          sections?: Json
+          status?: string
+          subheadline?: string | null
+          treatment?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
       }
       retainer_subscriptions: {
         Row: {

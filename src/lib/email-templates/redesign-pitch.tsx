@@ -16,7 +16,6 @@ interface Props {
   businessName?: string;
   body?: string;
   redesignUrl?: string;
-  topIssue?: string | null;
 }
 
 const main = { backgroundColor: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" };
@@ -35,14 +34,10 @@ const button = {
 const caption = { fontSize: "12px", lineHeight: "18px", color: "#666666", margin: "8px 0 0" };
 const small = { fontSize: "12px", lineHeight: "18px", color: "#666666", margin: "0" };
 
-const Email = ({ businessName, body, redesignUrl, topIssue }: Props) => (
+const Email = ({ businessName, body, redesignUrl }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>
-      {topIssue
-        ? `${topIssue} — I rebuilt the homepage for ${businessName ?? "your business"}`
-        : `I rebuilt the homepage for ${businessName ?? "your business"}`}
-    </Preview>
+    <Preview>{`A redesign concept for ${businessName ?? "your website"}`}</Preview>
     <Body style={main}>
       <Container style={container}>
         {(body ?? "").split(/\n{2,}/).map((paragraph, index) => (
@@ -53,10 +48,11 @@ const Email = ({ businessName, body, redesignUrl, topIssue }: Props) => (
         {redesignUrl ? (
           <Section style={{ margin: "22px 0" }}>
             <Button href={redesignUrl} style={button}>
-              See the rebuilt homepage
+              See the concept
             </Button>
             <Text style={caption}>
-              This is a real page, not a mockup. Nothing on your site was changed.
+              A concept page laying out what I would change. Nothing on your own site has been
+              touched.
             </Text>
           </Section>
         ) : null}
@@ -75,13 +71,12 @@ const Email = ({ businessName, body, redesignUrl, topIssue }: Props) => (
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    (data["subject"] as string) ?? "I rebuilt your homepage — take a look",
+    (data["subject"] as string) ?? "A redesign concept for your website",
   displayName: "Redesign pitch",
   previewData: {
-    businessName: "Whitfield Plumbing",
-    subject: "I rebuilt your homepage — take a look",
-    body: "Dana —\n\nI spent an hour on whitfieldplumbing.com this morning and rebuilt the homepage to show what I mean rather than describe it. The link below is a real page, not a mockup.\n\nThree things are costing you enquiries: the quote form can't be completed on a phone, the homepage opens with company history instead of what you do, and there are five logo versions in circulation.\n\nThe redesign fixes all three. If it's close, I'll walk you through it on a 15-minute call.\n\n— Rory",
+    businessName: "whitfieldplumbing.com",
+    subject: "Your quote form doesn't work on a phone",
+    body: "I went through whitfieldplumbing.com this morning. The quote form can't be completed on a phone, and the homepage opens with company history rather than what you do.\n\nI put together a concept for how I'd rearrange it: the service and the city first, the quote request above the fold, and one logo instead of the several in circulation.\n\nIf it's close to what you had in mind, I'll walk you through it on a 15-minute call.\n\n— Rory",
     redesignUrl: "https://theroyeffect.com/redesign/example",
-    topIssue: "Not built for phones",
   },
 } satisfies TemplateEntry;

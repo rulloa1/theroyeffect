@@ -182,17 +182,6 @@ export async function assertPublicScanUrl(rawUrl: string): Promise<URL> {
 
 /** Fetches a prospect's homepage and records objective quality signals. */
 export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
-  return (await scanWebsiteDocument(rawUrl)).scan;
-}
-
-/**
- * Same scan as {@link scanWebsite}, but also hands back the homepage HTML so a
- * caller that needs the markup (the Redesign Studio's capture stage) does not
- * have to fetch the page a second time. `html` is null when the fetch failed.
- */
-export async function scanWebsiteDocument(
-  rawUrl: string,
-): Promise<{ scan: ScanResult; html: string | null }> {
   const started = Date.now();
   try {
     // Follow redirects manually so every hop is re-validated against the
@@ -223,12 +212,9 @@ export async function scanWebsiteDocument(
     }
     if (!response) {
       return {
-        scan: {
-          ...EMPTY,
-          loadMs: Date.now() - started,
-          errorMessage: "Site redirected too many times",
-        },
-        html: null,
+        ...EMPTY,
+        loadMs: Date.now() - started,
+        errorMessage: "Site redirected too many times",
       };
     }
     const loadMs = Date.now() - started;
@@ -239,41 +225,35 @@ export async function scanWebsiteDocument(
     const yearMatch = html.match(/(?:©|&copy;|copyright)[^0-9]{0,20}(20\d{2})/i);
 
     return {
-      scan: {
-        reachable: response.ok,
-        finalUrl,
-        statusCode: response.status,
-        loadMs,
-        https: finalUrl.startsWith("https://"),
-        mobileFriendly: /<meta[^>]+name=["']viewport["']/i.test(html),
-        title: (html.match(/<title[^>]*>([^<]{1,200})<\/title>/i)?.[1] ?? "").trim() || null,
-        metaDescription:
-          (html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,300})["']/i)?.[1] ?? "").trim() ||
-          null,
-        htmlBytes: html.length,
-        hasPhoneLink: lower.includes("tel:"),
-        hasEmailLink: lower.includes("mailto:"),
-        hasContactForm: lower.includes("<form") || lower.includes("typeform") || lower.includes("jotform"),
-        hasBookingCta: /(book|schedule|appointment|free quote|get a quote|estimate)/i.test(html),
-        copyrightYear: yearMatch?.[1] ? Number(yearMatch[1]) : null,
-        foundEmail: extractEmail(html),
-        errorMessage: response.ok ? null : `Site returned ${response.status}`,
-      },
-      html,
+      reachable: response.ok,
+      finalUrl,
+      statusCode: response.status,
+      loadMs,
+      https: finalUrl.startsWith("https://"),
+      mobileFriendly: /<meta[^>]+name=["']viewport["']/i.test(html),
+      title: (html.match(/<title[^>]*>([^<]{1,200})<\/title>/i)?.[1] ?? "").trim() || null,
+      metaDescription:
+        (html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,300})["']/i)?.[1] ?? "").trim() ||
+        null,
+      htmlBytes: html.length,
+      hasPhoneLink: lower.includes("tel:"),
+      hasEmailLink: lower.includes("mailto:"),
+      hasContactForm: lower.includes("<form") || lower.includes("typeform") || lower.includes("jotform"),
+      hasBookingCta: /(book|schedule|appointment|free quote|get a quote|estimate)/i.test(html),
+      copyrightYear: yearMatch?.[1] ? Number(yearMatch[1]) : null,
+      foundEmail: extractEmail(html),
+      errorMessage: response.ok ? null : `Site returned ${response.status}`,
     };
   } catch (error) {
     return {
-      scan: {
-        ...EMPTY,
-        loadMs: Date.now() - started,
-        errorMessage:
-          error instanceof Error && error.name === "AbortError"
-            ? "Site did not respond within 12 seconds"
-            : error instanceof Error
-              ? error.message
-              : "Site could not be reached",
-      },
-      html: null,
+      ...EMPTY,
+      loadMs: Date.now() - started,
+      errorMessage:
+        error instanceof Error && error.name === "AbortError"
+          ? "Site did not respond within 12 seconds"
+          : error instanceof Error
+            ? error.message
+            : "Site could not be reached",
     };
   }
 }
