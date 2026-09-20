@@ -40,7 +40,7 @@ export function RefineryScene() {
     let disposed = false;
     let cleanup: (() => void) | undefined;
     let idleHandle: number | undefined;
-    let timeoutHandle: number | undefined;
+    let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
     const initialise = async () => {
       const [THREE, { RoomEnvironment }] = await Promise.all([
