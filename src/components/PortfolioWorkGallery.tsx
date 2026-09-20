@@ -9,6 +9,7 @@ export function PortfolioWorkGallery() {
       data-refinery-chapter="work"
       className="relative z-20 bg-[var(--veil-ground)] px-[var(--gutter)] py-[var(--section-y)]"
     >
+      <ScrollReveal chapterSeam respectEffectsGuard />
       <div className="mx-auto max-w-7xl">
         <ScrollReveal respectEffectsGuard>
           <div className="grid gap-6 border-b border-[var(--line)] pb-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
@@ -30,25 +31,35 @@ export function PortfolioWorkGallery() {
               aria-label="View the Houston service business website case study"
               className="group relative flex min-h-[28rem] flex-col justify-between overflow-hidden p-7 sm:p-10 lg:col-span-8 lg:min-h-[38rem] lg:p-14"
             >
-              <div aria-hidden className="portfolio-dot-grid absolute inset-0 opacity-50" />
+              <img
+                src="/work/responsive-site.svg"
+                alt=""
+                aria-hidden="true"
+                width={1200}
+                height={900}
+                className="absolute inset-0 size-full object-cover"
+              />
               <div
                 aria-hidden
-                className="portfolio-crosshair absolute right-[12%] top-[12%] size-44 opacity-50"
+                className="absolute inset-0 bg-[linear-gradient(to_top,var(--ground-sunk)_0%,transparent_55%)]"
               />
               <span className="relative font-mono text-xs tracking-widest text-[var(--gold)]">
                 FEATURED CASE STUDY · 01
               </span>
-              <div className="relative grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+              <ScrollReveal
+                stagger
+                respectEffectsGuard
+                className="relative grid max-w-3xl grid-cols-4 border-y border-[var(--line)]"
+              >
                 {["PROBLEM", "BRAND", "MOBILE", "LAUNCH"].map((label, index) => (
                   <span
                     key={label}
-                    className="border border-[var(--line)] bg-[var(--ground-sunk)]/70 p-4 font-mono text-[10px] tracking-widest text-[var(--ink-muted)] transition-colors group-hover:border-[var(--gold)]/40"
+                    className="border-r border-[var(--line)] px-3 py-4 font-mono text-[10px] tracking-widest text-[var(--ink-faint)] transition-colors last:border-r-0 hover:text-[var(--gold)]"
                   >
-                    0{index + 1}
-                    <span className="mt-8 block text-[var(--ink)]">{label}</span>
+                    0{index + 1} {label}
                   </span>
                 ))}
-              </div>
+              </ScrollReveal>
             </Link>
 
             <div className="flex flex-col justify-end border-t border-[var(--line)] p-7 sm:p-10 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-12">
@@ -73,6 +84,10 @@ export function PortfolioWorkGallery() {
             </div>
           </article>
         </ScrollReveal>
+
+        <p className="mt-4 font-mono text-xs leading-relaxed text-[var(--ink-faint)]">
+          More work shown on request — three client projects under NDA.
+        </p>
 
         <ScrollReveal className="mt-8" respectEffectsGuard>
           <aside className="grid gap-6 border border-[var(--line)] bg-[var(--ground-raised)] p-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-9">

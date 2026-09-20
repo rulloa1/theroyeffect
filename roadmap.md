@@ -28,3 +28,4 @@
 - [x] Add The Cut before-and-after concept study with accessible comparison controls and Ore refinement
 - [x] Add a periodically rotating word to The Cut headline
 - [x] Unify the homepage Refinery typography, warm ink, type scale, spacing, and ignition accents
+- [x] Add Refinery chapter seams, staggered reveals, a stronger Work chapter, and a type-led About chapter

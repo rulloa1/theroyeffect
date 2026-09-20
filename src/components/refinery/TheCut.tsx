@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useClientReducedMotion } from "@/components/cinematic/useClientReducedMotion";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import afterAsset from "@/assets/cut-after.webp.asset.json";
 import beforeAsset from "@/assets/cut-before.webp.asset.json";
 
@@ -144,6 +145,7 @@ export function TheCut() {
       data-refinery-chapter="cut"
       className="relative z-20 bg-[var(--veil-ground)] px-[var(--gutter)] py-[var(--section-y)]"
     >
+      <ScrollReveal chapterSeam respectEffectsGuard />
       <div className="mx-auto max-w-7xl">
         <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">THE CUT</p>
         <h2

@@ -430,6 +430,17 @@ html[data-motion="paused"] .the-cut-cursor {
   display: none;
 }
 
+html[data-motion="paused"] .chapter-seam {
+  transform: scaleX(1);
+  transition: none;
+}
+
+html[data-motion="paused"] .scroll-reveal-stagger > * {
+  animation: none !important;
+  opacity: 1;
+  transform: none;
+}
+
 @utility text-stroke-thin {
   -webkit-text-stroke: 1px #ffffff;
   color: transparent;
@@ -488,6 +499,64 @@ html[data-motion="paused"] .the-cut-cursor {
   transition: none;
 }
 
+.chapter-seam {
+  position: absolute;
+  inset: 0 0 auto;
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold) 18%,
+    var(--gold) 82%,
+    transparent 100%
+  );
+  opacity: 0.45;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.chapter-seam-trigger {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.chapter-seam-drawn {
+  transform: scaleX(1);
+  transition: transform var(--dur-state) var(--ease-draw);
+}
+
+@keyframes stagger-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal-stagger {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.scroll-reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.scroll-reveal-stagger.scroll-reveal-visible > * {
+  animation: stagger-reveal var(--dur-reveal) var(--ease-refine) both;
+  animation-delay: calc(var(--reveal-index) * var(--stagger));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-cta-marquee {
@@ -502,6 +571,17 @@ html[data-motion="paused"] .the-cut-cursor {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .chapter-seam {
+    transform: scaleX(1);
+    transition: none;
+  }
+
+  .scroll-reveal-stagger > * {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
   }
 
   .hero-eyebrow-rule,
