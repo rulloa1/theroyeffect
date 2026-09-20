@@ -346,9 +346,9 @@ function BriefPage() {
   };
 
   const handleSingleLineKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Enter" || step >= STEPS.length - 1) return;
+    if (event.key !== "Enter") return;
     event.preventDefault();
-    next();
+    if (step < STEPS.length - 1) next();
   };
 
   const submit = async (event: React.FormEvent) => {

@@ -77,7 +77,8 @@ const Email = (props: Props) => (
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => `Project brief — ${data["name"] || "new client"}`,
+  subject: (data: Record<string, unknown>) =>
+    `Project brief — ${typeof data["name"] === "string" ? data["name"] : "new client"}`,
   displayName: "Project brief intake",
   previewData: {
     name: "Jane Doe",
