@@ -57,7 +57,11 @@ export function setMotionPaused(nextPaused: boolean) {
 }
 
 export function useMotionPaused() {
-  const value = useSyncExternalStore(subscribeMotionPreference, () => paused, () => false);
+  const value = useSyncExternalStore(
+    subscribeMotionPreference,
+    () => paused,
+    () => false,
+  );
   useEffect(() => {
     hydratePreference();
   }, []);
