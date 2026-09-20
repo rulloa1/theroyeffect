@@ -4,6 +4,7 @@ import afterAsset from "@/assets/cut-after.webp.asset.json";
 import beforeAsset from "@/assets/cut-before.webp.asset.json";
 
 const DEFAULT_SEAM = 50;
+const CUT_WORDS = ["Better", "Sharper", "Clearer"] as const;
 
 function clamp(value: number) {
   return Math.min(100, Math.max(0, value));
@@ -20,6 +21,7 @@ export function TheCut() {
   const [seam, setSeam] = useState(DEFAULT_SEAM);
   const [settling, setSettling] = useState(false);
   const [cursorVisible, setCursorVisible] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
   const motionDisabled = useClientReducedMotion();
 
   const updateSeam = useCallback((value: number, shouldSettle = false) => {
@@ -70,7 +72,17 @@ export function TheCut() {
     if (motionDisabled) {
       cancelAnimationFrame(cursorFrame.current);
       setCursorVisible(false);
+      setWordIndex(0);
     }
+  }, [motionDisabled]);
+
+  useEffect(() => {
+    if (motionDisabled) return;
+    const interval = window.setInterval(
+      () => setWordIndex((current) => (current + 1) % CUT_WORDS.length),
+      3200,
+    );
+    return () => window.clearInterval(interval);
   }, [motionDisabled]);
 
   const moveCursor = useCallback(() => {
@@ -134,8 +146,23 @@ export function TheCut() {
     >
       <div className="mx-auto max-w-7xl">
         <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">THE CUT</p>
-        <h2 className="mt-4 max-w-5xl font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl">
-          Same business. Better first impression.
+        <h2
+          aria-label="Same business. Better first impression."
+          className="mt-4 max-w-5xl font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl"
+        >
+          Same business.{" "}
+          <span aria-hidden className="the-cut-word-cycle inline-grid text-[var(--gold)]">
+            {CUT_WORDS.map((word, index) => (
+              <span
+                key={word}
+                className="col-start-1 row-start-1 transition-[opacity,transform] duration-500"
+                data-active={index === wordIndex}
+              >
+                {word}
+              </span>
+            ))}
+          </span>{" "}
+          first impression.
         </h2>
         <p className="mt-7 max-w-4xl font-portfolio-body text-lg leading-relaxed text-white/75">
           Drag the line to compare. Left is a typical small-business site; right is the same

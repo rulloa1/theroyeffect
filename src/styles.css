@@ -353,6 +353,23 @@
   outline-offset: 3px;
 }
 
+.the-cut-word-cycle > span {
+  opacity: 0;
+  transform: translateY(0.2em);
+}
+
+.the-cut-word-cycle > span[data-active="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html[data-motion="paused"] .the-cut-word-cycle > span,
+@media (prefers-reduced-motion: reduce) {
+  .the-cut-word-cycle > span {
+    transition: none;
+  }
+}
+
 .the-cut-cursor {
   opacity: 0;
   transition: opacity var(--dur-micro) var(--ease-refine);

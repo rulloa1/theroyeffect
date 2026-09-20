@@ -26,4 +26,4 @@
 - [x] Add Refinery hero choreography, magnetic CTAs, focus rings, and persisted motion controls
 - [x] Extend the homepage Ore into one fixed, scroll-driven Refinery chapter scene
 - [x] Add The Cut before-and-after concept study with accessible comparison controls and Ore refinement
-- [ ] Add a periodically rotating word to the selected homepage headline
+- [x] Add a periodically rotating word to The Cut headline
