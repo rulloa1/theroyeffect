@@ -9,8 +9,8 @@ const HEADLINE = "I design and build websites people remember.";
 
 export function HeroContent() {
   return (
-    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-white/10 bg-[var(--veil-hero)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
-      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-white/10 bg-[var(--ground-raised)] md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
+    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-[var(--line)] bg-[var(--veil-hero)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
+      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-[var(--line)] bg-[var(--ground-raised)] md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
         <div className="hero-portrait absolute inset-0">
           <img
             src={portraitAsset.url}
@@ -25,7 +25,7 @@ export function HeroContent() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--ground)] via-transparent to-transparent" />
         <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8">
-          <p className="font-portfolio text-3xl font-bold leading-none text-white md:text-5xl">
+          <p className="font-portfolio text-3xl font-bold leading-none text-[var(--ink)] md:text-5xl">
             RORY ULLOA
           </p>
           <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[var(--gold)]">
