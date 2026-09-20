@@ -22,10 +22,12 @@ function syncDocumentAttribute() {
 }
 
 function hydratePreference() {
-  if (hydrated || typeof window === "undefined") return;
+  if (hydrated || typeof window === "undefined") return false;
   hydrated = true;
+  const previous = paused;
   paused = readStoredPreference();
   syncDocumentAttribute();
+  return previous !== paused;
 }
 
 export function getMotionPaused() {
@@ -34,8 +36,8 @@ export function getMotionPaused() {
 }
 
 export function subscribeMotionPreference(listener: () => void) {
-  hydratePreference();
   listeners.add(listener);
+  if (hydratePreference()) queueMicrotask(listener);
   return () => listeners.delete(listener);
 }
 

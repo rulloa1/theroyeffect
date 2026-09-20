@@ -75,31 +75,35 @@ export function HeroContent() {
             build digital experiences that look exceptional and help businesses stand out.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Magnetic className="hero-cta hero-cta-primary w-full sm:w-auto">
-              <Button
-                asChild
-                size="lg"
-                className="w-full rounded-none px-7 font-mono text-xs font-bold tracking-widest"
-              >
-                <Link to="/" hash="work">
-                  <span className="magnetic-label inline-flex items-center gap-2">
-                    VIEW MY WORK <ArrowUpRight />
-                  </span>
-                </Link>
-              </Button>
-            </Magnetic>
-            <Magnetic className="hero-cta hero-cta-secondary w-full sm:w-auto">
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="w-full rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
-              >
-                <Link to="/brief">
-                  <span className="magnetic-label">START A PROJECT</span>
-                </Link>
-              </Button>
-            </Magnetic>
+            <span className="hero-cta hero-cta-primary w-full sm:w-auto">
+              <Magnetic className="w-full">
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full rounded-none px-7 font-mono text-xs font-bold tracking-widest"
+                >
+                  <Link to="/" hash="work">
+                    <span className="magnetic-label inline-flex items-center gap-2">
+                      VIEW MY WORK <ArrowUpRight />
+                    </span>
+                  </Link>
+                </Button>
+              </Magnetic>
+            </span>
+            <span className="hero-cta hero-cta-secondary w-full sm:w-auto">
+              <Magnetic className="w-full">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="w-full rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
+                >
+                  <Link to="/brief">
+                    <span className="magnetic-label">START A PROJECT</span>
+                  </Link>
+                </Button>
+              </Magnetic>
+            </span>
           </div>
         </div>
       </div>
