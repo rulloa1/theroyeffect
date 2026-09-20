@@ -12,6 +12,25 @@ export interface RedesignSectionDto {
   body: string;
 }
 
+export interface RedesignScanDto {
+  reachable?: boolean;
+  finalUrl?: string | null;
+  statusCode?: number | null;
+  loadMs?: number | null;
+  https?: boolean;
+  mobileFriendly?: boolean;
+  title?: string | null;
+  metaDescription?: string | null;
+  htmlBytes?: number | null;
+  hasPhoneLink?: boolean;
+  hasEmailLink?: boolean;
+  hasContactForm?: boolean;
+  hasBookingCta?: boolean;
+  copyrightYear?: number | null;
+  foundEmail?: string | null;
+  errorMessage?: string | null;
+}
+
 export interface RedesignRun {
   id: string;
   url: string;
@@ -19,7 +38,7 @@ export interface RedesignRun {
   treatment: RedesignTreatment;
   angle: RedesignAngle;
   status: RedesignStatus;
-  scan: Record<string, unknown>;
+  scan: RedesignScanDto;
   headline: string | null;
   subheadline: string | null;
   sections: RedesignSectionDto[];
@@ -36,7 +55,7 @@ const SELECT =
 function normalise(row: any): RedesignRun {
   return {
     ...row,
-    scan: (row.scan ?? {}) as Record<string, unknown>,
+    scan: (row.scan ?? {}) as RedesignScanDto,
     sections: Array.isArray(row.sections) ? (row.sections as RedesignSectionDto[]) : [],
   } as RedesignRun;
 }
@@ -86,7 +105,7 @@ export const adminRunRedesign = createServerFn({ method: "POST" })
           treatment: data.treatment,
           angle: data.angle,
           status: "draft",
-          scan: result.scan as unknown as Record<string, unknown>,
+          scan: result.scan as unknown as RedesignScanDto,
           headline: result.pitch.headline,
           subheadline: result.pitch.subheadline,
           sections: result.pitch.sections,
