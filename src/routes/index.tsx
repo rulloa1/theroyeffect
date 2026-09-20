@@ -33,7 +33,10 @@ function Home() {
   return (
     <main className="relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
       <PortfolioHeader />
-      <section data-home-hero className="relative z-20 bg-[var(--ground)] px-2 pb-2 md:px-4 md:pb-4">
+      <section
+        data-home-hero
+        className="relative z-20 bg-[var(--ground)] px-2 pb-2 md:px-4 md:pb-4"
+      >
         <HeroContent />
       </section>
       <PortfolioWorkGallery />

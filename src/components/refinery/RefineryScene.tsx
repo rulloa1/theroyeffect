@@ -110,10 +110,7 @@ export function RefineryScene() {
         Object.assign(shader.uniforms, oreUniforms);
         shader.vertexShader = shader.vertexShader
           .replace("#include <common>", "#include <common>\nvarying vec3 vOrePosition;")
-          .replace(
-            "#include <begin_vertex>",
-            "#include <begin_vertex>\nvOrePosition = position;",
-          );
+          .replace("#include <begin_vertex>", "#include <begin_vertex>\nvOrePosition = position;");
         shader.fragmentShader = shader.fragmentShader
           .replace(
             "#include <common>",
@@ -215,7 +212,10 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       const dustGeometry = new THREE.BufferGeometry();
       dustGeometry.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
       dustGeometry.setAttribute("aSeed", new THREE.BufferAttribute(dustSeeds, 1));
-      const dustUniforms = { uTime: { value: 0 }, uPixelRatio: { value: renderer.getPixelRatio() } };
+      const dustUniforms = {
+        uTime: { value: 0 },
+        uPixelRatio: { value: renderer.getPixelRatio() },
+      };
       const dustMaterial = new THREE.ShaderMaterial({
         uniforms: dustUniforms,
         transparent: true,
@@ -263,8 +263,16 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       let targetTiltY = 0;
       const maxTilt = THREE.MathUtils.degToRad(2);
       const onPointerMove = (event: PointerEvent) => {
-        targetTiltY = THREE.MathUtils.clamp((event.clientX / window.innerWidth - 0.5) * maxTilt * 2, -maxTilt, maxTilt);
-        targetTiltX = THREE.MathUtils.clamp((event.clientY / window.innerHeight - 0.5) * maxTilt * 2, -maxTilt, maxTilt);
+        targetTiltY = THREE.MathUtils.clamp(
+          (event.clientX / window.innerWidth - 0.5) * maxTilt * 2,
+          -maxTilt,
+          maxTilt,
+        );
+        targetTiltX = THREE.MathUtils.clamp(
+          (event.clientY / window.innerHeight - 0.5) * maxTilt * 2,
+          -maxTilt,
+          maxTilt,
+        );
       };
       window.addEventListener("pointermove", onPointerMove, { passive: true });
 
@@ -282,7 +290,8 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         ore.rotation.x += (targetTiltX - ore.rotation.x) * 0.06;
         ore.rotation.z += (-targetTiltY - ore.rotation.z) * 0.06;
         oreUniforms.uTime.value = elapsed;
-        oreUniforms.uVeinGlow.value = 0.07 + (Math.sin((elapsed / 6) * Math.PI * 2) * 0.5 + 0.5) * 0.08;
+        oreUniforms.uVeinGlow.value =
+          0.07 + (Math.sin((elapsed / 6) * Math.PI * 2) * 0.5 + 0.5) * 0.08;
         dustUniforms.uTime.value = elapsed;
         renderer.render(scene, camera);
         frame = requestAnimationFrame(render);
@@ -300,10 +309,13 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       };
       const hero = document.querySelector<HTMLElement>("[data-home-hero]");
       const intersectionObserver = hero
-        ? new IntersectionObserver(([entry]) => {
-            heroVisible = entry?.isIntersecting ?? false;
-            syncAnimation();
-          }, { threshold: 0.01 })
+        ? new IntersectionObserver(
+            ([entry]) => {
+              heroVisible = entry?.isIntersecting ?? false;
+              syncAnimation();
+            },
+            { threshold: 0.01 },
+          )
         : null;
       if (hero && intersectionObserver) intersectionObserver.observe(hero);
       const onVisibilityChange = () => syncAnimation();

@@ -7,8 +7,7 @@
  * so those clients get a lightweight static page instead.
  */
 
-const BOT_UA =
-  /headless|bot|crawler|spider|lighthouse|validator|http|curl|python|axios|node/i;
+const BOT_UA = /headless|bot|crawler|spider|lighthouse|validator|http|curl|python|axios|node/i;
 
 let cached: boolean | null = null;
 
@@ -43,8 +42,7 @@ export function shouldRunHeavyEffects(): boolean {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
   )
     ok = false;
-  else if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 2)
-    ok = false;
+  else if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 2) ok = false;
   else if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 2) ok = false;
   else if (!webglAvailable()) ok = false;
 
