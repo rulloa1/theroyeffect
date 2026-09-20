@@ -30,6 +30,7 @@ fact needs rich structure (a table, a Why, several links).
 - [Site Mcp Server](reference_site_mcp_server.md) — 2026-09-15 The site hosts its own MCP server at /mcp, OAuth-protected through Supabase auth.
 - [Ai Provider Order](reference_ai_provider_order.md) — 2026-09-15 Drafting prefers the Lovable AI Gateway and falls back to direct Gemini only when the gateway key is absent.
 - [Email Sender Domains](reference_email_sender_domains.md) — 2026-09-15 Transactional email sends from notify.theroyeffect.com; the From header shows theroyeffect.com.
+- [Branch Cleanup](reference_branch_cleanup.md) — 2026-09-20 Merged branches cannot be deleted from a Claude Code remote session: the egress proxy answers git ref delet...
 
 ## User
 
