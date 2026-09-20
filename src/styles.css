@@ -436,7 +436,7 @@ html[data-motion="paused"] .chapter-seam {
 }
 
 html[data-motion="paused"] .scroll-reveal-stagger > * {
-  animation: none;
+  animation: none !important;
   opacity: 1;
   transform: none;
 }
@@ -579,7 +579,7 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   }
 
   .scroll-reveal-stagger > * {
-    animation: none;
+    animation: none !important;
     opacity: 1;
     transform: none;
   }
