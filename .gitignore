@@ -16,6 +16,21 @@ dist-ssr
 .nitro
 *.local
 
+# Environment files
+#
+# NOTE: .env, .env.development, .env.staging and .env.production are ALREADY
+# tracked. A .gitignore rule does not untrack a file, so these four keep being
+# committed and the build keeps working. See docs/env-handling.md for why they
+# have not been removed and what has to happen first.
+#
+# What this rule DOES do: stop any NEW env file (.env.local, .env.secrets, a
+# colleague's scratch copy) from being committed by accident. Server-side code
+# reads real secrets — SUPABASE_SERVICE_ROLE_KEY, STRIPE_LIVE_API_KEY,
+# VAPI_SERVER_SECRET — and vite.config.ts loads every var from these files into
+# process.env, so one pasted secret would otherwise land in git silently.
+.env*
+!.env.example
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
