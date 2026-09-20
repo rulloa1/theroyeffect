@@ -44,6 +44,39 @@ function requireEnv(name: string): string {
   return value;
 }
 
+/** Resolve the outbound caller number to its Vapi phone-number ID. */
+async function resolveCallerNumberId(apiKey: string): Promise<string> {
+  const explicitId = process.env["VAPI_PHONE_NUMBER_ID"];
+  // A uuid-like ID can be used as-is; anything that looks like a phone number needs resolving.
+  if (explicitId && !explicitId.trim().startsWith("+")) return explicitId.trim();
+
+  const outboundNumber = explicitId?.trim().startsWith("+") ? explicitId.trim() : process.env["VAPI_OUTBOUND_NUMBER"]?.trim();
+  if (!outboundNumber) {
+    throw new Error("No calling number configured — set VAPI_OUTBOUND_NUMBER (or VAPI_PHONE_NUMBER_ID).");
+  }
+
+  const response = await fetch(`${VAPI_API}/phone-number`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(`Could not look up Vapi phone numbers (${response.status}): ${text.slice(0, 300)}`);
+  }
+
+  let numbers: Array<{ id?: string; number?: string }>;
+  try {
+    numbers = JSON.parse(text) as Array<{ id?: string; number?: string }>;
+  } catch {
+    throw new Error("Vapi returned an unreadable phone-number list.");
+  }
+
+  const match = numbers.find((n) => n.number === outboundNumber || n.number === outboundNumber.replace(/^\+1/, "").slice(-10));
+  if (!match?.id) {
+    throw new Error(`The calling number ${outboundNumber} is not set up in your Vapi account yet.`);
+  }
+  return match.id;
+}
+
 export async function placeColdCall(input: OutboundCallInput): Promise<OutboundCallResult> {
   const apiKey = requireEnv("VAPI_PRIVATE_KEY");
   const phoneNumberId = requireEnv("VAPI_PHONE_NUMBER_ID");
