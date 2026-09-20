@@ -26,7 +26,6 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as WorkRouteImport } from './routes/work'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -39,6 +38,8 @@ import { Route as GuidesWebsiteAuditChecklistRouteImport } from './routes/guides
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as ProposalTokenRouteImport } from './routes/proposal.$token'
 import { Route as SiteReportTokenRouteImport } from './routes/site-report.$token'
+import { Route as WorkIndexRouteImport } from './routes/work.index'
+import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedProjectsProjectIdRouteImport } from './routes/_authenticated/projects.$projectId'
 import { Route as AuthenticatedProposalsProposalIdRouteImport } from './routes/_authenticated/proposals.$proposalId'
@@ -137,11 +138,6 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorkRoute = WorkRouteImport.update({
-  id: '/work',
-  path: '/work',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const Char91DotmcpChar93ListToolsRoute =
   Char91DotmcpChar93ListToolsRouteImport.update({
     id: '/.mcp/list-tools',
@@ -205,6 +201,16 @@ const ProposalTokenRoute = ProposalTokenRouteImport.update({
 const SiteReportTokenRoute = SiteReportTokenRouteImport.update({
   id: '/site-report/$token',
   path: '/site-report/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkIndexRoute = WorkIndexRouteImport.update({
+  id: '/work/',
+  path: '/work/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkSlugRoute = WorkSlugRouteImport.update({
+  id: '/work/$slug',
+  path: '/work/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -299,7 +305,6 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -312,6 +317,8 @@ export interface FileRoutesByFullPath {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -343,7 +350,6 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -356,6 +362,8 @@ export interface FileRoutesByTo {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -389,7 +397,6 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -402,6 +409,8 @@ export interface FileRoutesById {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/_authenticated/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -435,7 +444,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
@@ -448,6 +456,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
     | '/proposals/$proposalId'
@@ -479,7 +489,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
@@ -492,6 +501,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
     | '/proposals/$proposalId'
@@ -524,7 +535,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
@@ -537,6 +547,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/projects/$projectId'
     | '/_authenticated/proposals/$proposalId'
@@ -570,7 +582,6 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
-  WorkRoute: typeof WorkRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
@@ -580,6 +591,8 @@ export interface RootRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
   ProposalTokenRoute: typeof ProposalTokenRoute
   SiteReportTokenRoute: typeof SiteReportTokenRoute
+  WorkSlugRoute: typeof WorkSlugRoute
+  WorkIndexRoute: typeof WorkIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicBriefIntakeRoute: typeof ApiPublicBriefIntakeRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
@@ -714,13 +727,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/work': {
-      id: '/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof WorkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/.mcp/list-tools': {
       id: '/.mcp/list-tools'
       path: '/.mcp/list-tools'
@@ -803,6 +809,20 @@ declare module '@tanstack/react-router' {
       path: '/site-report/$token'
       fullPath: '/site-report/$token'
       preLoaderRoute: typeof SiteReportTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/': {
+      id: '/work/'
+      path: '/work'
+      fullPath: '/work/'
+      preLoaderRoute: typeof WorkIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/$slug': {
+      id: '/work/$slug'
+      path: '/work/$slug'
+      fullPath: '/work/$slug'
+      preLoaderRoute: typeof WorkSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
@@ -936,7 +956,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
-  WorkRoute: WorkRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
@@ -947,6 +966,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortalLoginRoute: PortalLoginRoute,
   ProposalTokenRoute: ProposalTokenRoute,
   SiteReportTokenRoute: SiteReportTokenRoute,
+  WorkSlugRoute: WorkSlugRoute,
+  WorkIndexRoute: WorkIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicBriefIntakeRoute: ApiPublicBriefIntakeRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
