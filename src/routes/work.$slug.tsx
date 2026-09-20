@@ -167,18 +167,32 @@ function WorkStudyPage() {
             <ScrollReveal
               stagger
               respectEffectsGuard
-              className="mt-8 grid gap-px border border-[var(--line)] bg-[var(--line)] md:grid-cols-2"
+              className="mt-8 border-t border-[var(--line)]"
             >
-              {study.approach.map((block) => (
-                <article key={block.title} className="bg-[var(--ground)] p-6 md:p-8">
-                  <h3 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-tight text-[var(--ink)]">
-                    {block.title}
-                  </h3>
-                  <p className="mt-3 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                    {block.body}
-                  </p>
-                </article>
-              ))}
+              {study.approach.map((block, index) => {
+                const [rawNumber, ...rest] = block.title.split("—");
+                const hasNumber = rest.length > 0;
+                const stepNumber = hasNumber
+                  ? rawNumber.trim()
+                  : String(index + 1).padStart(2, "0");
+                const stepTitle = hasNumber ? rest.join("—").trim() : block.title;
+                return (
+                  <article
+                    key={block.title}
+                    className="grid gap-2 border-b border-[var(--line)] py-6 md:grid-cols-[4rem_minmax(0,1fr)] md:gap-6 md:py-8"
+                  >
+                    <span className="font-mono text-sm text-[var(--ink-faint)]">{stepNumber}</span>
+                    <div className="min-w-0">
+                      <h3 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-tight text-[var(--ink)]">
+                        {stepTitle}
+                      </h3>
+                      <p className="mt-3 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+                        {block.body}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
             </ScrollReveal>
           </div>
         </section>
