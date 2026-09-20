@@ -40,13 +40,39 @@ need to stay siblings of it.
 
 | Event | Matcher | Effect |
 |---|---|---|
-| `SessionStart` | startup, resume, clear, compact | Injects the router skill into **every** session, n8n-related or not |
 | `PreToolUse` | `get_node_types`, `create_workflow_from_code`, `update_workflow`, `validate_workflow`, `execute_workflow`, `test_workflow` | One-shot reminder pointing at the relevant skill |
 | `PostToolUse` | `validate_workflow` | Follow-up guidance on reading validation output |
 
 `PreToolUse` reminders fire **once per session per marker**, deduped via marker
-files in `$TMPDIR/n8n-skills-state/`. `SessionStart` wipes those markers on
-`clear`/`compact` so the reminders can fire again after context is lost.
+files in `$TMPDIR/n8n-skills-state/`. These cost nothing until an n8n MCP tool
+is actually called.
+
+### SessionStart is deliberately NOT registered
+
+Upstream also ships a `SessionStart` hook that injects the router skill
+(`using-n8n-skills-official`) into **every** session. It is not registered in
+`settings.json` here: this repo is a marketing site with no n8n in it, so that
+hook would spend context on n8n guidance in every unrelated session.
+
+`hooks/session-start.sh` is still vendored, so re-enabling is just adding this
+block back to `.claude/settings.json`:
+
+```json
+"SessionStart": [
+  {
+    "matcher": "startup|resume|clear|compact",
+    "hooks": [
+      { "type": "command", "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh\"" }
+    ]
+  }
+]
+```
+
+One consequence of leaving it off: that script is also what wipes the
+`PreToolUse` dedup markers on `clear`/`compact`. Without it, each reminder
+fires only once per session even after a compaction has dropped it from
+context. The skills themselves are unaffected — they load on relevance like
+any other skill.
 
 Every hook script fails open — it exits 0 and emits nothing rather than
 blocking a tool call. `jq` is preferred, `python3` is the fallback; with
@@ -56,8 +82,8 @@ neither, hooks no-op.
 
 `theroyeffect` does not use n8n — its scheduled work is Supabase `pg_cron`
 (see `docs/memory/project_scheduled_jobs.md`). These skills are installed for
-workspace-level n8n work, not because this codebase needs them. The only
-always-on cost is the router skill the `SessionStart` hook injects.
+workspace-level n8n work, not because this codebase needs them. With
+`SessionStart` unregistered they carry no always-on context cost.
 
 ### Updating
 
