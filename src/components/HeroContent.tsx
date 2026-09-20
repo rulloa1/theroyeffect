@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/refinery/Magnetic";
@@ -57,7 +58,7 @@ export function HeroContent() {
                 <span key={`${word}-${index}`} className="inline-block overflow-hidden align-bottom">
                   <span
                     className="hero-word inline-block"
-                    style={{ "--word-index": index } as React.CSSProperties}
+                    style={{ "--word-index": index } as CSSProperties}
                   >
                     {word}
                   </span>
@@ -71,11 +72,11 @@ export function HeroContent() {
             build digital experiences that look exceptional and help businesses stand out.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Magnetic className="hero-cta hero-cta-primary">
+            <Magnetic className="hero-cta hero-cta-primary w-full sm:w-auto">
               <Button
                 asChild
                 size="lg"
-                className="rounded-none px-7 font-mono text-xs font-bold tracking-widest"
+                className="w-full rounded-none px-7 font-mono text-xs font-bold tracking-widest"
               >
                 <Link to="/" hash="work">
                   <span className="magnetic-label inline-flex items-center gap-2">
@@ -84,12 +85,12 @@ export function HeroContent() {
                 </Link>
               </Button>
             </Magnetic>
-            <Magnetic className="hero-cta hero-cta-secondary">
+            <Magnetic className="hero-cta hero-cta-secondary w-full sm:w-auto">
               <Button
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
+                className="w-full rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
               >
                 <Link to="/brief">
                   <span className="magnetic-label">START A PROJECT</span>

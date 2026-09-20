@@ -164,11 +164,11 @@ export function PortfolioSections() {
               into a polished digital experience.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Magnetic>
+              <Magnetic className="w-full sm:w-auto">
                 <Button
                   asChild
                   size="lg"
-                  className="rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
+                  className="w-full rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
                 >
                   <Link to="/brief">
                     <span className="magnetic-label inline-flex items-center gap-2">
@@ -177,12 +177,12 @@ export function PortfolioSections() {
                   </Link>
                 </Button>
               </Magnetic>
-              <Magnetic>
+              <Magnetic className="w-full sm:w-auto">
                 <Button
                   asChild
                   size="lg"
                   variant="outline"
-                  className="rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
+                  className="w-full rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
                 >
                   <Link to="/book">
                     <span className="magnetic-label">CONTACT ME</span>

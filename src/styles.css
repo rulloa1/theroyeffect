@@ -199,6 +199,159 @@
   );
 }
 
+@keyframes hero-rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-word-rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-eyebrow-rule {
+  animation: hero-rule-draw var(--dur-reveal) var(--ease-draw) both;
+}
+
+.hero-eyebrow-text {
+  animation: hero-fade-in var(--dur-reveal) var(--ease-draw) both;
+}
+
+.hero-word {
+  opacity: 1;
+  animation: hero-word-rise var(--dur-state) var(--ease-refine) both;
+  animation-delay: calc(120ms + var(--word-index) * var(--stagger));
+}
+
+.hero-portrait {
+  animation: hero-fade-in var(--dur-state) var(--ease-refine) 400ms both;
+}
+
+.hero-portrait-image {
+  filter: grayscale(1) contrast(1.25) drop-shadow(-1px -1px 0 rgb(223 186 115 / 0.55))
+    drop-shadow(-8px -6px 20px rgb(223 186 115 / 0.16));
+}
+
+.hero-body {
+  animation: hero-rise-in var(--dur-reveal) var(--ease-refine) 900ms both;
+}
+
+.hero-cta-primary {
+  animation: hero-rise-in var(--dur-reveal) var(--ease-refine) 970ms both;
+}
+
+.hero-cta-secondary {
+  animation: hero-rise-in var(--dur-reveal) var(--ease-refine) 1040ms both;
+}
+
+.magnetic {
+  --magnetic-x: 0px;
+  --magnetic-y: 0px;
+  --magnetic-label-x: 0px;
+  --magnetic-label-y: 0px;
+  transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0);
+  transition: transform 420ms var(--ease-press);
+}
+
+.magnetic[data-magnetic-active="true"] {
+  transition-duration: var(--dur-micro);
+}
+
+.magnetic > a,
+.magnetic > button {
+  transition:
+    transform var(--dur-micro) var(--ease-press),
+    color var(--dur-micro),
+    background-color var(--dur-micro),
+    border-color var(--dur-micro);
+}
+
+.magnetic > a:active,
+.magnetic > button:active {
+  transform: scale(0.97);
+}
+
+.magnetic-label {
+  transform: translate3d(var(--magnetic-label-x), var(--magnetic-label-y), 0);
+  transition: transform 420ms var(--ease-press);
+}
+
+.magnetic[data-magnetic-active="true"] .magnetic-label {
+  transition-duration: var(--dur-micro);
+}
+
+.homepage-root :is(a, button, input, select, textarea):focus-visible,
+.homepage-footer :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  --tw-ring-shadow: 0 0 #0000;
+  box-shadow: none;
+}
+
+.homepage-root #contact :is(a, button, input, select, textarea):focus-visible {
+  outline-color: var(--ground);
+}
+
+html[data-motion="paused"] .hero-eyebrow-rule,
+html[data-motion="paused"] .hero-eyebrow-text,
+html[data-motion="paused"] .hero-word,
+html[data-motion="paused"] .hero-portrait,
+html[data-motion="paused"] .hero-body,
+html[data-motion="paused"] .hero-cta,
+html[data-motion="paused"] .animate-marquee,
+html[data-motion="paused"] .animate-cta-marquee {
+  animation: none !important;
+}
+
+html[data-motion="paused"] .hero-eyebrow-rule {
+  transform: scaleX(1);
+}
+
+html[data-motion="paused"] .hero-word,
+html[data-motion="paused"] .hero-body,
+html[data-motion="paused"] .hero-cta,
+html[data-motion="paused"] .hero-portrait,
+html[data-motion="paused"] .hero-eyebrow-text,
+html[data-motion="paused"] .scroll-reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+html[data-motion="paused"] .magnetic,
+html[data-motion="paused"] .magnetic-label {
+  transform: none;
+  transition: none;
+}
+
 @utility text-stroke-thin {
   -webkit-text-stroke: 1px #ffffff;
   color: transparent;
@@ -272,10 +425,33 @@
     transform: none;
     transition: none;
   }
+
+  .hero-eyebrow-rule,
+  .hero-eyebrow-text,
+  .hero-word,
+  .hero-portrait,
+  .hero-body,
+  .hero-cta {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .magnetic,
+  .magnetic-label {
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (pointer: coarse) {
   .spotlight-overlay {
     display: none;
+  }
+
+  .magnetic,
+  .magnetic-label {
+    transform: none;
+    transition: none;
   }
 }
