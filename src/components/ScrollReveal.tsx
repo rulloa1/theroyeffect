@@ -84,14 +84,24 @@ export function ScrollReveal({
 
   if (as === "ol") {
     return (
-      <ol ref={(node) => (elementRef.current = node)} className={revealClassName}>
+      <ol
+        ref={(node) => {
+          elementRef.current = node;
+        }}
+        className={revealClassName}
+      >
         {content}
       </ol>
     );
   }
 
   return (
-    <div ref={(node) => (elementRef.current = node)} className={revealClassName}>
+    <div
+      ref={(node) => {
+        elementRef.current = node;
+      }}
+      className={revealClassName}
+    >
       {content}
     </div>
   );
