@@ -52,7 +52,9 @@ export function PortfolioWorkGallery() {
             </Link>
 
             <div className="flex flex-col justify-end border-t border-[var(--line)] p-7 sm:p-10 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-12">
-              <p className="font-mono text-xs tracking-widest text-[var(--gold)]">WEBSITE REDESIGN</p>
+              <p className="font-mono text-xs tracking-widest text-[var(--gold)]">
+                WEBSITE REDESIGN
+              </p>
               <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-none text-[var(--ink)]">
                 Redesigning a Houston service business site
               </h3>
