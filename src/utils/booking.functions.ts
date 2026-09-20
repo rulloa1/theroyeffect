@@ -23,8 +23,17 @@ export const getDiscoveryAvailability = createServerFn({ method: "GET" })
     };
   });
 
+const bookingRequestSchema = bookingSlotSchema.extend({
+  smsService: z.boolean().default(false),
+  smsMarketing: z.boolean().default(false),
+});
+
 export const bookDiscoveryCall = createServerFn({ method: "POST" })
-  .inputValidator((input) => bookingSlotSchema.parse(input))
+  .inputValidator((input) => bookingRequestSchema.parse(input))
   .handler(async ({ data }) => {
-    return bookDiscoverySlot(data);
+    const { smsService, smsMarketing, ...slot } = data;
+    return bookDiscoverySlot(slot, undefined, {
+      sms_service_consent: smsService,
+      sms_marketing_consent: smsMarketing,
+    });
   });

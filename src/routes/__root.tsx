@@ -18,7 +18,6 @@ import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { VoiceConcierge } from "@/components/VoiceConcierge";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -85,12 +84,13 @@ const STRUCTURED_DATA = {
   "@graph": [
     {
       "@type": "Person",
-      "@id": "https://www.theroyeffect.com/#person",
+      "@id": "https://theroyeffect.com/#person",
       name: "Rory Ulloa",
-      url: "https://www.theroyeffect.com",
       jobTitle: "Creative Director & UI/UX Designer",
+      url: "https://theroyeffect.com/about",
+      worksFor: { "@id": "https://theroyeffect.com/#business" },
       email: "rory@theroyeffect.com",
-      telephone: "281-323-0450",
+      telephone: "+1-281-323-0450",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Houston",
@@ -107,13 +107,23 @@ const STRUCTURED_DATA = {
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://www.theroyeffect.com/#service",
+      "@id": "https://theroyeffect.com/#business",
       name: "The Roy Effect",
-      slogan: "Design With Purpose",
-      url: "https://www.theroyeffect.com",
-      telephone: "281-323-0450",
-      founder: { "@id": "https://www.theroyeffect.com/#person" },
-      priceRange: "$$$$",
+      url: "https://theroyeffect.com",
+      logo: "https://theroyeffect.com/favicon.png",
+      email: "rory@theroyeffect.com",
+      telephone: "+1-281-323-0450",
+      founder: { "@id": "https://theroyeffect.com/#person" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Houston",
+        addressRegion: "TX",
+        addressCountry: "US",
+      },
+      areaServed: { "@type": "City", name: "Houston" },
+      openingHours: "Mo-Fr 09:00-17:00",
+      priceRange: "$2,500–$8,000",
+      sameAs: ["https://www.google.com/maps?cid=8301339460554210785"],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Design & Build Services",
@@ -193,16 +203,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        // Plex Mono 600/700 are requested because the hub's pills and status
-        // flags set font-bold on mono; without them the browser fakes it.
-        href: "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300..700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap",
+        // font-display now resolves to Space Grotesk sitewide, so Anton is no longer requested.
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap",
       },
       {
         rel: "stylesheet",
         href: appCss,
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
-
     ],
     scripts: [
       {
@@ -289,4 +297,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

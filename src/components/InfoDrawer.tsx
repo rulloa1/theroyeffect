@@ -13,7 +13,11 @@ const MENU_LINKS = [
   { label: "WORK", to: "/work" as const },
   { label: "SERVICES", to: "/services" as const },
   { label: "PRICING", to: "/pricing" as const },
-  { label: "CASE STUDY", to: "/case-study" as const },
+  {
+    label: "CASE STUDY",
+    to: "/work/$slug" as const,
+    params: { slug: "marlow-sons-cabinetry" },
+  },
   { label: "ABOUT", to: "/about" as const },
   { label: "PROCESS", to: "/process" as const },
 ];
@@ -166,6 +170,7 @@ export function InfoDrawer({
                       <li key={item.label}>
                         <Link
                           to={item.to}
+                          {...("params" in item ? { params: item.params } : {})}
                           onClick={close}
                           className="group flex w-full items-center justify-between border-b border-white/10 py-5 text-left"
                         >

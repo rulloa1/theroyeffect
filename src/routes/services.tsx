@@ -5,7 +5,7 @@ import { SERVICES, PROCESS_STEPS } from "@/lib/site-content";
 
 const TITLE = "Design Services — Brand, UI/UX & No-Code Build | The Roy Effect";
 const DESCRIPTION =
-  "Freelance design services by Rory Ulloa: brand identity systems, web design and UI/UX, end-to-end no-code builds and monthly design retainers. Houston-based, working remotely across the US.";
+  "Brand identity, web design and UI/UX, no-code builds and monthly design retainers from Rory Ulloa, a Houston-based independent creative director.";
 
 const SERVICE_SCHEMA = {
   "@context": "https://schema.org",
@@ -19,14 +19,14 @@ const SERVICE_SCHEMA = {
       name: s.name,
       description: s.summary,
       serviceType: s.name,
-      url: `https://www.theroyeffect.com/services#${s.slug}`,
-      provider: { "@id": "https://www.theroyeffect.com/#service" },
+      url: `https://theroyeffect.com/services#${s.slug}`,
+      provider: { "@id": "https://theroyeffect.com/#business" },
       areaServed: { "@type": "Country", name: "United States" },
       offers: {
         "@type": "Offer",
         priceCurrency: "USD",
         price: s.from.replace(/[^0-9]/g, ""),
-        url: "https://www.theroyeffect.com/pricing",
+        url: "https://theroyeffect.com/pricing",
       },
     },
   })),
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/services")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://www.theroyeffect.com/services" }],
+    links: [{ rel: "canonical", href: "https://theroyeffect.com/services" }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(SERVICE_SCHEMA) }],
   }),
   component: ServicesPage,

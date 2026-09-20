@@ -23,7 +23,7 @@ const Email = ({
   spoken = "your selected time",
   time_zone = "America/Chicago",
   notes,
-  questionnaire_url = "https://www.theroyeffect.com/brief",
+  questionnaire_url = "https://theroyeffect.com/brief",
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -60,7 +60,7 @@ export const template = {
     spoken: "Monday, January 1 at 10:00 AM",
     time_zone: "America/Chicago",
     notes: "Looking to redesign our homepage and improve conversions.",
-    questionnaire_url: "https://www.theroyeffect.com/brief",
+    questionnaire_url: "https://theroyeffect.com/brief",
   },
 } satisfies TemplateEntry;
 

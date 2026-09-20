@@ -3,7 +3,9 @@ import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { escapeLikePattern } from "@/lib/sql-like";
 
 export const OWNER_EMAIL = "rory@theroyeffect.com";
-export const SITE = "https://www.theroyeffect.com";
+import { SITE_URL } from "@/lib/site";
+
+export const SITE = SITE_URL;
 export const QUESTIONNAIRE_URL = `${SITE}/brief`;
 export const BOOKING_TZ = "America/Chicago";
 /** Discovery slots offered daily, expressed in UTC hours (10am / 1pm / 3pm Central). */
@@ -160,9 +162,16 @@ export function isOfferedSlot(start: Date): boolean {
   return start.getUTCMinutes() === 0 && start.getUTCSeconds() === 0;
 }
 
+/** SMS consents captured on the booking form when no payment step is involved. */
+export interface BookingConsent {
+  sms_service_consent: boolean;
+  sms_marketing_consent: boolean;
+}
+
 export async function bookDiscoverySlot(
   input: BookingSlotInput,
   payment?: BookingPaymentDetails,
+  consent?: BookingConsent,
 ): Promise<BookingResult> {
   const data = bookingSlotSchema.parse(input);
   const start = new Date(data.slot_start);
@@ -227,7 +236,13 @@ export async function bookDiscoverySlot(
             sms_marketing_consent: payment.sms_marketing_consent,
             consent_captured_at: new Date().toISOString(),
           }
-        : {}),
+        : consent
+          ? {
+              sms_service_consent: consent.sms_service_consent,
+              sms_marketing_consent: consent.sms_marketing_consent,
+              consent_captured_at: new Date().toISOString(),
+            }
+          : {}),
     })
     .select("id")
     .single();

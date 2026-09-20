@@ -39,4 +39,4 @@ export const FOLLOWUP_PLAYBOOKS = {
 
 export type PlaybookKey = keyof typeof FOLLOWUP_PLAYBOOKS;
 
-export const SITE_URL = "https://www.theroyeffect.com";
+export { SITE_URL } from "@/lib/site";

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMotionPaused } from "@/lib/motion-preference";
 
 /**
  * `prefers-reduced-motion`, read only after mount.
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
  */
 export function useClientReducedMotion(): boolean {
   const [reduced, setReduced] = useState(false);
+  const paused = useMotionPaused();
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -18,5 +20,5 @@ export function useClientReducedMotion(): boolean {
     return () => query.removeEventListener("change", update);
   }, []);
 
-  return reduced;
+  return reduced || paused;
 }

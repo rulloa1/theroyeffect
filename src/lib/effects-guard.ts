@@ -7,18 +7,17 @@
  * so those clients get a lightweight static page instead.
  */
 
-const BOT_UA =
-  /headless|bot|crawler|spider|lighthouse|validator|http|curl|python|axios|node/i;
+const BOT_UA = /headless|bot|crawler|spider|lighthouse|validator|http|curl|python|axios|node/i;
 
 let cached: boolean | null = null;
 
 function webglAvailable(): boolean {
   try {
     const canvas = document.createElement("canvas");
-    const gl =
-      (canvas.getContext("webgl2") as unknown) ||
-      (canvas.getContext("webgl") as unknown);
-    return Boolean(gl);
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+    const available = Boolean(gl);
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+    return available;
   } catch {
     return false;
   }
@@ -43,8 +42,7 @@ export function shouldRunHeavyEffects(): boolean {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
   )
     ok = false;
-  else if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 2)
-    ok = false;
+  else if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 2) ok = false;
   else if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 2) ok = false;
   else if (!webglAvailable()) ok = false;
 

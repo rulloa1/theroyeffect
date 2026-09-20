@@ -18,3 +18,24 @@
 - [x] Add and verify the data-driven homepage services section
 - [x] Add and verify the data-driven homepage process timeline
 - [x] Deduplicate homepage offers, promises, pricing references, CTAs, labels, and positioning copy
+- [x] Reposition the homepage as Rory's design-developer portfolio with work leading before services
+- [x] Replace homepage pricing and process detail with concise capabilities and philosophy sections
+- [x] Verify the redesigned homepage across navigation, media, motion, forms, and responsive breakpoints
+- [x] Rebuild the About page to match the architectural-noir homepage system
+- [x] Add Refinery design tokens and replace the homepage particle field with the procedural Ore scene
+- [x] Add Refinery hero choreography, magnetic CTAs, focus rings, and persisted motion controls
+- [x] Extend the homepage Ore into one fixed, scroll-driven Refinery chapter scene
+- [x] Add The Cut before-and-after concept study with accessible comparison controls and Ore refinement
+- [x] Add a periodically rotating word to The Cut headline
+- [x] Unify the homepage Refinery typography, warm ink, type scale, spacing, and ignition accents
+- [x] Add Refinery chapter seams, staggered reveals, a stronger Work chapter, and a type-led About chapter
+- [x] Simplify the project brief into an accessible two-step Refinery intake
+
+## Increment 7 — studio polish pass (preview only)
+
+- Tightened `--section-y` to clamp(3.5rem, 5.5vw, 6.5rem) for one vertical rhythm.
+- The Cut h2 keeps a clean aria-label; rotating words stay aria-hidden.
+- Anton dropped from the font request; `--font-display` now Space Grotesk; footer wordmark uses `--ink`.
+- `--ink-faint` raised to 0.56 (~5.4:1); services numerals use the token.
+- Free-audit aside heading demoted to lead size, semibold, max-w-[46ch].
+- [x] Increment 8 — three concept studies at /work/$slug, gallery rebuilt from WORK_STUDIES, /case-study permanently redirects to /work/marlow-sons-cabinetry

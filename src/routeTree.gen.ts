@@ -18,6 +18,7 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as BriefRouteImport } from './routes/brief'
 import { Route as CaseStudyRouteImport } from './routes/case-study'
 import { Route as ClientsRouteImport } from './routes/clients'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -25,7 +26,6 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as WorkRouteImport } from './routes/work'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -38,6 +38,8 @@ import { Route as GuidesWebsiteAuditChecklistRouteImport } from './routes/guides
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as ProposalTokenRouteImport } from './routes/proposal.$token'
 import { Route as SiteReportTokenRouteImport } from './routes/site-report.$token'
+import { Route as WorkIndexRouteImport } from './routes/work.index'
+import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedProjectsProjectIdRouteImport } from './routes/_authenticated/projects.$projectId'
 import { Route as AuthenticatedProposalsProposalIdRouteImport } from './routes/_authenticated/proposals.$proposalId'
@@ -45,6 +47,7 @@ import { Route as ApiPublicBriefIntakeRouteImport } from './routes/api/public/br
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicLeadconnectorRouteImport } from './routes/api/public/leadconnector'
 import { Route as ApiPublicVapiRouteImport } from './routes/api/public/vapi'
+import { Route as ApiPublicAutomationDeliveryRouteImport } from './routes/api/public/automation/delivery'
 import { Route as ApiPublicAutomationFollowupsRouteImport } from './routes/api/public/automation/followups'
 import { Route as ApiPublicAutomationGscIndexWatchRouteImport } from './routes/api/public/automation/gsc-index-watch'
 import { Route as ApiPublicAutomationProspectSyncRouteImport } from './routes/api/public/automation/prospect-sync'
@@ -95,6 +98,11 @@ const ClientsRoute = ClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
@@ -128,11 +136,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WorkRoute = WorkRouteImport.update({
-  id: '/work',
-  path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93ListToolsRoute =
@@ -200,6 +203,16 @@ const SiteReportTokenRoute = SiteReportTokenRouteImport.update({
   path: '/site-report/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkIndexRoute = WorkIndexRouteImport.update({
+  id: '/work/',
+  path: '/work/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkSlugRoute = WorkSlugRouteImport.update({
+  id: '/work/$slug',
+  path: '/work/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -238,6 +251,12 @@ const ApiPublicVapiRoute = ApiPublicVapiRouteImport.update({
   path: '/api/public/vapi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAutomationDeliveryRoute =
+  ApiPublicAutomationDeliveryRouteImport.update({
+    id: '/api/public/automation/delivery',
+    path: '/api/public/automation/delivery',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicAutomationFollowupsRoute =
   ApiPublicAutomationFollowupsRouteImport.update({
     id: '/api/public/automation/followups',
@@ -278,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -285,7 +305,6 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -298,6 +317,8 @@ export interface FileRoutesByFullPath {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -305,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
   '/api/public/automation/prospect-sync': typeof ApiPublicAutomationProspectSyncRoute
@@ -320,6 +342,7 @@ export interface FileRoutesByTo {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -327,7 +350,6 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -340,6 +362,8 @@ export interface FileRoutesByTo {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -347,6 +371,7 @@ export interface FileRoutesByTo {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
   '/api/public/automation/prospect-sync': typeof ApiPublicAutomationProspectSyncRoute
@@ -364,6 +389,7 @@ export interface FileRoutesById {
   '/brief': typeof BriefRoute
   '/case-study': typeof CaseStudyRoute
   '/clients': typeof ClientsRoute
+  '/connect': typeof ConnectRoute
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -371,7 +397,6 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
-  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -384,6 +409,8 @@ export interface FileRoutesById {
   '/portal/login': typeof PortalLoginRoute
   '/proposal/$token': typeof ProposalTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
   '/_authenticated/proposals/$proposalId': typeof AuthenticatedProposalsProposalIdRoute
@@ -391,6 +418,7 @@ export interface FileRoutesById {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
   '/api/public/automation/prospect-sync': typeof ApiPublicAutomationProspectSyncRoute
@@ -408,6 +436,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -415,7 +444,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
@@ -428,6 +456,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
     | '/proposals/$proposalId'
@@ -435,6 +465,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
     | '/api/public/automation/prospect-sync'
@@ -450,6 +481,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -457,7 +489,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
@@ -470,6 +501,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
     | '/proposals/$proposalId'
@@ -477,6 +510,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
     | '/api/public/automation/prospect-sync'
@@ -493,6 +527,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/case-study'
     | '/clients'
+    | '/connect'
     | '/mcp'
     | '/pricing'
     | '/privacy'
@@ -500,7 +535,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
-    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
@@ -513,6 +547,8 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/proposal/$token'
     | '/site-report/$token'
+    | '/work/$slug'
+    | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/projects/$projectId'
     | '/_authenticated/proposals/$proposalId'
@@ -520,6 +556,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
     | '/api/public/automation/prospect-sync'
@@ -537,6 +574,7 @@ export interface RootRouteChildren {
   BriefRoute: typeof BriefRoute
   CaseStudyRoute: typeof CaseStudyRoute
   ClientsRoute: typeof ClientsRoute
+  ConnectRoute: typeof ConnectRoute
   McpRoute: typeof McpRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -544,7 +582,6 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
-  WorkRoute: typeof WorkRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
@@ -554,11 +591,14 @@ export interface RootRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
   ProposalTokenRoute: typeof ProposalTokenRoute
   SiteReportTokenRoute: typeof SiteReportTokenRoute
+  WorkSlugRoute: typeof WorkSlugRoute
+  WorkIndexRoute: typeof WorkIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicBriefIntakeRoute: typeof ApiPublicBriefIntakeRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicLeadconnectorRoute: typeof ApiPublicLeadconnectorRoute
   ApiPublicVapiRoute: typeof ApiPublicVapiRoute
+  ApiPublicAutomationDeliveryRoute: typeof ApiPublicAutomationDeliveryRoute
   ApiPublicAutomationFollowupsRoute: typeof ApiPublicAutomationFollowupsRoute
   ApiPublicAutomationGscIndexWatchRoute: typeof ApiPublicAutomationGscIndexWatchRoute
   ApiPublicAutomationProspectSyncRoute: typeof ApiPublicAutomationProspectSyncRoute
@@ -631,6 +671,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mcp': {
       id: '/mcp'
       path: '/mcp'
@@ -678,13 +725,6 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/work': {
-      id: '/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -771,6 +811,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteReportTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/work/': {
+      id: '/work/'
+      path: '/work'
+      fullPath: '/work/'
+      preLoaderRoute: typeof WorkIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/$slug': {
+      id: '/work/$slug'
+      path: '/work/$slug'
+      fullPath: '/work/$slug'
+      preLoaderRoute: typeof WorkSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -818,6 +872,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/vapi'
       fullPath: '/api/public/vapi'
       preLoaderRoute: typeof ApiPublicVapiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/automation/delivery': {
+      id: '/api/public/automation/delivery'
+      path: '/api/public/automation/delivery'
+      fullPath: '/api/public/automation/delivery'
+      preLoaderRoute: typeof ApiPublicAutomationDeliveryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/automation/followups': {
@@ -887,6 +948,7 @@ const rootRouteChildren: RootRouteChildren = {
   BriefRoute: BriefRoute,
   CaseStudyRoute: CaseStudyRoute,
   ClientsRoute: ClientsRoute,
+  ConnectRoute: ConnectRoute,
   McpRoute: McpRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
@@ -894,7 +956,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
-  WorkRoute: WorkRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
@@ -905,11 +966,14 @@ const rootRouteChildren: RootRouteChildren = {
   PortalLoginRoute: PortalLoginRoute,
   ProposalTokenRoute: ProposalTokenRoute,
   SiteReportTokenRoute: SiteReportTokenRoute,
+  WorkSlugRoute: WorkSlugRoute,
+  WorkIndexRoute: WorkIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicBriefIntakeRoute: ApiPublicBriefIntakeRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicLeadconnectorRoute: ApiPublicLeadconnectorRoute,
   ApiPublicVapiRoute: ApiPublicVapiRoute,
+  ApiPublicAutomationDeliveryRoute: ApiPublicAutomationDeliveryRoute,
   ApiPublicAutomationFollowupsRoute: ApiPublicAutomationFollowupsRoute,
   ApiPublicAutomationGscIndexWatchRoute: ApiPublicAutomationGscIndexWatchRoute,
   ApiPublicAutomationProspectSyncRoute: ApiPublicAutomationProspectSyncRoute,
