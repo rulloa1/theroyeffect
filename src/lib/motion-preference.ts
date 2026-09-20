@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "tre:motion-paused";
 const listeners = new Set<() => void>();
@@ -57,5 +57,9 @@ export function setMotionPaused(nextPaused: boolean) {
 }
 
 export function useMotionPaused() {
-  return useSyncExternalStore(subscribeMotionPreference, getMotionPaused, () => false);
+  const value = useSyncExternalStore(subscribeMotionPreference, () => paused, () => false);
+  useEffect(() => {
+    hydratePreference();
+  }, []);
+  return value;
 }
