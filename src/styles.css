@@ -31,7 +31,7 @@
   --color-acid: var(--acid);
   --color-drawer: var(--drawer);
   --color-energy: var(--energy);
-  --font-display: "Anton", "Impact", "Arial Black", sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-sans: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-portfolio: "Space Grotesk", system-ui, sans-serif;
@@ -44,7 +44,7 @@
   --ground-raised: #121212;
   --ink: #f2eee6;
   --ink-muted: rgb(242 238 230 / 0.7);
-  --ink-faint: rgb(242 238 230 / 0.45);
+  --ink-faint: rgb(242 238 230 / 0.56);
   --line: rgb(242 238 230 / 0.12);
   --gold: #dfba73;
   --furnace: #ff3333;
@@ -52,7 +52,7 @@
   --type-h2: clamp(2.25rem, 5vw, 4rem);
   --type-h3: clamp(1.5rem, 2.2vw, 2.25rem);
   --type-lead: clamp(1.05rem, 1.3vw, 1.25rem);
-  --section-y: clamp(5rem, 9vw, 9rem);
+  --section-y: clamp(3.5rem, 5.5vw, 6.5rem);
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --veil-raised: rgb(18 18 18 / 0.78);
   --veil-ground: rgb(10 10 10 / 0.62);
@@ -123,7 +123,7 @@
 
 /* ---------------------------------------------------------------------------
    Signal — signed-in tool surfaces (studio hub, client portal)
-   Anton / Space Grotesk / IBM Plex Mono are the app-wide faces set in @theme,
+   Space Grotesk / Archivo / IBM Plex Mono are the app-wide faces set in @theme,
    so this scope only carries what the tools add on top: a gold focus ring
    against the near-black ground, plus the grid backdrop below.
    --------------------------------------------------------------------------- */

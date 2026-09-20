@@ -61,7 +61,7 @@ export function PortfolioSections() {
                   data-refinery-row={index}
                   className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-[var(--line)] py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
                 >
-                  <span className="font-mono text-xs text-white/35">0{index + 1}</span>
+                  <span className="font-mono text-xs text-[var(--ink-faint)]">0{index + 1}</span>
                   <span className="font-portfolio text-[length:var(--type-h3)] font-semibold text-[var(--ink)] transition-transform group-hover:translate-x-1">
                     {capability}
                   </span>
