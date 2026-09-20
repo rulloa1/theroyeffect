@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
+    <main className="homepage-root relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
       <PortfolioHeader />
       <section
         data-home-hero

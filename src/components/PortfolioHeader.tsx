@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
+import { MotionToggle } from "@/components/MotionToggle";
 
 const LINKS = [
   { label: "WORK", to: "/", hash: "work" },
@@ -38,6 +39,7 @@ export function PortfolioHeader() {
               {link.label}
             </Link>
           ))}
+          <MotionToggle className="mt-3 w-full justify-start border-t border-white/10 pt-3" />
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">

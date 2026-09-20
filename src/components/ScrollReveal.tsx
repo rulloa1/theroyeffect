@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
+import { useMotionPaused } from "@/lib/motion-preference";
 
 export function ScrollReveal({
   children,
@@ -13,6 +14,7 @@ export function ScrollReveal({
   const elementRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [staticReveal, setStaticReveal] = useState(false);
+  const paused = useMotionPaused();
 
   useEffect(() => {
     const element = elementRef.current;
@@ -21,6 +23,7 @@ export function ScrollReveal({
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (
       reduceMotion ||
+      paused ||
       (respectEffectsGuard && !shouldRunHeavyEffects()) ||
       typeof IntersectionObserver === "undefined"
     ) {
@@ -41,7 +44,7 @@ export function ScrollReveal({
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [respectEffectsGuard]);
+  }, [paused, respectEffectsGuard]);
 
   return (
     <div

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { Magnetic } from "@/components/refinery/Magnetic";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 
 const CAPABILITIES = [
@@ -163,23 +164,31 @@ export function PortfolioSections() {
               into a polished digital experience.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
-              >
-                <Link to="/brief">
-                  START A PROJECT <ArrowUpRight />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
-              >
-                <Link to="/book">CONTACT ME</Link>
-              </Button>
+              <Magnetic>
+                <Button
+                  asChild
+                  size="lg"
+                  className="rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
+                >
+                  <Link to="/brief">
+                    <span className="magnetic-label inline-flex items-center gap-2">
+                      START A PROJECT <ArrowUpRight />
+                    </span>
+                  </Link>
+                </Button>
+              </Magnetic>
+              <Magnetic>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
+                >
+                  <Link to="/book">
+                    <span className="magnetic-label">CONTACT ME</span>
+                  </Link>
+                </Button>
+              </Magnetic>
             </div>
           </div>
         </ScrollReveal>
