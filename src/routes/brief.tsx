@@ -447,6 +447,7 @@ function BriefPage() {
                 ● {lastSaved.startsWith("Draft") ? lastSaved : `Auto-saved at ${lastSaved}`}
               </span>
               <Button
+                key="brief-next"
                 type="button"
                 variant="ghost"
                 size="sm"
@@ -669,6 +670,7 @@ function BriefPage() {
               </Button>
             ) : (
               <Button
+                key="brief-submit"
                 type="submit"
                 disabled={sending}
                 className="min-h-11 rounded-none bg-[var(--furnace)] px-6 py-4 font-mono text-xs tracking-widest text-[var(--ground)] hover:bg-[var(--furnace)] hover:opacity-90 disabled:opacity-50"
