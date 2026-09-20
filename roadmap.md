@@ -27,3 +27,4 @@
 - [x] Extend the homepage Ore into one fixed, scroll-driven Refinery chapter scene
 - [x] Add The Cut before-and-after concept study with accessible comparison controls and Ore refinement
 - [x] Add a periodically rotating word to The Cut headline
+- [x] Unify the homepage Refinery typography, warm ink, type scale, spacing, and ignition accents

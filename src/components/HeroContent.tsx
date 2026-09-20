@@ -9,8 +9,8 @@ const HEADLINE = "I design and build websites people remember.";
 
 export function HeroContent() {
   return (
-    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-white/10 bg-[var(--veil-hero)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
-      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-white/10 bg-[var(--ground-raised)] md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
+    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-[var(--line)] bg-[var(--veil-hero)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
+      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-[var(--line)] bg-[var(--ground-raised)] md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
         <div className="hero-portrait absolute inset-0">
           <img
             src={portraitAsset.url}
@@ -25,7 +25,7 @@ export function HeroContent() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--ground)] via-transparent to-transparent" />
         <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8">
-          <p className="font-portfolio text-3xl font-bold leading-none text-white md:text-5xl">
+          <p className="font-portfolio text-3xl font-bold leading-none text-[var(--ink)] md:text-5xl">
             RORY ULLOA
           </p>
           <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[var(--gold)]">
@@ -50,26 +50,25 @@ export function HeroContent() {
           </div>
           <h1
             aria-label={HEADLINE}
-            className="hero-headline mt-6 max-w-4xl font-portfolio text-[2.8rem] font-bold leading-[0.9] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]"
+            className="hero-headline mt-6 max-w-4xl font-portfolio text-[length:var(--type-display)] font-bold leading-[0.9] text-[var(--ink)]"
           >
             <span aria-hidden="true">
               {HEADLINE.split(" ").map((word, index, words) => (
-                <span
-                  key={`${word}-${index}`}
-                  className="inline-block overflow-hidden align-bottom"
-                >
-                  <span
-                    className="hero-word inline-block"
-                    style={{ "--word-index": index } as CSSProperties}
-                  >
-                    {word}
+                <span key={`${word}-${index}`}>
+                  <span className="inline-block overflow-hidden align-bottom">
+                    <span
+                      className="hero-word inline-block"
+                      style={{ "--word-index": index } as CSSProperties}
+                    >
+                      {word}
+                    </span>
                   </span>
                   {index < words.length - 1 ? " " : null}
                 </span>
               ))}
             </span>
           </h1>
-          <p className="hero-body mt-6 max-w-2xl font-portfolio-body text-base leading-relaxed text-white/75 md:text-lg">
+          <p className="hero-body mt-6 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
             I combine creative direction, modern web development, motion, and strategic design to
             build digital experiences that look exceptional and help businesses stand out.
           </p>
@@ -95,7 +94,7 @@ export function HeroContent() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="w-full rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
+                  className="w-full rounded-none border-[var(--line)] bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--ink)]/5"
                 >
                   <Link to="/brief">
                     <span className="magnetic-label">START A PROJECT</span>

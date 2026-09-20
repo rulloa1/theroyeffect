@@ -203,9 +203,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        // Plex Mono 600/700 are requested because the hub's pills and status
-        // flags set font-bold on mono; without them the browser fakes it.
-        href: "https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400..900&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap",
+        // Anton remains for signed-in tool surfaces that still use font-display.
+        href: "https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400..700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap",
       },
       {
         rel: "stylesheet",
