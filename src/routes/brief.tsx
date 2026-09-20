@@ -234,10 +234,9 @@ function BriefPage() {
             name: typeof parsed.name === "string" ? parsed.name : previous.name,
             email: typeof parsed.email === "string" ? parsed.email : previous.email,
             company: typeof parsed.company === "string" ? parsed.company : previous.company,
-            projectType:
-              scopeType
-                ? previous.projectType
-                : typeof parsed.projectType === "string" && PROJECT_TYPES.includes(parsed.projectType)
+            projectType: scopeType
+              ? previous.projectType
+              : typeof parsed.projectType === "string" && PROJECT_TYPES.includes(parsed.projectType)
                 ? parsed.projectType
                 : previous.projectType,
             goals: typeof parsed.goals === "string" ? parsed.goals : previous.goals,
@@ -249,9 +248,9 @@ function BriefPage() {
               ? "Already paid"
               : scopeEstimate
                 ? previous.budget
-              : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
-                ? parsed.budget
-                : previous.budget,
+                : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
+                  ? parsed.budget
+                  : previous.budget,
             timeline:
               typeof parsed.timeline === "string" && TIMELINES.includes(parsed.timeline)
                 ? parsed.timeline
