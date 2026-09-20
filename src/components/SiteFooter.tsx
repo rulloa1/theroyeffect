@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowUpRight, Linkedin, Mail, MapPin, Phone, SearchCheck, Twitter } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { MotionToggle } from "@/components/MotionToggle";
 import { CONTACT_EMAIL, LINKEDIN_URL, X_URL } from "@/lib/site";
 
 const STUDIO_LINKS = [
@@ -20,10 +21,13 @@ const GUIDE_LINKS = [
 ];
 
 export function SiteFooter() {
-  const showCtas = useRouterState({ select: (state) => state.location.pathname !== "/" });
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const showCtas = pathname !== "/";
 
   return (
-    <footer className="relative z-20 w-full overflow-hidden border-t border-white/10 bg-[#030014] px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20">
+    <footer
+      className={`relative z-20 w-full overflow-hidden border-t border-white/10 bg-[#030014] px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20 ${pathname === "/" ? "homepage-footer" : ""}`}
+    >
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF3333] to-transparent opacity-70"
@@ -154,9 +158,12 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-2 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[15px] text-white/70">
-            © {new Date().getFullYear()} The Roy Effect
-          </p>
+          <div className="flex flex-wrap items-center gap-x-5">
+            <p className="font-mono text-[15px] text-white/70">
+              © {new Date().getFullYear()} The Roy Effect
+            </p>
+            <MotionToggle />
+          </div>
           <nav className="flex items-center gap-5" aria-label="Legal">
             <Link
               to="/privacy"

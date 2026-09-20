@@ -36,3 +36,4 @@ fact needs rich structure (a table, a Why, several links).
 _Preferences and working style — nothing filed yet._
 
 ## New / Unsorted (filed by brain store — sort into a section when touched)
+- [Refinery Motion System](refinery_motion_system.md) — 2026-09-20 Refinery homepage motion uses choreographed transform/opacity entrances, magnetic CTAs, gold focus rings, a...

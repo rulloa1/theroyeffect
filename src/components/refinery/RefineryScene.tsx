@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
+import { useMotionPaused } from "@/lib/motion-preference";
 
 const DUST_COUNT = 600;
 const ORE_X = 1.25;
@@ -32,6 +33,7 @@ function valueNoise3(x: number, y: number, z: number) {
 
 export function RefineryScene() {
   const holder = useRef<HTMLDivElement | null>(null);
+  const paused = useMotionPaused();
 
   useEffect(() => {
     const mount = holder.current;
@@ -302,7 +304,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         frame = requestAnimationFrame(render);
       };
       const syncAnimation = () => {
-        const shouldAnimate = heroVisible && !document.hidden;
+        const shouldAnimate = heroVisible && !document.hidden && !paused;
         if (shouldAnimate && !running) {
           running = true;
           previousTime = performance.now();
@@ -325,6 +327,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       if (hero && intersectionObserver) intersectionObserver.observe(hero);
       const onVisibilityChange = () => syncAnimation();
       document.addEventListener("visibilitychange", onVisibilityChange);
+      renderer.render(scene, camera);
       syncAnimation();
       requestAnimationFrame(() => mount.classList.add("refinery-scene-ready"));
 
@@ -365,7 +368,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       if (timeoutHandle !== undefined) window.clearTimeout(timeoutHandle);
       cleanup?.();
     };
-  }, []);
+  }, [paused]);
 
   return (
     <div ref={holder} aria-hidden className="refinery-scene pointer-events-none absolute inset-0">
