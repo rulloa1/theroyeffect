@@ -27,7 +27,7 @@ export function ScrollReveal({
   as?: "div" | "ol";
   chapterSeam?: boolean;
 }) {
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const [staticReveal, setStaticReveal] = useState(false);
   const paused = useMotionPaused();
@@ -62,7 +62,6 @@ export function ScrollReveal({
     return () => observer.disconnect();
   }, [paused, respectEffectsGuard]);
 
-  const Component = as;
   const staggeredChildren = stagger
     ? Children.map(children, (child, index) => {
         if (!isValidElement(child)) return child;
@@ -76,19 +75,24 @@ export function ScrollReveal({
       })
     : children;
 
+  const revealClassName = `scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${stagger ? "scroll-reveal-stagger" : ""} ${className}`;
+  const content = chapterSeam ? (
+    <span aria-hidden className={`chapter-seam ${visible ? "chapter-seam-drawn" : ""}`} />
+  ) : (
+    staggeredChildren
+  );
+
+  if (as === "ol") {
+    return (
+      <ol ref={(node) => (elementRef.current = node)} className={revealClassName}>
+        {content}
+      </ol>
+    );
+  }
+
   return (
-    <Component
-      ref={elementRef}
-      className={`scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${stagger ? "scroll-reveal-stagger" : ""} ${className}`}
-    >
-      {chapterSeam ? (
-        <span
-          aria-hidden
-          className={`chapter-seam ${visible ? "chapter-seam-drawn" : ""}`}
-        />
-      ) : (
-        staggeredChildren
-      )}
-    </Component>
+    <div ref={(node) => (elementRef.current = node)} className={revealClassName}>
+      {content}
+    </div>
   );
 }

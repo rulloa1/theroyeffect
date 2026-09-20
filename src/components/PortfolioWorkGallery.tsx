@@ -49,7 +49,7 @@ export function PortfolioWorkGallery() {
               <ScrollReveal
                 stagger
                 respectEffectsGuard
-                className="relative grid max-w-3xl grid-cols-2 border-y border-[var(--line)] sm:grid-cols-4"
+                className="relative grid max-w-3xl grid-cols-4 border-y border-[var(--line)]"
               >
                 {["PROBLEM", "BRAND", "MOBILE", "LAUNCH"].map((label, index) => (
                   <span
