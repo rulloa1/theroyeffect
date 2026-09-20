@@ -158,12 +158,13 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-2 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[15px] text-white/70">
-            © {new Date().getFullYear()} The Roy Effect
-          </p>
           <div className="flex flex-wrap items-center gap-x-5">
+            <p className="font-mono text-[15px] text-white/70">
+              © {new Date().getFullYear()} The Roy Effect
+            </p>
             <MotionToggle />
-            <nav className="flex items-center gap-5" aria-label="Legal">
+          </div>
+          <nav className="flex items-center gap-5" aria-label="Legal">
               <Link
                 to="/privacy"
                 className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
@@ -176,8 +177,7 @@ export function SiteFooter() {
               >
                 TERMS
               </Link>
-            </nav>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>

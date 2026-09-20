@@ -65,7 +65,7 @@ export function HeroContent() {
                   >
                     {word}
                   </span>
-                  {index < words.length - 1 ? "\u00a0" : null}
+                  {index < words.length - 1 ? " " : null}
                 </span>
               ))}
             </span>

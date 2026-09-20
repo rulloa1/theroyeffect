@@ -7,10 +7,46 @@ type MagneticProps = {
   className?: string;
 };
 
+type PointerPosition = { x: number; y: number };
+type PointerSubscriber = (pointer: PointerPosition | null) => void;
+
+const pointerSubscribers = new Set<PointerSubscriber>();
+let sharedFrame = 0;
+let latestPointer: PointerPosition = { x: 0, y: 0 };
+
+function notifyPointerSubscribers() {
+  sharedFrame = 0;
+  pointerSubscribers.forEach((subscriber) => subscriber(latestPointer));
+}
+
+function onSharedPointerMove(event: PointerEvent) {
+  latestPointer = { x: event.clientX, y: event.clientY };
+  if (!sharedFrame) sharedFrame = requestAnimationFrame(notifyPointerSubscribers);
+}
+
+function onSharedPointerLeave() {
+  pointerSubscribers.forEach((subscriber) => subscriber(null));
+}
+
+function subscribeToPointer(subscriber: PointerSubscriber) {
+  if (pointerSubscribers.size === 0) {
+    window.addEventListener("pointermove", onSharedPointerMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onSharedPointerLeave);
+  }
+  pointerSubscribers.add(subscriber);
+  return () => {
+    pointerSubscribers.delete(subscriber);
+    if (pointerSubscribers.size === 0) {
+      window.removeEventListener("pointermove", onSharedPointerMove);
+      document.documentElement.removeEventListener("pointerleave", onSharedPointerLeave);
+      cancelAnimationFrame(sharedFrame);
+      sharedFrame = 0;
+    }
+  };
+}
+
 export function Magnetic({ children, className = "" }: MagneticProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
-  const frameRef = useRef(0);
-  const latestPointer = useRef({ x: 0, y: 0 });
   const reduceMotion = useClientReducedMotion();
   const paused = useMotionPaused();
 
@@ -25,15 +61,24 @@ export function Magnetic({ children, className = "" }: MagneticProps) {
       return;
     }
 
-    const update = () => {
-      frameRef.current = 0;
+    const reset = () => {
+      root.style.setProperty("--magnetic-x", "0px");
+      root.style.setProperty("--magnetic-y", "0px");
+      root.style.setProperty("--magnetic-label-x", "0px");
+      root.style.setProperty("--magnetic-label-y", "0px");
+      root.dataset["magneticActive"] = "false";
+    };
+    const update = (pointer: PointerPosition | null) => {
+      if (!pointer) {
+        reset();
+        return;
+      }
       const bounds = root.getBoundingClientRect();
-      const pointer = latestPointer.current;
       const closestX = Math.max(bounds.left, Math.min(pointer.x, bounds.right));
       const closestY = Math.max(bounds.top, Math.min(pointer.y, bounds.bottom));
       const distance = Math.hypot(pointer.x - closestX, pointer.y - closestY);
       if (distance > 60) {
-        root.dataset["magneticActive"] = "false";
+        reset();
         return;
       }
 
@@ -48,21 +93,7 @@ export function Magnetic({ children, className = "" }: MagneticProps) {
       root.dataset["magneticActive"] = "true";
     };
 
-    const onPointerMove = (event: PointerEvent) => {
-      latestPointer.current = { x: event.clientX, y: event.clientY };
-      if (!frameRef.current) frameRef.current = requestAnimationFrame(update);
-    };
-    const onPointerLeave = () => {
-      root.dataset["magneticActive"] = "false";
-    };
-
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    document.documentElement.addEventListener("pointerleave", onPointerLeave);
-    return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      document.documentElement.removeEventListener("pointerleave", onPointerLeave);
-      cancelAnimationFrame(frameRef.current);
-    };
+    return subscribeToPointer(update);
   }, [paused, reduceMotion]);
 
   return (
