@@ -147,8 +147,9 @@ export const WORK_STUDIES: WorkStudy[] = [
         body: "Type, measure and contrast now agree with what the practice sells.",
       },
     ],
-    image: "/work/studio-presence.svg",
-    imageAlt: "Abstract layout study of an architecture practice's project index",
+    image: "/work/architecture-index.svg",
+    imageAlt:
+      "Concept mockup of the practice's website — a full-bleed project plate above a three-up project index",
   },
   {
     slug: "sabine-cypress-coffee",
@@ -206,8 +207,9 @@ export const WORK_STUDIES: WorkStudy[] = [
         body: "Roast dates and availability change without a phone call.",
       },
     ],
-    image: "/work/brand-identity.svg",
-    imageAlt: "Abstract brand identity system study — mark, wordmark and palette",
+    image: "/work/coffee-identity.svg",
+    imageAlt:
+      "Concept mockup of the roaster's identity — the mark on a 12oz bag, the same mark at browser-tab size, roast-level swatches and a storefront row",
   },
 ];
 
