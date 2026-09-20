@@ -188,27 +188,31 @@ export function TheCut() {
           </span>
 
           <div
-            className={`the-cut-seam pointer-events-none absolute inset-y-0 left-0 w-0 ${settling && !motionDisabled ? "the-cut-settling" : ""}`}
-            style={{ transform: `translate3d(${seam}%, 0, 0)`, left: `${seam}%` }}
+            className={`the-cut-seam pointer-events-none absolute inset-y-0 left-0 w-full ${settling && !motionDisabled ? "the-cut-settling" : ""}`}
+            style={{ transform: `translate3d(${seam}%, 0, 0)` }}
             aria-hidden
           >
             <span className="absolute inset-y-0 left-[-1px] w-0.5 bg-[var(--gold)]" />
           </div>
           <div
-            role="slider"
-            tabIndex={0}
-            aria-label="Before and after comparison"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(seam)}
-            aria-valuetext={`${Math.round(seam)}% showing the redesign`}
-            onKeyDown={onKeyDown}
-            className={`the-cut-handle absolute top-1/2 z-10 flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--gold)] bg-[var(--ground)] text-[var(--gold)] ${settling && !motionDisabled ? "the-cut-settling" : ""}`}
-            style={{ left: `${seam}%` }}
+            className={`the-cut-handle pointer-events-none absolute inset-y-0 left-0 z-10 w-full ${settling && !motionDisabled ? "the-cut-settling" : ""}`}
+            style={{ transform: `translate3d(${seam}%, 0, 0)` }}
           >
-            <span aria-hidden className="font-mono text-sm leading-none">
-              ‹›
-            </span>
+            <div
+              role="slider"
+              tabIndex={0}
+              aria-label="Before and after comparison"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(seam)}
+              aria-valuetext={`${Math.round(seam)}% showing the redesign`}
+              onKeyDown={onKeyDown}
+              className="pointer-events-auto absolute left-0 top-1/2 flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--gold)] bg-[var(--ground)] text-[var(--gold)]"
+            >
+              <span aria-hidden className="font-mono text-sm leading-none">
+                ‹›
+              </span>
+            </div>
           </div>
           <span
             ref={cursorRef}

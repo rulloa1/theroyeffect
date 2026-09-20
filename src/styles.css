@@ -345,10 +345,10 @@
 
 .the-cut-seam.the-cut-settling,
 .the-cut-handle.the-cut-settling {
-  transition: left 420ms var(--ease-press);
+  transition: transform 420ms var(--ease-press);
 }
 
-.the-cut-handle:focus-visible {
+.the-cut-handle [role="slider"]:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
 }
