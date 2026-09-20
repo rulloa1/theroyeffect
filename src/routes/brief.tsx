@@ -497,7 +497,7 @@ function BriefPage() {
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-10 space-y-7" noValidate>
+        <form ref={formRef} onSubmit={submit} className="mt-10 space-y-7" noValidate>
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h2
               ref={stepHeadingRef}
