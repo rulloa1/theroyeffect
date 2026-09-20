@@ -493,7 +493,6 @@ html[data-motion="paused"] .the-cut-cursor {
     transition: none;
   }
 
-
   .the-cut-after,
   .the-cut-seam,
   .the-cut-handle {
@@ -515,7 +514,6 @@ html[data-motion="paused"] .the-cut-cursor {
     transform: none;
     transition: none;
   }
-
 
   .the-cut-cursor {
     display: none;

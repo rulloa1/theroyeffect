@@ -138,8 +138,8 @@ export function TheCut() {
           Same business. Better first impression.
         </h2>
         <p className="mt-7 max-w-4xl font-portfolio-body text-lg leading-relaxed text-white/75">
-          Drag the line to compare. Left is a typical small-business site; right is the same business
-          after a Roy Effect redesign.
+          Drag the line to compare. Left is a typical small-business site; right is the same
+          business after a Roy Effect redesign.
         </p>
 
         <div

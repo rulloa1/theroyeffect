@@ -397,16 +397,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         const target = targetForChapter();
         const targetRefine = activeChapter === "cut" ? seamRefine : target.refine;
         const amount = snap ? 1 : 1 - Math.pow(1 - 0.08, delta * 60);
-        for (const key of [
-          "x",
-          "y",
-          "scale",
-          "dim",
-          "spin",
-          "key",
-          "furnace",
-          "cameraZ",
-        ] as const)
+        for (const key of ["x", "y", "scale", "dim", "spin", "key", "furnace", "cameraZ"] as const)
           current[key] = lerp(current[key], target[key], amount);
         current.refine = lerp(current.refine, targetRefine, amount);
         const effectiveDim = footerVisible ? 0 : current.dim;
