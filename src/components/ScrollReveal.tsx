@@ -75,7 +75,7 @@ export function ScrollReveal({
       })
     : children;
 
-  const revealClassName = `scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${stagger ? "scroll-reveal-stagger" : ""} ${className}`;
+  const revealClassName = `scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${stagger ? "scroll-reveal-stagger" : ""} ${chapterSeam ? "chapter-seam-trigger" : ""} ${className}`;
   const content = chapterSeam ? (
     <span aria-hidden className={`chapter-seam ${visible ? "chapter-seam-drawn" : ""}`} />
   ) : (

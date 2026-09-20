@@ -516,6 +516,15 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   transform-origin: left center;
 }
 
+.chapter-seam-trigger {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 .chapter-seam-drawn {
   transform: scaleX(1);
   transition: transform var(--dur-state) var(--ease-draw);
