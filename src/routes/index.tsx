@@ -4,6 +4,7 @@ import { HeroContent } from "@/components/HeroContent";
 import { PortfolioWorkGallery } from "@/components/PortfolioWorkGallery";
 import { PortfolioSections } from "@/components/PortfolioSections";
 import { RefineryScene } from "@/components/refinery/RefineryScene";
+import { TheCut } from "@/components/refinery/TheCut";
 import { SITE_URL } from "@/lib/site";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 
@@ -42,6 +43,7 @@ function Home() {
       >
         <HeroContent />
       </section>
+      <TheCut />
       <PortfolioWorkGallery />
       <PortfolioSections />
     </main>

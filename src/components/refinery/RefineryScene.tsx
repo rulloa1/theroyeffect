@@ -6,7 +6,7 @@ const DUST_COUNT = 600;
 const ORE_X = 1.25;
 const ORE_Y = 0.35;
 const CAMERA_Z = 9.5;
-const CHAPTERS = ["hero", "work", "services", "promise", "about", "finale"] as const;
+const CHAPTERS = ["hero", "cut", "work", "services", "promise", "about", "finale"] as const;
 type Chapter = (typeof CHAPTERS)[number];
 
 type Target = {
@@ -35,6 +35,17 @@ const TARGETS: Record<Chapter, Target> = {
     spin: 0.03,
     key: 2.2,
     furnace: 4.5,
+    cameraZ: CAMERA_Z,
+  },
+  cut: {
+    x: ORE_X,
+    y: ORE_Y,
+    scale: 0.8,
+    dim: 0.35,
+    refine: 0.5,
+    spin: 0.01,
+    key: 2,
+    furnace: 3,
     cameraZ: CAMERA_Z,
   },
   work: {
@@ -359,6 +370,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       window.addEventListener("pointermove", onPointerMove, { passive: true });
 
       let activeChapter: Chapter = "hero";
+      let seamRefine = 0.5;
       let serviceRotation: number | null = null;
       let serviceVelocity = 0;
       let footerVisible = false;
@@ -383,19 +395,20 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
 
       const applyScene = (now: number, delta: number, snap = false) => {
         const target = targetForChapter();
+        const targetRefine = activeChapter === "cut" ? seamRefine : target.refine;
         const amount = snap ? 1 : 1 - Math.pow(1 - 0.08, delta * 60);
         for (const key of [
           "x",
           "y",
           "scale",
           "dim",
-          "refine",
           "spin",
           "key",
           "furnace",
           "cameraZ",
         ] as const)
           current[key] = lerp(current[key], target[key], amount);
+        current.refine = lerp(current.refine, targetRefine, amount);
         const effectiveDim = footerVisible ? 0 : current.dim;
         ore.position.set(current.x + framedOffset, current.y, 0);
         ore.scale.setScalar(current.scale * pressScale(now));
@@ -503,6 +516,14 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       };
       services?.addEventListener("pointerover", updateServiceRotation);
 
+      const updateSeamRefine = (event: Event) => {
+        const value = (event as CustomEvent<{ value?: number }>).detail?.value;
+        if (typeof value !== "number" || !Number.isFinite(value)) return;
+        seamRefine = THREE.MathUtils.clamp(value / 100, 0, 1);
+        if (activeChapter === "cut" && pausedRef.current) renderStill();
+      };
+      window.addEventListener("refinery:seam", updateSeamRefine);
+
       const footer = document.querySelector<HTMLElement>("footer");
       const footerObserver = footer
         ? new IntersectionObserver(
@@ -534,6 +555,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         window.removeEventListener("pointermove", onPointerMove);
         document.removeEventListener("visibilitychange", onVisibilityChange);
         services?.removeEventListener("pointerover", updateServiceRotation);
+        window.removeEventListener("refinery:seam", updateSeamRefine);
         oreGeometry.dispose();
         oreMaterial.dispose();
         dustGeometry.dispose();
