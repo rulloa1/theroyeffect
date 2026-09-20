@@ -219,6 +219,7 @@ function BriefPage() {
   const [done, setDone] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const initialStepRender = useRef(true);
 
   const storageKey = `theroy_brief_draft_${sessionId || "general"}`;
