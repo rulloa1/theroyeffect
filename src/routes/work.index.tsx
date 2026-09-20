@@ -5,7 +5,7 @@ import { WorkGrid } from "@/components/WorkGrid";
 const TITLE = "Selected Work — The Roy Effect";
 const DESCRIPTION = "Selected studio work across brand, UI/UX and no-code build by Houston creative director Rory Ulloa. Named client projects shown on the call, with permission.";
 
-export const Route = createFileRoute("/work")({
+export const Route = createFileRoute("/work/")({
   head: () => ({
     meta: [
       { title: TITLE },
