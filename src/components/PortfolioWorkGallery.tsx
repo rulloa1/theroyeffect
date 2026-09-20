@@ -37,11 +37,13 @@ export function PortfolioWorkGallery() {
                 aria-hidden="true"
                 width={1200}
                 height={900}
-                className="absolute inset-0 size-full object-cover"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover opacity-[0.55]"
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-[linear-gradient(to_top,var(--ground-sunk)_0%,transparent_55%)]"
+                className="absolute inset-0 bg-[linear-gradient(to_top,var(--ground-sunk)_0%,var(--ground-sunk)_20%,transparent_70%)]"
               />
               <span className="relative font-mono text-xs tracking-widest text-[var(--gold)]">
                 FEATURED CASE STUDY · 01
@@ -86,7 +88,7 @@ export function PortfolioWorkGallery() {
         </ScrollReveal>
 
         <p className="mt-4 font-mono text-xs leading-relaxed text-[var(--ink-faint)]">
-          More work shown on request — three client projects under NDA.
+          More work shown on request.
         </p>
 
         <ScrollReveal className="mt-8" respectEffectsGuard>
