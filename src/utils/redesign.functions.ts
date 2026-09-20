@@ -119,7 +119,11 @@ export const adminRunRedesign = createServerFn({ method: "POST" })
       return { run: normalise(row) };
     } catch (error) {
       const message = error instanceof Error ? error.message : "The redesign run failed.";
-      const host = data.url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0] ?? data.url;
+      const host =
+        data.url
+          .replace(/^https?:\/\//i, "")
+          .replace(/^www\./i, "")
+          .split("/")[0] ?? data.url;
       await db.from("redesign_runs").insert({
         url: data.url,
         host,

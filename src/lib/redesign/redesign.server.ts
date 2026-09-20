@@ -120,15 +120,18 @@ export function parseRedesignResponse(raw: string): RedesignPitch {
 /** Human-readable problem list derived from the scan, used as the prompt evidence. */
 export function describeScan(scan: ScanResult): string[] {
   const notes: string[] = [];
-  if (!scan.reachable) notes.push(`The site did not load cleanly: ${scan.errorMessage ?? "unknown"}`);
+  if (!scan.reachable)
+    notes.push(`The site did not load cleanly: ${scan.errorMessage ?? "unknown"}`);
   if (scan.title) notes.push(`Page title: "${scan.title}"`);
   else notes.push("The homepage has no page title.");
   if (scan.metaDescription) notes.push(`Meta description: "${scan.metaDescription}"`);
   else notes.push("The homepage has no meta description.");
   if (!scan.https) notes.push("The site is not served over HTTPS.");
-  if (!scan.mobileFriendly) notes.push("There is no mobile viewport tag, so the layout is not built for phones.");
+  if (!scan.mobileFriendly)
+    notes.push("There is no mobile viewport tag, so the layout is not built for phones.");
   if (scan.loadMs !== null) notes.push(`The homepage responded in ${scan.loadMs}ms.`);
-  if (scan.htmlBytes !== null) notes.push(`Homepage HTML weighs ${Math.round(scan.htmlBytes / 1024)}KB.`);
+  if (scan.htmlBytes !== null)
+    notes.push(`Homepage HTML weighs ${Math.round(scan.htmlBytes / 1024)}KB.`);
   notes.push(scan.hasPhoneLink ? "There is a tap-to-call link." : "There is no tap-to-call link.");
   notes.push(scan.hasContactForm ? "There is a contact form." : "There is no contact form.");
   notes.push(

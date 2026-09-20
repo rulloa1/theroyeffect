@@ -199,7 +199,6 @@ function AdminPage() {
   const retryOnboardingFn = useServerFn(adminRetryOnboarding);
   const dismissOnboardingFn = useServerFn(adminDismissOnboarding);
 
-
   const [currentView, setCurrentView] = useState<MainView>("SIGNAL");
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
@@ -447,7 +446,6 @@ function AdminPage() {
     }
   };
 
-
   const listRedesignRuns = useServerFn(adminListRedesignRuns);
   const runRedesignFn = useServerFn(adminRunRedesign);
   const updateRedesignFn = useServerFn(adminUpdateRedesignRun);
@@ -553,7 +551,6 @@ function AdminPage() {
       setBusy(null);
     }
   };
-
 
   const findProspectsFor = async (industry: string) => {
     setBusy("find");
@@ -818,7 +815,11 @@ function AdminPage() {
         if (mode === "sent") {
           const sent = await sendProposal({ data: { id: editingProposalId } });
           if (!sent.success) throw new Error(sent.error || "Failed to send proposal");
-          toast.success(sent.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)");
+          toast.success(
+            sent.emailed
+              ? "Proposal sent to the client"
+              : "Proposal published (email not delivered)",
+          );
         } else {
           toast.success("Draft saved");
         }
@@ -830,7 +831,8 @@ function AdminPage() {
             status: mode,
           },
         });
-        if (!res.success || !res.proposal) throw new Error(res.error || "Failed to create proposal");
+        if (!res.success || !res.proposal)
+          throw new Error(res.error || "Failed to create proposal");
         if (mode === "sent") {
           const sent = await sendProposal({ data: { id: res.proposal.id } });
           toast.success(
@@ -855,7 +857,9 @@ function AdminPage() {
     try {
       const res = await sendProposal({ data: { id } });
       if (!res.success) throw new Error(res.error || "Send failed");
-      toast.success(res.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)");
+      toast.success(
+        res.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)",
+      );
       await queryClient.invalidateQueries({ queryKey: ["admin-proposals"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error sending proposal");
@@ -1084,7 +1088,9 @@ function AdminPage() {
               proposals={proposalsData ?? []}
               onboardingRuns={onboardingData?.runs ?? []}
               drafts={autopilotData?.drafts ?? []}
-              unreadChats={(chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length}
+              unreadChats={
+                (chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length
+              }
               onNavigate={(view) => setCurrentView(view as MainView)}
               onRunAutopilot={runAutopilotScan}
               autopilotBusy={busy === "autopilot-run"}
