@@ -27,7 +27,9 @@ function hydratePreference() {
   const previous = paused;
   paused = readStoredPreference();
   syncDocumentAttribute();
-  return previous !== paused;
+  const changed = previous !== paused;
+  if (changed) queueMicrotask(() => listeners.forEach((listener) => listener()));
+  return changed;
 }
 
 export function getMotionPaused() {
@@ -38,7 +40,6 @@ export function getMotionPaused() {
 export function subscribeMotionPreference(listener: () => void) {
   listeners.add(listener);
   hydratePreference();
-  queueMicrotask(listener);
   return () => listeners.delete(listener);
 }
 
