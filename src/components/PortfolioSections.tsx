@@ -21,7 +21,7 @@ export function PortfolioSections() {
       <section
         id="services"
         data-refinery-chapter="services"
-        className="relative z-20 border-y border-white/10 bg-[var(--veil-raised)] px-5 py-24 md:px-10 md:py-36"
+        className="relative z-20 border-y border-[var(--line)] bg-[var(--veil-raised)] px-[var(--gutter)] py-[var(--section-y)]"
       >
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
@@ -29,35 +29,35 @@ export function PortfolioSections() {
               <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 WHAT I DO
               </p>
-              <h2 className="mt-4 font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl">
+              <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
                 Design and development working as one.
               </h2>
-              <p className="mt-7 max-w-xl font-portfolio-body text-lg leading-relaxed text-white/75">
+              <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
                 I take projects from the first visual concept through design, development,
                 interaction, and launch—creating one cohesive digital experience.
               </p>
-              <p className="mt-5 max-w-xl font-portfolio-body text-sm leading-relaxed text-white/55">
+              <p className="mt-5 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
                 Every project is scoped around its goals, content, functionality, and creative
                 direction.
               </p>
               <Link
                 to="/services"
-                className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:text-white"
+                className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:text-[var(--ink)]"
               >
                 EXPLORE SERVICES
                 <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </Link>
             </div>
 
-            <ol className="border-t border-white/10">
+            <ol className="border-t border-[var(--line)]">
               {CAPABILITIES.map((capability, index) => (
                 <li
                   key={capability}
                   data-refinery-row={index}
-                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
+                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-[var(--line)] py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
                 >
                   <span className="font-mono text-xs text-white/35">0{index + 1}</span>
-                  <span className="font-portfolio text-xl font-semibold text-white transition-transform group-hover:translate-x-1 md:text-3xl">
+                  <span className="font-portfolio text-[length:var(--type-h3)] font-semibold text-[var(--ink)] transition-transform group-hover:translate-x-1">
                     {capability}
                   </span>
                   <span
@@ -75,26 +75,26 @@ export function PortfolioSections() {
 
       <section
         data-refinery-chapter="promise"
-        className="relative z-20 overflow-hidden bg-[var(--veil-ground)] px-5 py-28 md:px-10 md:py-44"
+        className="relative z-20 overflow-hidden bg-[var(--veil-ground)] px-[var(--gutter)] py-[var(--section-y)]"
       >
         <div
           aria-hidden
           className="portfolio-crosshair absolute right-[8%] top-[18%] size-40 opacity-50"
         />
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
-          <p className="font-mono text-xs font-bold tracking-widest text-[var(--furnace)]">
+          <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
             DESIGN PHILOSOPHY
           </p>
-          <h2 className="mt-5 max-w-6xl font-portfolio text-5xl font-bold leading-[0.9] text-white md:text-8xl">
+          <h2 className="mt-5 max-w-6xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
             Your website should feel like an experience—
             <span className="text-white/35">not a template.</span>
           </h2>
-          <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-20">
-            <p className="max-w-2xl font-portfolio-body text-lg leading-relaxed text-white/75">
+          <div className="mt-12 grid gap-8 border-t border-[var(--line)] pt-8 md:grid-cols-2 md:gap-20">
+            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
               I combine strategy, visual storytelling, responsive development, and thoughtful
               interaction to create websites that communicate value before visitors read every word.
             </p>
-            <p className="max-w-2xl font-portfolio-body text-lg leading-relaxed text-white/75">
+            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
               You approve the design before the build begins. The experience that gets approved is
               the experience that goes live.
             </p>
@@ -105,13 +105,13 @@ export function PortfolioSections() {
       <section
         id="about"
         data-refinery-chapter="about"
-        className="relative z-20 border-y border-white/10 bg-[var(--veil-raised)] px-5 py-24 md:px-10 md:py-36"
+        className="relative z-20 border-y border-[var(--line)] bg-[var(--veil-raised)] px-[var(--gutter)] py-[var(--section-y)]"
       >
         <ScrollReveal
           className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center"
           respectEffectsGuard
         >
-          <div className="relative min-h-[28rem] overflow-hidden border border-white/10 bg-[var(--ground)] sm:min-h-[36rem] lg:col-span-5">
+          <div className="relative min-h-[28rem] overflow-hidden border border-[var(--line)] bg-[var(--ground)] sm:min-h-[36rem] lg:col-span-5">
             <img
               src={portraitAsset.url}
               alt="Rory Ulloa, design developer and web developer behind The Roy Effect"
@@ -126,21 +126,21 @@ export function PortfolioSections() {
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">ABOUT</p>
-            <h2 className="mt-4 font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl">
+            <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
               Creative vision backed by real development.
             </h2>
-            <p className="mt-7 max-w-2xl font-portfolio-body text-lg leading-relaxed text-white/75">
+            <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
               I&apos;m Rory Ulloa, the design developer behind The Roy Effect. I create distinctive
               digital experiences by bringing design and development together—from the first idea to
               the finished website.
             </p>
-            <p className="mt-5 max-w-2xl font-portfolio-body text-base leading-relaxed text-white/60">
+            <p className="mt-5 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-faint)]">
               I work solo from Houston, shaping brand systems, marketing sites, and product
               interfaces, then shipping them in Webflow, Framer, or TanStack.
             </p>
             <Link
               to="/about"
-              className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:text-[var(--gold)]"
+              className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[var(--ink)] transition-colors hover:text-[var(--gold)]"
             >
               MORE ABOUT ME
               <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -152,7 +152,7 @@ export function PortfolioSections() {
       <section
         id="contact"
         data-refinery-chapter="finale"
-        className="relative z-20 overflow-hidden bg-[var(--gold)] px-5 py-24 text-[var(--ground)] md:px-10 md:py-36"
+        className="relative z-20 overflow-hidden bg-[var(--gold)] px-[var(--gutter)] py-[var(--section-y)] text-[var(--ground)]"
       >
         <div
           aria-hidden
@@ -162,11 +162,11 @@ export function PortfolioSections() {
         </div>
         <ScrollReveal className="relative mx-auto max-w-7xl" respectEffectsGuard>
           <p className="font-mono text-xs font-bold tracking-widest">START A PROJECT</p>
-          <h2 className="mt-4 max-w-5xl font-portfolio text-5xl font-bold leading-[0.9] md:text-8xl">
+          <h2 className="mt-4 max-w-5xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92]">
             Have a website idea worth building?
           </h2>
           <div className="mt-10 grid gap-8 border-t border-[var(--ground)]/20 pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-            <p className="max-w-2xl font-portfolio-body text-lg leading-relaxed text-[var(--ground)]/75">
+            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ground)]/75">
               Tell me what you&apos;re creating, improving, or launching. I&apos;ll help turn it
               into a polished digital experience.
             </p>

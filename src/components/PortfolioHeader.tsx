@@ -16,13 +16,13 @@ export function PortfolioHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-[#030014]/85 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--line)] bg-[var(--ground)]/85 backdrop-blur-xl">
       <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:flex sm:justify-between md:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Logo variant="responsive" size="sm" href="/" className="inline-flex shrink-0" />
           <Link
             to="/"
-            className="hidden min-w-0 font-portfolio text-sm font-bold text-white sm:block"
+            className="hidden min-w-0 font-portfolio text-sm font-bold text-[var(--ink)] sm:block"
           >
             THE ROY EFFECT
           </Link>
@@ -34,7 +34,7 @@ export function PortfolioHeader() {
               key={link.label}
               to={link.to}
               {...("hash" in link ? { hash: link.hash } : {})}
-              className="inline-flex min-h-11 items-center font-mono text-[10px] font-bold tracking-widest text-white/75 transition-colors hover:text-[#DFBA73]"
+              className="inline-flex min-h-11 items-center font-mono text-[10px] font-bold tracking-widest text-[var(--ink-muted)] transition-colors hover:text-[var(--gold)]"
             >
               {link.label}
             </Link>
@@ -45,7 +45,8 @@ export function PortfolioHeader() {
           <Button
             asChild
             size="sm"
-            className="rounded-none px-4 font-mono text-[10px] font-bold tracking-widest sm:px-5"
+            variant="outline"
+            className="rounded-none border-[var(--gold)] bg-transparent px-4 font-mono text-[10px] font-bold tracking-widest text-[var(--gold)] hover:bg-[var(--gold)] hover:text-[var(--ground)] sm:px-5"
           >
             <Link to="/brief">
               START A PROJECT <ArrowUpRight className="hidden sm:block" />
@@ -58,7 +59,7 @@ export function PortfolioHeader() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="rounded-none border-white/20 bg-transparent text-white hover:border-[#DFBA73] hover:bg-white/5 lg:hidden"
+            className="rounded-none border-[var(--line)] bg-transparent text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--ink)]/5 lg:hidden"
           >
             {menuOpen ? <X /> : <Menu />}
           </Button>
@@ -68,7 +69,7 @@ export function PortfolioHeader() {
       {menuOpen ? (
         <nav
           aria-label="Mobile primary"
-          className="border-t border-white/10 bg-[#030014] px-5 py-5 lg:hidden"
+          className="border-t border-[var(--line)] bg-[var(--ground)] px-5 py-5 lg:hidden"
         >
           {LINKS.map((link) => (
             <Link
@@ -76,13 +77,13 @@ export function PortfolioHeader() {
               to={link.to}
               {...("hash" in link ? { hash: link.hash } : {})}
               onClick={() => setMenuOpen(false)}
-              className="flex min-h-12 items-center justify-between border-b border-white/10 font-portfolio text-xl font-semibold text-white last:border-0"
+              className="flex min-h-12 items-center justify-between border-b border-[var(--line)] font-portfolio text-xl font-semibold text-[var(--ink)] last:border-0"
             >
               {link.label}
-              <ArrowUpRight className="size-4 text-[#DFBA73]" />
+              <ArrowUpRight className="size-4 text-[var(--gold)]" />
             </Link>
           ))}
-          <MotionToggle className="mt-3 w-full justify-start border-t border-white/10 pt-3" />
+          <MotionToggle className="mt-3 w-full justify-start border-t border-[var(--line)] pt-3" />
         </nav>
       ) : null}
     </header>

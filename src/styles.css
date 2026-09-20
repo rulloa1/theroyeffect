@@ -35,17 +35,25 @@
   --font-sans: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-portfolio: "Space Grotesk", system-ui, sans-serif;
-  --font-portfolio-body: "Space Grotesk", system-ui, sans-serif;
+  --font-portfolio-body: "Archivo", system-ui, sans-serif;
 }
 
 :root {
   --ground: #0a0a0a;
+  --ground-sunk: #060606;
   --ground-raised: #121212;
   --ink: #f2eee6;
   --ink-muted: rgb(242 238 230 / 0.7);
-  --line: rgb(255 255 255 / 0.1);
+  --ink-faint: rgb(242 238 230 / 0.45);
+  --line: rgb(242 238 230 / 0.12);
   --gold: #dfba73;
   --furnace: #ff3333;
+  --type-display: clamp(2.75rem, 7vw, 5.25rem);
+  --type-h2: clamp(2.25rem, 5vw, 4rem);
+  --type-h3: clamp(1.5rem, 2.2vw, 2.25rem);
+  --type-lead: clamp(1.05rem, 1.3vw, 1.25rem);
+  --section-y: clamp(5rem, 9vw, 9rem);
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --veil-raised: rgb(18 18 18 / 0.78);
   --veil-ground: rgb(10 10 10 / 0.62);
   --veil-hero: rgb(18 18 18 / 0.45);
@@ -57,10 +65,10 @@
   --dur-state: 800ms;
   --stagger: 70ms;
   --radius: 0.25rem;
-  --background: #030014;
-  --foreground: #ffffff;
-  --card: #0a0620;
-  --card-foreground: #ffffff;
+  --background: #0a0a0a;
+  --foreground: var(--ink);
+  --card: #121212;
+  --card-foreground: var(--ink);
   --popover: #333333;
   --popover-foreground: #ffffff;
   --primary: #ff3333;
@@ -103,12 +111,12 @@
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
-    letter-spacing: 0.01em;
+    font-family: var(--font-portfolio);
+    letter-spacing: -0.02em;
   }
 
   ::selection {
-    background: #ff3333;
+    background: var(--furnace);
     color: #000000;
   }
 }

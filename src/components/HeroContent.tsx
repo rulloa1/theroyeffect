@@ -50,26 +50,25 @@ export function HeroContent() {
           </div>
           <h1
             aria-label={HEADLINE}
-            className="hero-headline mt-6 max-w-4xl font-portfolio text-[2.8rem] font-bold leading-[0.9] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]"
+            className="hero-headline mt-6 max-w-4xl font-portfolio text-[length:var(--type-display)] font-bold leading-[0.9] text-[var(--ink)]"
           >
             <span aria-hidden="true">
               {HEADLINE.split(" ").map((word, index, words) => (
-                <span
-                  key={`${word}-${index}`}
-                  className="inline-block overflow-hidden align-bottom"
-                >
-                  <span
-                    className="hero-word inline-block"
-                    style={{ "--word-index": index } as CSSProperties}
-                  >
-                    {word}
+                <span key={`${word}-${index}`}>
+                  <span className="inline-block overflow-hidden align-bottom">
+                    <span
+                      className="hero-word inline-block"
+                      style={{ "--word-index": index } as CSSProperties}
+                    >
+                      {word}
+                    </span>
                   </span>
                   {index < words.length - 1 ? " " : null}
                 </span>
               ))}
             </span>
           </h1>
-          <p className="hero-body mt-6 max-w-2xl font-portfolio-body text-base leading-relaxed text-white/75 md:text-lg">
+          <p className="hero-body mt-6 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
             I combine creative direction, modern web development, motion, and strategic design to
             build digital experiences that look exceptional and help businesses stand out.
           </p>
@@ -95,7 +94,7 @@ export function HeroContent() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="w-full rounded-none border-white/30 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-white hover:border-[var(--gold)] hover:bg-white/5"
+                  className="w-full rounded-none border-[var(--line)] bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--ink)]/5"
                 >
                   <Link to="/brief">
                     <span className="magnetic-label">START A PROJECT</span>
