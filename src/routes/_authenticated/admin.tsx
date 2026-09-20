@@ -59,6 +59,15 @@ import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
 import { AdminSignalView } from "@/components/admin/AdminSignalView";
 import { AdminRedesignView } from "@/components/admin/AdminRedesignView";
 import {
+  AdminColdCallsView,
+  type ColdCallPrefill,
+} from "@/components/admin/AdminColdCallsView";
+import {
+  adminListColdCalls,
+  adminStartColdCall,
+  adminDeleteColdCall,
+} from "@/utils/coldcalls.functions";
+import {
   adminListRedesignRuns,
   adminRunRedesign,
   adminUpdateRedesignRun,
@@ -150,6 +159,7 @@ type MainView =
   | "PORTFOLIO"
   | "CLIENTPORTAL"
   | "REDESIGN"
+  | "COLDCALLS"
   | "FINANCIALS";
 
 function AdminPage() {
@@ -493,6 +503,48 @@ function AdminPage() {
       await refreshRedesign();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not delete that run");
+    }
+  };
+
+  const listColdCalls = useServerFn(adminListColdCalls);
+  const startColdCallFn = useServerFn(adminStartColdCall);
+  const deleteColdCallFn = useServerFn(adminDeleteColdCall);
+  const [coldCallPrefill, setColdCallPrefill] = useState<ColdCallPrefill | null>(null);
+
+  const { data: coldCallData } = useQuery({
+    queryKey: ["admin-cold-calls"],
+    queryFn: () => listColdCalls(),
+    retry: false,
+    refetchInterval: 20000,
+  });
+
+  const refreshColdCalls = () => queryClient.invalidateQueries({ queryKey: ["admin-cold-calls"] });
+
+  const startColdCall = async (input: {
+    businessName: string;
+    phone: string;
+    website: string | null;
+    talkingPoints: string | null;
+    redesignRunId: string | null;
+  }) => {
+    setBusy("cold-call");
+    try {
+      await startColdCallFn({ data: input });
+      toast.success(`Calling ${input.businessName} now.`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "That call could not be placed");
+    } finally {
+      setBusy(null);
+      await refreshColdCalls();
+    }
+  };
+
+  const removeColdCall = async (id: string) => {
+    try {
+      await deleteColdCallFn({ data: { id } });
+      await refreshColdCalls();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not delete that call");
     }
   };
 
@@ -1007,6 +1059,7 @@ function AdminPage() {
               label: `NEW PURCHASE SETUP (${(onboardingData?.runs ?? []).filter((r) => r.status === "ready" || r.status === "failed").length})`,
               icon: Rocket,
             },
+            { id: "COLDCALLS", label: "COLD CALLS", icon: Phone },
             {
               id: "AUTOPILOT",
               label: `FOLLOW-UP AUTOPILOT (${(autopilotData?.drafts ?? []).filter((d) => d.status === "draft").length})`,
@@ -1039,6 +1092,7 @@ function AdminPage() {
               label: `REDESIGN & PITCH (${(redesignData?.runs ?? []).length})`,
               icon: Rocket,
             },
+            { id: "COLDCALLS", label: "COLD CALLS", icon: Phone },
             { id: "FINANCIALS", label: "FINANCIALS & STATS", icon: DollarSign },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -1069,6 +1123,17 @@ function AdminPage() {
 
         {/* Dynamic Views */}
         <div className="mt-8">
+          {currentView === "COLDCALLS" && (
+            <AdminColdCallsView
+              calls={coldCallData?.calls ?? []}
+              busy={busy}
+              prefill={coldCallPrefill}
+              onStart={startColdCall}
+              onDelete={removeColdCall}
+              date={date}
+            />
+          )}
+
           {currentView === "REDESIGN" && (
             <AdminRedesignView
               runs={redesignData?.runs ?? []}
@@ -1076,6 +1141,15 @@ function AdminPage() {
               onRun={startRedesign}
               onSetStatus={setRedesignStatus}
               onDelete={removeRedesignRun}
+              onCall={(run) => {
+                setColdCallPrefill({
+                  businessName: run.host,
+                  website: run.url,
+                  talkingPoints: run.outreach ?? null,
+                  redesignRunId: run.id,
+                });
+                setCurrentView("COLDCALLS");
+              }}
               date={date}
             />
           )}
