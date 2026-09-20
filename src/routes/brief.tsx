@@ -61,7 +61,15 @@ const schema = z.object({
 });
 
 type Form = z.infer<typeof schema>;
-type VisibleField = "name" | "email" | "company" | "projectType" | "goals" | "referencesLinks" | "budget" | "timeline";
+type VisibleField =
+  | "name"
+  | "email"
+  | "company"
+  | "projectType"
+  | "goals"
+  | "referencesLinks"
+  | "budget"
+  | "timeline";
 type Errors = Partial<Record<VisibleField, string>>;
 
 const EMPTY: Form = {
@@ -230,12 +238,11 @@ function BriefPage() {
               typeof parsed.referencesLinks === "string"
                 ? parsed.referencesLinks
                 : previous.referencesLinks,
-            budget:
-              paid
-                ? "Already paid"
-                : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
-                  ? parsed.budget
-                  : previous.budget,
+            budget: paid
+              ? "Already paid"
+              : typeof parsed.budget === "string" && BUDGETS.includes(parsed.budget)
+                ? parsed.budget
+                : previous.budget,
             timeline:
               typeof parsed.timeline === "string" && TIMELINES.includes(parsed.timeline)
                 ? parsed.timeline
@@ -320,8 +327,8 @@ function BriefPage() {
     validateFields([field]);
   };
 
-  const handleChoiceBlur = (field: "projectType" | "budget" | "timeline") =>
-    (event: FocusEvent<HTMLFieldSetElement>) => {
+  const handleChoiceBlur =
+    (field: "projectType" | "budget" | "timeline") => (event: FocusEvent<HTMLFieldSetElement>) => {
       const nextTarget = event.relatedTarget;
       if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) return;
       validateField(field);
@@ -626,9 +633,7 @@ function BriefPage() {
                   placeholder="Figma links, Google Drive / Dropbox assets, inspiration URLs, current website..."
                   maxLength={1000}
                   aria-invalid={errors.referencesLinks ? true : undefined}
-                  aria-describedby={
-                    errors.referencesLinks ? "brief-references-error" : undefined
-                  }
+                  aria-describedby={errors.referencesLinks ? "brief-references-error" : undefined}
                 />
                 <FieldError field="referencesLinks" errors={errors} />
               </div>

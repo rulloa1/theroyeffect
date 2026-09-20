@@ -32,6 +32,7 @@
 - [x] Simplify the project brief into an accessible two-step Refinery intake
 
 ## Increment 7 — studio polish pass (preview only)
+
 - Tightened `--section-y` to clamp(3.5rem, 5.5vw, 6.5rem) for one vertical rhythm.
 - The Cut h2 keeps a clean aria-label; rotating words stay aria-hidden.
 - Anton dropped from the font request; `--font-display` now Space Grotesk; footer wordmark uses `--ink`.
