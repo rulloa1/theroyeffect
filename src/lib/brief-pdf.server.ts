@@ -104,7 +104,8 @@ export async function buildBriefPdf(data: BriefPdfData): Promise<Uint8Array> {
   y -= 8;
 
   const section = (label: string, value?: string) => {
-    const content = value && value.trim() ? value.trim() : "—";
+    const content = value?.trim();
+    if (!content) return;
     ensure(48);
     drawLines(label.toUpperCase(), bold, 9, CRIMSON, 15);
     drawLines(content, regular, 11, INK, 16);

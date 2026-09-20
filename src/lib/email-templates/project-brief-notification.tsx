@@ -28,11 +28,14 @@ interface Props {
   pdfUrl?: string;
 }
 
-const Row = ({ label, value }: { label: string; value?: string | undefined }) => (
-  <Text style={row}>
-    <strong>{label}:</strong> {value && value.trim() ? value : "—"}
-  </Text>
-);
+const Row = ({ label, value }: { label: string; value?: string | undefined }) => {
+  if (!value?.trim()) return null;
+  return (
+    <Text style={row}>
+      <strong>{label}:</strong> {value}
+    </Text>
+  );
+};
 
 const Email = (props: Props) => (
   <Html lang="en" dir="ltr">
