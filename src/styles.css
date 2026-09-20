@@ -181,12 +181,12 @@
     );
 }
 
-.refinery-scene canvas {
+.refinery-scene-webgl {
   opacity: 0;
   transition: opacity var(--dur-state) var(--ease-draw);
 }
 
-.refinery-scene-ready canvas {
+.refinery-scene-ready {
   opacity: 1;
 }
 

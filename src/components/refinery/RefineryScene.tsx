@@ -53,7 +53,7 @@ export function RefineryScene() {
       scene.fog = new THREE.FogExp2(0x0a0a0a, 0.08);
 
       const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-      camera.position.set(0, -0.4, 6);
+      camera.position.set(0, -0.4, 9.5);
       camera.lookAt(0, ORE_Y, 0);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -67,6 +67,7 @@ export function RefineryScene() {
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
       holder.current.appendChild(renderer.domElement);
+      mount.classList.add("refinery-scene-webgl");
 
       const room = new RoomEnvironment();
       const pmrem = new THREE.PMREMGenerator(renderer);
@@ -251,6 +252,10 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
       const resize = () => {
         const { width, height } = mount.getBoundingClientRect();
         if (width <= 0 || height <= 0) return;
+        const framedX = width < 600 ? 0.5 : ORE_X;
+        ore.position.x = framedX;
+        glow.position.x = framedX;
+        furnaceLight.position.x = framedX;
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
@@ -339,6 +344,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         environmentTarget.dispose();
         pmrem.dispose();
         renderer.dispose();
+        mount.classList.remove("refinery-scene-ready", "refinery-scene-webgl");
         if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
       };
     };
