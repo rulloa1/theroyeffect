@@ -15,6 +15,7 @@ import {
   Radar,
   FolderKanban,
   Rocket,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
