@@ -35,7 +35,7 @@ export function HeroContent() {
       </div>
 
       <div className="relative order-1 flex flex-col justify-center px-5 py-10 sm:px-8 md:order-2 md:col-span-7 md:px-10 md:py-16 lg:col-span-8 lg:px-16">
-        <div aria-hidden className="refinery-ember absolute inset-0 md:hidden" />
+        <div aria-hidden className="hero-refinery-fallback refinery-ember absolute inset-0" />
         <div
           aria-hidden
           className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,var(--ground-raised)_0%,var(--ground-raised)_35%,transparent_55%)] opacity-95"

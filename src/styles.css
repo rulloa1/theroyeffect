@@ -207,7 +207,7 @@
 }
 
 @media (min-width: 768px) {
-  .refinery-ember {
+  .refinery-webgl-active .hero-refinery-fallback {
     display: none;
   }
 }
