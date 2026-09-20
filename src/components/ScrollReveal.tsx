@@ -1,4 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
 import { useMotionPaused } from "@/lib/motion-preference";
 
@@ -6,10 +16,16 @@ export function ScrollReveal({
   children,
   className = "",
   respectEffectsGuard = false,
+  stagger = false,
+  as = "div",
+  chapterSeam = false,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   respectEffectsGuard?: boolean;
+  stagger?: boolean;
+  as?: "div" | "ol";
+  chapterSeam?: boolean;
 }) {
   const elementRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -46,12 +62,33 @@ export function ScrollReveal({
     return () => observer.disconnect();
   }, [paused, respectEffectsGuard]);
 
+  const Component = as;
+  const staggeredChildren = stagger
+    ? Children.map(children, (child, index) => {
+        if (!isValidElement(child)) return child;
+        const element = child as ReactElement<{ style?: CSSProperties }>;
+        return cloneElement(element, {
+          style: {
+            ...element.props.style,
+            "--reveal-index": index,
+          } as CSSProperties,
+        });
+      })
+    : children;
+
   return (
-    <div
+    <Component
       ref={elementRef}
-      className={`scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${className}`}
+      className={`scroll-reveal ${visible ? "scroll-reveal-visible" : ""} ${staticReveal ? "scroll-reveal-static" : ""} ${stagger ? "scroll-reveal-stagger" : ""} ${className}`}
     >
-      {children}
-    </div>
+      {chapterSeam ? (
+        <span
+          aria-hidden
+          className={`chapter-seam ${visible ? "chapter-seam-drawn" : ""}`}
+        />
+      ) : (
+        staggeredChildren
+      )}
+    </Component>
   );
 }
