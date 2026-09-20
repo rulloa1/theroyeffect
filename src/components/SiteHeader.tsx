@@ -33,7 +33,8 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
           PRICING
         </Link>
         <Link
-          to="/case-study"
+          to="/work/$slug"
+                  params={{ slug: "marlow-sons-cabinetry" }}
           className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-white/90 transition-colors hover:text-[#FF3333]"
         >
           CASE STUDY

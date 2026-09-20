@@ -175,7 +175,8 @@ function AboutPage() {
               </dt>
               <dd className="mt-2">
                 <Link
-                  to="/case-study"
+                  to="/work/$slug"
+                  params={{ slug: "marlow-sons-cabinetry" }}
                   className="inline-flex min-h-11 items-center gap-2 font-portfolio text-lg font-semibold text-foreground transition-colors hover:text-[#DFBA73]"
                 >
                   View case study <ArrowUpRight className="size-4" />

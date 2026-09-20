@@ -10,7 +10,11 @@ const STUDIO_LINKS = [
   { label: "PRICING", to: "/pricing" },
   { label: "ABOUT", to: "/about" },
   { label: "PROCESS", to: "/process" },
-  { label: "CASE STUDY", to: "/case-study" },
+  {
+    label: "CASE STUDY",
+    to: "/work/$slug",
+    params: { slug: "marlow-sons-cabinetry" },
+  },
 ];
 
 const GUIDE_LINKS = [

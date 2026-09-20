@@ -254,7 +254,7 @@ export function TheCut() {
 
         <p className="mt-5 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
           Concept study: a redesign of a fictional Houston cabinetmaker, made to show the process.
-          Real client projects are in Selected Work below.
+          The full study is in Selected Work below.
         </p>
       </div>
     </section>

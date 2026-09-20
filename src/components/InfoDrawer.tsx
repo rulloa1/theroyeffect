@@ -13,7 +13,11 @@ const MENU_LINKS = [
   { label: "WORK", to: "/work" as const },
   { label: "SERVICES", to: "/services" as const },
   { label: "PRICING", to: "/pricing" as const },
-  { label: "CASE STUDY", to: "/case-study" as const },
+  {
+    label: "CASE STUDY",
+    to: "/work/$slug" as const,
+    params: { slug: "marlow-sons-cabinetry" },
+  },
   { label: "ABOUT", to: "/about" as const },
   { label: "PROCESS", to: "/process" as const },
 ];
