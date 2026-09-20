@@ -39,3 +39,11 @@
 - `--ink-faint` raised to 0.56 (~5.4:1); services numerals use the token.
 - Free-audit aside heading demoted to lead size, semibold, max-w-[46ch].
 - [x] Increment 8 — three concept studies at /work/$slug, gallery rebuilt from WORK_STUDIES, /case-study permanently redirects to /work/marlow-sons-cabinetry
+
+## Increment 9 — Studio command hub additions
+
+- [ ] Redesign & Pitch tab in /admin: URL in, site scan + AI redesign pitch + outreach draft out, runs saved in redesign_runs.
+- [ ] Vapi cold calling: trigger outbound calls to prospects/redesign runs from the admin hub.
+
+- [x] Increment 9a — Redesign & Pitch admin tab (URL -> scan -> AI pitch + outreach, saved in redesign_runs).
+- [x] Increment 9b — Cold calls admin tab: outbound Vapi calls in cold_calls, transcript/summary joined from voice_call_records. Needs VAPI_PRIVATE_KEY, VAPI_PHONE_NUMBER_ID, VAPI_OUTBOUND_ASSISTANT_ID.

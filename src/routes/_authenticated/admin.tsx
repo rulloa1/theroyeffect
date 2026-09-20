@@ -15,6 +15,7 @@ import {
   Radar,
   FolderKanban,
   Rocket,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -57,6 +58,22 @@ import { AdminProspectsView } from "@/components/admin/AdminProspectsView";
 import { AdminPortalView } from "@/components/admin/AdminPortalView";
 import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
 import { AdminSignalView } from "@/components/admin/AdminSignalView";
+import { AdminRedesignView } from "@/components/admin/AdminRedesignView";
+import { AdminColdCallsView, type ColdCallPrefill } from "@/components/admin/AdminColdCallsView";
+import {
+  adminListColdCalls,
+  adminStartColdCall,
+  adminDeleteColdCall,
+} from "@/utils/coldcalls.functions";
+import {
+  adminListRedesignRuns,
+  adminRunRedesign,
+  adminUpdateRedesignRun,
+  adminDeleteRedesignRun,
+  type RedesignAngle,
+  type RedesignStatus,
+  type RedesignTreatment,
+} from "@/utils/redesign.functions";
 import {
   adminListOnboarding,
   adminRunOnboarding,
@@ -139,6 +156,8 @@ type MainView =
   | "PROPOSALS"
   | "PORTFOLIO"
   | "CLIENTPORTAL"
+  | "REDESIGN"
+  | "COLDCALLS"
   | "FINANCIALS";
 
 function AdminPage() {
@@ -187,7 +206,6 @@ function AdminPage() {
   const approveOnboardingFn = useServerFn(adminApproveOnboarding);
   const retryOnboardingFn = useServerFn(adminRetryOnboarding);
   const dismissOnboardingFn = useServerFn(adminDismissOnboarding);
-
 
   const [currentView, setCurrentView] = useState<MainView>("SIGNAL");
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
@@ -436,6 +454,97 @@ function AdminPage() {
     }
   };
 
+  const listRedesignRuns = useServerFn(adminListRedesignRuns);
+  const runRedesignFn = useServerFn(adminRunRedesign);
+  const updateRedesignFn = useServerFn(adminUpdateRedesignRun);
+  const deleteRedesignFn = useServerFn(adminDeleteRedesignRun);
+
+  const { data: redesignData } = useQuery({
+    queryKey: ["admin-redesign"],
+    queryFn: () => listRedesignRuns(),
+    retry: false,
+  });
+
+  const refreshRedesign = () => queryClient.invalidateQueries({ queryKey: ["admin-redesign"] });
+
+  const startRedesign = async (input: {
+    url: string;
+    treatment: RedesignTreatment;
+    angle: RedesignAngle;
+  }) => {
+    setBusy("redesign-run");
+    try {
+      const { run } = await runRedesignFn({ data: input });
+      toast.success(`Pitch ready for ${run.host}`);
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "That redesign run failed");
+      await refreshRedesign();
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const setRedesignStatus = async (id: string, status: RedesignStatus) => {
+    try {
+      await updateRedesignFn({ data: { id, status } });
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not update that run");
+    }
+  };
+
+  const removeRedesignRun = async (id: string) => {
+    try {
+      await deleteRedesignFn({ data: { id } });
+      toast.success("Run deleted");
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not delete that run");
+    }
+  };
+
+  const listColdCalls = useServerFn(adminListColdCalls);
+  const startColdCallFn = useServerFn(adminStartColdCall);
+  const deleteColdCallFn = useServerFn(adminDeleteColdCall);
+  const [coldCallPrefill, setColdCallPrefill] = useState<ColdCallPrefill | null>(null);
+
+  const { data: coldCallData } = useQuery({
+    queryKey: ["admin-cold-calls"],
+    queryFn: () => listColdCalls(),
+    retry: false,
+    refetchInterval: 20000,
+  });
+
+  const refreshColdCalls = () => queryClient.invalidateQueries({ queryKey: ["admin-cold-calls"] });
+
+  const startColdCall = async (input: {
+    businessName: string;
+    phone: string;
+    website: string | null;
+    talkingPoints: string | null;
+    redesignRunId: string | null;
+  }) => {
+    setBusy("cold-call");
+    try {
+      await startColdCallFn({ data: input });
+      toast.success(`Calling ${input.businessName} now.`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "That call could not be placed");
+    } finally {
+      setBusy(null);
+      await refreshColdCalls();
+    }
+  };
+
+  const removeColdCall = async (id: string) => {
+    try {
+      await deleteColdCallFn({ data: { id } });
+      await refreshColdCalls();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not delete that call");
+    }
+  };
 
   const { data: prospectsData } = useQuery({
     queryKey: ["admin-prospects"],
@@ -492,7 +601,6 @@ function AdminPage() {
       setBusy(null);
     }
   };
-
 
   const findProspectsFor = async (industry: string) => {
     setBusy("find");
@@ -757,7 +865,11 @@ function AdminPage() {
         if (mode === "sent") {
           const sent = await sendProposal({ data: { id: editingProposalId } });
           if (!sent.success) throw new Error(sent.error || "Failed to send proposal");
-          toast.success(sent.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)");
+          toast.success(
+            sent.emailed
+              ? "Proposal sent to the client"
+              : "Proposal published (email not delivered)",
+          );
         } else {
           toast.success("Draft saved");
         }
@@ -769,7 +881,8 @@ function AdminPage() {
             status: mode,
           },
         });
-        if (!res.success || !res.proposal) throw new Error(res.error || "Failed to create proposal");
+        if (!res.success || !res.proposal)
+          throw new Error(res.error || "Failed to create proposal");
         if (mode === "sent") {
           const sent = await sendProposal({ data: { id: res.proposal.id } });
           toast.success(
@@ -794,7 +907,9 @@ function AdminPage() {
     try {
       const res = await sendProposal({ data: { id } });
       if (!res.success) throw new Error(res.error || "Send failed");
-      toast.success(res.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)");
+      toast.success(
+        res.emailed ? "Proposal sent to the client" : "Proposal published (email not delivered)",
+      );
       await queryClient.invalidateQueries({ queryKey: ["admin-proposals"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error sending proposal");
@@ -942,6 +1057,7 @@ function AdminPage() {
               label: `NEW PURCHASE SETUP (${(onboardingData?.runs ?? []).filter((r) => r.status === "ready" || r.status === "failed").length})`,
               icon: Rocket,
             },
+            { id: "COLDCALLS", label: "COLD CALLS", icon: Phone },
             {
               id: "AUTOPILOT",
               label: `FOLLOW-UP AUTOPILOT (${(autopilotData?.drafts ?? []).filter((d) => d.status === "draft").length})`,
@@ -969,6 +1085,12 @@ function AdminPage() {
             },
             { id: "PORTFOLIO", label: "PORTFOLIO MANAGER", icon: Eye },
             { id: "CLIENTPORTAL", label: "CLIENT PORTAL", icon: FolderKanban },
+            {
+              id: "REDESIGN",
+              label: `REDESIGN & PITCH (${(redesignData?.runs ?? []).length})`,
+              icon: Rocket,
+            },
+            { id: "COLDCALLS", label: "COLD CALLS", icon: Phone },
             { id: "FINANCIALS", label: "FINANCIALS & STATS", icon: DollarSign },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -999,6 +1121,38 @@ function AdminPage() {
 
         {/* Dynamic Views */}
         <div className="mt-8">
+          {currentView === "COLDCALLS" && (
+            <AdminColdCallsView
+              calls={coldCallData?.calls ?? []}
+              busy={busy}
+              prefill={coldCallPrefill}
+              onStart={startColdCall}
+              onDelete={removeColdCall}
+              date={date}
+            />
+          )}
+
+          {currentView === "REDESIGN" && (
+            <AdminRedesignView
+              runs={redesignData?.runs ?? []}
+              busy={busy}
+              onRun={startRedesign}
+              onSetStatus={setRedesignStatus}
+              onDelete={removeRedesignRun}
+              onCall={(run) => {
+                setColdCallPrefill({
+                  businessName: run.host,
+                  website: run.url,
+                  talkingPoints:
+                    [run.headline, run.outreach_body].filter(Boolean).join("\n\n") || null,
+                  redesignRunId: run.id,
+                });
+                setCurrentView("COLDCALLS");
+              }}
+              date={date}
+            />
+          )}
+
           {currentView === "SIGNAL" && (
             <AdminSignalView
               orders={ordersData?.orders ?? []}
@@ -1007,7 +1161,9 @@ function AdminPage() {
               proposals={proposalsData ?? []}
               onboardingRuns={onboardingData?.runs ?? []}
               drafts={autopilotData?.drafts ?? []}
-              unreadChats={(chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length}
+              unreadChats={
+                (chatsData?.conversations ?? []).filter((c) => c.unread_count > 0).length
+              }
               onNavigate={(view) => setCurrentView(view as MainView)}
               onRunAutopilot={runAutopilotScan}
               autopilotBusy={busy === "autopilot-run"}
