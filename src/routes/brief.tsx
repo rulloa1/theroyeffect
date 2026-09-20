@@ -219,6 +219,7 @@ function BriefPage() {
   const [done, setDone] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const initialStepRender = useRef(true);
 
   const storageKey = `theroy_brief_draft_${sessionId || "general"}`;
@@ -356,7 +357,11 @@ function BriefPage() {
   const handleSingleLineKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== "Enter") return;
     event.preventDefault();
-    if (step < STEPS.length - 1) next();
+    if (step < STEPS.length - 1) {
+      next();
+      return;
+    }
+    formRef.current?.requestSubmit();
   };
 
   const submit = async (event: React.FormEvent) => {
@@ -492,7 +497,7 @@ function BriefPage() {
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-10 space-y-7" noValidate>
+        <form ref={formRef} onSubmit={submit} className="mt-10 space-y-7" noValidate>
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h2
               ref={stepHeadingRef}
