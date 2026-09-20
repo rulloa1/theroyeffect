@@ -363,7 +363,10 @@
   transform: translateY(0);
 }
 
-html[data-motion="paused"] .the-cut-word-cycle > span,
+html[data-motion="paused"] .the-cut-word-cycle > span {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .the-cut-word-cycle > span {
     transition: none;
