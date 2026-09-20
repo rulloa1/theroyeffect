@@ -173,7 +173,7 @@ function WorkStudyPage() {
                 const [rawNumber, ...rest] = block.title.split("—");
                 const hasNumber = rest.length > 0;
                 const stepNumber = hasNumber
-                  ? rawNumber.trim()
+                  ? (rawNumber ?? "").trim()
                   : String(index + 1).padStart(2, "0");
                 const stepTitle = hasNumber ? rest.join("—").trim() : block.title;
                 return (
