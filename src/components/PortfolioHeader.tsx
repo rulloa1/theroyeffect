@@ -39,7 +39,6 @@ export function PortfolioHeader() {
               {link.label}
             </Link>
           ))}
-          <MotionToggle className="mt-3 w-full justify-start border-t border-white/10 pt-3" />
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -83,6 +82,7 @@ export function PortfolioHeader() {
               <ArrowUpRight className="size-4 text-[#DFBA73]" />
             </Link>
           ))}
+          <MotionToggle className="mt-3 w-full justify-start border-t border-white/10 pt-3" />
         </nav>
       ) : null}
     </header>
