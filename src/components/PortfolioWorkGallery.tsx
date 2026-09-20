@@ -97,7 +97,7 @@ export function PortfolioWorkGallery() {
               <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 FREE WEBSITE AUDIT
               </p>
-              <h3 className="mt-2 font-portfolio text-[length:var(--type-h3)] font-bold text-[var(--ink)]">
+              <h3 className="mt-2 max-w-[46ch] font-portfolio text-[length:var(--type-lead)] font-semibold text-[var(--ink)]">
                 Get a focused teardown of your homepage, mobile experience, and conversion path.
               </h3>
             </div>

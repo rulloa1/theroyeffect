@@ -42,7 +42,7 @@ export function SiteFooter() {
                 className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#FF3333] focus-visible:ring-offset-4 focus-visible:ring-offset-[#030014]"
               />
               <div>
-                <p className="font-display text-2xl uppercase text-white">The Roy Effect</p>
+                <p className="font-display text-2xl uppercase text-[var(--ink)]">The Roy Effect</p>
                 <p className="font-mono text-xs uppercase tracking-widest text-[#DFBA73]">
                   Rory Ulloa · Houston, Texas
                 </p>
