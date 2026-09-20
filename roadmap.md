@@ -38,3 +38,4 @@
 - Anton dropped from the font request; `--font-display` now Space Grotesk; footer wordmark uses `--ink`.
 - `--ink-faint` raised to 0.56 (~5.4:1); services numerals use the token.
 - Free-audit aside heading demoted to lead size, semibold, max-w-[46ch].
+- [x] Increment 8 — three concept studies at /work/$slug, gallery rebuilt from WORK_STUDIES, /case-study permanently redirects to /work/marlow-sons-cabinetry
