@@ -3,6 +3,7 @@ import { PortfolioHeader } from "@/components/PortfolioHeader";
 import { HeroContent } from "@/components/HeroContent";
 import { PortfolioWorkGallery } from "@/components/PortfolioWorkGallery";
 import { PortfolioSections } from "@/components/PortfolioSections";
+import { RefineryScene } from "@/components/refinery/RefineryScene";
 import { SITE_URL } from "@/lib/site";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 
@@ -32,10 +33,12 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <main className="homepage-root relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
+      <RefineryScene />
       <PortfolioHeader />
       <section
         data-home-hero
-        className="relative z-20 bg-[var(--ground)] px-2 pb-2 md:px-4 md:pb-4"
+        data-refinery-chapter="hero"
+        className="relative z-20 bg-[var(--veil-ground)] px-2 pb-2 md:px-4 md:pb-4"
       >
         <HeroContent />
       </section>

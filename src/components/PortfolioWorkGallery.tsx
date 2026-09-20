@@ -4,7 +4,11 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 
 export function PortfolioWorkGallery() {
   return (
-    <section id="work" className="relative z-20 bg-[#030014] px-5 py-24 md:px-10 md:py-36">
+    <section
+      id="work"
+      data-refinery-chapter="work"
+      className="relative z-20 bg-[var(--veil-ground)] px-5 py-24 md:px-10 md:py-36"
+    >
       <div className="mx-auto max-w-7xl">
         <ScrollReveal respectEffectsGuard>
           <div className="grid gap-6 border-b border-white/10 pb-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
