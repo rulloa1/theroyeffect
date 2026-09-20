@@ -23,3 +23,4 @@
 - [x] Verify the redesigned homepage across navigation, media, motion, forms, and responsive breakpoints
 - [x] Rebuild the About page to match the architectural-noir homepage system
 - [x] Add Refinery design tokens and replace the homepage particle field with the procedural Ore scene
+- [ ] Add Refinery hero choreography, magnetic CTAs, focus rings, and persisted motion controls
