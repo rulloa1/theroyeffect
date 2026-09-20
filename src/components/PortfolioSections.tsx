@@ -19,12 +19,12 @@ export function PortfolioSections() {
     <>
       <section
         id="services"
-        className="relative z-20 border-y border-white/10 bg-[#0a0620] px-5 py-24 md:px-10 md:py-36"
+        className="relative z-20 border-y border-white/10 bg-[var(--ground-raised)] px-5 py-24 md:px-10 md:py-36"
       >
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
             <div>
-              <p className="font-mono text-xs font-bold tracking-widest text-[#DFBA73]">
+              <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 WHAT I DO
               </p>
               <h2 className="mt-4 font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl">
@@ -40,7 +40,7 @@ export function PortfolioSections() {
               </p>
               <Link
                 to="/services"
-                className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[#DFBA73] transition-colors hover:text-white"
+                className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:text-white"
               >
                 EXPLORE SERVICES
                 <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -51,7 +51,7 @@ export function PortfolioSections() {
               {CAPABILITIES.map((capability, index) => (
                 <li
                   key={capability}
-                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[#DFBA73]/50 md:py-6"
+                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
                 >
                   <span className="font-mono text-xs text-white/35">0{index + 1}</span>
                   <span className="font-portfolio text-xl font-semibold text-white transition-transform group-hover:translate-x-1 md:text-3xl">
@@ -59,7 +59,7 @@ export function PortfolioSections() {
                   </span>
                   <span
                     aria-hidden
-                    className="text-[#DFBA73] opacity-0 transition-opacity group-hover:opacity-100"
+                    className="text-[var(--gold)] opacity-0 transition-opacity group-hover:opacity-100"
                   >
                     ↗
                   </span>
@@ -70,13 +70,13 @@ export function PortfolioSections() {
         </ScrollReveal>
       </section>
 
-      <section className="relative z-20 overflow-hidden bg-[#030014] px-5 py-28 md:px-10 md:py-44">
+      <section className="relative z-20 overflow-hidden bg-[var(--ground)] px-5 py-28 md:px-10 md:py-44">
         <div
           aria-hidden
           className="portfolio-crosshair absolute right-[8%] top-[18%] size-40 opacity-50"
         />
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
-          <p className="font-mono text-xs font-bold tracking-widest text-[#FF3333]">
+          <p className="font-mono text-xs font-bold tracking-widest text-[var(--furnace)]">
             DESIGN PHILOSOPHY
           </p>
           <h2 className="mt-5 max-w-6xl font-portfolio text-5xl font-bold leading-[0.9] text-white md:text-8xl">
@@ -98,13 +98,13 @@ export function PortfolioSections() {
 
       <section
         id="about"
-        className="relative z-20 border-y border-white/10 bg-[#0a0620] px-5 py-24 md:px-10 md:py-36"
+        className="relative z-20 border-y border-white/10 bg-[var(--ground-raised)] px-5 py-24 md:px-10 md:py-36"
       >
         <ScrollReveal
           className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center"
           respectEffectsGuard
         >
-          <div className="relative min-h-[28rem] overflow-hidden border border-white/10 bg-[#030014] sm:min-h-[36rem] lg:col-span-5">
+          <div className="relative min-h-[28rem] overflow-hidden border border-white/10 bg-[var(--ground)] sm:min-h-[36rem] lg:col-span-5">
             <img
               src={portraitAsset.url}
               alt="Rory Ulloa, design developer and web developer behind The Roy Effect"
@@ -112,13 +112,13 @@ export function PortfolioSections() {
               decoding="async"
               className="absolute inset-0 h-full w-full object-contain object-bottom grayscale contrast-125"
             />
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030014] to-transparent" />
-            <p className="absolute bottom-6 left-6 font-mono text-xs tracking-widest text-[#DFBA73]">
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--ground)] to-transparent" />
+            <p className="absolute bottom-6 left-6 font-mono text-xs tracking-widest text-[var(--gold)]">
               RORY ULLOA · HOUSTON, TEXAS
             </p>
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
-            <p className="font-mono text-xs font-bold tracking-widest text-[#DFBA73]">ABOUT</p>
+            <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">ABOUT</p>
             <h2 className="mt-4 font-portfolio text-5xl font-bold leading-[0.92] text-white md:text-7xl">
               Creative vision backed by real development.
             </h2>
@@ -133,7 +133,7 @@ export function PortfolioSections() {
             </p>
             <Link
               to="/about"
-              className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:text-[#DFBA73]"
+              className="group mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-white transition-colors hover:text-[var(--gold)]"
             >
               MORE ABOUT ME
               <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -144,11 +144,11 @@ export function PortfolioSections() {
 
       <section
         id="contact"
-        className="relative z-20 overflow-hidden bg-[#DFBA73] px-5 py-24 text-[#030014] md:px-10 md:py-36"
+        className="relative z-20 overflow-hidden bg-[var(--gold)] px-5 py-24 text-[var(--ground)] md:px-10 md:py-36"
       >
         <div
           aria-hidden
-          className="absolute -right-10 -top-20 font-portfolio text-[18rem] font-bold leading-none text-[#030014]/5"
+          className="absolute -right-10 -top-20 font-portfolio text-[18rem] font-bold leading-none text-[var(--ground)]/5"
         >
           R
         </div>
@@ -157,8 +157,8 @@ export function PortfolioSections() {
           <h2 className="mt-4 max-w-5xl font-portfolio text-5xl font-bold leading-[0.9] md:text-8xl">
             Have a website idea worth building?
           </h2>
-          <div className="mt-10 grid gap-8 border-t border-[#030014]/20 pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-            <p className="max-w-2xl font-portfolio-body text-lg leading-relaxed text-[#030014]/75">
+          <div className="mt-10 grid gap-8 border-t border-[var(--ground)]/20 pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+            <p className="max-w-2xl font-portfolio-body text-lg leading-relaxed text-[var(--ground)]/75">
               Tell me what you&apos;re creating, improving, or launching. I&apos;ll help turn it
               into a polished digital experience.
             </p>
@@ -166,7 +166,7 @@ export function PortfolioSections() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-none bg-[#030014] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[#0a0620]"
+                className="rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
               >
                 <Link to="/brief">
                   START A PROJECT <ArrowUpRight />
@@ -176,7 +176,7 @@ export function PortfolioSections() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-none border-[#030014]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[#030014] hover:bg-[#030014] hover:text-white"
+                className="rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
               >
                 <Link to="/book">CONTACT ME</Link>
               </Button>
