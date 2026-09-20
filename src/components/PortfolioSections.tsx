@@ -54,8 +54,7 @@ export function PortfolioSections() {
                 <li
                   key={capability}
                   data-refinery-row={index}
-                  tabIndex={0}
-                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 focus-visible:border-[var(--gold)]/50 focus-visible:outline-none md:py-6"
+                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
                 >
                   <span className="font-mono text-xs text-white/35">0{index + 1}</span>
                   <span className="font-portfolio text-xl font-semibold text-white transition-transform group-hover:translate-x-1 md:text-3xl">

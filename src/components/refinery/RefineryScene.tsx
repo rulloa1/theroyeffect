@@ -478,12 +478,20 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         const chapter = centred?.dataset["refineryChapter"];
         if (chapter && CHAPTERS.includes(chapter as Chapter)) setChapter(chapter as Chapter);
       };
-      const chapterObserver = new IntersectionObserver(detectChapter, {
+      let chapterDetectionFrame = 0;
+      const scheduleChapterDetection = () => {
+        if (chapterDetectionFrame) return;
+        chapterDetectionFrame = requestAnimationFrame(() => {
+          chapterDetectionFrame = 0;
+          detectChapter();
+        });
+      };
+      const chapterObserver = new IntersectionObserver(scheduleChapterDetection, {
         rootMargin: "-50% 0px -50% 0px",
         threshold: 0,
       });
       chapterElements.forEach((element) => chapterObserver.observe(element));
-      window.addEventListener("scroll", detectChapter, { passive: true });
+      window.addEventListener("scroll", scheduleChapterDetection, { passive: true });
 
       const services = document.querySelector<HTMLElement>("#services");
       const updateServiceRotation = (event: Event) => {
@@ -494,7 +502,6 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         if (pausedRef.current) renderStill();
       };
       services?.addEventListener("pointerover", updateServiceRotation);
-      services?.addEventListener("focusin", updateServiceRotation);
 
       const footer = document.querySelector<HTMLElement>("footer");
       const footerObserver = footer
@@ -519,14 +526,14 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
         running = false;
         cancelAnimationFrame(frame);
         controller.current = null;
+        cancelAnimationFrame(chapterDetectionFrame);
         chapterObserver.disconnect();
         footerObserver?.disconnect();
         resizeObserver.disconnect();
-        window.removeEventListener("scroll", detectChapter);
+        window.removeEventListener("scroll", scheduleChapterDetection);
         window.removeEventListener("pointermove", onPointerMove);
         document.removeEventListener("visibilitychange", onVisibilityChange);
         services?.removeEventListener("pointerover", updateServiceRotation);
-        services?.removeEventListener("focusin", updateServiceRotation);
         oreGeometry.dispose();
         oreMaterial.dispose();
         dustGeometry.dispose();
