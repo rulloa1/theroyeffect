@@ -59,10 +59,7 @@ import { AdminPortalView } from "@/components/admin/AdminPortalView";
 import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
 import { AdminSignalView } from "@/components/admin/AdminSignalView";
 import { AdminRedesignView } from "@/components/admin/AdminRedesignView";
-import {
-  AdminColdCallsView,
-  type ColdCallPrefill,
-} from "@/components/admin/AdminColdCallsView";
+import { AdminColdCallsView, type ColdCallPrefill } from "@/components/admin/AdminColdCallsView";
 import {
   adminListColdCalls,
   adminStartColdCall,
@@ -1146,7 +1143,8 @@ function AdminPage() {
                 setColdCallPrefill({
                   businessName: run.host,
                   website: run.url,
-                  talkingPoints: run.outreach ?? null,
+                  talkingPoints:
+                    [run.headline, run.outreach_body].filter(Boolean).join("\n\n") || null,
                   redesignRunId: run.id,
                 });
                 setCurrentView("COLDCALLS");

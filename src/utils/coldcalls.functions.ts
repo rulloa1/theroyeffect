@@ -52,7 +52,7 @@ export const adminListColdCalls = createServerFn({ method: "GET" })
         .select("vapi_call_id, summary, transcript, recording_url, ended_reason, status")
         .in("vapi_call_id", ids);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      for (const record of ((records as any[]) ?? [])) {
+      for (const record of (records as any[]) ?? []) {
         const row = rows.find((item) => item.vapi_call_id === record.vapi_call_id);
         if (!row) continue;
         row.summary = record.summary ?? null;

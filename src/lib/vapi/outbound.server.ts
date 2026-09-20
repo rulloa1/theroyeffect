@@ -43,8 +43,7 @@ function requireEnv(name: string): string {
 export async function placeColdCall(input: OutboundCallInput): Promise<OutboundCallResult> {
   const apiKey = requireEnv("VAPI_PRIVATE_KEY");
   const phoneNumberId = requireEnv("VAPI_PHONE_NUMBER_ID");
-  const assistantId =
-    process.env["VAPI_OUTBOUND_ASSISTANT_ID"] ?? requireEnv("VAPI_ASSISTANT_ID");
+  const assistantId = process.env["VAPI_OUTBOUND_ASSISTANT_ID"] ?? requireEnv("VAPI_ASSISTANT_ID");
 
   const number = normalisePhone(input.phone);
 
