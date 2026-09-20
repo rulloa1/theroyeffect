@@ -90,7 +90,7 @@ const FIELD_IDS: Record<VisibleField, string> = {
   name: "brief-name",
   email: "brief-email",
   company: "brief-company",
-  projectType: "brief-type-0",
+  projectType: "brief-projectType-0",
   goals: "brief-goals",
   referencesLinks: "brief-references",
   budget: "brief-budget-0",
