@@ -1,12 +1,16 @@
 /**
  * Server-only: places outbound (cold) calls through Vapi.
  *
- * Requires VAPI_PRIVATE_KEY, VAPI_PHONE_NUMBER_ID and VAPI_OUTBOUND_ASSISTANT_ID
- * (falls back to VAPI_ASSISTANT_ID). All three are read at call time, never at
- * module scope.
+ * The calling number is configured two ways, in priority order:
+ *  1. VAPI_PHONE_NUMBER_ID — a Vapi phone-number ID (uuid-like).
+ *  2. VAPI_OUTBOUND_NUMBER — the raw calling number in E.164 (e.g. +15714459046);
+ *     it is resolved to its Vapi phone-number ID via the Vapi API at call time.
+ *
+ * Also requires VAPI_PRIVATE_KEY and VAPI_OUTBOUND_ASSISTANT_ID
+ * (falls back to VAPI_ASSISTANT_ID). All are read at call time, never at module scope.
  */
 
-const VAPI_API = "https://api.vapi.ai/call";
+const VAPI_API = "https://api.vapi.ai";
 
 export interface OutboundCallInput {
   businessName: string;
