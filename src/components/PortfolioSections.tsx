@@ -121,14 +121,16 @@ export function PortfolioSections() {
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
-              <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">ABOUT</p>
+              <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
+                ABOUT
+              </p>
               <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
                 Creative vision backed by real development.
               </h2>
               <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
-                I&apos;m Rory Ulloa, the design developer behind The Roy Effect. I create distinctive
-                digital experiences by bringing design and development together—from the first idea
-                to the finished website.
+                I&apos;m Rory Ulloa, the design developer behind The Roy Effect. I create
+                distinctive digital experiences by bringing design and development together—from the
+                first idea to the finished website.
               </p>
               <p className="mt-5 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-faint)]">
                 I work solo from Houston, shaping brand systems, marketing sites, and product
