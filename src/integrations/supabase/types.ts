@@ -932,6 +932,63 @@ export type Database = {
           },
         ]
       }
+      redesign_runs: {
+        Row: {
+          angle: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          headline: string | null
+          host: string
+          id: string
+          outreach_body: string | null
+          outreach_subject: string | null
+          scan: Json
+          sections: Json
+          status: string
+          subheadline: string | null
+          treatment: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          angle?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          headline?: string | null
+          host: string
+          id?: string
+          outreach_body?: string | null
+          outreach_subject?: string | null
+          scan?: Json
+          sections?: Json
+          status?: string
+          subheadline?: string | null
+          treatment?: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          angle?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          headline?: string | null
+          host?: string
+          id?: string
+          outreach_body?: string | null
+          outreach_subject?: string | null
+          scan?: Json
+          sections?: Json
+          status?: string
+          subheadline?: string | null
+          treatment?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       retainer_subscriptions: {
         Row: {
           cancel_at_period_end: boolean
