@@ -32,6 +32,19 @@ function hydratePreference() {
   return changed;
 }
 
+function restorePreference() {
+  if (typeof window === "undefined") return;
+  const storedPaused = readStoredPreference();
+  hydrated = true;
+  if (paused === storedPaused) {
+    syncDocumentAttribute();
+    return;
+  }
+  paused = storedPaused;
+  syncDocumentAttribute();
+  listeners.forEach((listener) => listener());
+}
+
 export function getMotionPaused() {
   hydratePreference();
   return paused;
@@ -63,7 +76,7 @@ export function useMotionPaused() {
     () => false,
   );
   useEffect(() => {
-    hydratePreference();
+    restorePreference();
   }, []);
   return value;
 }
