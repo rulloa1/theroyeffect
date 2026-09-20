@@ -333,6 +333,55 @@
   outline-color: var(--ground);
 }
 
+.the-cut-after,
+.the-cut-seam,
+.the-cut-handle {
+  transition: none;
+}
+
+.the-cut-after.the-cut-settling {
+  transition: clip-path 420ms var(--ease-press);
+}
+
+.the-cut-seam.the-cut-settling,
+.the-cut-handle.the-cut-settling {
+  transition: transform 420ms var(--ease-press);
+}
+
+.the-cut-handle [role="slider"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.the-cut-word-cycle > span {
+  opacity: 0;
+  transform: translateY(0.2em);
+}
+
+.the-cut-word-cycle > span[data-active="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html[data-motion="paused"] .the-cut-word-cycle > span {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .the-cut-word-cycle > span {
+    transition: none;
+  }
+}
+
+.the-cut-cursor {
+  opacity: 0;
+  transition: opacity var(--dur-micro) var(--ease-refine);
+}
+
+.the-cut-cursor-visible {
+  opacity: 1;
+}
+
 html[data-motion="paused"] .hero-eyebrow-rule,
 html[data-motion="paused"] .hero-eyebrow-text,
 html[data-motion="paused"] .hero-word,
@@ -363,6 +412,14 @@ html[data-motion="paused"] .magnetic,
 html[data-motion="paused"] .magnetic-label {
   transform: none;
   transition: none;
+}
+
+html[data-motion="paused"] :is(.the-cut-after, .the-cut-seam, .the-cut-handle) {
+  transition: none !important;
+}
+
+html[data-motion="paused"] .the-cut-cursor {
+  display: none;
 }
 
 @utility text-stroke-thin {
@@ -455,6 +512,16 @@ html[data-motion="paused"] .magnetic-label {
     transform: none;
     transition: none;
   }
+
+  .the-cut-after,
+  .the-cut-seam,
+  .the-cut-handle {
+    transition: none !important;
+  }
+
+  .the-cut-cursor {
+    display: none;
+  }
 }
 
 @media (pointer: coarse) {
@@ -466,5 +533,9 @@ html[data-motion="paused"] .magnetic-label {
   .magnetic-label {
     transform: none;
     transition: none;
+  }
+
+  .the-cut-cursor {
+    display: none;
   }
 }
