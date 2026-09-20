@@ -24,3 +24,4 @@
 - [x] Rebuild the About page to match the architectural-noir homepage system
 - [x] Add Refinery design tokens and replace the homepage particle field with the procedural Ore scene
 - [x] Add Refinery hero choreography, magnetic CTAs, focus rings, and persisted motion controls
+- [x] Extend the homepage Ore into one fixed, scroll-driven Refinery chapter scene

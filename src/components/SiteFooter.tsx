@@ -26,7 +26,7 @@ export function SiteFooter() {
 
   return (
     <footer
-      className={`relative z-20 w-full overflow-hidden border-t border-white/10 bg-[#030014] px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20 ${pathname === "/" ? "homepage-footer" : ""}`}
+      className={`relative z-20 w-full overflow-hidden border-t border-white/10 bg-[var(--ground)] px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20 ${pathname === "/" ? "homepage-footer" : ""}`}
     >
       <div
         aria-hidden

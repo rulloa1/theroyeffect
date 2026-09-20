@@ -20,7 +20,8 @@ export function PortfolioSections() {
     <>
       <section
         id="services"
-        className="relative z-20 border-y border-white/10 bg-[var(--ground-raised)] px-5 py-24 md:px-10 md:py-36"
+        data-refinery-chapter="services"
+        className="relative z-20 border-y border-white/10 bg-[var(--veil-raised)] px-5 py-24 md:px-10 md:py-36"
       >
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
@@ -52,7 +53,9 @@ export function PortfolioSections() {
               {CAPABILITIES.map((capability, index) => (
                 <li
                   key={capability}
-                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 md:py-6"
+                  data-refinery-row={index}
+                  tabIndex={0}
+                  className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-white/10 py-5 transition-colors hover:border-[var(--gold)]/50 focus-visible:border-[var(--gold)]/50 focus-visible:outline-none md:py-6"
                 >
                   <span className="font-mono text-xs text-white/35">0{index + 1}</span>
                   <span className="font-portfolio text-xl font-semibold text-white transition-transform group-hover:translate-x-1 md:text-3xl">
@@ -71,7 +74,10 @@ export function PortfolioSections() {
         </ScrollReveal>
       </section>
 
-      <section className="relative z-20 overflow-hidden bg-[var(--ground)] px-5 py-28 md:px-10 md:py-44">
+      <section
+        data-refinery-chapter="promise"
+        className="relative z-20 overflow-hidden bg-[var(--veil-ground)] px-5 py-28 md:px-10 md:py-44"
+      >
         <div
           aria-hidden
           className="portfolio-crosshair absolute right-[8%] top-[18%] size-40 opacity-50"
@@ -99,7 +105,8 @@ export function PortfolioSections() {
 
       <section
         id="about"
-        className="relative z-20 border-y border-white/10 bg-[var(--ground-raised)] px-5 py-24 md:px-10 md:py-36"
+        data-refinery-chapter="about"
+        className="relative z-20 border-y border-white/10 bg-[var(--veil-raised)] px-5 py-24 md:px-10 md:py-36"
       >
         <ScrollReveal
           className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center"
@@ -145,6 +152,7 @@ export function PortfolioSections() {
 
       <section
         id="contact"
+        data-refinery-chapter="finale"
         className="relative z-20 overflow-hidden bg-[var(--gold)] px-5 py-24 text-[var(--ground)] md:px-10 md:py-36"
       >
         <div

@@ -3,15 +3,14 @@ import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/refinery/Magnetic";
-import { RefineryScene } from "@/components/refinery/RefineryScene";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 
 const HEADLINE = "I design and build websites people remember.";
 
 export function HeroContent() {
   return (
-    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-white/10 bg-[var(--ground-raised)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
-      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-white/10 md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
+    <div className="relative z-20 mx-auto grid min-h-[calc(100svh-1rem)] w-full max-w-[96rem] grid-cols-1 overflow-hidden border-x border-b border-white/10 bg-[var(--veil-hero)] pt-20 md:min-h-[calc(100svh-2rem)] md:grid-cols-12 md:pt-24">
+      <div className="relative order-2 min-h-[18rem] overflow-hidden border-t border-white/10 bg-[var(--ground-raised)] md:order-1 md:col-span-5 md:min-h-0 md:border-r md:border-t-0 lg:col-span-4">
         <div className="hero-portrait absolute inset-0">
           <img
             src={portraitAsset.url}
@@ -36,10 +35,10 @@ export function HeroContent() {
       </div>
 
       <div className="relative order-1 flex flex-col justify-center px-5 py-10 sm:px-8 md:order-2 md:col-span-7 md:px-10 md:py-16 lg:col-span-8 lg:px-16">
-        <RefineryScene />
+        <div aria-hidden className="hero-refinery-fallback refinery-ember absolute inset-0" />
         <div
           aria-hidden
-          className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,var(--ground-raised)_0%,var(--ground-raised)_35%,transparent_55%)]"
+          className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,var(--ground-raised)_0%,var(--ground-raised)_35%,transparent_55%)] opacity-95"
         />
         <div aria-hidden className="portfolio-dot-grid absolute inset-0 z-[2] opacity-40" />
         <div className="relative z-10 max-w-4xl">

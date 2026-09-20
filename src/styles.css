@@ -46,6 +46,9 @@
   --line: rgb(255 255 255 / 0.1);
   --gold: #dfba73;
   --furnace: #ff3333;
+  --veil-raised: rgb(18 18 18 / 0.78);
+  --veil-ground: rgb(10 10 10 / 0.62);
+  --veil-hero: rgb(18 18 18 / 0.35);
   --ease-refine: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-draw: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-press: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -190,6 +193,10 @@
   opacity: 1;
 }
 
+.refinery-fixed-layer {
+  z-index: 0;
+}
+
 .refinery-ember {
   background: radial-gradient(
     circle at 78% 40%,
@@ -197,6 +204,12 @@
     rgb(223 186 115 / 0.04) 18%,
     transparent 42%
   );
+}
+
+@media (min-width: 768px) {
+  .refinery-webgl-active .hero-refinery-fallback {
+    display: none;
+  }
 }
 
 @keyframes hero-rule-draw {
