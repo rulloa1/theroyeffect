@@ -13,7 +13,7 @@
   --home-line: rgba(255, 255, 255, 0.1);
   --home-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --font-home-display: "Anton", "Impact", "Arial Black", sans-serif;
-  --font-home-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-home-sans: "Archivo", "Space Grotesk", system-ui, sans-serif;
   --font-home-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
   background: var(--home-bg);
