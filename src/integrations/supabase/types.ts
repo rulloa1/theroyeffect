@@ -248,6 +248,62 @@ export type Database = {
         }
         Relationships: []
       }
+      cold_calls: {
+        Row: {
+          business_name: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          id: string
+          phone: string
+          prospect_id: string | null
+          redesign_run_id: string | null
+          status: string
+          talking_points: string | null
+          updated_at: string
+          vapi_call_id: string | null
+          website: string | null
+        }
+        Insert: {
+          business_name: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          phone: string
+          prospect_id?: string | null
+          redesign_run_id?: string | null
+          status?: string
+          talking_points?: string | null
+          updated_at?: string
+          vapi_call_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          business_name?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          phone?: string
+          prospect_id?: string | null
+          redesign_run_id?: string | null
+          status?: string
+          talking_points?: string | null
+          updated_at?: string
+          vapi_call_id?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cold_calls_redesign_run_id_fkey"
+            columns: ["redesign_run_id"]
+            isOneToOne: false
+            referencedRelation: "redesign_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_inquiries: {
         Row: {
           bottleneck: string | null
