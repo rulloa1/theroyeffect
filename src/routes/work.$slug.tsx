@@ -16,7 +16,10 @@ export const Route = createFileRoute("/work/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Study not found — The Roy Effect" }, { name: "robots", content: "noindex" }],
+        meta: [
+          { title: "Study not found — The Roy Effect" },
+          { name: "robots", content: "noindex" },
+        ],
       };
     }
     const title = `${loaderData.name} — concept study | The Roy Effect`;

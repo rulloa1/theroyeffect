@@ -82,6 +82,7 @@ export function SiteFooter() {
                 <Link
                   key={link.label}
                   to={link.to}
+                  {...("params" in link ? { params: link.params } : {})}
                   className="inline-flex min-h-11 items-center border-b border-white/5 font-mono text-[15px] text-white/90 transition-colors last:border-0 hover:text-[#FF3333] focus-visible:outline-none focus-visible:text-[#FF3333]"
                 >
                   {link.label}

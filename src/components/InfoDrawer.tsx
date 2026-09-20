@@ -170,6 +170,7 @@ export function InfoDrawer({
                       <li key={item.label}>
                         <Link
                           to={item.to}
+                          {...("params" in item ? { params: item.params } : {})}
                           onClick={close}
                           className="group flex w-full items-center justify-between border-b border-white/10 py-5 text-left"
                         >

@@ -117,7 +117,7 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
               <Link
                 key={entry.slug}
                 to="/work/$slug"
-                  params={{ slug: "marlow-sons-cabinetry" }}
+                params={{ slug: "marlow-sons-cabinetry" }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="group block border-t border-white/10 bg-white/[0.02] px-4 py-5 transition-colors hover:bg-white/[0.04] md:px-6 md:py-7"
@@ -174,7 +174,7 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
       </p>
       <Link
         to="/work/$slug"
-                  params={{ slug: "marlow-sons-cabinetry" }}
+        params={{ slug: "marlow-sons-cabinetry" }}
         className="mt-4 inline-flex min-h-11 items-center gap-2 py-2 font-mono text-[15px] tracking-widest text-[#DFBA73] transition-colors hover:text-white"
       >
         SEE HOW I WORK <ArrowUpRight className="size-4" />
