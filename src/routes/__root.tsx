@@ -200,7 +200,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Bold brand systems, high-contrast digital experiences and production-ready builds by Rory Ulloa.",
       },
-      { property: "og:site_name", content: "theroyeffect.com" },
+      { property: "og:site_name", content: "The Roy Effect" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "google-site-verification", content: "77GixI64Yh4THH1-qNE6EXBc87IRpeA76Jo1KHyaTCA" },
@@ -248,6 +248,12 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--gold)] focus:px-4 focus:py-3 focus:font-mono focus:text-xs focus:font-bold focus:tracking-widest focus:text-[var(--ground)]"
+        >
+          SKIP TO CONTENT
+        </a>
         {children}
         <Scripts />
       </body>
