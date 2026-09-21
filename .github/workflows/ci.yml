@@ -23,6 +23,20 @@ jobs:
         with:
           bun-version: latest
 
+      # bun fetches the exact tarball URL recorded in bun.lock, and a registry
+      # override does NOT redirect it. A lockfile written inside a sandbox that
+      # proxies npm through a private mirror therefore makes every package 403
+      # here. Fail with something actionable instead of 500 opaque 403s.
+      - name: Check lockfile resolves from public npm
+        run: |
+          if grep -qE 'https://[^"]*(pkg\.dev|artifactory|nexus|\.internal)' bun.lock; then
+            echo "::error file=bun.lock::bun.lock resolves packages through a private registry that CI cannot authenticate to."
+            echo "Rewrite the tarball URLs in place (keeps every resolved version and integrity hash):"
+            echo "  sed -i -E 's#https://[^\"]*/sandbox-npm-cache/#https://registry.npmjs.org/#g' bun.lock"
+            echo "  bun install --frozen-lockfile   # verify"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
