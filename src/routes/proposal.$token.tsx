@@ -119,7 +119,7 @@ function ProposalPage() {
 
   if (isLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#030014] text-white">
+      <main id="main" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#030014] text-white">
         <p className="font-mono text-xs tracking-widest text-[#DFBA73]">LOADING AGREEMENT…</p>
       </main>
     );
@@ -127,7 +127,7 @@ function ProposalPage() {
 
   if (error || !proposal) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-[#030014] px-5 text-center text-white">
+      <main id="main" tabIndex={-1} className="flex min-h-screen flex-col items-center justify-center bg-[#030014] px-5 text-center text-white">
         <AlertCircle className="size-12 text-[#E51924]" />
         <h1 className="mt-4 font-display text-3xl uppercase">Proposal Not Found</h1>
         <p className="mt-2 font-mono text-xs text-white/50">
@@ -164,7 +164,7 @@ function ProposalPage() {
   }).format(proposal.balance_cents / 100);
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 text-white md:px-10 md:py-24">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 text-white md:px-10 md:py-24">
       <Toaster />
       <div className="mx-auto max-w-4xl">
         {/* Top Header */}

@@ -51,7 +51,7 @@ function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#030014]">
       <SiteHeader onNavigate={() => void navigate({ to: "/" })} />
-      <main className="px-5 pb-16 pt-28 md:px-10 md:pt-36">
+      <main id="main" tabIndex={-1} className="px-5 pb-16 pt-28 md:px-10 md:pt-36">
         <article className="mx-auto max-w-3xl">
           <h1 className="font-display text-4xl uppercase leading-[0.95] text-white md:text-6xl">
             Privacy Policy

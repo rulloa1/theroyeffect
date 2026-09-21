@@ -42,7 +42,7 @@ function BookPage() {
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#030014]">
+    <main id="main" tabIndex={-1} className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#030014]">
       <ParticleBackground />
       <SiteHeader onNavigate={handleNavigate} />
 

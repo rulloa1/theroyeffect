@@ -46,7 +46,7 @@ export const Route = createFileRoute("/pricing")({
 function PricingPage() {
   const navigate = useNavigate();
   return (
-    <main className="min-h-screen bg-[#030014]">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014]">
       <Toaster />
       <div className="mx-auto max-w-7xl px-5 pt-16 md:px-10 md:pt-24">
         <Logo variant="compact" size="md" href="/" className="mb-10" />

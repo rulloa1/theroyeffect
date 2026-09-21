@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <main className="homepage-root relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
+    <main id="main" tabIndex={-1} className="homepage-root relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
       <RefineryScene />
       <PortfolioHeader />
       <section

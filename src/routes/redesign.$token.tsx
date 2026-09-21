@@ -32,7 +32,7 @@ export const Route = createFileRoute("/redesign/$token")({
 
 function RedesignMessage({ title }: { title: string }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-[var(--ground)] px-6 text-center text-[var(--ink)]">
+    <main id="main" tabIndex={-1} className="flex min-h-screen flex-col items-center justify-center gap-6 bg-[var(--ground)] px-6 text-center text-[var(--ink)]">
       <Logo className="h-8 w-auto" />
       <h1 className="font-display text-2xl uppercase tracking-tight">{title}</h1>
       <Link
@@ -49,7 +49,7 @@ function RedesignPage() {
   const { host, treatment, headline, subheadline, sections } = Route.useLoaderData();
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)] text-[var(--ink)]">
+    <main id="main" tabIndex={-1} className="relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)] text-[var(--ink)]">
       {treatment === "cinematic_3d" ? <RefineryScene /> : null}
 
       {/* Concept banner — nobody should mistake this for their live site. */}
