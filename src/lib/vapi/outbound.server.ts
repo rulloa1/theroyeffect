@@ -84,7 +84,7 @@ export async function placeColdCall(input: OutboundCallInput): Promise<OutboundC
 
   const number = normalisePhone(input.phone);
 
-  const response = await fetch(VAPI_API, {
+  const response = await fetch(`${VAPI_API}/call`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
