@@ -98,15 +98,27 @@
 @font-face {
   font-family: "Space Grotesk Fallback";
   src: local("Arial"), local("ArialMT");
-  ascent-override: 89.7072%;
-  descent-override: 26.6204%;
+  font-weight: 300 500;
+  ascent-override: 89.5241%;
+  descent-override: 26.5661%;
   line-gap-override: 0%;
-  size-adjust: 109.6903%;
+  size-adjust: 109.9146%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 700;
+  ascent-override: 96.3879%;
+  descent-override: 28.6029%;
+  line-gap-override: 0%;
+  size-adjust: 102.0875%;
 }
 
 @font-face {
   font-family: "Archivo Fallback";
   src: local("Arial"), local("ArialMT");
+  font-weight: 100 500;
   ascent-override: 88.9575%;
   descent-override: 21.2769%;
   line-gap-override: 0%;
@@ -114,8 +126,28 @@
 }
 
 @font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 900;
+  ascent-override: 89.2845%;
+  descent-override: 21.3551%;
+  line-gap-override: 0%;
+  size-adjust: 98.3373%;
+}
+
+@font-face {
   font-family: "IBM Plex Mono Fallback";
   src: local("Courier New"), local("CourierNewPSMT");
+  font-weight: 400;
+  ascent-override: 102.5167%;
+  descent-override: 27.5045%;
+  size-adjust: 99.9837%;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Fallback";
+  src: local("Courier New Bold"), local("CourierNewPS-BoldMT");
+  font-weight: 700;
   ascent-override: 102.5167%;
   descent-override: 27.5045%;
   size-adjust: 99.9837%;

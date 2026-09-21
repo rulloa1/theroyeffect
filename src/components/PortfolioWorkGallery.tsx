@@ -71,12 +71,12 @@ export function PortfolioWorkGallery() {
               <ScrollReveal
                 stagger
                 respectEffectsGuard
-                className="relative mt-auto grid max-w-3xl grid-cols-3 border-y border-[var(--line)]"
+                className="relative mt-auto flex flex-wrap gap-x-4 gap-y-1 border-y border-[var(--line)] px-3 py-4 sm:grid sm:max-w-3xl sm:grid-cols-3 sm:gap-0 sm:px-0 sm:py-0"
               >
                 {featured.scopeTags.map((tag) => (
                   <span
                     key={tag}
-                    className="border-r border-[var(--line)] px-3 py-4 font-mono text-[11px] tracking-[0.14em] text-[var(--ink-faint)] transition-colors last:border-r-0 hover:text-[var(--gold)]"
+                    className="font-mono text-[11px] tracking-[0.14em] text-[var(--ink-faint)] transition-colors after:mr-4 after:content-['·'] last:after:content-none hover:text-[var(--gold)] sm:border-r sm:border-[var(--line)] sm:px-3 sm:py-4 sm:after:mr-0 sm:after:content-none sm:last:border-r-0"
                   >
                     {tag.toUpperCase()}
                   </span>
