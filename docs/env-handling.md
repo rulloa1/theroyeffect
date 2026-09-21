@@ -63,9 +63,15 @@ that:
   returns `null`; `initializeFirebase()` then returns `null` and
   `getFirebaseAuth()` / `getFirebaseFirestore()` throw
   "Firebase is not initialized."
-- The only consumer is `FirebaseProvider` in `src/routes/__root.tsx`. There are
-  no `getFirebaseAuth` / `getFirebaseFirestore` call sites outside the
-  `integrations/firebase` barrel.
+- Everything downstream of that null is therefore a no-op. `FirebaseProvider`
+  (`src/routes/__root.tsx`) calls `startFirebaseAnalytics()`, which returns
+  `null` on the same failed config, and **eight components and routes** now call
+  `trackAnalyticsEvent` — `SiteHeader`, `SiteFooter`, `PortfolioHeader`,
+  `PortfolioSections`, `PortfolioWorkGallery`, `HeroContent`,
+  `ClosingMarqueeCta` and `routes/audit.tsx`. None of them records anything
+  today. Nothing outside the `integrations/firebase` barrel calls
+  `getFirebaseAuth` / `getFirebaseFirestore`, so there is no auth or Firestore
+  dependency on Firebase — only this silent analytics surface.
 - `src/firebase.ts` is a second, older config path that initializes
   unconditionally with the empty key. Nothing imports it — it is dead code and a
   reasonable cleanup candidate.
@@ -73,6 +79,11 @@ that:
 So the blocker for untracking is **Supabase, Vapi and the payments token**, not
 Firebase. Verify those three in step 4 below; Firebase needs its keys filled in
 before it can be verified at all, which is separate work.
+
+That separate work is worth scheduling on its own merits: the analytics calls are
+already in place across eight surfaces, so filling in `VITE_FIREBASE_API_KEY`
+would switch on the tracking those calls were written for. Until then the site is
+paying the import cost and recording nothing.
 
 ## Migration path, if you want them untracked
 
