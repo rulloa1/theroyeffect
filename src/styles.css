@@ -31,11 +31,13 @@
   --color-acid: var(--acid);
   --color-drawer: var(--drawer);
   --color-energy: var(--energy);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Archivo", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-  --font-portfolio: "Space Grotesk", system-ui, sans-serif;
-  --font-portfolio-body: "Archivo", system-ui, sans-serif;
+  --font-display:
+    "Space Grotesk Variable", "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-sans: "Archivo Variable", "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Mono Fallback", "SFMono-Regular", Consolas, monospace;
+  --font-portfolio:
+    "Space Grotesk Variable", "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-portfolio-body: "Archivo Variable", "Archivo", "Archivo Fallback", system-ui, sans-serif;
   --default-transition-duration: 160ms;
   --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
