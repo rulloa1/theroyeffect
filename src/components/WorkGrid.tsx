@@ -8,7 +8,10 @@ import { shouldRunHeavyEffects } from "@/lib/effects-guard";
 function SiteShot({ study, className }: { study: StudyCard; className?: string }) {
   return (
     <div className={`overflow-hidden border border-white/10 bg-[#0a0a0a] ${className ?? ""}`}>
-      <div className="flex h-6 items-center gap-1.5 border-b border-white/10 px-3" aria-hidden="true">
+      <div
+        className="flex h-6 items-center gap-1.5 border-b border-white/10 px-3"
+        aria-hidden="true"
+      >
         <span className="size-1.5 rounded-full bg-white/25" />
         <span className="size-1.5 rounded-full bg-white/25" />
         <span className="size-1.5 rounded-full bg-white/25" />
@@ -39,7 +42,9 @@ function StudyCardCompact({ study }: { study: StudyCard }) {
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#DFBA73]">
           Study {study.index} · {study.sector}
         </p>
-        <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-white">{study.name}</h3>
+        <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-white">
+          {study.name}
+        </h3>
         <p className="mt-2 font-sans text-[15px] leading-relaxed text-white/75">{study.summary}</p>
         <span className="mt-auto inline-flex items-center gap-2 pt-5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-colors group-hover:text-[#DFBA73]">
           Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -118,7 +123,9 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
                       className="size-5 shrink-0 -translate-x-2 text-white opacity-0 transition-all group-hover:translate-x-0 group-hover:text-[#DFBA73] group-hover:opacity-100"
                     />
                   </div>
-                  <p className="font-sans text-base leading-relaxed text-white/80">{study.summary}</p>
+                  <p className="font-sans text-base leading-relaxed text-white/80">
+                    {study.summary}
+                  </p>
                   <span className="font-mono text-xs uppercase tracking-widest text-[#DFBA73] md:max-w-44 md:text-right">
                     Study {study.index} · {study.sector}
                   </span>
@@ -154,7 +161,9 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
           ) : null}
         </div>
       )}
-      <p className="mt-5 max-w-[70ch] font-sans text-sm leading-relaxed text-white/60">{STUDIES_NOTE}</p>
+      <p className="mt-5 max-w-[70ch] font-sans text-sm leading-relaxed text-white/60">
+        {STUDIES_NOTE}
+      </p>
     </div>
   );
 }
