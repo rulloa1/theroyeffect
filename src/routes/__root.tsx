@@ -19,21 +19,30 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
 
+const SQUARE_BUTTON =
+  "inline-flex items-center justify-center rounded-none px-6 min-h-12 font-mono text-xs font-bold tracking-widest";
+
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="flex min-h-screen items-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)]">
+      <div className="mx-auto w-full max-w-7xl">
+        <span className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">404</span>
+        <h1 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
+          This page isn't here.
+        </h1>
+        <p className="mt-4 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+          The link may be old, or the page moved.
         </p>
-        <div className="mt-6">
+        <div className="mt-8 flex flex-wrap gap-3">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            hash="work"
+            className={`${SQUARE_BUTTON} border border-[var(--line)] text-[var(--ink)]`}
           >
-            Go home
+            BACK TO THE WORK
+          </Link>
+          <Link to="/audit" className={`${SQUARE_BUTTON} bg-[var(--furnace)] text-black`}>
+            GET YOUR FREE AUDIT
           </Link>
         </div>
       </div>
