@@ -18,6 +18,7 @@ import { captureClientError, initSentryClient } from "../lib/sentry/client";
 import { AuthProvider } from "@/hooks/useAuth";
 import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
+import { MK_MOTION_HEAD_SCRIPT } from "@/components/markup/motion";
 
 const SQUARE_BUTTON =
   "inline-flex items-center justify-center rounded-none px-6 min-h-12 font-mono text-xs font-bold tracking-widest";
@@ -231,6 +232,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
     scripts: [
+      { children: MK_MOTION_HEAD_SCRIPT },
       {
         type: "application/ld+json",
         children: JSON.stringify(STRUCTURED_DATA),
@@ -245,7 +247,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -305,6 +307,7 @@ function RootComponent() {
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isSignedInTool = pathname.startsWith("/admin") || pathname.startsWith("/portal");
+  const isMarkup = pathname === "/" || pathname === "/audit";
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -314,7 +317,7 @@ function RootComponent() {
           <Outlet />
           {/* The studio hub and client portal are signed-in tools, not marketing
               surfaces: the public footer stays off them. */}
-          {!isSignedInTool && <SiteFooter />}
+          {!isSignedInTool && !isMarkup && <SiteFooter />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>
