@@ -64,8 +64,7 @@ const FIELD_IDS: Record<FieldName, string> = {
   notes: "audit-notes",
 };
 
-const LABEL_CLASS =
-  "block font-mono text-[11px] uppercase tracking-wider text-[var(--ink-muted)]";
+const LABEL_CLASS = "block font-mono text-[11px] uppercase tracking-wider text-[var(--ink-muted)]";
 const CONTROL_CLASS =
   "mt-2 w-full min-h-12 border border-[var(--line)] bg-[var(--ground-raised)] px-4 py-3 font-portfolio-body text-base text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)]";
 
@@ -148,11 +147,7 @@ export function AuditPage() {
 
   const fieldError = (field: FieldName) =>
     errors[field] ? (
-      <p
-        id={`audit-${field}-error`}
-        role="alert"
-        className="mt-2 text-sm text-[var(--furnace)]"
-      >
+      <p id={`audit-${field}-error`} role="alert" className="mt-2 text-sm text-[var(--furnace)]">
         {errors[field]}
       </p>
     ) : null;
@@ -174,9 +169,7 @@ export function AuditPage() {
 
           <h1 className="mt-6 font-portfolio text-[length:var(--type-display)] font-bold leading-[0.95] text-[var(--ink)]">
             Free website audit <br />
-            <span className="text-[var(--ink-muted)]">
-              a 5-minute video teardown of your site.
-            </span>
+            <span className="text-[var(--ink-muted)]">a 5-minute video teardown of your site.</span>
           </h1>
 
           <p className="mt-5 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
@@ -489,7 +482,10 @@ export function AuditPage() {
                 a: "Send the closest thing you have — a social profile, a directory listing, or a competitor you admire — and I'll review positioning instead of layout.",
               },
             ].map((faq) => (
-              <div key={faq.q} className="border border-[var(--line)] bg-[var(--ground-raised)] p-5">
+              <div
+                key={faq.q}
+                className="border border-[var(--line)] bg-[var(--ground-raised)] p-5"
+              >
                 <h3 className="font-portfolio text-lg font-bold leading-snug text-[var(--ink)]">
                   {faq.q}
                 </h3>

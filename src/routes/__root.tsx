@@ -61,7 +61,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)]">
       <div className="mx-auto w-full max-w-7xl">
-        <span className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">ERROR</span>
+        <span className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
+          ERROR
+        </span>
         <h1 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
           This page didn't load.
         </h1>
