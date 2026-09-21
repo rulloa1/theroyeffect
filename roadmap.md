@@ -50,3 +50,4 @@
 - [x] Increment 9c — architecture-index.svg + coffee-identity.svg study artwork; single-column approach sequence on /work/$slug.
 - [x] Wire user-supplied phone number +1 (571) 445 9046 into the project (purpose being confirmed with Rory).
 - [x] Complete launch-audit batch 1 homepage and shared-component polish in preview.
+- Launch-audit batch 2: /audit rebuilt on the site tokens with inline validation, self-hosted fonts with metric-matched fallbacks, skip link + main landmarks, tokenised 404/error screens, og:site_name fix.
