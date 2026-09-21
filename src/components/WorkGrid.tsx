@@ -1,67 +1,51 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import { SHOWCASE_WORK, type ShowcaseWorkEntry } from "@/lib/site-content";
+import { STUDIES_NOTE, STUDY_CARDS, type StudyCard } from "@/lib/showcase-work";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
 
-function WorkImage({
-  entry,
-  index,
-  className,
-}: {
-  entry: ShowcaseWorkEntry;
-  index: number;
-  className?: string;
-}) {
-  const [imageFailed, setImageFailed] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const showImage = entry.image !== null && !imageFailed;
-
-  useEffect(() => {
-    const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth === 0) setImageFailed(true);
-  }, []);
-
+/** A study's homepage, shown in a thin browser frame so it reads as a real site. */
+function SiteShot({ study, className }: { study: StudyCard; className?: string }) {
   return (
-    <div className={`relative overflow-hidden bg-[#0a0620] ${className ?? ""}`}>
-      {showImage ? (
+    <div className={`overflow-hidden border border-white/10 bg-[#0a0a0a] ${className ?? ""}`}>
+      <div className="flex h-6 items-center gap-1.5 border-b border-white/10 px-3" aria-hidden="true">
+        <span className="size-1.5 rounded-full bg-white/25" />
+        <span className="size-1.5 rounded-full bg-white/25" />
+        <span className="size-1.5 rounded-full bg-white/25" />
+      </div>
+      <div className="relative aspect-[16/10] overflow-hidden">
         <img
-          ref={imgRef}
-          src={entry.image ?? ""}
-          alt={entry.alt}
+          src={study.image}
+          alt={study.imageAlt}
           loading="lazy"
           decoding="async"
-          onError={() => setImageFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
-      ) : (
-        <div
-          className="absolute inset-0 overflow-hidden bg-[#0a0620]"
-          role="img"
-          aria-label={entry.alt}
-        >
-          <div className="absolute inset-x-[12%] top-[18%] h-[58%] border border-[#DFBA73]/50 bg-[#030014] shadow-[18px_18px_0_rgba(255,51,51,0.18)]" />
-          <div className="absolute left-[18%] top-[29%] h-2 w-[18%] bg-[#DFBA73]" />
-          <div className="absolute left-[18%] top-[39%] h-5 w-[48%] bg-white/90" />
-          <div className="absolute left-[18%] top-[51%] h-3 w-[35%] bg-white/30" />
-          <div className="absolute bottom-2 right-4 font-display text-6xl text-white/5">
-            0{index + 1}
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
 
-function CompactCard({ entry, index }: { entry: ShowcaseWorkEntry; index: number }) {
+/** Homepage: one card per study, the whole card links to its page. */
+function StudyCardCompact({ study }: { study: StudyCard }) {
   return (
-    <article className="group border border-white/10 bg-white/[0.02] transition-colors hover:border-[#DFBA73]/60">
-      <WorkImage entry={entry} index={index} className="aspect-[4/3] max-h-56 w-full" />
-      <div className="p-5">
-        <h3 className="font-display text-xl uppercase text-white">{entry.title}</h3>
-        <p className="mt-2 font-mono text-base leading-[1.6] text-white/90">{entry.result}</p>
+    <Link
+      to="/work/$slug"
+      params={{ slug: study.slug }}
+      className="group flex flex-col border border-white/10 bg-white/[0.02] p-3 transition-colors duration-300 hover:border-[#DFBA73]/60"
+    >
+      <SiteShot study={study} />
+      <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#DFBA73]">
+          Study {study.index} · {study.sector}
+        </p>
+        <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-white">{study.name}</h3>
+        <p className="mt-2 font-sans text-[15px] leading-relaxed text-white/75">{study.summary}</p>
+        <span className="mt-auto inline-flex items-center gap-2 pt-5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-colors group-hover:text-[#DFBA73]">
+          Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }
 
@@ -73,6 +57,7 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [canPreview, setCanPreview] = useState(false);
 
+  // /work only: a cursor-following preview of the study being hovered.
   useEffect(() => {
     if (compact) return;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -93,7 +78,7 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
     return () => cancelAnimationFrame(frame);
   }, [compact]);
 
-  const movePreview = (event: React.MouseEvent<HTMLDivElement>) => {
+  const movePreview = (event: MouseEvent<HTMLDivElement>) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     targetRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -104,81 +89,72 @@ export function WorkGrid({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      <div ref={containerRef} onMouseMove={movePreview} className="relative">
-        {compact ? (
-          <div className="grid gap-4 md:grid-cols-3">
-            {SHOWCASE_WORK.map((entry, index) => (
-              <CompactCard key={entry.slug} entry={entry} index={index} />
-            ))}
-          </div>
-        ) : (
+      {compact ? (
+        <div className="grid gap-4 md:grid-cols-3">
+          {STUDY_CARDS.map((study) => (
+            <StudyCardCompact key={study.slug} study={study} />
+          ))}
+        </div>
+      ) : (
+        <div ref={containerRef} onMouseMove={movePreview} className="relative">
           <div className="border-b border-white/10">
-            {SHOWCASE_WORK.map((entry, index) => (
+            {STUDY_CARDS.map((study, index) => (
               <Link
-                key={entry.slug}
+                key={study.slug}
                 to="/work/$slug"
-                params={{ slug: "marlow-sons-cabinetry" }}
+                params={{ slug: study.slug }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="group block border-t border-white/10 bg-white/[0.02] px-4 py-5 transition-colors hover:bg-white/[0.04] md:px-6 md:py-7"
               >
-                <WorkImage
-                  entry={entry}
-                  index={index}
-                  className="mb-5 aspect-[4/3] w-full border border-[#DFBA73]/30 md:hidden"
-                />
-                <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.75fr)_auto] md:items-center md:gap-8">
+                <SiteShot study={study} className="mb-5 md:hidden" />
+                <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.9fr)_auto] md:items-center md:gap-8">
                   <div className="flex items-center gap-3">
                     <h3 className="font-display text-3xl uppercase text-white transition-colors group-hover:text-[#DFBA73] md:text-5xl">
-                      {entry.title}
+                      {study.name}
                     </h3>
-                    <ArrowUpRight className="size-5 -translate-x-2 text-white opacity-0 transition-all group-hover:translate-x-0 group-hover:text-[#DFBA73] group-hover:opacity-100" />
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="size-5 shrink-0 -translate-x-2 text-white opacity-0 transition-all group-hover:translate-x-0 group-hover:text-[#DFBA73] group-hover:opacity-100"
+                    />
                   </div>
-                  <p className="font-mono text-base leading-[1.6] text-white/90">{entry.result}</p>
-                  <span className="font-mono text-xs tracking-widest text-[#DFBA73] md:max-w-44 md:text-right">
-                    {entry.eyebrow}
+                  <p className="font-sans text-base leading-relaxed text-white/80">{study.summary}</p>
+                  <span className="font-mono text-xs uppercase tracking-widest text-[#DFBA73] md:max-w-44 md:text-right">
+                    Study {study.index} · {study.sector}
                   </span>
                 </div>
               </Link>
             ))}
           </div>
-        )}
-        {!compact && canPreview ? (
-          <div
-            ref={previewRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-0 z-30 hidden h-[220px] w-[320px] md:block"
-          >
+          {canPreview ? (
             <div
-              className={`relative h-full w-full border border-[#DFBA73]/40 bg-[#0a0620] shadow-[18px_18px_0_rgba(255,51,51,0.18)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
-                hoveredIndex === null ? "scale-[0.92] opacity-0" : "scale-100 opacity-100"
-              }`}
+              ref={previewRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-0 z-30 hidden w-[360px] md:block"
             >
-              {SHOWCASE_WORK.map((entry, index) => (
-                <WorkImage
-                  key={entry.slug}
-                  entry={entry}
-                  index={index}
-                  className={`absolute inset-0 h-full w-full transition-[opacity,filter] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
-                    hoveredIndex === index ? "opacity-100 blur-0" : "opacity-0 blur-[2px]"
-                  }`}
-                />
-              ))}
+              <div
+                className={`relative aspect-[16/10] w-full overflow-hidden border border-[#DFBA73]/40 bg-[#0a0a0a] shadow-[18px_18px_0_rgba(255,51,51,0.18)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
+                  hoveredIndex === null ? "scale-[0.92] opacity-0" : "scale-100 opacity-100"
+                }`}
+              >
+                {STUDY_CARDS.map((study, index) => (
+                  <img
+                    key={study.slug}
+                    src={study.image}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className={`absolute inset-0 h-full w-full object-cover object-top transition-[opacity,filter] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
+                      hoveredIndex === index ? "opacity-100 blur-0" : "opacity-0 blur-[2px]"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ) : null}
-      </div>
-      <p className="mt-5 font-mono text-[15px] leading-[1.6] text-white/90">
-        Named client work is added with written permission — I&apos;ll walk you through live
-        projects on the call.
-      </p>
-      <Link
-        to="/work/$slug"
-        params={{ slug: "marlow-sons-cabinetry" }}
-        className="mt-4 inline-flex min-h-11 items-center gap-2 py-2 font-mono text-[15px] tracking-widest text-[#DFBA73] transition-colors hover:text-white"
-      >
-        SEE HOW I WORK <ArrowUpRight className="size-4" />
-      </Link>
+          ) : null}
+        </div>
+      )}
+      <p className="mt-5 max-w-[70ch] font-sans text-sm leading-relaxed text-white/60">{STUDIES_NOTE}</p>
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import marlowDesktop from "@/assets/cut-after.webp.asset.json";
+import marlowMobile from "@/assets/marlow-mobile.webp.asset.json";
 import { WEBSITE_LABELS } from "../../content";
 import { clamp01, easeInOut, easeOut, segment, windowed } from "../timeline";
 import { COLORS, createGlowSprite, seeded, type FrameContext, type SceneModule } from "./shared";
@@ -10,8 +12,17 @@ interface Piece {
   rest: THREE.Vector3;
   from: THREE.Vector3;
   delay: number;
+  /** Which device the block belongs to: 0 monitor, 1 laptop, 2 phone. */
+  order: number;
   material: THREE.MeshBasicMaterial;
   maxOpacity: number;
+}
+
+/** A real screenshot laid over a device screen once its wireframe has assembled. */
+interface Shot {
+  order: number;
+  material: THREE.MeshBasicMaterial;
+  texture: THREE.Texture;
 }
 
 type Block = [
@@ -68,12 +79,29 @@ const TONES = {
   panel: new THREE.Color("#1a1a1d"),
 };
 
+// A finished site on the screens: the Marlow & Sons redesign (concept study 01),
+// desktop on the monitor and laptop, its mobile layout on the phone.
+// width / height are the source image sizes, used to crop "cover"-style to the screen.
+const SCREENS = [
+  { src: marlowDesktop.url, width: 1440, height: 900 },
+  { src: marlowDesktop.url, width: 1440, height: 900 },
+  { src: marlowMobile.url, width: 780, height: 1600 },
+] as const;
+
+// Each device's wireframe resolves into its real screen once it has assembled,
+// monitor first, a beat apart.
+const REVEAL_START = 0.222;
+const REVEAL_LENGTH = 0.033;
+const REVEAL_STAGGER = 0.006;
+
 export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
   const root = new THREE.Group();
   root.position.z = WEBSITE_Z;
   const rand = seeded(7);
   const pieces: Piece[] = [];
+  const shots: Shot[] = [];
   const unitPlane = new THREE.PlaneGeometry(1, 1);
+  const loader = new THREE.TextureLoader();
 
   const frameMat = new THREE.MeshStandardMaterial({
     color: "#121214",
@@ -110,10 +138,42 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
         rest,
         from,
         delay: order * 0.06 + i * 0.035,
+        order,
         material,
         maxOpacity: alpha,
       });
     });
+  }
+
+  /** Lay a screenshot over a screen of w × h, cropped to fill it and anchored to the top. */
+  function addShot(parent: THREE.Object3D, order: 0 | 1 | 2, w: number, h: number, z: number) {
+    const screen = SCREENS[order];
+    const texture = loader.load(screen.src);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    const imageAspect = screen.width / screen.height;
+    const screenAspect = w / h;
+    if (imageAspect < screenAspect) {
+      // Image is taller than the screen: keep the full width, show the top.
+      const ry = imageAspect / screenAspect;
+      texture.repeat.set(1, ry);
+      texture.offset.set(0, 1 - ry);
+    } else {
+      // Image is wider than the screen: keep the full height, centre it.
+      const rx = screenAspect / imageAspect;
+      texture.repeat.set(rx, 1);
+      texture.offset.set((1 - rx) / 2, 0);
+    }
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      toneMapped: false,
+    });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), material);
+    mesh.position.z = z;
+    parent.add(mesh);
+    shots.push({ order, material, texture });
   }
 
   // Monitor
@@ -129,6 +189,7 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
   foot.position.set(0, -1.5, 0);
   monitor.add(neck, foot);
   addPieces(monitor, DESKTOP, 3.14, 1.8, 0.05, 0);
+  addShot(monitor, 0, 3.14, 1.8, 0.09);
 
   // Laptop
   const laptop = new THREE.Group();
@@ -148,6 +209,7 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
   lidPieces.position.y = 0.6;
   lid.add(lidPieces);
   addPieces(lidPieces, LAPTOP, 1.78, 1.08, 0.03, 1);
+  addShot(lidPieces, 1, 1.78, 1.08, 0.06);
   laptop.add(lid);
 
   // Phone
@@ -159,6 +221,7 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
   phoneScreen.position.z = 0.031;
   phone.add(phoneScreen);
   addPieces(phone, PHONE, 0.58, 1.2, 0.04, 2);
+  addShot(phone, 2, 0.58, 1.2, 0.06);
 
   root.add(monitor, laptop, phone);
 
@@ -182,6 +245,7 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
   const world = new THREE.Vector3();
   const flyInScreen = monitorScreen.material as THREE.MeshBasicMaterial;
   const dark = new THREE.Color("#070708");
+  const reveals = [0, 0, 0];
 
   return {
     object: root,
@@ -199,12 +263,28 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
       rim.intensity = 42 * presence;
       glow.material.opacity = 0.32 * presence;
 
-      // Assembly: every UI block flies in from depth to its slot.
+      // Screen brightens as the camera dives into it, so entering reads as light.
+      const dive = easeInOut(segment(p, 0.315, 0.35));
+      flyInScreen.color.copy(dark).lerp(COLORS.white, dive * 0.85);
+
+      // Wireframe → real site, one device at a time.
+      for (let i = 0; i < reveals.length; i++) {
+        const start = REVEAL_START + i * REVEAL_STAGGER;
+        reveals[i] = easeInOut(segment(p, start, start + REVEAL_LENGTH));
+      }
+
+      // Assembly: every UI block flies in from depth to its slot, then hands over to the screenshot.
       const build = segment(p, 0.175, 0.28);
       for (const piece of pieces) {
         const local = easeOut(clamp01((build * 1.9 - piece.delay) / 0.55));
         piece.mesh.position.lerpVectors(piece.from, piece.rest, local);
-        piece.material.opacity = local * piece.maxOpacity * presence;
+        const handOver = 1 - (reveals[piece.order] ?? 0);
+        piece.material.opacity = local * piece.maxOpacity * presence * handOver;
+      }
+      for (const shot of shots) {
+        // The monitor's screenshot gives way to the brightening screen during the dive.
+        const diveOut = shot.order === 0 ? 1 - dive : 1;
+        shot.material.opacity = (reveals[shot.order] ?? 0) * presence * diveOut;
       }
 
       const float = 1 - easeInOut(segment(p, 0.3, 0.345));
@@ -213,10 +293,6 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
       phone.position.y = -0.7 + Math.sin(t * 0.9 + 2.1) * 0.07 * float;
       root.rotation.y = (pointer.x * 0.06 + Math.sin(t * 0.2) * 0.03) * float;
       root.rotation.x = -pointer.y * 0.03 * float;
-
-      // Screen brightens as the camera dives into it, so entering reads as light.
-      const dive = easeInOut(segment(p, 0.315, 0.35));
-      flyInScreen.color.copy(dark).lerp(COLORS.white, dive * 0.85);
 
       const labelIn = windowed(p, 0.2, 0.31, 0.02) * (0.5 + 0.5 * k);
       WEBSITE_LABELS.forEach((label, i) => {
@@ -234,6 +310,10 @@ export function createWebsiteScene(glowTexture: THREE.Texture): SceneModule {
         if (mesh.geometry && mesh.geometry !== unitPlane) mesh.geometry.dispose();
       });
       pieces.forEach((piece) => piece.material.dispose());
+      shots.forEach((shot) => {
+        shot.texture.dispose();
+        shot.material.dispose();
+      });
       frameMat.dispose();
       screenMat.dispose();
       flyInScreen.dispose();
