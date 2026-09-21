@@ -25,7 +25,11 @@ export const Route = createFileRoute("/work/")({
 
 function WorkPage() {
   return (
-    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <Logo variant="compact" size="md" href="/" className="mb-12" />
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">WORK</span>
