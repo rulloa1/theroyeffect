@@ -36,6 +36,8 @@
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-portfolio: "Space Grotesk", system-ui, sans-serif;
   --font-portfolio-body: "Archivo", system-ui, sans-serif;
+  --default-transition-duration: 160ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
@@ -109,7 +111,12 @@
 
   h1,
   h2,
-  h3,
+  h3 {
+    font-family: var(--font-portfolio);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
   h4 {
     font-family: var(--font-portfolio);
     letter-spacing: -0.02em;
@@ -164,6 +171,7 @@
     transparent 1px,
     transparent 9px
   );
+  -webkit-mask-image: radial-gradient(ellipse 80% 52% at 50% 0%, #000 28%, transparent 82%);
   mask-image: radial-gradient(ellipse 80% 52% at 50% 0%, #000 28%, transparent 82%);
 }
 
@@ -174,6 +182,7 @@
     transparent 0
   );
   background-size: 36px 36px;
+  -webkit-mask-image: linear-gradient(to left, #000, transparent 86%);
   mask-image: linear-gradient(to left, #000, transparent 86%);
 }
 
@@ -272,8 +281,18 @@
   animation-delay: calc(120ms + var(--word-index) * var(--stagger));
 }
 
-.hero-portrait {
-  animation: hero-fade-in var(--dur-state) var(--ease-refine) 400ms both;
+@keyframes hero-veil-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.hero-portrait-veil {
+  background: var(--ground-raised);
+  animation: hero-veil-out var(--dur-state) var(--ease-refine) 400ms both;
 }
 
 .hero-portrait-image {
@@ -299,7 +318,7 @@
   --magnetic-label-x: 0px;
   --magnetic-label-y: 0px;
   transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0);
-  transition: transform 420ms var(--ease-press);
+  transition: transform var(--dur-reveal) var(--ease-press);
 }
 
 .magnetic[data-magnetic-active="true"] {
@@ -322,7 +341,7 @@
 
 .magnetic-label {
   transform: translate3d(var(--magnetic-label-x), var(--magnetic-label-y), 0);
-  transition: transform 420ms var(--ease-press);
+  transition: transform var(--dur-reveal) var(--ease-press);
 }
 
 .magnetic[data-magnetic-active="true"] .magnetic-label {
@@ -397,6 +416,10 @@ html[data-motion="paused"] .the-cut-word-cycle > span {
   transition: none;
 }
 
+html[data-motion="paused"] .hero-portrait-veil {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .the-cut-word-cycle > span {
     transition: none;
@@ -415,7 +438,7 @@ html[data-motion="paused"] .the-cut-word-cycle > span {
 html[data-motion="paused"] .hero-eyebrow-rule,
 html[data-motion="paused"] .hero-eyebrow-text,
 html[data-motion="paused"] .hero-word,
-html[data-motion="paused"] .hero-portrait,
+html[data-motion="paused"] .hero-portrait-veil,
 html[data-motion="paused"] .hero-body,
 html[data-motion="paused"] .hero-cta,
 html[data-motion="paused"] .animate-marquee,
@@ -430,7 +453,6 @@ html[data-motion="paused"] .hero-eyebrow-rule {
 html[data-motion="paused"] .hero-word,
 html[data-motion="paused"] .hero-body,
 html[data-motion="paused"] .hero-cta,
-html[data-motion="paused"] .hero-portrait,
 html[data-motion="paused"] .hero-eyebrow-text,
 html[data-motion="paused"] .scroll-reveal {
   opacity: 1;
@@ -508,8 +530,8 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   opacity: 0;
   transform: translateY(28px);
   transition:
-    opacity 700ms ease,
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity var(--dur-reveal) var(--ease-refine),
+    transform var(--dur-reveal) var(--ease-refine);
 }
 
 .scroll-reveal-visible {
@@ -609,12 +631,16 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   .hero-eyebrow-rule,
   .hero-eyebrow-text,
   .hero-word,
-  .hero-portrait,
+  .hero-portrait-veil,
   .hero-body,
   .hero-cta {
     animation: none !important;
     opacity: 1;
     transform: none;
+  }
+
+  .hero-portrait-veil {
+    display: none;
   }
 
   .magnetic,

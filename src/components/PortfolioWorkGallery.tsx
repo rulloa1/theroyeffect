@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/refinery/Magnetic";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 import { studyDisclosure, WORK_STUDIES } from "@/lib/work-studies";
 
 export function PortfolioWorkGallery() {
@@ -21,10 +24,10 @@ export function PortfolioWorkGallery() {
               <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 SELECTED WORK
               </p>
-              <h2 className="mt-4 max-w-4xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
+              <h2 className="mt-4 max-w-4xl font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
                 Built to be seen. Designed to be used.
               </h2>
-              <p className="mt-5 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+              <p className="mt-5 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
                 Three concept studies — invented Houston businesses, each used to show how the work
                 actually runs, from the first audit to the finished build.
               </p>
@@ -38,8 +41,19 @@ export function PortfolioWorkGallery() {
               to="/work/$slug"
               params={{ slug: featured.slug }}
               aria-label={`Read the ${featured.name} concept study`}
-              className="group relative flex min-h-[28rem] flex-col justify-between overflow-hidden p-7 sm:p-10 lg:col-span-8 lg:min-h-[38rem] lg:p-14"
+              className="group relative flex flex-col overflow-hidden lg:col-span-8 lg:min-h-[38rem] lg:justify-between lg:p-14"
             >
+              <div className="aspect-[16/10] w-full overflow-hidden border-b border-[var(--line)] lg:hidden">
+                <img
+                  src={featured.image}
+                  alt={featured.imageAlt}
+                  width={1200}
+                  height={750}
+                  loading="lazy"
+                  decoding="async"
+                  className="size-full object-cover object-left-top"
+                />
+              </div>
               <img
                 src={featured.image}
                 alt=""
@@ -48,24 +62,21 @@ export function PortfolioWorkGallery() {
                 height={900}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 size-full object-cover opacity-[0.55]"
+                className="absolute inset-0 hidden size-full object-cover object-left-top opacity-90 lg:block"
               />
               <div
                 aria-hidden
                 className="absolute inset-0 bg-[linear-gradient(to_top,var(--ground-sunk)_0%,var(--ground-sunk)_20%,transparent_70%)]"
               />
-              <span className="relative font-mono text-xs tracking-widest text-[var(--gold)]">
-                CONCEPT STUDY · {featured.index}
-              </span>
               <ScrollReveal
                 stagger
                 respectEffectsGuard
-                className="relative grid max-w-3xl grid-cols-3 border-y border-[var(--line)]"
+                className="relative mt-auto grid max-w-3xl grid-cols-3 border-y border-[var(--line)]"
               >
                 {featured.scopeTags.map((tag) => (
                   <span
                     key={tag}
-                    className="border-r border-[var(--line)] px-3 py-4 font-mono text-[10px] tracking-widest text-[var(--ink-faint)] transition-colors last:border-r-0 hover:text-[var(--gold)]"
+                    className="border-r border-[var(--line)] px-3 py-4 font-mono text-[11px] tracking-[0.14em] text-[var(--ink-faint)] transition-colors last:border-r-0 hover:text-[var(--gold)]"
                   >
                     {tag.toUpperCase()}
                   </span>
@@ -74,16 +85,19 @@ export function PortfolioWorkGallery() {
             </Link>
 
             <div className="flex flex-col justify-end border-t border-[var(--line)] p-7 sm:p-10 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-12">
-              <p className="font-mono text-xs tracking-widest text-[var(--gold)]">
+              <p className="font-mono text-[11px] tracking-[0.14em] text-[var(--gold)]">
+                CONCEPT STUDY · {featured.index}
+              </p>
+              <p className="mt-3 font-mono text-xs tracking-widest text-[var(--gold)]">
                 {featured.sector.toUpperCase()}
               </p>
-              <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-none text-[var(--ink)]">
+              <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
                 {featured.name}
               </h3>
-              <p className="mt-5 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+              <p className="mt-5 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
                 {featured.summary}
               </p>
-              <p className="mt-4 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
+              <p className="mt-4 max-w-[60ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
                 {studyDisclosure(featured)}
               </p>
               <Link
@@ -115,23 +129,23 @@ export function PortfolioWorkGallery() {
                   height={750}
                   loading="lazy"
                   decoding="async"
-                  className="size-full object-cover opacity-[0.7] transition-opacity group-hover:opacity-100"
+                  className="size-full object-cover transition-transform duration-[var(--dur-reveal)] ease-[var(--ease-refine)] group-hover:scale-[1.02]"
                 />
               </div>
               <div className="flex flex-1 flex-col p-7">
-                <span className="font-mono text-xs tracking-widest text-[var(--gold)]">
+                <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--gold)]">
                   CONCEPT STUDY · {study.index}
                 </span>
-                <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-none text-[var(--ink)]">
+                <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
                   {study.name}
                 </h3>
-                <p className="mt-3 font-mono text-[10px] tracking-widest text-[var(--ink-faint)]">
+                <p className="mt-3 font-mono text-[11px] tracking-[0.14em] text-[var(--ink-faint)]">
                   {study.sector.toUpperCase()}
                 </p>
-                <p className="mt-4 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+                <p className="mt-4 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
                   {study.summary}
                 </p>
-                <p className="mt-3 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
+                <p className="mt-3 max-w-[60ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
                   {studyDisclosure(study)}
                 </p>
                 <span className="mt-auto inline-flex min-h-11 items-center gap-2 pt-6 font-mono text-xs font-bold tracking-widest text-[var(--ink)] transition-colors group-hover:text-[var(--gold)]">
@@ -157,12 +171,22 @@ export function PortfolioWorkGallery() {
                 Get a focused teardown of your homepage, mobile experience, and conversion path.
               </h3>
             </div>
-            <Link
-              to="/audit"
-              className="inline-flex min-h-11 w-fit items-center gap-2 border-b border-[var(--gold)]/60 px-1 py-3 font-mono text-xs font-bold tracking-widest text-[var(--ink)] transition-colors hover:border-[var(--gold)] hover:text-[var(--gold)]"
-            >
-              GET YOUR FREE AUDIT <ArrowUpRight className="size-4" />
-            </Link>
+            <Magnetic className="w-full md:w-auto">
+              <Button
+                asChild
+                size="lg"
+                className="min-h-12 w-full rounded-none bg-[var(--gold)] px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ink)] md:w-auto"
+              >
+                <Link
+                  to="/audit"
+                  onClick={() => trackAnalyticsEvent("audit_cta_click", { placement: "mid" })}
+                >
+                  <span className="magnetic-label inline-flex items-center gap-2">
+                    GET YOUR FREE AUDIT <ArrowUpRight className="size-4" />
+                  </span>
+                </Link>
+              </Button>
+            </Magnetic>
           </aside>
         </ScrollReveal>
       </div>

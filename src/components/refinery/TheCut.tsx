@@ -150,23 +150,24 @@ export function TheCut() {
         <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">THE CUT</p>
         <h2
           aria-label="Same business. Better first impression."
-          className="mt-4 max-w-5xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]"
+          className="mt-4 max-w-5xl font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]"
         >
           Same business.{" "}
           <span aria-hidden className="the-cut-word-cycle inline-grid text-[var(--gold)]">
             {CUT_WORDS.map((word, index) => (
               <span
                 key={word}
-                className="col-start-1 row-start-1 transition-[opacity,transform] duration-500"
+                className="col-start-1 row-start-1 transition-[opacity,transform] duration-[var(--dur-reveal)] ease-[var(--ease-refine)]"
                 data-active={index === wordIndex}
               >
                 {word}
               </span>
             ))}
-          </span>{" "}
+          </span>
+          <br />
           first impression.
         </h2>
-        <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+        <p className="mt-7 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
           Drag the line to compare. Left is a typical small-business site; right is the same
           business after a Roy Effect redesign.
         </p>
@@ -209,10 +210,10 @@ export function TheCut() {
             />
           </div>
 
-          <span className="pointer-events-none absolute left-3 top-3 bg-[var(--ground)]/85 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--ink)] md:left-5 md:top-5">
+          <span className="pointer-events-none absolute left-3 top-3 bg-[var(--ground)]/85 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink)] md:left-5 md:top-5">
             Before
           </span>
-          <span className="pointer-events-none absolute right-3 top-3 bg-[var(--ground)]/85 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--ink)] md:right-5 md:top-5">
+          <span className="pointer-events-none absolute right-3 top-3 bg-[var(--ground)]/85 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink)] md:right-5 md:top-5">
             After
           </span>
 
@@ -246,13 +247,13 @@ export function TheCut() {
           <span
             ref={cursorRef}
             aria-hidden
-            className={`the-cut-cursor pointer-events-none absolute left-0 top-0 z-20 -translate-x-1/2 -translate-y-[calc(100%+12px)] bg-[var(--gold)] px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--ground)] ${cursorVisible && !motionDisabled ? "the-cut-cursor-visible" : ""}`}
+            className={`the-cut-cursor pointer-events-none absolute left-0 top-0 z-20 -translate-x-1/2 -translate-y-[calc(100%+12px)] bg-[var(--gold)] px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ground)] ${cursorVisible && !motionDisabled ? "the-cut-cursor-visible" : ""}`}
           >
             Drag
           </span>
         </div>
 
-        <p className="mt-5 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
+        <p className="mt-5 max-w-[60ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
           Concept study: a redesign of a fictional Houston cabinetmaker, made to show the process.
           The full study is in Selected Work below.
         </p>

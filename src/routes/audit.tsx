@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Check, QrCode, Sparkles, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
@@ -100,6 +101,7 @@ export function AuditPage() {
       if (!response.ok) throw new Error(data.error || "Failed to submit request");
 
       setSubmitted(true);
+      trackAnalyticsEvent("audit_submitted");
       toast.success("Audit request received! Rory will send your video teardown within 24 hours.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -340,8 +342,8 @@ export function AuditPage() {
           </h2>
           <p className="mt-3 max-w-2xl font-mono text-xs leading-relaxed text-white/60">
             I work mostly with owner-run businesses around Houston — contractors, clinics, law and
-            accounting practices, salons, restaurants, real estate agents and B2B service firms.
-            If people find you, look at the site, and still call someone else, the audit shows you
+            accounting practices, salons, restaurants, real estate agents and B2B service firms. If
+            people find you, look at the site, and still call someone else, the audit shows you
             where that happens.
           </p>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -425,5 +427,3 @@ export function AuditPage() {
     </main>
   );
 }
-
-

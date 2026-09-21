@@ -7,6 +7,8 @@
  * testimonials to this file.
  */
 import cutAfterAsset from "@/assets/cut-after.webp.asset.json";
+import architectureIndexAsset from "@/assets/architecture-index.svg";
+import coffeeIdentityAsset from "@/assets/coffee-identity.svg";
 
 export type StudyBlock = { title: string; body: string };
 
@@ -147,7 +149,7 @@ export const WORK_STUDIES: WorkStudy[] = [
         body: "Type, measure and contrast now agree with what the practice sells.",
       },
     ],
-    image: "/work/architecture-index.svg",
+    image: architectureIndexAsset,
     imageAlt:
       "Concept mockup of the practice's website — a full-bleed project plate above a three-up project index",
   },
@@ -207,7 +209,7 @@ export const WORK_STUDIES: WorkStudy[] = [
         body: "Roast dates and availability change without a phone call.",
       },
     ],
-    image: "/work/coffee-identity.svg",
+    image: coffeeIdentityAsset,
     imageAlt:
       "Concept mockup of the roaster's identity — the mark on a 12oz bag, the same mark at browser-tab size, roast-level swatches and a storefront row",
   },
