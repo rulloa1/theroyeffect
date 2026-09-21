@@ -11,6 +11,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import spaceGroteskLatin from "@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { captureClientError, initSentryClient } from "../lib/sentry/client";
 import { AuthProvider } from "@/hooks/useAuth";
