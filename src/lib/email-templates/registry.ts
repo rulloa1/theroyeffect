@@ -19,6 +19,7 @@ import { template as launchReady } from "./launch-ready";
 import { template as postLaunchHandover } from "./post-launch-handover";
 import { template as retainerWeeklySync } from "./retainer-weekly-sync";
 import { template as supportWindowClosing } from "./support-window-closing";
+import { template as redesignPitch } from "./redesign-pitch";
 
 export interface TemplateEntry {
   component: ComponentType<any>;
@@ -58,4 +59,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "post-launch-handover": postLaunchHandover,
   "retainer-weekly-sync": retainerWeeklySync,
   "support-window-closing": supportWindowClosing,
+  "redesign-pitch": redesignPitch,
 };

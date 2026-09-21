@@ -70,6 +70,9 @@ import {
   adminRunRedesign,
   adminUpdateRedesignRun,
   adminDeleteRedesignRun,
+  adminSaveRedesignOutreach,
+  adminSendRedesignPitch,
+  adminDownloadRedesignPdf,
   type RedesignAngle,
   type RedesignStatus,
   type RedesignTreatment,
@@ -458,6 +461,9 @@ function AdminPage() {
   const runRedesignFn = useServerFn(adminRunRedesign);
   const updateRedesignFn = useServerFn(adminUpdateRedesignRun);
   const deleteRedesignFn = useServerFn(adminDeleteRedesignRun);
+  const saveRedesignOutreachFn = useServerFn(adminSaveRedesignOutreach);
+  const sendRedesignPitchFn = useServerFn(adminSendRedesignPitch);
+  const downloadRedesignPdfFn = useServerFn(adminDownloadRedesignPdf);
 
   const { data: redesignData } = useQuery({
     queryKey: ["admin-redesign"],
@@ -501,6 +507,55 @@ function AdminPage() {
       await refreshRedesign();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not delete that run");
+    }
+  };
+
+  const saveRedesignOutreach = async (
+    id: string,
+    subject: string,
+    body: string,
+    contactEmail: string | null,
+  ) => {
+    setBusy(`redesign-save-${id}`);
+    try {
+      await saveRedesignOutreachFn({ data: { id, subject, body, contactEmail } });
+      toast.success("Outreach saved.");
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save that draft");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const sendRedesignPitch = async (id: string) => {
+    setBusy(`redesign-send-${id}`);
+    try {
+      const result = await sendRedesignPitchFn({ data: { id } });
+      if (result.ok) toast.success("Pitch sent.");
+      else toast.error("Not delivered — that address is suppressed.");
+      await refreshRedesign();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Send failed");
+      await refreshRedesign();
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const exportRedesignPdf = async (id: string) => {
+    setBusy(`redesign-pdf-${id}`);
+    try {
+      const res = await downloadRedesignPdfFn({ data: { id } });
+      if (!res.success) throw new Error(res.error || "Failed");
+      const link = document.createElement("a");
+      link.href = `data:application/pdf;base64,${res.pdfBase64}`;
+      link.download = res.filename;
+      link.click();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not export the PDF");
+    } finally {
+      setBusy(null);
     }
   };
 
@@ -1155,6 +1210,10 @@ function AdminPage() {
                 });
                 setCurrentView("COLDCALLS");
               }}
+              onSaveOutreach={saveRedesignOutreach}
+              onSend={sendRedesignPitch}
+              onExportPdf={exportRedesignPdf}
+              onOpenLeadPipeline={() => setCurrentView("PIPELINE")}
               date={date}
             />
           )}
