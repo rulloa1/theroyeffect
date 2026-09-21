@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { WorkGrid } from "@/components/WorkGrid";
+import { studyDisclosure, WORK_STUDIES } from "@/lib/work-studies";
 
 const TITLE = "Selected Work — The Roy Effect";
 const DESCRIPTION =
