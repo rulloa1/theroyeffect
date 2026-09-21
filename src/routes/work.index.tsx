@@ -4,7 +4,7 @@ import { WorkGrid } from "@/components/WorkGrid";
 
 const TITLE = "Selected Work — The Roy Effect";
 const DESCRIPTION =
-  "Selected studio work across brand, UI/UX and no-code build by Houston creative director Rory Ulloa. Named client projects shown on the call, with permission.";
+  "Three concept studies showing how Rory Ulloa takes a site from the first note to launch: brand, UI/UX and build.";
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
@@ -24,7 +24,11 @@ export const Route = createFileRoute("/work/")({
 
 function WorkPage() {
   return (
-    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="min-h-screen bg-[var(--ground)] px-5 py-16 md:px-10 md:py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <Logo variant="compact" size="md" href="/" className="mb-12" />
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">WORK</span>
@@ -32,8 +36,7 @@ function WorkPage() {
           Work built around the next action
         </h1>
         <p className="mt-5 max-w-2xl font-mono text-base leading-[1.6] text-white/90">
-          Selected studio work across brand, UI/UX and no-code build. Named client projects are
-          shown on the call, with permission.
+          Three concept studies that show how a site goes from the first note to launch.
         </p>
         <div className="mt-12">
           <WorkGrid />
