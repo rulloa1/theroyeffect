@@ -187,59 +187,71 @@ const STRUCTURED_DATA = {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: ({ matches }) => {
-    const onPaper = matches.some((m) => String(m.routeId) === "/" || String(m.routeId) === "/audit");
+    const onPaper = matches.some(
+      (m) => String(m.routeId) === "/" || String(m.routeId) === "/audit",
+    );
     return {
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Rory Ulloa — Creative Director & UI/UX Designer" },
-      {
-        name: "description",
-        content:
-          "Portfolio & studio of Rory Ulloa, an independent Creative Director and UI/UX designer crafting bold brand systems, high-contrast digital experiences and no-code builds.",
-      },
-      { name: "author", content: "Rory Ulloa" },
-      { property: "og:title", content: "Rory Ulloa — Creative Director & UI/UX Designer" },
-      {
-        property: "og:description",
-        content:
-          "Bold brand systems, high-contrast digital experiences and production-ready builds by Rory Ulloa.",
-      },
-      { property: "og:site_name", content: "The Roy Effect" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "google-site-verification", content: "77GixI64Yh4THH1-qNE6EXBc87IRpeA76Jo1KHyaTCA" },
-      { name: "google-site-verification", content: "abyZ_limkEmpSFo8qAaXN9SRvACJ8wTWriZNi-XPtAI" },
-    ],
-    links: [
-      // Fonts are self-hosted; these two files are above the fold.
-      ...(!onPaper ? [{
-        rel: "preload",
-        href: spaceGroteskLatin,
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous" as const,
-      },
-      {
-        rel: "preload",
-        href: archivoLatin,
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous" as const,
-      }] : []),
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-    ],
-    scripts: [
-      { children: MK_MOTION_HEAD_SCRIPT },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(STRUCTURED_DATA),
-      },
-    ],
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: "Rory Ulloa — Creative Director & UI/UX Designer" },
+        {
+          name: "description",
+          content:
+            "Portfolio & studio of Rory Ulloa, an independent Creative Director and UI/UX designer crafting bold brand systems, high-contrast digital experiences and no-code builds.",
+        },
+        { name: "author", content: "Rory Ulloa" },
+        { property: "og:title", content: "Rory Ulloa — Creative Director & UI/UX Designer" },
+        {
+          property: "og:description",
+          content:
+            "Bold brand systems, high-contrast digital experiences and production-ready builds by Rory Ulloa.",
+        },
+        { property: "og:site_name", content: "The Roy Effect" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "google-site-verification",
+          content: "77GixI64Yh4THH1-qNE6EXBc87IRpeA76Jo1KHyaTCA",
+        },
+        {
+          name: "google-site-verification",
+          content: "abyZ_limkEmpSFo8qAaXN9SRvACJ8wTWriZNi-XPtAI",
+        },
+      ],
+      links: [
+        // Fonts are self-hosted; these two files are above the fold.
+        ...(!onPaper
+          ? [
+              {
+                rel: "preload",
+                href: spaceGroteskLatin,
+                as: "font",
+                type: "font/woff2",
+                crossOrigin: "anonymous" as const,
+              },
+              {
+                rel: "preload",
+                href: archivoLatin,
+                as: "font",
+                type: "font/woff2",
+                crossOrigin: "anonymous" as const,
+              },
+            ]
+          : []),
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+        { rel: "icon", href: "/favicon.png", type: "image/png" },
+      ],
+      scripts: [
+        { children: MK_MOTION_HEAD_SCRIPT },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(STRUCTURED_DATA),
+        },
+      ],
     };
   },
   shellComponent: RootShell,

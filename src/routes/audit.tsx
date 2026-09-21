@@ -16,7 +16,9 @@ const TITLE = "Free Website Audit: a 5-Minute Video Teardown | The Roy Effect";
 const DESCRIPTION =
   "A free personal video teardown of your website's conversion, mobile experience and brand positioning. Three fixes ranked by impact, in your inbox within one business day.";
 
-const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url) ? ogImageAsset.url : `${SITE_URL}${ogImageAsset.url}`;
+const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url)
+  ? ogImageAsset.url
+  : `${SITE_URL}${ogImageAsset.url}`;
 
 type AuditSearch = { website?: string };
 
@@ -224,19 +226,22 @@ export function AuditPage() {
                   Free website audit. Five minutes, three fixes, ranked.
                 </h1>
                 <p className="mk-lead">
-                  Send the URL. I open it the way a customer would — on a phone first, cold — and record five minutes
-                  on what's confusing, slow or off-brand. The video reaches you within one business day, with three
-                  fixes ranked by impact.
+                  Send the URL. I open it the way a customer would — on a phone first, cold — and
+                  record five minutes on what's confusing, slow or off-brand. The video reaches you
+                  within one business day, with three fixes ranked by impact.
                 </p>
               </div>
 
               <div className="mk-plate mk-form-plate" id="request">
                 {submitted ? (
                   <div className="mk-done" role="status">
-                    <span className="mk-check" aria-hidden="true">✓</span>
+                    <span className="mk-check" aria-hidden="true">
+                      ✓
+                    </span>
                     <h2>Got it.</h2>
                     <p className="mk-body">
-                      Thanks, {name}. I'm looking at {websiteUrl} and will email your teardown within one business day.
+                      Thanks, {name}. I'm looking at {websiteUrl} and will email your teardown
+                      within one business day.
                     </p>
                     <p>
                       <Link to="/" className="mk-link">
@@ -253,7 +258,9 @@ export function AuditPage() {
 
                     <div className="mk-fields">
                       <div className="mk-field">
-                        <label htmlFor="audit-url" className="mk-label">Your website *</label>
+                        <label htmlFor="audit-url" className="mk-label">
+                          Your website *
+                        </label>
                         <input
                           id="audit-url"
                           name="website"
@@ -276,7 +283,9 @@ export function AuditPage() {
                       </div>
 
                       <div className="mk-field">
-                        <label htmlFor="audit-name" className="mk-label">Your name *</label>
+                        <label htmlFor="audit-name" className="mk-label">
+                          Your name *
+                        </label>
                         <input
                           ref={nameRef}
                           id="audit-name"
@@ -297,7 +306,9 @@ export function AuditPage() {
                       </div>
 
                       <div className="mk-field">
-                        <label htmlFor="audit-email" className="mk-label">Work email * · where the video goes</label>
+                        <label htmlFor="audit-email" className="mk-label">
+                          Work email * · where the video goes
+                        </label>
                         <input
                           id="audit-email"
                           name="email"
@@ -317,7 +328,9 @@ export function AuditPage() {
                       </div>
 
                       <div className="mk-field">
-                        <label htmlFor="audit-bottleneck" className="mk-label">Biggest challenge *</label>
+                        <label htmlFor="audit-bottleneck" className="mk-label">
+                          Biggest challenge *
+                        </label>
                         <select
                           id="audit-bottleneck"
                           name="bottleneck"
@@ -329,17 +342,29 @@ export function AuditPage() {
                           className="mk-input"
                           {...errorProps("bottleneck")}
                         >
-                          <option value="Conversion Rate & Inbound Leads">Low conversion rate & few inquiries</option>
-                          <option value="Outdated Visual Identity">Design looks dated compared to competitors</option>
-                          <option value="Mobile Experience & Performance">Poor mobile layout / slow loading</option>
-                          <option value="Full Rebrand & Launch">Preparing for a major rebrand / new launch</option>
-                          <option value="General Teardown">General teardown & high-level recommendations</option>
+                          <option value="Conversion Rate & Inbound Leads">
+                            Low conversion rate & few inquiries
+                          </option>
+                          <option value="Outdated Visual Identity">
+                            Design looks dated compared to competitors
+                          </option>
+                          <option value="Mobile Experience & Performance">
+                            Poor mobile layout / slow loading
+                          </option>
+                          <option value="Full Rebrand & Launch">
+                            Preparing for a major rebrand / new launch
+                          </option>
+                          <option value="General Teardown">
+                            General teardown & high-level recommendations
+                          </option>
                         </select>
                         {fieldError("bottleneck")}
                       </div>
 
                       <div className="mk-field is-wide">
-                        <label htmlFor="audit-notes" className="mk-label">Pages or competitors to look at · optional</label>
+                        <label htmlFor="audit-notes" className="mk-label">
+                          Pages or competitors to look at · optional
+                        </label>
                         <textarea
                           id="audit-notes"
                           name="notes"
@@ -405,9 +430,10 @@ export function AuditPage() {
             <div className="mk-stack">
               <h2 id="mk-h-who">Who the audit is for.</h2>
               <p className="mk-lead">
-                I work mostly with owner-run businesses around Houston — contractors, clinics, law and accounting
-                practices, salons, restaurants, real estate agents and B2B service firms. If people find you, look at
-                the site, and still call someone else, the audit shows you where that happens.
+                I work mostly with owner-run businesses around Houston — contractors, clinics, law
+                and accounting practices, salons, restaurants, real estate agents and B2B service
+                firms. If people find you, look at the site, and still call someone else, the audit
+                shows you where that happens.
               </p>
             </div>
             <ul className="mk-list mk-rv">
