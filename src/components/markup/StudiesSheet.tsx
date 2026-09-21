@@ -3,9 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { studyDisclosure, WORK_STUDIES } from "@/lib/work-studies";
 import { Sheet } from "./Sheet";
 
-/** Sheet 4: every note is lifted from work-studies.ts, so this and /work/$slug agree. */
+/** Sheet 4: every note is lifted from work-studies.ts, so this and /work/$slug agree.
+ *  The sheet is scoped to the invented studies — real studio-owned projects
+ *  (those with their own `disclosure`) live on /work instead. */
 export function StudiesSheet() {
-  const [first, ...rest] = WORK_STUDIES;
+  const [first, ...rest] = WORK_STUDIES.filter((study) => !study.disclosure);
 
   return (
     <Sheet id="studies" labelledBy="mk-h-studies">
