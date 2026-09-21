@@ -196,9 +196,7 @@ export function PortfolioSections() {
                 >
                   <Link
                     to="/audit"
-                    onClick={() =>
-                      trackAnalyticsEvent("audit_cta_click", { placement: "closing" })
-                    }
+                    onClick={() => trackAnalyticsEvent("audit_cta_click", { placement: "closing" })}
                   >
                     <span className="magnetic-label inline-flex items-center gap-2">
                       GET YOUR FREE AUDIT <ArrowUpRight />

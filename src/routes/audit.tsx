@@ -342,8 +342,8 @@ export function AuditPage() {
           </h2>
           <p className="mt-3 max-w-2xl font-mono text-xs leading-relaxed text-white/60">
             I work mostly with owner-run businesses around Houston — contractors, clinics, law and
-            accounting practices, salons, restaurants, real estate agents and B2B service firms.
-            If people find you, look at the site, and still call someone else, the audit shows you
+            accounting practices, salons, restaurants, real estate agents and B2B service firms. If
+            people find you, look at the site, and still call someone else, the audit shows you
             where that happens.
           </p>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -427,5 +427,3 @@ export function AuditPage() {
     </main>
   );
 }
-
-

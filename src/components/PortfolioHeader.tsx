@@ -19,11 +19,7 @@ export function PortfolioHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--line)] bg-[var(--ground)]/85 px-[var(--gutter)] backdrop-blur-xl">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-3 sm:flex sm:justify-between">
-        <Link
-          to="/"
-          aria-label="The Roy Effect home"
-          className="flex min-w-0 items-center gap-3"
-        >
+        <Link to="/" aria-label="The Roy Effect home" className="flex min-w-0 items-center gap-3">
           <Logo variant="responsive" size="sm" href={null} className="inline-flex shrink-0" />
           <span className="hidden min-w-0 font-portfolio text-sm font-bold text-[var(--ink)] sm:block">
             THE ROY EFFECT

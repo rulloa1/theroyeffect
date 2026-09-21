@@ -73,7 +73,9 @@ export function SiteFooter() {
           </div>
 
           <div className="lg:col-span-2">
-            <h3 className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">STUDIO</h3>
+            <h3 className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
+              STUDIO
+            </h3>
             <nav className="mt-4 flex flex-col" aria-label="Studio">
               {STUDIO_LINKS.map((link) => (
                 <Link
@@ -105,7 +107,9 @@ export function SiteFooter() {
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">CONTACT</h3>
+            <h3 className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
+              CONTACT
+            </h3>
             <div className="mt-4 font-mono text-sm text-[var(--ink)]">
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
