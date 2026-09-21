@@ -186,7 +186,9 @@ const STRUCTURED_DATA = {
 };
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: ({ matches }) => {
+    const onPaper = matches.some((m) => String(m.routeId) === "/" || String(m.routeId) === "/audit");
+    return {
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -211,20 +213,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       // Fonts are self-hosted; these two files are above the fold.
-      {
+      ...(!onPaper ? [{
         rel: "preload",
         href: spaceGroteskLatin,
         as: "font",
         type: "font/woff2",
-        crossOrigin: "anonymous",
+        crossOrigin: "anonymous" as const,
       },
       {
         rel: "preload",
         href: archivoLatin,
         as: "font",
         type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
+        crossOrigin: "anonymous" as const,
+      }] : []),
       {
         rel: "stylesheet",
         href: appCss,
@@ -238,7 +240,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify(STRUCTURED_DATA),
       },
     ],
-  }),
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

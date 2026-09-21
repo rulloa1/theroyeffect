@@ -1,18 +1,34 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { SmsConsent } from "@/components/SmsConsent";
 import { z } from "zod";
-import { Check, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { SmsConsent } from "@/components/SmsConsent";
 import { Toaster } from "@/components/ui/sonner";
-import { Logo } from "@/components/Logo";
 import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
+import { MarkupShell } from "@/components/markup/MarkupShell";
+import { MARKUP_FONT_PRELOADS } from "@/components/markup/fonts";
+import { Sheet } from "@/components/markup/Sheet";
+import { AuditSteps, RecordedBy } from "@/components/markup/AuditSheet";
+import ogImageAsset from "@/assets/og-markup.jpg.asset.json";
+import { SITE_URL } from "@/lib/site";
 
 const TITLE = "Free Website Audit: a 5-Minute Video Teardown | The Roy Effect";
 const DESCRIPTION =
   "A free personal video teardown of your website's conversion, mobile experience and brand positioning. Three fixes ranked by impact, in your inbox within one business day.";
 
+const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url) ? ogImageAsset.url : `${SITE_URL}${ogImageAsset.url}`;
+
+type AuditSearch = { website?: string };
+
 export const Route = createFileRoute("/audit")({
+  // The homepage URL fields hand the address over as ?website=. It is only ever
+  // used as an input value (React escapes it), trimmed and capped at 255 chars.
+  validateSearch: (search: Record<string, unknown>): AuditSearch => {
+    const raw = search["website"];
+    if (typeof raw !== "string") return {};
+    const website = raw.trim().slice(0, 255);
+    return website ? { website } : {};
+  },
   head: () => ({
     meta: [
       { title: TITLE },
@@ -21,10 +37,14 @@ export const Route = createFileRoute("/audit")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theroyeffect.com/audit" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "canonical", href: "https://theroyeffect.com/audit" }],
+    links: [...MARKUP_FONT_PRELOADS, { rel: "canonical", href: "https://theroyeffect.com/audit" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -64,14 +84,37 @@ const FIELD_IDS: Record<FieldName, string> = {
   notes: "audit-notes",
 };
 
-const LABEL_CLASS = "block font-mono text-[11px] uppercase tracking-wider text-[var(--ink-muted)]";
-const CONTROL_CLASS =
-  "mt-2 w-full min-h-12 border border-[var(--line)] bg-[var(--ground-raised)] px-4 py-3 font-portfolio-body text-base text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)]";
+const WHO_FOR = [
+  "Your site was built years ago and hasn't kept up with competitors",
+  "Most of your traffic is mobile but the layout fights small screens",
+  "You get visits from Google Business Profile but almost no form fills",
+  "You're about to spend on ads and want the landing experience checked first",
+];
+
+const FAQ = [
+  {
+    q: "Is the website audit really free?",
+    a: "Yes. There's no fee and no card. I record a handful of these each week because a few people end up hiring me afterwards — that's the whole business case.",
+  },
+  {
+    q: "How long does it take to get the audit?",
+    a: "Usually within one business day, occasionally two if the queue is full. It arrives as a private video link in your inbox.",
+  },
+  {
+    q: "Do I have to be in Houston?",
+    a: "No. I'm based in Houston and know the local market best, but I audit and build for clients anywhere in the US.",
+  },
+  {
+    q: "What if I don't have a website yet?",
+    a: "Send the closest thing you have — a social profile, a directory listing, or a competitor you admire — and I'll review positioning instead of layout.",
+  },
+];
 
 export function AuditPage() {
+  const { website: prefilled } = Route.useSearch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState(prefilled ?? "");
   const [bottleneck, setBottleneck] = useState("Conversion Rate & Inbound Leads");
   const [notes, setNotes] = useState("");
   const [smsService, setSmsService] = useState(false);
@@ -80,6 +123,12 @@ export function AuditPage() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const formRef = useRef<HTMLFormElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  // Arrived from a homepage URL field: the address is filled in, so start at the next field.
+  useEffect(() => {
+    if (prefilled) nameRef.current?.focus();
+  }, [prefilled]);
 
   const clearError = (field: FieldName) =>
     setErrors((prev) => {
@@ -94,7 +143,14 @@ export function AuditPage() {
       ? { "aria-invalid": true, "aria-describedby": `audit-${field}-error` }
       : { "aria-invalid": undefined, "aria-describedby": undefined };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const fieldError = (field: FieldName) =>
+    errors[field] ? (
+      <p id={`audit-${field}-error`} role="alert" className="mk-field-err">
+        {errors[field]}
+      </p>
+    ) : null;
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = auditSchema.safeParse({ name, email, websiteUrl, bottleneck, notes });
     if (!result.success) {
@@ -107,8 +163,7 @@ export function AuditPage() {
       toast.error(result.error.issues[0]?.message ?? "Please check the form");
       const firstInvalid = FIELD_ORDER.find((field) => fieldErrors[field]);
       if (firstInvalid) {
-        const el = formRef.current?.querySelector<HTMLElement>(`#${FIELD_IDS[firstInvalid]}`);
-        el?.focus();
+        formRef.current?.querySelector<HTMLElement>(`#${FIELD_IDS[firstInvalid]}`)?.focus();
       }
       return;
     }
@@ -137,7 +192,7 @@ export function AuditPage() {
 
       setSubmitted(true);
       trackAnalyticsEvent("audit_submitted");
-      toast.success("Audit request received! Rory will send your video teardown within 24 hours.");
+      toast.success("Got it. Your teardown arrives within one business day.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -145,366 +200,250 @@ export function AuditPage() {
     }
   };
 
-  const fieldError = (field: FieldName) =>
-    errors[field] ? (
-      <p id={`audit-${field}-error`} role="alert" className="mt-2 text-sm text-[var(--furnace)]">
-        {errors[field]}
-      </p>
-    ) : null;
-
   return (
-    <main
-      id="main"
-      tabIndex={-1}
-      className="min-h-screen bg-[var(--ground)] px-5 py-16 text-[var(--ink)] md:px-10 md:py-24"
-    >
+    <MarkupShell ctaFormId="request">
       <Toaster />
-      <div className="mx-auto max-w-4xl">
-        {/* Top Header & Logo */}
-        <div className="flex flex-col">
-          <Logo variant="stacked" size="lg" href="/" className="mb-6 self-start" />
-          <span className="mt-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--gold)]">
-            The 5-minute audit &bull; complimentary teardown
-          </span>
+      <section className="mk-sheet mk-hero is-in" aria-labelledby="mk-h-audit-page">
+        <div className="mk-wrap">
+          <div className="mk-grid">
+            <div className="mk-margin">
+              <p className="mk-label">
+                The audit<b>Request</b>
+              </p>
+              <ul className="mk-promise">
+                <li>Free. No card.</li>
+                <li>Video within one business day.</li>
+                <li>Three fixes, ranked by impact.</li>
+                <li>No call required.</li>
+              </ul>
+              <RecordedBy />
+            </div>
+            <div className="mk-stack" style={{ gap: "clamp(32px, 4vw, 48px)" }}>
+              <div className="mk-stack">
+                <h1 className="mk-display" id="mk-h-audit-page">
+                  Free website audit. Five minutes, three fixes, ranked.
+                </h1>
+                <p className="mk-lead">
+                  Send the URL. I open it the way a customer would — on a phone first, cold — and record five minutes
+                  on what's confusing, slow or off-brand. The video reaches you within one business day, with three
+                  fixes ranked by impact.
+                </p>
+              </div>
 
-          <h1 className="mt-6 font-portfolio text-[length:var(--type-display)] font-bold leading-[0.95] text-[var(--ink)]">
-            Free website audit <br />
-            <span className="text-[var(--ink-muted)]">a 5-minute video teardown of your site.</span>
-          </h1>
+              <div className="mk-plate mk-form-plate" id="request">
+                {submitted ? (
+                  <div className="mk-done" role="status">
+                    <span className="mk-check" aria-hidden="true">✓</span>
+                    <h2>Got it.</h2>
+                    <p className="mk-body">
+                      Thanks, {name}. I'm looking at {websiteUrl} and will email your teardown within one business day.
+                    </p>
+                    <p>
+                      <Link to="/" className="mk-link">
+                        Back to the homepage <span aria-hidden="true">→</span>
+                      </Link>
+                    </p>
+                  </div>
+                ) : (
+                  <form ref={formRef} onSubmit={handleSubmit} noValidate>
+                    <div className="mk-stack" style={{ gap: 8 }}>
+                      <h2>Request your teardown</h2>
+                      <p className="mk-cap">Every field marked * is needed to record it.</p>
+                    </div>
 
-          <p className="mt-5 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
-            Most local service websites in Houston look dated, load slowly on phones, and send
-            high-paying clients straight to a competitor. Send me your URL and I'll record a free
-            5-minute video breaking down your UX bottlenecks and conversion leaks — no sales call,
-            no obligation.
-          </p>
+                    <div className="mk-fields">
+                      <div className="mk-field">
+                        <label htmlFor="audit-url" className="mk-label">Your website *</label>
+                        <input
+                          id="audit-url"
+                          name="website"
+                          type="text"
+                          required
+                          autoComplete="url"
+                          inputMode="url"
+                          autoCapitalize="none"
+                          spellCheck={false}
+                          value={websiteUrl}
+                          onChange={(e) => {
+                            setWebsiteUrl(e.target.value);
+                            clearError("websiteUrl");
+                          }}
+                          placeholder="yourfirm.com"
+                          className="mk-input"
+                          {...errorProps("websiteUrl")}
+                        />
+                        {fieldError("websiteUrl")}
+                      </div>
+
+                      <div className="mk-field">
+                        <label htmlFor="audit-name" className="mk-label">Your name *</label>
+                        <input
+                          ref={nameRef}
+                          id="audit-name"
+                          name="name"
+                          type="text"
+                          required
+                          autoComplete="name"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            clearError("name");
+                          }}
+                          placeholder="Jane Doe"
+                          className="mk-input"
+                          {...errorProps("name")}
+                        />
+                        {fieldError("name")}
+                      </div>
+
+                      <div className="mk-field">
+                        <label htmlFor="audit-email" className="mk-label">Work email * · where the video goes</label>
+                        <input
+                          id="audit-email"
+                          name="email"
+                          type="email"
+                          required
+                          autoComplete="email"
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            clearError("email");
+                          }}
+                          placeholder="jane@yourfirm.com"
+                          className="mk-input"
+                          {...errorProps("email")}
+                        />
+                        {fieldError("email")}
+                      </div>
+
+                      <div className="mk-field">
+                        <label htmlFor="audit-bottleneck" className="mk-label">Biggest challenge *</label>
+                        <select
+                          id="audit-bottleneck"
+                          name="bottleneck"
+                          value={bottleneck}
+                          onChange={(e) => {
+                            setBottleneck(e.target.value);
+                            clearError("bottleneck");
+                          }}
+                          className="mk-input"
+                          {...errorProps("bottleneck")}
+                        >
+                          <option value="Conversion Rate & Inbound Leads">Low conversion rate & few inquiries</option>
+                          <option value="Outdated Visual Identity">Design looks dated compared to competitors</option>
+                          <option value="Mobile Experience & Performance">Poor mobile layout / slow loading</option>
+                          <option value="Full Rebrand & Launch">Preparing for a major rebrand / new launch</option>
+                          <option value="General Teardown">General teardown & high-level recommendations</option>
+                        </select>
+                        {fieldError("bottleneck")}
+                      </div>
+
+                      <div className="mk-field is-wide">
+                        <label htmlFor="audit-notes" className="mk-label">Pages or competitors to look at · optional</label>
+                        <textarea
+                          id="audit-notes"
+                          name="notes"
+                          rows={3}
+                          value={notes}
+                          onChange={(e) => {
+                            setNotes(e.target.value);
+                            clearError("notes");
+                          }}
+                          placeholder="e.g. Please look at our services page. Our main competitor is..."
+                          className="mk-input"
+                          {...errorProps("notes")}
+                        />
+                        {fieldError("notes")}
+                      </div>
+                    </div>
+
+                    <SmsConsent
+                      className="mk-consent"
+                      smsService={smsService}
+                      smsMarketing={smsMarketing}
+                      onChange={(field, value) =>
+                        field === "smsService" ? setSmsService(value) : setSmsMarketing(value)
+                      }
+                    />
+
+                    <div className="mk-form-foot">
+                      <p className="mk-cap">Confidential. No spam, no sales pressure.</p>
+                      <button type="submit" disabled={sending} className="mk-btn mk-btn-pen">
+                        {sending ? "Sending…" : "Audit my site"}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* 3 Core Value Pillars */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          {[
-            {
-              title: "Conversion teardown",
-              desc: "Pinpoint exact friction points where visitors bounce before filling out your form or calling.",
-              tag: "STEP 1",
-            },
-            {
-              title: "Mobile & brand score",
-              desc: "Full evaluation of mobile responsiveness, typographic hierarchy, and premium perceived value.",
-              tag: "STEP 2",
-            },
-            {
-              title: "3 actionable fixes",
-              desc: "A personalized 5-minute video report with exact changes to increase inquiries immediately.",
-              tag: "STEP 3",
-            },
-          ].map((pillar) => (
-            <div
-              key={pillar.title}
-              className="border border-[var(--line)] bg-[var(--ground-raised)] p-5 transition-colors hover:border-[var(--gold)]"
-            >
-              <span className="font-mono text-[11px] tracking-widest text-[var(--gold)]">
-                {pillar.tag}
-              </span>
-              <h3 className="mt-2 font-portfolio text-lg font-bold leading-snug text-[var(--ink)]">
-                {pillar.title}
-              </h3>
-              <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                {pillar.desc}
+      <Sheet labelledBy="mk-h-next">
+        <div className="mk-grid">
+          <div className="mk-margin">
+            <p className="mk-label">
+              Next<b>After you submit</b>
+            </p>
+          </div>
+          <div className="mk-stack" style={{ gap: "clamp(28px, 3.5vw, 40px)" }}>
+            <h2 id="mk-h-next">What happens next.</h2>
+            <AuditSteps />
+          </div>
+        </div>
+      </Sheet>
+
+      <Sheet labelledBy="mk-h-who">
+        <div className="mk-grid">
+          <div className="mk-margin">
+            <p className="mk-label">
+              Fit<b>Who it's for</b>
+            </p>
+          </div>
+          <div className="mk-stack" style={{ gap: "clamp(28px, 3.5vw, 40px)" }}>
+            <div className="mk-stack">
+              <h2 id="mk-h-who">Who the audit is for.</h2>
+              <p className="mk-lead">
+                I work mostly with owner-run businesses around Houston — contractors, clinics, law and accounting
+                practices, salons, restaurants, real estate agents and B2B service firms. If people find you, look at
+                the site, and still call someone else, the audit shows you where that happens.
               </p>
             </div>
-          ))}
-        </div>
-
-        {/* Audit Request Form / Confirmation */}
-        <div className="mt-12 border border-[var(--line)] bg-[var(--ground-raised)] p-6 md:p-10">
-          {submitted ? (
-            <div className="space-y-4 py-8">
-              <div className="flex size-14 items-center justify-center rounded-full border border-[var(--gold)] text-[var(--gold)]">
-                <Check className="size-7" />
-              </div>
-              <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
-                Audit request received
-              </h2>
-              <p className="max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                Thanks, <strong>{name}</strong>. Rory Ulloa is reviewing{" "}
-                <strong>{websiteUrl}</strong> and will email your personalized teardown within 1
-                business day.
-              </p>
-              <div className="pt-4">
-                <Link
-                  to="/"
-                  className="inline-flex min-h-12 items-center gap-2 rounded-none border border-[var(--gold)] px-6 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:bg-[var(--gold)] hover:text-black"
-                >
-                  EXPLORE THE STUDIO ↗
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              <div className="border-b border-[var(--line)] pb-4">
-                <span className="font-mono text-[11px] uppercase tracking-widest text-[var(--gold)]">
-                  CLAIM YOUR COMPLIMENTARY SPOT
-                </span>
-                <h2 className="mt-1 font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
-                  Request your 5-minute teardown
-                </h2>
-                <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                  100% free • No sales calls required • Delivered straight to your inbox
-                </p>
-              </div>
-
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="audit-url" className={LABEL_CLASS}>
-                    Your Website URL *
-                  </label>
-                  <input
-                    id="audit-url"
-                    name="website"
-                    type="text"
-                    required
-                    autoComplete="url"
-                    inputMode="url"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    value={websiteUrl}
-                    onChange={(e) => {
-                      setWebsiteUrl(e.target.value);
-                      clearError("websiteUrl");
-                    }}
-                    placeholder="https://yourbusiness.com"
-                    className={CONTROL_CLASS}
-                    {...errorProps("websiteUrl")}
-                  />
-                  {fieldError("websiteUrl")}
-                </div>
-
-                <div>
-                  <label htmlFor="audit-name" className={LABEL_CLASS}>
-                    Your Name *
-                  </label>
-                  <input
-                    id="audit-name"
-                    name="name"
-                    type="text"
-                    required
-                    autoComplete="name"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      clearError("name");
-                    }}
-                    placeholder="Jane Doe"
-                    className={CONTROL_CLASS}
-                    {...errorProps("name")}
-                  />
-                  {fieldError("name")}
-                </div>
-
-                <div>
-                  <label htmlFor="audit-email" className={LABEL_CLASS}>
-                    Your Work Email * (Where we send the audit)
-                  </label>
-                  <input
-                    id="audit-email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      clearError("email");
-                    }}
-                    placeholder="jane@yourbusiness.com"
-                    className={CONTROL_CLASS}
-                    {...errorProps("email")}
-                  />
-                  {fieldError("email")}
-                </div>
-
-                <div>
-                  <label htmlFor="audit-bottleneck" className={LABEL_CLASS}>
-                    Biggest Challenge / Goal *
-                  </label>
-                  <select
-                    id="audit-bottleneck"
-                    name="bottleneck"
-                    value={bottleneck}
-                    onChange={(e) => {
-                      setBottleneck(e.target.value);
-                      clearError("bottleneck");
-                    }}
-                    className={CONTROL_CLASS}
-                    {...errorProps("bottleneck")}
-                  >
-                    <option value="Conversion Rate & Inbound Leads">
-                      Low conversion rate & few inquiries
-                    </option>
-                    <option value="Outdated Visual Identity">
-                      Design looks dated compared to competitors
-                    </option>
-                    <option value="Mobile Experience & Performance">
-                      Poor mobile layout / slow loading
-                    </option>
-                    <option value="Full Rebrand & Launch">
-                      Preparing for a major rebrand / new launch
-                    </option>
-                    <option value="General Teardown">
-                      General teardown & high-level recommendations
-                    </option>
-                  </select>
-                  {fieldError("bottleneck")}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="audit-notes" className={LABEL_CLASS}>
-                  Any specific pages or competitors we should look at? (Optional)
-                </label>
-                <textarea
-                  id="audit-notes"
-                  name="notes"
-                  rows={3}
-                  value={notes}
-                  onChange={(e) => {
-                    setNotes(e.target.value);
-                    clearError("notes");
-                  }}
-                  placeholder="e.g. Please look at our services page. Our main competitor is..."
-                  className={`${CONTROL_CLASS} resize-none`}
-                  {...errorProps("notes")}
-                />
-                {fieldError("notes")}
-              </div>
-
-              <SmsConsent
-                smsService={smsService}
-                smsMarketing={smsMarketing}
-                onChange={(field, value) =>
-                  field === "smsService" ? setSmsService(value) : setSmsMarketing(value)
-                }
-              />
-
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--line)] pt-6">
-                <div className="flex items-center gap-2 font-mono text-[11px] text-[var(--ink-faint)]">
-                  <ShieldCheck className="size-4 text-[var(--gold)]" />
-                  <span>Strictly confidential. No spam or sales pressure.</span>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="inline-flex min-h-12 items-center gap-2 rounded-none bg-[var(--furnace)] px-8 font-mono text-xs font-bold tracking-widest text-black transition-colors hover:bg-[var(--ink)] disabled:opacity-50"
-                >
-                  {sending ? "SUBMITTING..." : "GET MY FREE AUDIT"}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* Who it's for */}
-        <section className="mt-16">
-          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
-            Who the audit is for
-          </h2>
-          <p className="mt-3 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-            I work mostly with owner-run businesses around Houston — contractors, clinics, law and
-            accounting practices, salons, restaurants, real estate agents and B2B service firms. If
-            people find you, look at the site, and still call someone else, the audit shows you
-            where that happens.
-          </p>
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-            {[
-              "Your site was built years ago and hasn't kept up with competitors",
-              "Most of your traffic is mobile but the layout fights small screens",
-              "You get visits from Google Business Profile but almost no form fills",
-              "You're about to spend on ads and want the landing experience checked first",
-            ].map((item) => (
-              <li
-                key={item}
-                className="flex max-w-[60ch] items-start gap-2 border border-[var(--line)] bg-[var(--ground-raised)] p-4 font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]"
-              >
-                <Zap className="mt-1.5 size-3.5 shrink-0 text-[var(--gold)]" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* What happens next */}
-        <section className="mt-14">
-          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
-            What happens after you submit
-          </h2>
-          <ol className="mt-5 space-y-4">
-            {[
-              "I open your site the way a customer would — on a phone first, cold, with no context.",
-              "I record a 5-minute screen video walking through what's confusing, slow or off-brand.",
-              "You get the video by email within one business day, plus three fixes ranked by impact.",
-              "If you want me to make those fixes, we talk. If not, the notes are yours to keep.",
-            ].map((step, i) => (
-              <li key={step} className="flex gap-4">
-                <span className="font-portfolio text-2xl font-bold text-[var(--gold)]">
-                  0{i + 1}
-                </span>
-                <p className="max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                  {step}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* FAQ */}
-        <section className="mt-14">
-          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
-            Common questions
-          </h2>
-          <div className="mt-5 space-y-4">
-            {[
-              {
-                q: "Is the website audit really free?",
-                a: "Yes. There's no fee and no card. I record a handful of these each week because a few people end up hiring me afterwards — that's the whole business case.",
-              },
-              {
-                q: "How long does it take to get the audit?",
-                a: "Usually within one business day, occasionally two if the queue is full. It arrives as a private video link in your inbox.",
-              },
-              {
-                q: "Do I have to be in Houston?",
-                a: "No. I'm based in Houston and know the local market best, but I audit and build for clients anywhere in the US.",
-              },
-              {
-                q: "What if I don't have a website yet?",
-                a: "Send the closest thing you have — a social profile, a directory listing, or a competitor you admire — and I'll review positioning instead of layout.",
-              },
-            ].map((faq) => (
-              <div
-                key={faq.q}
-                className="border border-[var(--line)] bg-[var(--ground-raised)] p-5"
-              >
-                <h3 className="font-portfolio text-lg font-bold leading-snug text-[var(--ink)]">
-                  {faq.q}
-                </h3>
-                <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
-                  {faq.a}
-                </p>
-              </div>
-            ))}
+            <ul className="mk-list mk-rv">
+              {WHO_FOR.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
-          <div className="mt-8">
-            <Link
-              to="/pricing"
-              className="inline-flex min-h-12 items-center gap-2 rounded-none border border-[var(--gold)] px-6 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:bg-[var(--gold)] hover:text-black"
-            >
-              SEE PRICING <ArrowRight className="size-3.5" />
-            </Link>
+        </div>
+      </Sheet>
+
+      <Sheet labelledBy="mk-h-faq">
+        <div className="mk-grid">
+          <div className="mk-margin">
+            <p className="mk-label">
+              Questions<b>Before you send it</b>
+            </p>
           </div>
-        </section>
-      </div>
-    </main>
+          <div className="mk-stack" style={{ gap: "clamp(28px, 3.5vw, 40px)" }}>
+            <h2 id="mk-h-faq">Common questions.</h2>
+            <dl className="mk-faq mk-rv">
+              {FAQ.map((item) => (
+                <div key={item.q}>
+                  <dt>{item.q}</dt>
+                  <dd>{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+            <p>
+              <Link to="/pricing" className="mk-link">
+                See pricing <span aria-hidden="true">→</span>
+              </Link>
+            </p>
+          </div>
+        </div>
+      </Sheet>
+    </MarkupShell>
   );
 }
