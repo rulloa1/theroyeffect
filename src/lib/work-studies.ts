@@ -1,10 +1,14 @@
 /**
  * Concept studies.
  *
- * Every study in this file is an INVENTED Houston business, used purely to
- * demonstrate how the work runs end to end. Nothing here describes a real
+ * Most studies in this file are INVENTED Houston businesses, used purely to
+ * demonstrate how the work runs end to end. Nothing in those describes a real
  * client engagement. Do not add client names, metrics, percentages, quotes or
- * testimonials to this file.
+ * testimonials to invented studies.
+ *
+ * Studies of the studio's OWN projects (Rory's self-initiated builds) are also
+ * allowed here. Those set a `disclosure` string describing exactly what they
+ * are, and must never be presented as client work.
  */
 import cutAfterAsset from "@/assets/cut-after.webp.asset.json";
 import architectureIndexAsset from "@/assets/architecture-index.svg";
@@ -25,11 +29,16 @@ export type WorkStudy = {
   outcomes: StudyBlock[];
   image: string;
   imageAlt: string;
+  /** Overrides the default "invented business" disclosure for real studio-owned projects. */
+  disclosure?: string;
 };
 
 /** The disclosure that must appear on every card and every detail page. */
 export function studyDisclosure(study: WorkStudy): string {
-  return `A concept study. ${study.name} is an invented Houston business, used to show how the work runs end to end — not a client engagement.`;
+  return (
+    study.disclosure ??
+    `A concept study. ${study.name} is an invented Houston business, used to show how the work runs end to end — not a client engagement.`
+  );
 }
 
 export const WORK_STUDIES: WorkStudy[] = [
