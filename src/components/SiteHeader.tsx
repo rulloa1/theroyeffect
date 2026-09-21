@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { ArrowUpRight } from "lucide-react";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 
 export type NavTarget =
   "PROJECTS" | "PROCESS" | "ABOUT" | "RESUME" | "PRICING" | "LET'S WORK" | "MENU";
@@ -44,6 +45,7 @@ export function SiteHeader({ onNavigate }: { onNavigate?: (target: NavTarget) =>
       <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         <Link
           to="/audit"
+          onClick={() => trackAnalyticsEvent("audit_cta_click", { placement: "header" })}
           className="inline-flex min-h-11 items-center gap-1 rounded-full bg-[#FF3333] px-3 py-2.5 font-mono text-[10px] font-bold tracking-widest text-black transition-all hover:bg-[#FF5555] sm:px-4 sm:text-xs"
         >
           GET YOUR FREE AUDIT <ArrowUpRight className="hidden size-3 sm:inline-block" />

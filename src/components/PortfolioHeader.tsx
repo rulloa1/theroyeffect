@@ -36,7 +36,7 @@ export function PortfolioHeader() {
               key={link.label}
               to={link.to}
               {...("hash" in link ? { hash: link.hash } : {})}
-              className="inline-flex min-h-11 items-center font-mono text-[10px] font-bold tracking-widest text-[var(--ink-muted)] transition-colors hover:text-[var(--gold)]"
+              className="inline-flex min-h-11 items-center font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--ink-muted)] transition-colors hover:text-[var(--gold)]"
             >
               {link.label}
             </Link>

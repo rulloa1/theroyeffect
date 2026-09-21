@@ -133,7 +133,7 @@ export function PortfolioWorkGallery() {
                 />
               </div>
               <div className="flex flex-1 flex-col p-7">
-                <span className="font-mono text-xs tracking-widest text-[var(--gold)]">
+                <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--gold)]">
                   CONCEPT STUDY · {study.index}
                 </span>
                 <h3 className="mt-3 font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">

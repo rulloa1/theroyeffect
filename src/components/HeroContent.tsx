@@ -30,7 +30,7 @@ export function HeroContent() {
           <p className="font-portfolio text-3xl font-bold leading-none text-[var(--ink)] md:text-5xl">
             RORY ULLOA
           </p>
-          <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[var(--gold)]">
+          <p className="mt-2 font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--gold)]">
             THE ROY EFFECT · HOUSTON
           </p>
         </div>
