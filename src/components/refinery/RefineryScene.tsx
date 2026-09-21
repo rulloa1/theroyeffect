@@ -570,7 +570,7 @@ diffuseColor.rgb = mix(vec3(0.0103, 0.0086, 0.0069), vec3(0.738, 0.491, 0.171), 
     };
     if (typeof idleWindow.requestIdleCallback === "function")
       idleHandle = idleWindow.requestIdleCallback(() => void initialise());
-    else timeoutHandle = globalThis.setTimeout(() => void initialise(), 200);
+    else timeoutHandle = globalThis.setTimeout(() => void initialise(), 2000);
 
     return () => {
       disposed = true;

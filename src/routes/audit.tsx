@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Check, QrCode, Sparkles, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
@@ -100,6 +101,7 @@ export function AuditPage() {
       if (!response.ok) throw new Error(data.error || "Failed to submit request");
 
       setSubmitted(true);
+      trackAnalyticsEvent("audit_submitted");
       toast.success("Audit request received! Rory will send your video teardown within 24 hours.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");

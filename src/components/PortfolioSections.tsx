@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Magnetic } from "@/components/refinery/Magnetic";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 
 const CAPABILITIES = [
   "Website Design",
@@ -25,18 +26,18 @@ export function PortfolioSections() {
         <ScrollReveal chapterSeam respectEffectsGuard />
         <ScrollReveal className="mx-auto max-w-7xl" respectEffectsGuard>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
-            <div>
+            <div className="lg:sticky lg:top-28 lg:self-start">
               <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 WHAT I DO
               </p>
-              <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
+              <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
                 Design and development working as one.
               </h2>
-              <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+              <p className="mt-7 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
                 I take projects from the first visual concept through design, development,
                 interaction, and launch—creating one cohesive digital experience.
               </p>
-              <p className="mt-5 max-w-[68ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
+              <p className="mt-5 max-w-[60ch] font-portfolio-body text-sm leading-relaxed text-[var(--ink-faint)]">
                 Every project is scoped around its goals, content, functionality, and creative
                 direction.
               </p>
@@ -91,7 +92,7 @@ export function PortfolioSections() {
           <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
             DESIGN PHILOSOPHY
           </p>
-          <h2 className="mt-5 max-w-6xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
+          <h2 className="mt-5 max-w-6xl font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
             Your website should feel like an experience—
             <span className="text-white/35">not a template.</span>
           </h2>
@@ -100,11 +101,11 @@ export function PortfolioSections() {
             className="mt-12 grid gap-8 border-t border-[var(--line)] pt-8 md:grid-cols-2 md:gap-20"
             respectEffectsGuard
           >
-            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+            <p className="max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
               I combine strategy, visual storytelling, responsive development, and thoughtful
               interaction to create websites that communicate value before visitors read every word.
             </p>
-            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+            <p className="max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
               You approve the design before the build begins. The experience that gets approved is
               the experience that goes live.
             </p>
@@ -124,15 +125,15 @@ export function PortfolioSections() {
               <p className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
                 ABOUT
               </p>
-              <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92] text-[var(--ink)]">
+              <h2 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
                 Creative vision backed by real development.
               </h2>
-              <p className="mt-7 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+              <p className="mt-7 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
                 I&apos;m Rory Ulloa, the design developer behind The Roy Effect. I create
                 distinctive digital experiences by bringing design and development together—from the
                 first idea to the finished website.
               </p>
-              <p className="mt-5 max-w-[68ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-faint)]">
+              <p className="mt-5 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-faint)]">
                 I work solo from Houston, shaping brand systems, marketing sites, and product
                 interfaces, then shipping them in Webflow, Framer, or TanStack.
               </p>
@@ -172,19 +173,19 @@ export function PortfolioSections() {
         <ScrollReveal chapterSeam respectEffectsGuard />
         <div
           aria-hidden
-          className="absolute -right-10 -top-20 font-portfolio text-[18rem] font-bold leading-none text-[var(--ground)]/5"
+          className="absolute right-[-0.06em] bottom-[-0.24em] top-auto font-portfolio text-[clamp(14rem,32vw,30rem)] font-bold leading-none text-[var(--ground)]/[0.07]"
         >
           R
         </div>
         <ScrollReveal className="relative mx-auto max-w-7xl" respectEffectsGuard>
-          <p className="font-mono text-xs font-bold tracking-widest">START A PROJECT</p>
-          <h2 className="mt-4 max-w-5xl font-portfolio text-[length:var(--type-h2)] font-bold leading-[0.92]">
-            Have a website idea worth building?
+          <p className="font-mono text-xs font-bold tracking-widest">FREE WEBSITE AUDIT</p>
+          <h2 className="mt-4 max-w-5xl font-portfolio text-[length:var(--type-h2)] font-bold leading-none">
+            See what your site is costing you.
           </h2>
-          <div className="mt-10 grid gap-8 border-t border-[var(--ground)]/20 pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-            <p className="max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ground)]/75">
-              Tell me what you&apos;re creating, improving, or launching. I&apos;ll help turn it
-              into a polished digital experience.
+          <div className="mt-10 grid gap-8 border-t border-[var(--ground)]/20 pt-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <p className="max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ground)]/75">
+              Send the URL. I&apos;ll record a 5-minute video teardown with three fixes ranked by
+              impact, in your inbox within one business day. No call required.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Magnetic className="w-full sm:w-auto">
@@ -193,9 +194,14 @@ export function PortfolioSections() {
                   size="lg"
                   className="w-full rounded-none bg-[var(--ground)] px-7 font-mono text-xs font-bold tracking-widest text-white hover:bg-[var(--ground-raised)]"
                 >
-                  <Link to="/brief">
+                  <Link
+                    to="/audit"
+                    onClick={() =>
+                      trackAnalyticsEvent("audit_cta_click", { placement: "closing" })
+                    }
+                  >
                     <span className="magnetic-label inline-flex items-center gap-2">
-                      START A PROJECT <ArrowUpRight />
+                      GET YOUR FREE AUDIT <ArrowUpRight />
                     </span>
                   </Link>
                 </Button>
