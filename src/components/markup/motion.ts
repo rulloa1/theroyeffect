@@ -17,7 +17,8 @@ export function motionAllowedNow(): boolean {
 export function syncMotionClass(paused: boolean) {
   const html = document.documentElement;
   if (paused) html.classList.remove("mk-motion");
-  else if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("mk-motion");
+  else if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    html.classList.add("mk-motion");
 }
 
 /** Inline head script — runs before paint. Mirrors lib/motion-preference's storage key. */

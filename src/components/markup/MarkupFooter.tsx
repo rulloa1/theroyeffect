@@ -18,41 +18,77 @@ export function MarkupFooter() {
         <div className="mk-foot">
           <div>
             <p className="mk-label">The Roy Effect</p>
-            <p>Brand, web design and build for firms whose work is better than their website. Houston, Texas.</p>
+            <p>
+              Brand, web design and build for firms whose work is better than their website.
+              Houston, Texas.
+            </p>
           </div>
           <div>
             <p className="mk-label">Contact</p>
             <ul>
-              <li><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
-              <li><a href="tel:+12813230450">(281) 323-0450</a></li>
-              <li><Link to="/portal/login">Client sign in</Link></li>
+              <li>
+                <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              </li>
+              <li>
+                <a href="tel:+12813230450">(281) 323-0450</a>
+              </li>
+              <li>
+                <Link to="/portal/login">Client sign in</Link>
+              </li>
             </ul>
           </div>
           <div>
             <p className="mk-label">Site</p>
             <ul>
-              <li><Link to="/work">Studies</Link></li>
-              <li><Link to="/pricing">Pricing</Link></li>
-              <li><Link to="/process">Process</Link></li>
-              <li><Link to="/about">About</Link></li>
-              <li><Link to="/brief">Start a project</Link></li>
+              <li>
+                <Link to="/work">Studies</Link>
+              </li>
+              <li>
+                <Link to="/pricing">Pricing</Link>
+              </li>
+              <li>
+                <Link to="/process">Process</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/brief">Start a project</Link>
+              </li>
             </ul>
           </div>
           <div>
             <p className="mk-label">Guides</p>
             <ul>
-              <li><Link to="/guides/website-audit-checklist">Website audit checklist</Link></li>
-              <li><Link to="/guides/houston-website-cost">Houston website cost</Link></li>
-              <li><Link to="/guides/squarespace-vs-custom-website">Squarespace vs custom</Link></li>
-              <li><Link to="/connect">Connect an AI assistant</Link></li>
+              <li>
+                <Link to="/guides/website-audit-checklist">Website audit checklist</Link>
+              </li>
+              <li>
+                <Link to="/guides/houston-website-cost">Houston website cost</Link>
+              </li>
+              <li>
+                <Link to="/guides/squarespace-vs-custom-website">Squarespace vs custom</Link>
+              </li>
+              <li>
+                <Link to="/connect">Connect an AI assistant</Link>
+              </li>
             </ul>
           </div>
         </div>
         <div className="mk-foot-base">
           <span className="mk-fine">© {new Date().getFullYear()} The Roy Effect</span>
-          <Link className="mk-fine" to="/privacy">Privacy</Link>
-          <Link className="mk-fine" to="/terms">Terms</Link>
-          <button type="button" className="mk-fine mk-motion-toggle" aria-pressed={paused} onClick={toggle}>
+          <Link className="mk-fine" to="/privacy">
+            Privacy
+          </Link>
+          <Link className="mk-fine" to="/terms">
+            Terms
+          </Link>
+          <button
+            type="button"
+            className="mk-fine mk-motion-toggle"
+            aria-pressed={paused}
+            onClick={toggle}
+          >
             {paused ? "Resume motion" : "Pause motion"}
           </button>
         </div>

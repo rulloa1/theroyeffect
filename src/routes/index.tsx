@@ -5,8 +5,11 @@ import { SITE_URL } from "@/lib/site";
 import ogImageAsset from "@/assets/og-markup.jpg.asset.json";
 
 // Asset URLs may already be absolute; only prefix the site when they're not.
-const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url) ? ogImageAsset.url : `${SITE_URL}${ogImageAsset.url}`;
-const OG_ALT = "Your work is better than your website. A marked-up homepage with three numbered fixes.";
+const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url)
+  ? ogImageAsset.url
+  : `${SITE_URL}${ogImageAsset.url}`;
+const OG_ALT =
+  "Your work is better than your website. A marked-up homepage with three numbered fixes.";
 const TITLE = "Houston Web Design — Rory Ulloa | The Roy Effect";
 const DESCRIPTION =
   "Send your URL and get a free five-minute video teardown of your website, with three fixes ranked by impact. Brand, web design and build by Rory Ulloa in Houston.";

@@ -5,7 +5,10 @@ import { UrlForm } from "./UrlForm";
 
 export const AUDIT_STEPS = [
   ["You send the URL.", "Nothing else. No login, no call booked, no questionnaire."],
-  ["I open it the way a customer would.", "On a phone first, cold, with no context. Then on a laptop."],
+  [
+    "I open it the way a customer would.",
+    "On a phone first, cold, with no context. Then on a laptop.",
+  ],
   [
     "You get the video within one business day.",
     "Five minutes, screen-recorded, with the three changes that would bring in the most enquiries, ranked.",
@@ -30,7 +33,14 @@ export function AuditSteps() {
 export function RecordedBy() {
   return (
     <div className="mk-who mk-rv">
-      <img src={portraitAsset.url} width={896} height={1078} alt="Rory Ulloa" loading="lazy" decoding="async" />
+      <img
+        src={portraitAsset.url}
+        width={896}
+        height={1078}
+        alt="Rory Ulloa"
+        loading="lazy"
+        decoding="async"
+      />
       <p>
         <b>Recorded by Rory Ulloa.</b>
         Not a template or a tool. The person who marks it up is the person who would build it.
@@ -54,7 +64,8 @@ export function AuditSheet() {
           <div className="mk-stack">
             <h2 id="mk-h-audit">Five minutes of video. Three fixes, ranked.</h2>
             <p className="mk-lead">
-              It's the same teardown you just read, recorded for your site instead of an invented one.
+              It's the same teardown you just read, recorded for your site instead of an invented
+              one.
             </p>
           </div>
           <AuditSteps />

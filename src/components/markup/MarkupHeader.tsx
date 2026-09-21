@@ -11,7 +11,9 @@ function jumpToForm(e: MouseEvent<HTMLAnchorElement>, id: string) {
   e.preventDefault();
   const smooth = motionAllowedNow();
   form.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
-  const fields = Array.from(form.querySelectorAll<HTMLInputElement>("input:not([type=checkbox]), select, textarea"));
+  const fields = Array.from(
+    form.querySelectorAll<HTMLInputElement>("input:not([type=checkbox]), select, textarea"),
+  );
   const target = fields.find((f) => !f.value) ?? fields[0];
   target?.focus({ preventScroll: true });
 }
@@ -57,7 +59,11 @@ export function MarkupHeader({ ctaFormId }: { ctaFormId?: string | undefined }) 
           <Link to="/brief">Start a project</Link>
         </nav>
         {ctaFormId ? (
-          <a href={`#${ctaFormId}`} className="mk-btn mk-hdr-cta" onClick={(e) => jumpToForm(e, ctaFormId)}>
+          <a
+            href={`#${ctaFormId}`}
+            className="mk-btn mk-hdr-cta"
+            onClick={(e) => jumpToForm(e, ctaFormId)}
+          >
             Audit my site
           </a>
         ) : (

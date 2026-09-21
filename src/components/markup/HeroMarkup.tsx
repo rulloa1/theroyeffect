@@ -80,7 +80,16 @@ export function HeroMarkup() {
         if (!def || !pin) return null;
         const px = sr.left + (sr.width * def.x) / 100;
         const py = sr.top + (sr.height * def.y) / 100;
-        return { n, pinId: def.pin, px, py, r: pin.offsetWidth / 2, cy: py - nr.top, h: n.offsetHeight, y: 0 };
+        return {
+          n,
+          pinId: def.pin,
+          px,
+          py,
+          r: pin.offsetWidth / 2,
+          cy: py - nr.top,
+          h: n.offsetHeight,
+          y: 0,
+        };
       })
       .filter((it): it is NonNullable<typeof it> => it !== null)
       .sort((a, b) => a.cy - b.cy);
@@ -192,7 +201,11 @@ export function HeroMarkup() {
           ref={markupRef}
           className={`mk-markup mk-grid${landed ? " is-land" : ""}${hot ? " is-focusing" : ""}`}
         >
-          <ol ref={notesRef} className="mk-notes" aria-label="Three notes from the audit, ranked by impact">
+          <ol
+            ref={notesRef}
+            className="mk-notes"
+            aria-label="Three notes from the audit, ranked by impact"
+          >
             {NOTES.map((n) => (
               <li
                 key={n.pin}

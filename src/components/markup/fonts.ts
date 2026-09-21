@@ -7,6 +7,12 @@ import hankenLatin from "@fontsource-variable/hanken-grotesk/files/hanken-grotes
  * and its fallback is metric-matched in styles/markup.css.
  */
 export const MARKUP_FONT_PRELOADS = [
-  { rel: "preload", href: bricolageLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+  {
+    rel: "preload",
+    href: bricolageLatin,
+    as: "font",
+    type: "font/woff2",
+    crossOrigin: "anonymous",
+  },
   { rel: "preload", href: hankenLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
 ] as const;

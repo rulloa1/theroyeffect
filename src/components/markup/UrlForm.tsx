@@ -60,7 +60,12 @@ export function UrlForm({ placement }: { placement: "inline" | "closing" }) {
       <p className="mk-label mk-help" id={helpId}>
         Free · One business day · No call required
       </p>
-      <p className={`mk-form-msg${error ? " is-err" : ""}`} id={msgId} role="status" aria-live="polite">
+      <p
+        className={`mk-form-msg${error ? " is-err" : ""}`}
+        id={msgId}
+        role="status"
+        aria-live="polite"
+      >
         {error ?? ""}
       </p>
     </form>

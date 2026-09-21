@@ -18,7 +18,8 @@ export function StudiesSheet() {
         <div className="mk-stack">
           <h2 id="mk-h-studies">Three studies, marked up and fixed.</h2>
           <p className="mk-lead">
-            Each is an invented Houston business, used to show how the work runs from the first note to the finished site.
+            Each is an invented Houston business, used to show how the work runs from the first note
+            to the finished site.
           </p>
         </div>
       </div>
@@ -34,7 +35,14 @@ export function StudiesSheet() {
             </div>
             <div className="mk-study-compact">
               <figure className="mk-plate">
-                <img src={first.image} width={1200} height={750} alt={first.imageAlt} loading="lazy" decoding="async" />
+                <img
+                  src={first.image}
+                  width={1200}
+                  height={750}
+                  alt={first.imageAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
               </figure>
               <div className="mk-study-text">
                 <p className="mk-label">{first.sector}</p>
@@ -71,7 +79,14 @@ export function StudiesSheet() {
             </div>
             <div className="mk-study-body">
               <figure className="mk-plate">
-                <img src={study.image} width={1200} height={750} alt={study.imageAlt} loading="lazy" decoding="async" />
+                <img
+                  src={study.image}
+                  width={1200}
+                  height={750}
+                  alt={study.imageAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
               </figure>
               <div className="mk-study-text">
                 <p className="mk-label">{study.sector}</p>
