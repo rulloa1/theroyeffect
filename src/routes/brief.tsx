@@ -418,7 +418,11 @@ function BriefPage() {
 
   if (done) {
     return (
-      <main id="main" tabIndex={-1} className="brief-root flex min-h-screen items-center justify-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32">
+      <main
+        id="main"
+        tabIndex={-1}
+        className="brief-root flex min-h-screen items-center justify-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32"
+      >
         <Toaster />
         <div className="w-full max-w-lg border border-[var(--line)] bg-[var(--card)] p-6 sm:p-8">
           <span className="font-mono text-[10px] tracking-widest text-[var(--gold)]">
@@ -446,7 +450,11 @@ function BriefPage() {
   if (!current) return null;
 
   return (
-    <main id="main" tabIndex={-1} className="brief-root min-h-screen bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32 sm:pb-36">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="brief-root min-h-screen bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pb-32 sm:pb-36"
+    >
       <Toaster />
       <div className="mx-auto max-w-2xl">
         <Logo variant="compact" size="md" href="/" className="mb-8" />
