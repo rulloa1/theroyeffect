@@ -39,8 +39,6 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       { rel: "canonical", href: `${SITE_URL}/` },
-      // Anton is this page's display face and is not in the sitewide font link.
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Anton&display=swap" },
       { rel: "stylesheet", href: homeBaseCss },
       { rel: "stylesheet", href: homeExperienceCss },
       { rel: "stylesheet", href: homeExperienceMotionCss },
