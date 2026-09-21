@@ -34,7 +34,7 @@ export const Route = createFileRoute("/site-report/$token")({
 
 function ReportMessage({ title }: { title: string }) {
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-6 px-6 text-center">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-6 px-6 text-center">
       <Logo className="h-8 w-auto" />
       <h1 className="text-2xl font-bold uppercase tracking-tight">{title}</h1>
       <Link
@@ -59,7 +59,7 @@ function SiteReportPage() {
     report.painScore >= 40 ? "Critical" : report.painScore >= 20 ? "Needs work" : report.painScore > 0 ? "Minor issues" : "Looks solid";
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
       <div className="mx-auto w-full max-w-3xl px-6 py-14 md:py-20">
         <Logo className="h-7 w-auto" />
 

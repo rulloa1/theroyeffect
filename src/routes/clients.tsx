@@ -61,7 +61,7 @@ function ClientsPage() {
   const signedIn = !loading && Boolean(user);
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 pb-24 pt-28 text-white sm:px-8">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 pb-24 pt-28 text-white sm:px-8">
       <div className="mx-auto max-w-4xl">
         <div className="flex justify-center">
           <Logo variant="stacked" size="md" href="/" />

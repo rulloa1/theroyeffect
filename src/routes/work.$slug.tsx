@@ -53,7 +53,7 @@ export const Route = createFileRoute("/work/$slug")({
     };
   },
   notFoundComponent: () => (
-    <main className="min-h-screen bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pt-28 text-[var(--ink)]">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)] pt-28 text-[var(--ink)]">
       <div className="mx-auto max-w-7xl">
         <h1 className="font-portfolio text-[length:var(--type-h2)] font-bold">Study not found</h1>
         <p className="mt-4 max-w-[68ch] font-portfolio-body text-base text-[var(--ink-muted)]">
@@ -78,7 +78,7 @@ function WorkStudyPage() {
   return (
     <>
       <PortfolioHeader />
-      <main className="min-h-screen bg-[var(--ground)] pt-24 text-[var(--ink)]">
+      <main id="main" tabIndex={-1} className="min-h-screen bg-[var(--ground)] pt-24 text-[var(--ink)]">
         <section className="relative px-[var(--gutter)] py-[var(--section-y)]">
           <div className="mx-auto max-w-7xl">
             <ScrollReveal respectEffectsGuard>
