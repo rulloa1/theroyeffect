@@ -1,0 +1,317 @@
+/* =====================================================================
+   The Roy Effect — homepage
+   Base layer: tokens, type, buttons, navigation, cursor. Separate from styles.css.
+   ===================================================================== */
+
+/* Anton, self-hosted like the sitewide faces in styles.css (no third-party font requests). */
+@font-face {
+  font-family: "Anton";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../../../node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2")
+    format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.home {
+  --home-bg: #050505;
+  --home-red: #ff3333;
+  --home-gold: #dfba73;
+  --home-text: #ffffff;
+  --home-body: rgba(255, 255, 255, 0.72);
+  --home-muted: rgba(255, 255, 255, 0.5);
+  --home-line: rgba(255, 255, 255, 0.1);
+  --home-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-home-display: "Anton", "Impact", "Arial Black", sans-serif;
+  --font-home-sans: "Archivo Variable", "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --font-home-mono:
+    "IBM Plex Mono", "IBM Plex Mono Fallback", "SFMono-Regular", Consolas, monospace;
+
+  background: var(--home-bg);
+  color: var(--home-text);
+  font-family: var(--font-home-sans);
+  overflow-x: clip;
+}
+
+.home ::selection {
+  background: var(--home-red);
+  color: #000;
+}
+
+/* ---------- shared type ---------- */
+.home-eyebrow {
+  font-family: var(--font-home-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--home-red);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.home-eyebrow b {
+  color: var(--home-muted);
+  font-weight: 500;
+}
+
+.home-display {
+  font-family: var(--font-home-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+}
+
+/* ---------- buttons ---------- */
+.home-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.05rem 1.6rem;
+  font-family: var(--font-home-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color 0.45s var(--home-ease),
+    border-color 0.45s var(--home-ease),
+    transform 0.45s var(--home-ease);
+  will-change: transform;
+}
+.home-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateY(101%);
+  transition: transform 0.55s var(--home-ease);
+}
+.home-btn:hover::before,
+.home-btn:focus-visible::before {
+  transform: translateY(0);
+}
+.home-btn--primary {
+  background: var(--home-red);
+  color: #000;
+}
+.home-btn--primary::before {
+  background: #fff;
+}
+.home-btn--ghost {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  background: rgba(5, 5, 5, 0.35);
+}
+.home-btn--ghost::before {
+  background: #fff;
+}
+.home-btn--ghost:hover,
+.home-btn--ghost:focus-visible {
+  color: #000;
+  border-color: #fff;
+}
+.home-btn svg {
+  transition: transform 0.45s var(--home-ease);
+}
+.home-btn:hover svg {
+  transform: translate(3px, -3px);
+}
+
+.home-link {
+  position: relative;
+  display: inline-block;
+}
+.home-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--home-ease);
+}
+.home-link:hover::after,
+.home-link:focus-visible::after,
+.home-link[aria-current="page"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.home :focus-visible {
+  outline: 2px solid var(--home-gold);
+  outline-offset: 4px;
+}
+
+/* =====================================================================
+   Floating navigation
+   ===================================================================== */
+.home-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  padding: 1.1rem clamp(1rem, 3vw, 2.25rem);
+  pointer-events: none;
+}
+.home-nav-bar {
+  pointer-events: auto;
+  margin: 0 auto;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition:
+    background 0.6s var(--home-ease),
+    border-color 0.6s var(--home-ease),
+    box-shadow 0.6s var(--home-ease);
+}
+.home-nav[data-solid="true"] .home-nav-bar {
+  background: rgba(8, 8, 9, 0.78);
+  border-color: var(--home-line);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.home-nav-links {
+  display: none;
+  gap: 2.1rem;
+  font-family: var(--font-home-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.home-nav-links a {
+  color: rgba(255, 255, 255, 0.72);
+  transition: color 0.3s var(--home-ease);
+}
+.home-nav-links a:hover {
+  color: #fff;
+}
+.home-nav-cta {
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+}
+.home-nav-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  font-family: var(--font-home-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(5, 5, 5, 0.4);
+}
+@media (min-width: 960px) {
+  .home-nav-links {
+    display: flex;
+  }
+  .home-nav-menu {
+    display: none;
+  }
+}
+@media (max-width: 959px) {
+  .home-nav-cta {
+    display: none;
+  }
+}
+
+.home-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(5, 5, 5, 0.97);
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem clamp(1.25rem, 5vw, 2.5rem) 2.5rem;
+}
+.home-sheet nav {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.home-sheet nav a {
+  font-family: var(--font-home-display);
+  font-size: clamp(2.6rem, 13vw, 4.5rem);
+  text-transform: uppercase;
+  line-height: 1.02;
+}
+.home-sheet nav a:hover {
+  color: var(--home-red);
+}
+
+/* =====================================================================
+   Custom cursor (desktop, fine pointer, motion allowed)
+   ===================================================================== */
+.home-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--home-ease);
+}
+.home-cursor[data-visible="true"] {
+  opacity: 1;
+}
+.home-cursor-dot,
+.home-cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+.home-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #fff;
+}
+.home-cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  transition:
+    width 0.4s var(--home-ease),
+    height 0.4s var(--home-ease),
+    margin 0.4s var(--home-ease),
+    border-color 0.4s var(--home-ease),
+    background 0.4s var(--home-ease);
+}
+.home-cursor[data-state="hover"] .home-cursor-ring {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-color: var(--home-red);
+  background: rgba(255, 51, 51, 0.08);
+}
+.home-cursor[data-state="hover"] .home-cursor-dot {
+  background: var(--home-red);
+}
+html.has-home-cursor,
+html.has-home-cursor a,
+html.has-home-cursor button {
+  cursor: none;
+}
