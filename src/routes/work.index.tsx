@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { WorkGrid } from "@/components/WorkGrid";
-import { studyDisclosure, WORK_STUDIES } from "@/lib/work-studies";
 
 const TITLE = "Selected Work — The Roy Effect";
 const DESCRIPTION =
@@ -25,11 +24,7 @@ export const Route = createFileRoute("/work/")({
 
 function WorkPage() {
   return (
-    <main
-      id="main"
-      tabIndex={-1}
-      className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24"
-    >
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
         <Logo variant="compact" size="md" href="/" className="mb-12" />
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">WORK</span>
@@ -43,44 +38,6 @@ function WorkPage() {
         <div className="mt-12">
           <WorkGrid />
         </div>
-
-        <section aria-labelledby="work-studies-heading" className="mt-20">
-          <h2
-            id="work-studies-heading"
-            className="font-display text-2xl uppercase text-white md:text-3xl"
-          >
-            Concept studies
-          </h2>
-          <p className="mt-3 max-w-2xl font-mono text-[15px] leading-[1.6] text-white/90">
-            Full write-ups of how the work runs, end to end — including one of my own builds.
-          </p>
-          <div className="mt-8 border-t border-white/10">
-            {WORK_STUDIES.map((study) => (
-              <Link
-                key={study.slug}
-                to="/work/$slug"
-                params={{ slug: study.slug }}
-                className="group block border-b border-white/10 px-1 py-6 transition-colors hover:bg-white/[0.04] md:px-4"
-              >
-                <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)] md:items-center md:gap-8">
-                  <span className="font-mono text-xs tracking-widest text-[#DFBA73]">
-                    {study.index}
-                  </span>
-                  <h3 className="font-display text-2xl uppercase text-white transition-colors group-hover:text-[#DFBA73] md:text-3xl">
-                    {study.name}
-                  </h3>
-                  <p className="font-mono text-[15px] leading-[1.6] text-white/90">
-                    {study.summary}
-                  </p>
-                </div>
-                <p className="mt-3 font-mono text-xs leading-[1.6] text-white/60">
-                  {studyDisclosure(study)}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
             to="/audit"

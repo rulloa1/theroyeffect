@@ -1,14 +1,10 @@
 /**
  * Concept studies.
  *
- * Most studies in this file are INVENTED Houston businesses, used purely to
- * demonstrate how the work runs end to end. Nothing in those describes a real
+ * Every study in this file is an INVENTED Houston business, used purely to
+ * demonstrate how the work runs end to end. Nothing here describes a real
  * client engagement. Do not add client names, metrics, percentages, quotes or
- * testimonials to invented studies.
- *
- * Studies of the studio's OWN projects (Rory's self-initiated builds) are also
- * allowed here. Those set a `disclosure` string describing exactly what they
- * are, and must never be presented as client work.
+ * testimonials to this file.
  */
 import cutAfterAsset from "@/assets/cut-after.webp.asset.json";
 import architectureIndexAsset from "@/assets/architecture-index.svg";
@@ -29,16 +25,11 @@ export type WorkStudy = {
   outcomes: StudyBlock[];
   image: string;
   imageAlt: string;
-  /** Overrides the default "invented business" disclosure for real studio-owned projects. */
-  disclosure?: string;
 };
 
 /** The disclosure that must appear on every card and every detail page. */
 export function studyDisclosure(study: WorkStudy): string {
-  return (
-    study.disclosure ??
-    `A concept study. ${study.name} is an invented Houston business, used to show how the work runs end to end — not a client engagement.`
-  );
+  return `A concept study. ${study.name} is an invented Houston business, used to show how the work runs end to end — not a client engagement.`;
 }
 
 export const WORK_STUDIES: WorkStudy[] = [
@@ -221,68 +212,6 @@ export const WORK_STUDIES: WorkStudy[] = [
     image: coffeeIdentityAsset,
     imageAlt:
       "Concept mockup of the roaster's identity — the mark on a 12oz bag, the same mark at browser-tab size, roast-level swatches and a storefront row",
-  },
-  {
-    slug: "flava-depot",
-    index: "04",
-    name: "Flava Depot",
-    sector: "Concept storefront · Houston",
-    scopeTags: ["Concept design & build", "Age-gate UX", "Menu & cart flow"],
-    summary:
-      "A self-initiated storefront concept for a Houston smoke-shop brand — 21+ entry, a three-category menu with real price anchors, and a cart that previews an order without ever taking one.",
-    problemIntro:
-      "This one is my own project, so the brief was one I set myself: prove a storefront can do its selling with design alone, before any real inventory or checkout exists. Four questions the concept had to answer:",
-    problems: [
-      "How does a store that cannot take orders still feel like a store — menu, cart, checkout — without tricking anyone?",
-      "A 21+ age gate is non-negotiable in this category, but most gates either dead-end the visitor or bury the store behind friction.",
-      "Menus in this category tend to be walls of strain names with no structure, so prices read as random instead of tiered.",
-      "The brand voice — loud, neon, Houston — had to survive contact with the compliance copy instead of being sanded down by it.",
-    ],
-    approach: [
-      {
-        title: "01 — Set the honesty rule first",
-        body: "One banner sentence rides every screen — design concept preview, not a live store, no orders are taken — and the same honesty repeats at every conversion point: the VIP form confirms nothing was saved or sent, and checkout ends on a 'no order was placed' screen that returns to the site. Every feature a real store would have, labelled for exactly what it is.",
-      },
-      {
-        title: "02 — Brand direction",
-        body: "Black-out backgrounds, a single acid-green accent, macro product photography and an oversized wordmark. 'Tha Houston Chronic' sets the voice; neon glow and smoke effects carry it. Committing to one accent colour means the compliance banner reads as part of the brand, not as fine print.",
-      },
-      {
-        title: "03 — Age gate as a door, not a wall",
-        body: "The 21+ check is a full-screen lock with two states: enter, or a plain access-denied message. It sits one tap in front of the store, keeps the same visual system, and never interrupts again once passed.",
-      },
-      {
-        title: "04 — A menu that sells in three cards",
-        body: "Flower, concentrates and edibles each get one card with photography and price anchors — $5 signature grams, $35 7G zaza, $3/g budget picks, concentrates from $25 to $87, edibles from $7. A visitor understands the whole price structure without ever opening a menu page.",
-      },
-      {
-        title: "05 — Cart, checkout and VIP as previews",
-        body: "The cart, order preview and checkout completion all work end to end, but every screen repeats the concept disclaimer and ends by returning to the site. The VIP signup behaves the same way: the confirmation states plainly that nothing was saved.",
-      },
-    ],
-    outcomes: [
-      {
-        title: "A storefront that demonstrates the full flow",
-        body: "Age gate, menu, cart and checkout preview run end to end, so the concept can be walked through like a real store in a pitch.",
-      },
-      {
-        title: "Compliance built into the design",
-        body: "The 21+ gate and the concept-only notices are part of the visual system — exactly how a storefront in a regulated category has to behave when it goes live.",
-      },
-      {
-        title: "A price architecture in one screen",
-        body: "Three categories and tiered price anchors, enough for a visitor to understand the offer without opening a single menu page.",
-      },
-      {
-        title: "A reusable brand language",
-        body: "Black, acid green, macro photography and glow — a kit that extends to packaging, socials or the live store whenever it gets built.",
-      },
-    ],
-    image: "/work/flava-depot.jpg",
-    imageAlt:
-      "Flava Depot concept storefront hero — an oversized white and neon-green wordmark over macro flower photography in a glowing glass tube",
-    disclosure:
-      "A storefront concept I designed and built as my own project. Flava Depot is a design concept preview, not a live store — no orders are taken, and nothing submitted on it is saved.",
   },
 ];
 
