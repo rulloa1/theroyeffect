@@ -57,6 +57,17 @@ jobs:
           VITE_APP_ENV: ${{ env.TARGET_ENV }}
           VITE_APP_RELEASE: ${{ github.sha }}
           VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          # Firebase analytics. These two are the empty strings in the committed
+          # .env files, so supplying them here is a no-op until the repository
+          # variables exist, and switches analytics on the moment they do — an
+          # env var present at build time outranks a .env file in Vite.
+          #
+          # Only wire a variable here once its value is in GitHub. Adding a
+          # populated var (VITE_SUPABASE_*, VITE_VAPI_*, VITE_PAYMENTS_CLIENT_TOKEN)
+          # before the repository variable is set would override a working value
+          # from .env with an empty one. See docs/env-handling.md.
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
           # Source map upload happens inside the build via @sentry/vite-plugin
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
