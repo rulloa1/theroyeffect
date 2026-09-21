@@ -31,11 +31,126 @@
   --color-acid: var(--acid);
   --color-drawer: var(--drawer);
   --color-energy: var(--energy);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Archivo", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-  --font-portfolio: "Space Grotesk", system-ui, sans-serif;
-  --font-portfolio-body: "Archivo", system-ui, sans-serif;
+  --font-display:
+    "Space Grotesk Variable", "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-sans: "Archivo Variable", "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Mono Fallback", "SFMono-Regular", Consolas, monospace;
+  --font-portfolio:
+    "Space Grotesk Variable", "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-portfolio-body: "Archivo Variable", "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --default-transition-duration: 160ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Self-hosted faces (latin subsets only) + metric-matched fallbacks.
+   Self-hosting removes the Google Fonts round trip; the fallback faces keep
+   the swap from re-wrapping headlines (CLS).
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Space Grotesk Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2")
+    format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2")
+    format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 300 500;
+  ascent-override: 89.5241%;
+  descent-override: 26.5661%;
+  line-gap-override: 0%;
+  size-adjust: 109.9146%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 700;
+  ascent-override: 96.3879%;
+  descent-override: 28.6029%;
+  line-gap-override: 0%;
+  size-adjust: 102.0875%;
+}
+
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 100 500;
+  ascent-override: 88.9575%;
+  descent-override: 21.2769%;
+  line-gap-override: 0%;
+  size-adjust: 98.6988%;
+}
+
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 900;
+  ascent-override: 89.2845%;
+  descent-override: 21.3551%;
+  line-gap-override: 0%;
+  size-adjust: 98.3373%;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Fallback";
+  src: local("Courier New"), local("CourierNewPSMT");
+  font-weight: 400;
+  ascent-override: 102.5167%;
+  descent-override: 27.5045%;
+  size-adjust: 99.9837%;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Fallback";
+  src: local("Courier New Bold"), local("CourierNewPS-BoldMT");
+  font-weight: 700;
+  ascent-override: 102.5167%;
+  descent-override: 27.5045%;
+  size-adjust: 99.9837%;
 }
 
 :root {
@@ -109,7 +224,12 @@
 
   h1,
   h2,
-  h3,
+  h3 {
+    font-family: var(--font-portfolio);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
   h4 {
     font-family: var(--font-portfolio);
     letter-spacing: -0.02em;
@@ -164,6 +284,7 @@
     transparent 1px,
     transparent 9px
   );
+  -webkit-mask-image: radial-gradient(ellipse 80% 52% at 50% 0%, #000 28%, transparent 82%);
   mask-image: radial-gradient(ellipse 80% 52% at 50% 0%, #000 28%, transparent 82%);
 }
 
@@ -174,6 +295,7 @@
     transparent 0
   );
   background-size: 36px 36px;
+  -webkit-mask-image: linear-gradient(to left, #000, transparent 86%);
   mask-image: linear-gradient(to left, #000, transparent 86%);
 }
 
@@ -272,8 +394,18 @@
   animation-delay: calc(120ms + var(--word-index) * var(--stagger));
 }
 
-.hero-portrait {
-  animation: hero-fade-in var(--dur-state) var(--ease-refine) 400ms both;
+@keyframes hero-veil-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.hero-portrait-veil {
+  background: var(--ground-raised);
+  animation: hero-veil-out var(--dur-state) var(--ease-refine) 400ms both;
 }
 
 .hero-portrait-image {
@@ -299,7 +431,7 @@
   --magnetic-label-x: 0px;
   --magnetic-label-y: 0px;
   transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0);
-  transition: transform 420ms var(--ease-press);
+  transition: transform var(--dur-reveal) var(--ease-press);
 }
 
 .magnetic[data-magnetic-active="true"] {
@@ -322,7 +454,7 @@
 
 .magnetic-label {
   transform: translate3d(var(--magnetic-label-x), var(--magnetic-label-y), 0);
-  transition: transform 420ms var(--ease-press);
+  transition: transform var(--dur-reveal) var(--ease-press);
 }
 
 .magnetic[data-magnetic-active="true"] .magnetic-label {
@@ -397,6 +529,10 @@ html[data-motion="paused"] .the-cut-word-cycle > span {
   transition: none;
 }
 
+html[data-motion="paused"] .hero-portrait-veil {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .the-cut-word-cycle > span {
     transition: none;
@@ -415,7 +551,7 @@ html[data-motion="paused"] .the-cut-word-cycle > span {
 html[data-motion="paused"] .hero-eyebrow-rule,
 html[data-motion="paused"] .hero-eyebrow-text,
 html[data-motion="paused"] .hero-word,
-html[data-motion="paused"] .hero-portrait,
+html[data-motion="paused"] .hero-portrait-veil,
 html[data-motion="paused"] .hero-body,
 html[data-motion="paused"] .hero-cta,
 html[data-motion="paused"] .animate-marquee,
@@ -430,7 +566,6 @@ html[data-motion="paused"] .hero-eyebrow-rule {
 html[data-motion="paused"] .hero-word,
 html[data-motion="paused"] .hero-body,
 html[data-motion="paused"] .hero-cta,
-html[data-motion="paused"] .hero-portrait,
 html[data-motion="paused"] .hero-eyebrow-text,
 html[data-motion="paused"] .scroll-reveal {
   opacity: 1;
@@ -508,8 +643,8 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   opacity: 0;
   transform: translateY(28px);
   transition:
-    opacity 700ms ease,
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity var(--dur-reveal) var(--ease-refine),
+    transform var(--dur-reveal) var(--ease-refine);
 }
 
 .scroll-reveal-visible {
@@ -609,12 +744,16 @@ html[data-motion="paused"] .scroll-reveal-stagger > * {
   .hero-eyebrow-rule,
   .hero-eyebrow-text,
   .hero-word,
-  .hero-portrait,
+  .hero-portrait-veil,
   .hero-body,
   .hero-cta {
     animation: none !important;
     opacity: 1;
     transform: none;
+  }
+
+  .hero-portrait-veil {
+    display: none;
   }
 
   .magnetic,

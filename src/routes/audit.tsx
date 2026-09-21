@@ -1,35 +1,28 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SmsConsent } from "@/components/SmsConsent";
 import { z } from "zod";
-import { Check, QrCode, Sparkles, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
+
+const TITLE = "Free Website Audit: a 5-Minute Video Teardown | The Roy Effect";
+const DESCRIPTION =
+  "A free personal video teardown of your website's conversion, mobile experience and brand positioning. Three fixes ranked by impact, in your inbox within one business day.";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
     meta: [
-      { title: "Free Website Audit for Houston Small Businesses" },
-      {
-        name: "description",
-        content:
-          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
-      },
-      { property: "og:title", content: "Free Website Audit for Houston Small Businesses" },
-      {
-        property: "og:description",
-        content:
-          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
-      },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theroyeffect.com/audit" },
       { name: "twitter:card", content: "summary_large_image" },
-      {
-        name: "twitter:description",
-        content:
-          "A free personal video teardown of your website's conversion, mobile experience and brand positioning, for Houston small businesses.",
-      },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
     links: [{ rel: "canonical", href: "https://theroyeffect.com/audit" }],
     scripts: [
@@ -59,6 +52,22 @@ const auditSchema = z.object({
   notes: z.string().trim().max(1000).optional(),
 });
 
+type FieldName = "name" | "email" | "websiteUrl" | "bottleneck" | "notes";
+
+const FIELD_ORDER: FieldName[] = ["websiteUrl", "name", "email", "bottleneck", "notes"];
+
+const FIELD_IDS: Record<FieldName, string> = {
+  websiteUrl: "audit-url",
+  name: "audit-name",
+  email: "audit-email",
+  bottleneck: "audit-bottleneck",
+  notes: "audit-notes",
+};
+
+const LABEL_CLASS = "block font-mono text-[11px] uppercase tracking-wider text-[var(--ink-muted)]";
+const CONTROL_CLASS =
+  "mt-2 w-full min-h-12 border border-[var(--line)] bg-[var(--ground-raised)] px-4 py-3 font-portfolio-body text-base text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)]";
+
 export function AuditPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -69,15 +78,42 @@ export function AuditPage() {
   const [smsMarketing, setSmsMarketing] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const clearError = (field: FieldName) =>
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+
+  const errorProps = (field: FieldName) =>
+    errors[field]
+      ? { "aria-invalid": true, "aria-describedby": `audit-${field}-error` }
+      : { "aria-invalid": undefined, "aria-describedby": undefined };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = auditSchema.safeParse({ name, email, websiteUrl, bottleneck, notes });
     if (!result.success) {
+      const fieldErrors: Partial<Record<FieldName, string>> = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as FieldName | undefined;
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
       toast.error(result.error.issues[0]?.message ?? "Please check the form");
+      const firstInvalid = FIELD_ORDER.find((field) => fieldErrors[field]);
+      if (firstInvalid) {
+        const el = formRef.current?.querySelector<HTMLElement>(`#${FIELD_IDS[firstInvalid]}`);
+        el?.focus();
+      }
       return;
     }
 
+    setErrors({});
     setSending(true);
     try {
       const response = await fetch("/api/public/contact", {
@@ -100,6 +136,7 @@ export function AuditPage() {
       if (!response.ok) throw new Error(data.error || "Failed to submit request");
 
       setSubmitted(true);
+      trackAnalyticsEvent("audit_submitted");
       toast.success("Audit request received! Rory will send your video teardown within 24 hours.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -108,26 +145,34 @@ export function AuditPage() {
     }
   };
 
+  const fieldError = (field: FieldName) =>
+    errors[field] ? (
+      <p id={`audit-${field}-error`} role="alert" className="mt-2 text-sm text-[var(--furnace)]">
+        {errors[field]}
+      </p>
+    ) : null;
+
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 text-white md:px-10 md:py-24">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="min-h-screen bg-[var(--ground)] px-5 py-16 text-[var(--ink)] md:px-10 md:py-24"
+    >
       <Toaster />
       <div className="mx-auto max-w-4xl">
         {/* Top Header & Logo */}
-        <div className="flex flex-col items-center justify-center text-center">
-          <Logo variant="stacked" size="lg" href="/" className="mb-6" />
-          <div className="mt-2 inline-flex items-center gap-2 border border-[#DFBA73]/30 bg-[#DFBA73]/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.25em] text-[#F6DC9A] uppercase">
-            <Sparkles className="size-3" />
-            THE 5-MINUTE AUDIT &bull; COMPLIMENTARY TEARDOWN
-          </div>
+        <div className="flex flex-col">
+          <Logo variant="stacked" size="lg" href="/" className="mb-6 self-start" />
+          <span className="mt-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--gold)]">
+            The 5-minute audit &bull; complimentary teardown
+          </span>
 
-          <h1 className="mt-6 font-display text-4xl uppercase leading-[0.9] text-white sm:text-6xl md:text-7xl">
-            Free Website Audit <br />
-            <span className="text-[#E51924] drop-shadow-[0_0_24px_rgba(229,25,36,0.4)]">
-              For Houston Businesses
-            </span>
+          <h1 className="mt-6 font-portfolio text-[length:var(--type-display)] font-bold leading-[0.95] text-[var(--ink)]">
+            Free website audit <br />
+            <span className="text-[var(--ink-muted)]">a 5-minute video teardown of your site.</span>
           </h1>
 
-          <p className="mt-5 max-w-xl font-mono text-xs leading-relaxed text-white/60 sm:text-sm">
+          <p className="mt-5 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
             Most local service websites in Houston look dated, load slowly on phones, and send
             high-paying clients straight to a competitor. Send me your URL and I'll record a free
             5-minute video breaking down your UX bottlenecks and conversion leaks — no sales call,
@@ -139,43 +184,49 @@ export function AuditPage() {
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {[
             {
-              title: "Conversion Teardown",
+              title: "Conversion teardown",
               desc: "Pinpoint exact friction points where visitors bounce before filling out your form or calling.",
               tag: "STEP 1",
             },
             {
-              title: "Mobile & Brand Score",
+              title: "Mobile & brand score",
               desc: "Full evaluation of mobile responsiveness, typographic hierarchy, and premium perceived value.",
               tag: "STEP 2",
             },
             {
-              title: "3 Actionable Fixes",
+              title: "3 actionable fixes",
               desc: "A personalized 5-minute video report with exact changes to increase inquiries immediately.",
               tag: "STEP 3",
             },
           ].map((pillar) => (
             <div
               key={pillar.title}
-              className="border border-white/10 bg-white/[0.02] p-5 transition-all hover:border-[#DFBA73]/40"
+              className="border border-[var(--line)] bg-[var(--ground-raised)] p-5 transition-colors hover:border-[var(--gold)]"
             >
-              <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">
+              <span className="font-mono text-[11px] tracking-widest text-[var(--gold)]">
                 {pillar.tag}
               </span>
-              <h3 className="mt-2 font-display text-xl uppercase text-white">{pillar.title}</h3>
-              <p className="mt-2 font-mono text-xs leading-relaxed text-white/50">{pillar.desc}</p>
+              <h3 className="mt-2 font-portfolio text-lg font-bold leading-snug text-[var(--ink)]">
+                {pillar.title}
+              </h3>
+              <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+                {pillar.desc}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Audit Request Form / Confirmation */}
-        <div className="mt-12 border border-white/15 bg-white/[0.02] p-6 md:p-10 shadow-2xl">
+        <div className="mt-12 border border-[var(--line)] bg-[var(--ground-raised)] p-6 md:p-10">
           {submitted ? (
-            <div className="py-8 text-center space-y-4">
-              <div className="mx-auto flex size-14 items-center justify-center rounded-full border border-[#DFBA73] bg-[#DFBA73]/10 text-[#DFBA73]">
+            <div className="space-y-4 py-8">
+              <div className="flex size-14 items-center justify-center rounded-full border border-[var(--gold)] text-[var(--gold)]">
                 <Check className="size-7" />
               </div>
-              <h2 className="font-display text-3xl uppercase text-white">AUDIT REQUEST RECEIVED</h2>
-              <p className="mx-auto max-w-md font-mono text-xs leading-relaxed text-white/60">
+              <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
+                Audit request received
+              </h2>
+              <p className="max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
                 Thanks, <strong>{name}</strong>. Rory Ulloa is reviewing{" "}
                 <strong>{websiteUrl}</strong> and will email your personalized teardown within 1
                 business day.
@@ -183,93 +234,110 @@ export function AuditPage() {
               <div className="pt-4">
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-2 bg-[#E51924] px-6 py-3 font-mono text-xs font-bold tracking-widest text-white hover:bg-[#FF3333]"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-none border border-[var(--gold)] px-6 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:bg-[var(--gold)] hover:text-black"
                 >
                   EXPLORE THE STUDIO ↗
                 </Link>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="border-b border-white/10 pb-4">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-[#DFBA73]">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+              <div className="border-b border-[var(--line)] pb-4">
+                <span className="font-mono text-[11px] uppercase tracking-widest text-[var(--gold)]">
                   CLAIM YOUR COMPLIMENTARY SPOT
                 </span>
-                <h2 className="mt-1 font-display text-2xl uppercase text-white sm:text-3xl">
-                  REQUEST YOUR 5-MINUTE TEARDOWN
+                <h2 className="mt-1 font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
+                  Request your 5-minute teardown
                 </h2>
-                <p className="mt-1 font-mono text-xs text-white/50">
+                <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
                   100% free • No sales calls required • Delivered straight to your inbox
                 </p>
               </div>
 
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
-                  <label
-                    htmlFor="audit-url"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
-                  >
+                  <label htmlFor="audit-url" className={LABEL_CLASS}>
                     Your Website URL *
                   </label>
                   <input
                     id="audit-url"
+                    name="website"
                     type="text"
                     required
+                    autoComplete="url"
+                    inputMode="url"
+                    autoCapitalize="none"
+                    spellCheck={false}
                     value={websiteUrl}
-                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    onChange={(e) => {
+                      setWebsiteUrl(e.target.value);
+                      clearError("websiteUrl");
+                    }}
                     placeholder="https://yourbusiness.com"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className={CONTROL_CLASS}
+                    {...errorProps("websiteUrl")}
                   />
+                  {fieldError("websiteUrl")}
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="audit-name"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
-                  >
+                  <label htmlFor="audit-name" className={LABEL_CLASS}>
                     Your Name *
                   </label>
                   <input
                     id="audit-name"
+                    name="name"
                     type="text"
                     required
+                    autoComplete="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      clearError("name");
+                    }}
                     placeholder="Jane Doe"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className={CONTROL_CLASS}
+                    {...errorProps("name")}
                   />
+                  {fieldError("name")}
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="audit-email"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
-                  >
+                  <label htmlFor="audit-email" className={LABEL_CLASS}>
                     Your Work Email * (Where we send the audit)
                   </label>
                   <input
                     id="audit-email"
+                    name="email"
                     type="email"
                     required
+                    autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      clearError("email");
+                    }}
                     placeholder="jane@yourbusiness.com"
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                    className={CONTROL_CLASS}
+                    {...errorProps("email")}
                   />
+                  {fieldError("email")}
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="audit-bottleneck"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
-                  >
+                  <label htmlFor="audit-bottleneck" className={LABEL_CLASS}>
                     Biggest Challenge / Goal *
                   </label>
                   <select
                     id="audit-bottleneck"
+                    name="bottleneck"
                     value={bottleneck}
-                    onChange={(e) => setBottleneck(e.target.value)}
-                    className="mt-2 w-full border border-white/15 bg-[#030014] p-3 font-mono text-xs text-[#DFBA73] focus:border-[#DFBA73] focus:outline-none"
+                    onChange={(e) => {
+                      setBottleneck(e.target.value);
+                      clearError("bottleneck");
+                    }}
+                    className={CONTROL_CLASS}
+                    {...errorProps("bottleneck")}
                   >
                     <option value="Conversion Rate & Inbound Leads">
                       Low conversion rate & few inquiries
@@ -287,24 +355,28 @@ export function AuditPage() {
                       General teardown & high-level recommendations
                     </option>
                   </select>
+                  {fieldError("bottleneck")}
                 </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="audit-notes"
-                  className="block font-mono text-[11px] uppercase tracking-wider text-white/70"
-                >
+                <label htmlFor="audit-notes" className={LABEL_CLASS}>
                   Any specific pages or competitors we should look at? (Optional)
                 </label>
                 <textarea
                   id="audit-notes"
+                  name="notes"
                   rows={3}
                   value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  onChange={(e) => {
+                    setNotes(e.target.value);
+                    clearError("notes");
+                  }}
                   placeholder="e.g. Please look at our services page. Our main competitor is..."
-                  className="mt-2 w-full resize-none border border-white/15 bg-[#030014] p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none"
+                  className={`${CONTROL_CLASS} resize-none`}
+                  {...errorProps("notes")}
                 />
+                {fieldError("notes")}
               </div>
 
               <SmsConsent
@@ -315,18 +387,18 @@ export function AuditPage() {
                 }
               />
 
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-                <div className="flex items-center gap-2 font-mono text-[11px] text-white/50">
-                  <ShieldCheck className="size-4 text-[#DFBA73]" />
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--line)] pt-6">
+                <div className="flex items-center gap-2 font-mono text-[11px] text-[var(--ink-faint)]">
+                  <ShieldCheck className="size-4 text-[var(--gold)]" />
                   <span>Strictly confidential. No spam or sales pressure.</span>
                 </div>
 
                 <button
                   type="submit"
                   disabled={sending}
-                  className="inline-flex items-center gap-2 bg-[#E51924] px-8 py-3.5 font-mono text-xs font-bold tracking-widest text-white transition-all hover:bg-[#FF3333] hover:shadow-[0_0_24px_rgba(229,25,36,0.6)] disabled:opacity-50"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-none bg-[var(--furnace)] px-8 font-mono text-xs font-bold tracking-widest text-black transition-colors hover:bg-[var(--ink)] disabled:opacity-50"
                 >
-                  {sending ? "SUBMITTING..." : "GET FREE 5-MINUTE AUDIT →"}
+                  {sending ? "SUBMITTING..." : "GET MY FREE AUDIT"}
                 </button>
               </div>
             </form>
@@ -335,13 +407,13 @@ export function AuditPage() {
 
         {/* Who it's for */}
         <section className="mt-16">
-          <h2 className="font-display text-2xl uppercase text-white sm:text-3xl">
+          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
             Who the audit is for
           </h2>
-          <p className="mt-3 max-w-2xl font-mono text-xs leading-relaxed text-white/60">
+          <p className="mt-3 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
             I work mostly with owner-run businesses around Houston — contractors, clinics, law and
-            accounting practices, salons, restaurants, real estate agents and B2B service firms.
-            If people find you, look at the site, and still call someone else, the audit shows you
+            accounting practices, salons, restaurants, real estate agents and B2B service firms. If
+            people find you, look at the site, and still call someone else, the audit shows you
             where that happens.
           </p>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -353,9 +425,9 @@ export function AuditPage() {
             ].map((item) => (
               <li
                 key={item}
-                className="flex items-start gap-2 border border-white/10 bg-white/[0.02] p-4 font-mono text-xs leading-relaxed text-white/60"
+                className="flex max-w-[60ch] items-start gap-2 border border-[var(--line)] bg-[var(--ground-raised)] p-4 font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]"
               >
-                <Zap className="mt-0.5 size-3.5 shrink-0 text-[#DFBA73]" />
+                <Zap className="mt-1.5 size-3.5 shrink-0 text-[var(--gold)]" />
                 <span>{item}</span>
               </li>
             ))}
@@ -364,7 +436,7 @@ export function AuditPage() {
 
         {/* What happens next */}
         <section className="mt-14">
-          <h2 className="font-display text-2xl uppercase text-white sm:text-3xl">
+          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
             What happens after you submit
           </h2>
           <ol className="mt-5 space-y-4">
@@ -375,8 +447,12 @@ export function AuditPage() {
               "If you want me to make those fixes, we talk. If not, the notes are yours to keep.",
             ].map((step, i) => (
               <li key={step} className="flex gap-4">
-                <span className="font-display text-2xl text-[#E51924]">0{i + 1}</span>
-                <p className="font-mono text-xs leading-relaxed text-white/60">{step}</p>
+                <span className="font-portfolio text-2xl font-bold text-[var(--gold)]">
+                  0{i + 1}
+                </span>
+                <p className="max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+                  {step}
+                </p>
               </li>
             ))}
           </ol>
@@ -384,7 +460,7 @@ export function AuditPage() {
 
         {/* FAQ */}
         <section className="mt-14">
-          <h2 className="font-display text-2xl uppercase text-white sm:text-3xl">
+          <h2 className="font-portfolio text-[length:var(--type-h3)] font-bold leading-[1.1] text-[var(--ink)]">
             Common questions
           </h2>
           <div className="mt-5 space-y-4">
@@ -406,16 +482,23 @@ export function AuditPage() {
                 a: "Send the closest thing you have — a social profile, a directory listing, or a competitor you admire — and I'll review positioning instead of layout.",
               },
             ].map((faq) => (
-              <div key={faq.q} className="border border-white/10 bg-white/[0.02] p-5">
-                <h3 className="font-display text-lg uppercase text-white">{faq.q}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-white/60">{faq.a}</p>
+              <div
+                key={faq.q}
+                className="border border-[var(--line)] bg-[var(--ground-raised)] p-5"
+              >
+                <h3 className="font-portfolio text-lg font-bold leading-snug text-[var(--ink)]">
+                  {faq.q}
+                </h3>
+                <p className="mt-2 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+                  {faq.a}
+                </p>
               </div>
             ))}
           </div>
           <div className="mt-8">
             <Link
               to="/pricing"
-              className="inline-flex items-center gap-2 border border-[#DFBA73]/40 px-6 py-3 font-mono text-xs font-bold tracking-widest text-[#F6DC9A] transition-all hover:bg-[#DFBA73] hover:text-black"
+              className="inline-flex min-h-12 items-center gap-2 rounded-none border border-[var(--gold)] px-6 font-mono text-xs font-bold tracking-widest text-[var(--gold)] transition-colors hover:bg-[var(--gold)] hover:text-black"
             >
               SEE PRICING <ArrowRight className="size-3.5" />
             </Link>
@@ -425,5 +508,3 @@ export function AuditPage() {
     </main>
   );
 }
-
-

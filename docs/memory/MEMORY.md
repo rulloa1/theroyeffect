@@ -21,6 +21,7 @@ fact needs rich structure (a table, a Why, several links).
 - [Brain Runs Commonjs](project_brain_runs_commonjs.md) — 2026-09-15 The brain engine is vendored at rubric-second-brain/ and runs CommonJS via its own package.json, because th...
 - [Scheduled Jobs](project_scheduled_jobs.md) — 2026-09-15 Two hourly pg_cron jobs run in Supabase — follow-up autopilot at :17 and prospect CRM sync at :47.
 - [Ci Gates](project_ci_gates.md) — 2026-09-15 CI lint reports but does not block; typecheck and tests are the hard gates.
+- [Refinery Motion System](project_refinery_motion_system.md) — 2026-09-20 Refinery homepage motion uses choreographed transform/opacity entrances, magnetic CTAs, gold focus rings, a...
 
 ## Reference
 
@@ -30,11 +31,11 @@ fact needs rich structure (a table, a Why, several links).
 - [Site Mcp Server](reference_site_mcp_server.md) — 2026-09-15 The site hosts its own MCP server at /mcp, OAuth-protected through Supabase auth.
 - [Ai Provider Order](reference_ai_provider_order.md) — 2026-09-15 Drafting prefers the Lovable AI Gateway and falls back to direct Gemini only when the gateway key is absent.
 - [Email Sender Domains](reference_email_sender_domains.md) — 2026-09-15 Transactional email sends from notify.theroyeffect.com; the From header shows theroyeffect.com.
+- [Branch Cleanup](reference_branch_cleanup.md) — 2026-09-20 Merged branches cannot be deleted from a Claude Code remote session: the egress proxy answers git ref delet...
+- [Env Files Tracked](reference_env_files_tracked.md) — 2026-09-17 Env files (.env, .env.development, .env.staging, .env.production) are tracked in git on purpose for now: Vi...
 
 ## User
 
 _Preferences and working style — nothing filed yet._
 
 ## New / Unsorted (filed by brain store — sort into a section when touched)
-- [Env Files Tracked](reference_env_files_tracked.md) — 2026-09-17 Env files (.env, .env.development, .env.staging, .env.production) are tracked in git on purpose for now: Vi...
-- [Refinery Motion System](refinery_motion_system.md) — 2026-09-20 Refinery homepage motion uses choreographed transform/opacity entrances, magnetic CTAs, gold focus rings, a...

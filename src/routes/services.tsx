@@ -50,7 +50,7 @@ export const Route = createFileRoute("/services")({
 
 function ServicesPage() {
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
       <div className="mx-auto max-w-5xl">
         <Logo variant="compact" size="md" href="/" className="mb-10" />
 

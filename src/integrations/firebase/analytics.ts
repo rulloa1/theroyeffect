@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
+import { getAnalytics, isSupported, logEvent, type Analytics } from "firebase/analytics";
 
 import { getFirebaseConfig } from "./config";
 
@@ -24,4 +24,12 @@ export async function startFirebaseAnalytics(): Promise<Analytics | null> {
       ? getApp()
       : initializeApp({ ...options, ...(measurementId ? { measurementId } : {}) });
   return getAnalytics(app);
+}
+
+export function trackAnalyticsEvent(name: string, parameters?: Record<string, string>): void {
+  void startFirebaseAnalytics()
+    .then((analytics) => {
+      if (analytics) logEvent(analytics, name, parameters);
+    })
+    .catch(() => undefined);
 }

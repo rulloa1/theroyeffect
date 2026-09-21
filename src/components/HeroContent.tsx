@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/refinery/Magnetic";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 import portraitAsset from "@/assets/rory-portrait-clean.webp.asset.json";
 
 const HEADLINE = "I design and build websites people remember.";
@@ -22,13 +23,14 @@ export function HeroContent() {
             fetchPriority="high"
             className="hero-portrait-image absolute inset-0 h-full w-full object-contain object-bottom grayscale contrast-125 md:object-cover md:object-[52%_center]"
           />
+          <div aria-hidden className="hero-portrait-veil pointer-events-none absolute inset-0" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--ground)] via-transparent to-transparent" />
         <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8">
           <p className="font-portfolio text-3xl font-bold leading-none text-[var(--ink)] md:text-5xl">
             RORY ULLOA
           </p>
-          <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-[var(--gold)]">
+          <p className="mt-2 font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--gold)]">
             THE ROY EFFECT · HOUSTON
           </p>
         </div>
@@ -44,18 +46,18 @@ export function HeroContent() {
         <div className="relative z-10 max-w-4xl">
           <div className="hero-eyebrow flex items-center gap-3">
             <span className="hero-eyebrow-rule h-px w-8 origin-left bg-[var(--gold)]" />
-            <p className="hero-eyebrow-text font-mono text-[10px] font-bold tracking-[0.18em] text-[var(--gold)] sm:text-xs">
-              DESIGN DEVELOPER + WEB DEVELOPER
+            <p className="hero-eyebrow-text font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--gold)]">
+              DESIGN + BUILD · HOUSTON
             </p>
           </div>
           <h1
             aria-label={HEADLINE}
-            className="hero-headline mt-6 max-w-4xl font-portfolio text-[length:var(--type-display)] font-bold leading-[0.9] text-[var(--ink)]"
+            className="hero-headline mt-6 max-w-4xl font-portfolio text-[length:var(--type-display)] font-bold leading-[0.95] text-[var(--ink)]"
           >
             <span aria-hidden="true">
               {HEADLINE.split(" ").map((word, index, words) => (
                 <span key={`${word}-${index}`}>
-                  <span className="inline-block overflow-hidden align-bottom">
+                  <span className="-mb-[0.16em] inline-block overflow-hidden pb-[0.16em] align-bottom">
                     <span
                       className="hero-word inline-block"
                       style={{ "--word-index": index } as CSSProperties}
@@ -68,9 +70,9 @@ export function HeroContent() {
               ))}
             </span>
           </h1>
-          <p className="hero-body mt-6 max-w-[68ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
-            I combine creative direction, modern web development, motion, and strategic design to
-            build digital experiences that look exceptional and help businesses stand out.
+          <p className="hero-body mt-6 max-w-[52ch] font-portfolio-body text-[length:var(--type-lead)] leading-relaxed text-[var(--ink-muted)]">
+            One person designs it and builds it, so the site you approve is the site that goes live.
+            Start with a free 5-minute video audit of the one you have.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <span className="hero-cta hero-cta-primary w-full sm:w-auto">
@@ -80,9 +82,12 @@ export function HeroContent() {
                   size="lg"
                   className="w-full rounded-none px-7 font-mono text-xs font-bold tracking-widest"
                 >
-                  <Link to="/" hash="work">
+                  <Link
+                    to="/audit"
+                    onClick={() => trackAnalyticsEvent("audit_cta_click", { placement: "hero" })}
+                  >
                     <span className="magnetic-label inline-flex items-center gap-2">
-                      VIEW MY WORK <ArrowUpRight />
+                      GET YOUR FREE AUDIT <ArrowUpRight />
                     </span>
                   </Link>
                 </Button>
@@ -96,8 +101,8 @@ export function HeroContent() {
                   variant="outline"
                   className="w-full rounded-none border-[var(--line)] bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--ink)]/5"
                 >
-                  <Link to="/brief">
-                    <span className="magnetic-label">START A PROJECT</span>
+                  <Link to="/" hash="work">
+                    <span className="magnetic-label">VIEW THE WORK</span>
                   </Link>
                 </Button>
               </Magnetic>

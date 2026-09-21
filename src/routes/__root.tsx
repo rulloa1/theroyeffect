@@ -11,28 +11,38 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import spaceGroteskLatin from "@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { captureClientError, initSentryClient } from "../lib/sentry/client";
 import { AuthProvider } from "@/hooks/useAuth";
 import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
-import { VoiceConcierge } from "@/components/VoiceConcierge";
+
+const SQUARE_BUTTON =
+  "inline-flex items-center justify-center rounded-none px-6 min-h-12 font-mono text-xs font-bold tracking-widest";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="flex min-h-screen items-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)]">
+      <div className="mx-auto w-full max-w-7xl">
+        <span className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">404</span>
+        <h1 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
+          This page isn't here.
+        </h1>
+        <p className="mt-4 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+          The link may be old, or the page moved.
         </p>
-        <div className="mt-6">
+        <div className="mt-8 flex flex-wrap gap-3">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            hash="work"
+            className={`${SQUARE_BUTTON} border border-[var(--line)] text-[var(--ink)]`}
           >
-            Go home
+            BACK TO THE WORK
+          </Link>
+          <Link to="/audit" className={`${SQUARE_BUTTON} bg-[var(--furnace)] text-black`}>
+            GET YOUR FREE AUDIT
           </Link>
         </div>
       </div>
@@ -49,29 +59,29 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+    <div className="flex min-h-screen items-center bg-[var(--ground)] px-[var(--gutter)] py-[var(--section-y)]">
+      <div className="mx-auto w-full max-w-7xl">
+        <span className="font-mono text-xs font-bold tracking-widest text-[var(--gold)]">
+          ERROR
+        </span>
+        <h1 className="mt-4 font-portfolio text-[length:var(--type-h2)] font-bold leading-none text-[var(--ink)]">
+          This page didn't load.
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-4 max-w-[60ch] font-portfolio-body text-base leading-relaxed text-[var(--ink-muted)]">
+          Something went wrong on our end. You can try again, or head back to the work.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className={`${SQUARE_BUTTON} border border-[var(--line)] text-[var(--ink)]`}
           >
-            Try again
+            TRY AGAIN
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
+          <a href="/audit" className={`${SQUARE_BUTTON} bg-[var(--furnace)] text-black`}>
+            GET YOUR FREE AUDIT
           </a>
         </div>
       </div>
@@ -192,19 +202,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Bold brand systems, high-contrast digital experiences and production-ready builds by Rory Ulloa.",
       },
-      { property: "og:site_name", content: "theroyeffect.com" },
+      { property: "og:site_name", content: "The Roy Effect" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "google-site-verification", content: "77GixI64Yh4THH1-qNE6EXBc87IRpeA76Jo1KHyaTCA" },
       { name: "google-site-verification", content: "abyZ_limkEmpSFo8qAaXN9SRvACJ8wTWriZNi-XPtAI" },
     ],
     links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      // Fonts are self-hosted; these two files are above the fold.
       {
-        rel: "stylesheet",
-        // font-display now resolves to Space Grotesk sitewide, so Anton is no longer requested.
-        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap",
+        rel: "preload",
+        href: spaceGroteskLatin,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: archivoLatin,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
       },
       {
         rel: "stylesheet",
@@ -232,6 +250,12 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--gold)] focus:px-4 focus:py-3 focus:font-mono focus:text-xs focus:font-bold focus:tracking-widest focus:text-[var(--ground)]"
+        >
+          SKIP TO CONTENT
+        </a>
         {children}
         <Scripts />
       </body>
@@ -289,9 +313,8 @@ function RootComponent() {
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           {/* The studio hub and client portal are signed-in tools, not marketing
-              surfaces: the public footer and the sales voice agent stay off them. */}
+              surfaces: the public footer stays off them. */}
           {!isSignedInTool && <SiteFooter />}
-          {!isSignedInTool && <VoiceConcierge />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>

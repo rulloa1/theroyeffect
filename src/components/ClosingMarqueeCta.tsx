@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
+import { trackAnalyticsEvent } from "@/integrations/firebase/analytics";
 
 const PHRASE = `${"The Roy Effect · ".repeat(8)}`;
 
@@ -41,7 +42,10 @@ export function ClosingMarqueeCta() {
           asChild
           className="mt-9 min-h-11 rounded-none bg-[#FF3333] px-7 font-mono text-xs font-bold tracking-widest text-black hover:bg-[#FF5555]"
         >
-          <Link to="/audit">
+          <Link
+            to="/audit"
+            onClick={() => trackAnalyticsEvent("audit_cta_click", { placement: "closing" })}
+          >
             GET YOUR FREE AUDIT <ArrowUpRight className="size-4" />
           </Link>
         </Button>

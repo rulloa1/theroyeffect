@@ -84,7 +84,7 @@ function ConnectPage() {
   const claudeCodeCommand = `claude mcp add --scope user --transport http ${SLUG} '${shownUrl.replaceAll("'", "'\\''")}'`;
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
+    <main id="main" tabIndex={-1} className="min-h-screen bg-[#030014] px-5 py-16 md:px-10 md:py-24">
       <div className="mx-auto max-w-4xl">
         <Logo variant="compact" size="md" href="/" className="mb-12" />
         <span className="font-mono text-xs tracking-widest text-[#FF3333]">AI ASSISTANTS</span>

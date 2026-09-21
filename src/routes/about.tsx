@@ -58,7 +58,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-background">
+    <main id="main" tabIndex={-1} className="relative min-h-screen overflow-x-clip bg-background">
       <ParticleBackground />
       <PortfolioHeader />
 
