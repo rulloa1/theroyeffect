@@ -16,7 +16,6 @@ import { captureClientError, initSentryClient } from "../lib/sentry/client";
 import { AuthProvider } from "@/hooks/useAuth";
 import { FirebaseProvider } from "@/integrations/firebase/provider";
 import { SiteFooter } from "@/components/SiteFooter";
-import { VoiceConcierge } from "@/components/VoiceConcierge";
 
 function NotFoundComponent() {
   return (
@@ -289,9 +288,8 @@ function RootComponent() {
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           {/* The studio hub and client portal are signed-in tools, not marketing
-              surfaces: the public footer and the sales voice agent stay off them. */}
+              surfaces: the public footer stays off them. */}
           {!isSignedInTool && <SiteFooter />}
-          {!isSignedInTool && <VoiceConcierge />}
         </FirebaseProvider>
       </AuthProvider>
     </QueryClientProvider>
