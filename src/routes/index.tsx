@@ -1,17 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PortfolioHeader } from "@/components/PortfolioHeader";
-import { HeroContent } from "@/components/HeroContent";
-import { PortfolioWorkGallery } from "@/components/PortfolioWorkGallery";
-import { PortfolioSections } from "@/components/PortfolioSections";
-import { RefineryScene } from "@/components/refinery/RefineryScene";
-import { TheCut } from "@/components/refinery/TheCut";
+import { MarkupHome } from "@/components/markup/MarkupHome";
+import { MARKUP_FONT_PRELOADS } from "@/components/markup/fonts";
 import { SITE_URL } from "@/lib/site";
-import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
+import ogImageAsset from "@/assets/og-markup.jpg.asset.json";
 
-const HERO_IMAGE_ABSOLUTE = `${SITE_URL}${ogImageAsset.url}`;
+// Asset URLs may already be absolute; only prefix the site when they're not.
+const OG_IMAGE = /^https?:\/\//.test(ogImageAsset.url)
+  ? ogImageAsset.url
+  : `${SITE_URL}${ogImageAsset.url}`;
+const OG_ALT =
+  "Your work is better than your website. A marked-up homepage with three numbered fixes.";
 const TITLE = "Houston Web Design — Rory Ulloa | The Roy Effect";
 const DESCRIPTION =
-  "Houston web design, UI/UX, brand systems and no-code builds by independent creative director Rory Ulloa. Free personalised video website audit.";
+  "Send your URL and get a free five-minute video teardown of your website, with three fixes ranked by impact. Brand, web design and build by Rory Ulloa in Houston.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,30 +23,15 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${SITE_URL}/` },
-      { property: "og:image", content: HERO_IMAGE_ABSOLUTE },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: OG_ALT },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: HERO_IMAGE_ABSOLUTE },
+      { name: "twitter:image", content: OG_IMAGE },
+      { name: "twitter:image:alt", content: OG_ALT },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
+    links: [...MARKUP_FONT_PRELOADS, { rel: "canonical", href: `${SITE_URL}/` }],
   }),
-  component: Home,
+  component: MarkupHome,
 });
-
-function Home() {
-  return (
-    <main id="main" tabIndex={-1} className="homepage-root relative flex min-h-screen flex-col overflow-x-clip bg-[var(--ground)]">
-      <RefineryScene />
-      <PortfolioHeader />
-      <section
-        data-home-hero
-        data-refinery-chapter="hero"
-        className="relative z-20 bg-[var(--veil-ground)] px-2 pb-2 md:px-4 md:pb-4"
-      >
-        <HeroContent />
-      </section>
-      <TheCut />
-      <PortfolioWorkGallery />
-      <PortfolioSections />
-    </main>
-  );
-}
