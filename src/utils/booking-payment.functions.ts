@@ -6,6 +6,8 @@ import {
   createCheckoutSessionWithTaxFallback,
   createStripeClient,
   getStripeErrorMessage,
+  resolvePaymentsEnv,
+  sessionMatchesEnv,
 } from "@/lib/stripe.server";
 
 const DISCOVERY_PRICE_KEY = "discovery_call_fee";
@@ -20,7 +22,8 @@ const checkoutInputSchema = z.object({
   smsService: z.boolean().optional().default(false),
   smsMarketing: z.boolean().optional().default(false),
   returnUrl: z.string().trim().url().max(500),
-  environment: z.enum(["sandbox", "live"]),
+  // Accepted for client compatibility but ignored: the server decides the environment.
+  environment: z.enum(["sandbox", "live"]).optional(),
 });
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -54,7 +57,7 @@ export const createDiscoveryCheckoutSession = createServerFn({ method: "POST" })
         .maybeSingle();
       if (clash?.id) return { error: "That time was just taken." };
 
-      const stripe = createStripeClient(data.environment as StripeEnv);
+      const stripe = createStripeClient(resolvePaymentsEnv());
       const prices = await stripe.prices.list({ lookup_keys: [DISCOVERY_PRICE_KEY] });
       const price = prices.data.find((p) => p.lookup_key === DISCOVERY_PRICE_KEY);
       if (!price) return { error: "The discovery call fee is not configured yet." };
@@ -103,17 +106,21 @@ export type DiscoveryConfirmation =
  * slot if the webhook has not landed yet. Idempotent on the session id.
  */
 export const confirmDiscoveryPayment = createServerFn({ method: "POST" })
-  .inputValidator((input: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((input: { sessionId: string; environment?: StripeEnv }) => {
     assertValidSessionId(input.sessionId);
     return input;
   })
   .handler(async ({ data }): Promise<DiscoveryConfirmation> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const env = resolvePaymentsEnv();
+      const stripe = createStripeClient(env);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
 
       if (session.metadata?.["purpose"] !== "discovery_call") {
         return { status: "invalid", message: "That payment is not a discovery call." };
+      }
+      if (!sessionMatchesEnv(session, env)) {
+        return { status: "invalid", message: "That payment was not made in this environment." };
       }
       if (session.payment_status === "unpaid") {
         return { status: "pending", message: "Payment is still processing." };

@@ -25,6 +25,14 @@ export function resolvePaymentsEnv(): StripeEnv {
   return process.env["STRIPE_LIVE_API_KEY"] ? "live" : "sandbox";
 }
 
+/**
+ * True when a Checkout Session was created in the environment this deployment
+ * transacts in. A test-mode session must never settle a live purchase.
+ */
+export function sessionMatchesEnv(session: { livemode: boolean }, env: StripeEnv): boolean {
+  return session.livemode === (env === "live");
+}
+
 export function createStripeClient(env: StripeEnv): Stripe {
   const connectionApiKey = getConnectionApiKey(env);
   const lovableApiKey = getEnv("LOVABLE_API_KEY");

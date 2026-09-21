@@ -8,6 +8,7 @@ import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 import { HomeNav } from "@/components/home/HomeNav";
 import { CustomCursor } from "@/components/home/CustomCursor";
 import { HeroExperience } from "@/components/home/experience/HeroExperience";
+import { ForgeSequence } from "@/components/home/sections/ForgeSequence";
 import { Services } from "@/components/home/sections/Services";
 import { EffectProcess } from "@/components/home/sections/EffectProcess";
 import { SelectedWork } from "@/components/home/sections/SelectedWork";
@@ -98,6 +99,7 @@ function Home() {
       <CustomCursor />
       <HeroExperience />
       <div id="experience-end" aria-hidden="true" />
+      <ForgeSequence />
       <Services />
       <EffectProcess />
       <SelectedWork />

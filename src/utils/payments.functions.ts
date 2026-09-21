@@ -16,6 +16,7 @@ import {
   createStripeClient,
   getStripeErrorMessage,
   resolvePaymentsEnv,
+  sessionMatchesEnv,
 } from "@/lib/stripe.server";
 import type Stripe from "stripe";
 
@@ -30,7 +31,8 @@ export const createCommissionCheckoutSession = createServerFn({ method: "POST" }
       tierLabel?: string | undefined;
       customerEmail?: string | undefined;
       returnUrl: string;
-      environment: StripeEnv;
+      /** Ignored: the server decides the environment. */
+      environment?: StripeEnv;
     }) => {
       assertValidPriceId(data.priceId);
       if (data.addOnPriceIds) assertValidPriceIds(data.addOnPriceIds);
@@ -39,7 +41,7 @@ export const createCommissionCheckoutSession = createServerFn({ method: "POST" }
   )
   .handler(async ({ data }): Promise<CheckoutSessionResult> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(resolvePaymentsEnv());
 
       // Taken from the caller's verified token, never from the request body:
       // this id decides which account the resulting order is filed under.
@@ -127,16 +129,20 @@ export type CheckoutSummary =
  * brief pages render real data instead of trusting the URL.
  */
 export const getCheckoutSessionSummary = createServerFn({ method: "GET" })
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string; environment?: StripeEnv }) => {
     assertValidSessionId(data.sessionId);
     return data;
   })
   .handler(async ({ data }): Promise<CheckoutSummary> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const env = resolvePaymentsEnv();
+      const stripe = createStripeClient(env);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
         expand: ["line_items"],
       });
+      if (!sessionMatchesEnv(session, env)) {
+        return { error: "That payment was not made in this environment" };
+      }
       const line = session.line_items?.data?.[0];
       return {
         status: (session.status ?? "open") as "complete" | "open" | "expired",
@@ -187,7 +193,7 @@ export const listMyBalanceDue = createServerFn({ method: "GET" })
 /** Starts an embedded Stripe checkout for the remaining balance of one order. */
 export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { orderId: string; returnUrl: string; environment: StripeEnv }) => {
+  .inputValidator((data: { orderId: string; returnUrl: string; environment?: StripeEnv }) => {
     if (!/^[0-9a-f-]{36}$/i.test(data.orderId)) throw new Error("Invalid order");
     return data;
   })
@@ -209,7 +215,7 @@ export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
         return { error: "This balance is already settled" };
       }
 
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(resolvePaymentsEnv());
       const label = String(order["tier_label"] || order["product_name"] || "Commission");
       const email = order["customer_email"] as string | null;
 
@@ -259,14 +265,18 @@ export const createBalanceCheckoutSession = createServerFn({ method: "POST" })
 /** Confirms a balance checkout on return, so settlement doesn't depend on the webhook alone. */
 export const confirmBalancePayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string; environment?: StripeEnv }) => {
     assertValidSessionId(data.sessionId);
     return data;
   })
   .handler(async ({ data }): Promise<{ paid: boolean; error?: string }> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      const env = resolvePaymentsEnv();
+      const stripe = createStripeClient(env);
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
+      if (!sessionMatchesEnv(session, env)) {
+        return { paid: false, error: "That payment was not made in this environment" };
+      }
       if (session.payment_status === "unpaid") return { paid: false };
       const { settleCommissionBalance } = await import("@/lib/booking/balance-payment.server");
       await settleCommissionBalance({
