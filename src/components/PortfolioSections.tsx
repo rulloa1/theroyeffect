@@ -209,7 +209,7 @@ export function PortfolioSections() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="w-full rounded-none border-[var(--ground)]/40 bg-transparent px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
+                  className="w-full rounded-none border-[var(--ground)]/40 bg-[var(--gold)] px-7 font-mono text-xs font-bold tracking-widest text-[var(--ground)] hover:bg-[var(--ground)] hover:text-white"
                 >
                   <Link to="/book">
                     <span className="magnetic-label">BOOK A FREE 15-MIN CALL</span>
