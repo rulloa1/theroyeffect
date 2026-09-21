@@ -22,7 +22,7 @@ const ANCHORS = [
   { label: "Pricing", hash: "after" },
 ] as const;
 
-export function MarkupHeader({ ctaFormId }: { ctaFormId?: string }) {
+export function MarkupHeader({ ctaFormId }: { ctaFormId?: string | undefined }) {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const close = () => setOpen(false);

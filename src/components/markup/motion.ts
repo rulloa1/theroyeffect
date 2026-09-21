@@ -10,7 +10,7 @@
 export function motionAllowedNow(): boolean {
   if (typeof document === "undefined") return false;
   const html = document.documentElement;
-  return html.classList.contains("mk-motion") && html.dataset.motion !== "paused";
+  return html.classList.contains("mk-motion") && html.dataset["motion"] !== "paused";
 }
 
 /** Keep the class in step when the visitor toggles "Pause motion". */
