@@ -6,6 +6,9 @@ const FRAME_COUNT = 96;
 const framePath = (n: number) => `/hero-frames/frame-${String(n).padStart(4, "0")}.jpg`;
 const POSTER = "/hero-frames/poster.jpg";
 
+/** Share of the viewport height the frame is lifted by, leaving a band for the copy. */
+const FRAME_LIFT = 0.025;
+
 const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Phones and save-data users get every other frame: half the bytes, same scrub. */
@@ -62,11 +65,18 @@ export function ForgeSequence() {
     function draw(idx: number) {
       const img = frames[idx];
       if (!img || !img.complete || !img.naturalWidth || !ctx2d || !canvas) return;
-      const r = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+      // Cover-fit, lifted so the mark clears the copy band below it. The frame only
+      // scales up when the viewport is too tall to lift into (16:9 and narrower);
+      // wider windows already crop enough vertically.
+      const lift = canvas.height * FRAME_LIFT;
+      const r = Math.max(
+        canvas.width / img.naturalWidth,
+        (canvas.height + lift * 2) / img.naturalHeight,
+      );
       const w = img.naturalWidth * r;
       const h = img.naturalHeight * r;
       ctx2d.clearRect(0, 0, canvas.width, canvas.height);
-      ctx2d.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+      ctx2d.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2 - lift, w, h);
     }
 
     const start = () => {
@@ -112,18 +122,29 @@ export function ForgeSequence() {
           },
         });
 
-        // Copy arrives once the light has settled into the finished mark.
-        gsap.fromTo(
-          ".forge-copy > *",
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            ease: "none",
-            stagger: 0.08,
-            scrollTrigger: { trigger: root, start: "62% top", end: "86% top", scrub: true },
+        // Copy arrives once the light has settled into the finished mark. Positions
+        // are fractions of the scrubbable range (section height minus one screen),
+        // not of the section's height, or the copy would never finish appearing.
+        const at = (fraction: number) => () =>
+          root.getBoundingClientRect().top +
+          window.scrollY +
+          (root.offsetHeight - window.innerHeight) * fraction;
+        // Hidden state is set explicitly: a staggered fromTo under scrub only
+        // applies it to the first element, leaving the headline visible early.
+        gsap.set(".forge-copy > *", { opacity: 0, y: 24 });
+        gsap.to(".forge-copy > *", {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: root,
+            start: at(0.62),
+            end: at(0.86),
+            scrub: true,
+            invalidateOnRefresh: true,
           },
-        );
+        });
       }, root);
     };
 
