@@ -1151,7 +1151,6 @@ function AdminPage() {
               label: `REDESIGN & PITCH (${(redesignData?.runs ?? []).length})`,
               icon: Rocket,
             },
-            { id: "COLDCALLS", label: "COLD CALLS", icon: Phone },
             { id: "FINANCIALS", label: "FINANCIALS & STATS", icon: DollarSign },
           ].map((tab) => {
             const Icon = tab.icon;
