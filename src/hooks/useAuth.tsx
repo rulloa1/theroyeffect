@@ -21,15 +21,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
-      setSession(next);
-      setLoading(false);
-    });
-    void supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
+    let mounted = true;
+    try {
+      const res = supabase.auth.onAuthStateChange((_event, next) => {
+        if (mounted) {
+          setSession(next);
+          setLoading(false);
+        }
+      });
+      void supabase.auth
+        .getSession()
+        .then(({ data }) => {
+          if (mounted) {
+            setSession(data?.session ?? null);
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (mounted) setLoading(false);
+        });
+
+      return () => {
+        mounted = false;
+        res?.data?.subscription?.unsubscribe();
+      };
+    } catch (err) {
+      console.warn("[AuthProvider] Supabase auth not available:", err);
+      if (mounted) {
+        setSession(null);
+        setLoading(false);
+      }
+    }
   }, []);
 
   const value = useMemo<AuthState>(

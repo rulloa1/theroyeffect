@@ -1,0 +1,8 @@
+{
+  "name": "The Roy Effect",
+  "description": "Portfolio and studio website for Rory Ulloa, Creative Director & UI/UX Designer crafting bold brand systems, high-contrast digital experiences, and builds.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -22,6 +22,10 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    server: {
+      host: "0.0.0.0",
+      port: 3000,
+    },
     build: {
       // Needed for readable Sentry stack traces; maps are uploaded and then
       // deleted by @sentry/vite-plugin in CI so they are never served publicly.
