@@ -51,6 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(null);
         setLoading(false);
       }
+      return () => {
+        mounted = false;
+      };
     }
   }, []);
 
