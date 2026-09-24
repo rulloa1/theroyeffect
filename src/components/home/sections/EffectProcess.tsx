@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { useMotionPaused } from "@/lib/motion-preference";
 import { EFFECT_PROCESS } from "../content";
 
 /**
@@ -7,12 +8,48 @@ import { EFFECT_PROCESS } from "../content";
  * stage; the rail fills to show everything that happened before it.
  */
 export function EffectProcess() {
+  const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const motionPaused = useMotionPaused();
   const stage = EFFECT_PROCESS[active] ?? EFFECT_PROCESS[0]!;
   const last = EFFECT_PROCESS.length - 1;
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || motionPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    let frame = 0;
+    const updateFromScroll = () => {
+      frame = 0;
+      const bounds = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const start = viewportHeight * 0.68;
+      const distance = Math.max(bounds.height + viewportHeight * 0.36, 1);
+      const progress = Math.min(1, Math.max(0, (start - bounds.top) / distance));
+      const next = Math.min(last, Math.floor(progress * EFFECT_PROCESS.length));
+      setActive((current) => (current === next ? current : next));
+    };
+
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateFromScroll);
+    };
+
+    updateFromScroll();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [last, motionPaused]);
+
   return (
-    <section className="home-section" aria-labelledby="effect-title">
+    <section ref={sectionRef} className="home-section" aria-labelledby="effect-title">
       <div className="home-wrap">
         <ScrollReveal className="home-section-head">
           <div>
