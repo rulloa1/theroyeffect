@@ -54,7 +54,8 @@ function StudyCardCompact({ study }: { study: StudyCard }) {
           Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
         </span>
       </div>
-    </Link>
+      </Link>
+    </Tilt3D>
   );
 }
 
