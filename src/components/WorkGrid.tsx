@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { STUDIES_NOTE, STUDY_CARDS, type StudyCard } from "@/lib/showcase-work";
 import { shouldRunHeavyEffects } from "@/lib/effects-guard";
+import { Tilt3D } from "@/components/Tilt3D";
 
 /** A study's homepage, shown in a thin browser frame so it reads as a real site. */
 function SiteShot({ study, className }: { study: StudyCard; className?: string }) {
@@ -32,12 +33,15 @@ function SiteShot({ study, className }: { study: StudyCard; className?: string }
 /** Homepage: one card per study, the whole card links to its page. */
 function StudyCardCompact({ study }: { study: StudyCard }) {
   return (
-    <Link
-      to="/work/$slug"
-      params={{ slug: study.slug }}
-      className="group flex flex-col border border-white/10 bg-white/[0.02] p-3 transition-colors duration-300 hover:border-[#DFBA73]/60"
-    >
-      <SiteShot study={study} />
+    <Tilt3D className="h-full">
+      <Link
+        to="/work/$slug"
+        params={{ slug: study.slug }}
+        className="group flex h-full flex-col border border-white/10 bg-white/[0.02] p-3 transition-colors duration-300 hover:border-[#DFBA73]/60"
+      >
+        <div data-tilt-layer="">
+          <SiteShot study={study} />
+        </div>
       <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#DFBA73]">
           Study {study.index} · {study.sector}
@@ -50,7 +54,8 @@ function StudyCardCompact({ study }: { study: StudyCard }) {
           Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
         </span>
       </div>
-    </Link>
+      </Link>
+    </Tilt3D>
   );
 }
 
