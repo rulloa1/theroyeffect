@@ -372,3 +372,17 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Pointer-tilt 3D cards (Tilt3D): the wrapper holds the perspective, the
+   direct child rotates, and [data-tilt-layer] content lifts toward the
+   viewer. JS stays inert for coarse pointers, bots, and paused motion. */
+.tilt3d {
+  perspective: 900px;
+}
+.tilt3d > * {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt3d [data-tilt-layer] {
+  transform-style: preserve-3d;
+}
