@@ -1,1692 +1,1680 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
-  }
+    PostgrestVersion: "14.5";
+  };
   public: {
     Tables: {
       automation_jobs: {
         Row: {
-          consecutive_failures: number
-          items_processed: number
-          job_key: string
-          last_error: string | null
-          last_run_at: string | null
-          lease_expires_at: string | null
-          lease_owner: string | null
-          paused_reason: string | null
-          state: Json
-          status: string
-          updated_at: string
-        }
+          consecutive_failures: number;
+          items_processed: number;
+          job_key: string;
+          last_error: string | null;
+          last_run_at: string | null;
+          lease_expires_at: string | null;
+          lease_owner: string | null;
+          paused_reason: string | null;
+          state: Json;
+          status: string;
+          updated_at: string;
+        };
         Insert: {
-          consecutive_failures?: number
-          items_processed?: number
-          job_key: string
-          last_error?: string | null
-          last_run_at?: string | null
-          lease_expires_at?: string | null
-          lease_owner?: string | null
-          paused_reason?: string | null
-          state?: Json
-          status?: string
-          updated_at?: string
-        }
+          consecutive_failures?: number;
+          items_processed?: number;
+          job_key: string;
+          last_error?: string | null;
+          last_run_at?: string | null;
+          lease_expires_at?: string | null;
+          lease_owner?: string | null;
+          paused_reason?: string | null;
+          state?: Json;
+          status?: string;
+          updated_at?: string;
+        };
         Update: {
-          consecutive_failures?: number
-          items_processed?: number
-          job_key?: string
-          last_error?: string | null
-          last_run_at?: string | null
-          lease_expires_at?: string | null
-          lease_owner?: string | null
-          paused_reason?: string | null
-          state?: Json
-          status?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
+          consecutive_failures?: number;
+          items_processed?: number;
+          job_key?: string;
+          last_error?: string | null;
+          last_run_at?: string | null;
+          lease_expires_at?: string | null;
+          lease_owner?: string | null;
+          paused_reason?: string | null;
+          state?: Json;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       chat_conversations: {
         Row: {
-          contact_email: string | null
-          contact_name: string | null
-          contact_phone: string | null
-          created_at: string
-          external_id: string | null
-          id: string
-          last_message_at: string
-          last_message_preview: string | null
-          lead_id: string | null
-          source: string
-          status: string
-          unread_count: number
-          updated_at: string
-        }
+          contact_email: string | null;
+          contact_name: string | null;
+          contact_phone: string | null;
+          created_at: string;
+          external_id: string | null;
+          id: string;
+          last_message_at: string;
+          last_message_preview: string | null;
+          lead_id: string | null;
+          source: string;
+          status: string;
+          unread_count: number;
+          updated_at: string;
+        };
         Insert: {
-          contact_email?: string | null
-          contact_name?: string | null
-          contact_phone?: string | null
-          created_at?: string
-          external_id?: string | null
-          id?: string
-          last_message_at?: string
-          last_message_preview?: string | null
-          lead_id?: string | null
-          source?: string
-          status?: string
-          unread_count?: number
-          updated_at?: string
-        }
+          contact_email?: string | null;
+          contact_name?: string | null;
+          contact_phone?: string | null;
+          created_at?: string;
+          external_id?: string | null;
+          id?: string;
+          last_message_at?: string;
+          last_message_preview?: string | null;
+          lead_id?: string | null;
+          source?: string;
+          status?: string;
+          unread_count?: number;
+          updated_at?: string;
+        };
         Update: {
-          contact_email?: string | null
-          contact_name?: string | null
-          contact_phone?: string | null
-          created_at?: string
-          external_id?: string | null
-          id?: string
-          last_message_at?: string
-          last_message_preview?: string | null
-          lead_id?: string | null
-          source?: string
-          status?: string
-          unread_count?: number
-          updated_at?: string
-        }
+          contact_email?: string | null;
+          contact_name?: string | null;
+          contact_phone?: string | null;
+          created_at?: string;
+          external_id?: string | null;
+          id?: string;
+          last_message_at?: string;
+          last_message_preview?: string | null;
+          lead_id?: string | null;
+          source?: string;
+          status?: string;
+          unread_count?: number;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "chat_conversations_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "chat_conversations_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       chat_messages: {
         Row: {
-          body: string
-          conversation_id: string
-          created_at: string
-          direction: string
-          external_id: string | null
-          id: string
-          message_type: string | null
-          sent_at: string
-        }
+          body: string;
+          conversation_id: string;
+          created_at: string;
+          direction: string;
+          external_id: string | null;
+          id: string;
+          message_type: string | null;
+          sent_at: string;
+        };
         Insert: {
-          body?: string
-          conversation_id: string
-          created_at?: string
-          direction: string
-          external_id?: string | null
-          id?: string
-          message_type?: string | null
-          sent_at?: string
-        }
+          body?: string;
+          conversation_id: string;
+          created_at?: string;
+          direction: string;
+          external_id?: string | null;
+          id?: string;
+          message_type?: string | null;
+          sent_at?: string;
+        };
         Update: {
-          body?: string
-          conversation_id?: string
-          created_at?: string
-          direction?: string
-          external_id?: string | null
-          id?: string
-          message_type?: string | null
-          sent_at?: string
-        }
+          body?: string;
+          conversation_id?: string;
+          created_at?: string;
+          direction?: string;
+          external_id?: string | null;
+          id?: string;
+          message_type?: string | null;
+          sent_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "chat_messages_conversation_id_fkey"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "chat_conversations"
-            referencedColumns: ["id"]
+            foreignKeyName: "chat_messages_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_conversations";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       client_milestones: {
         Row: {
-          completed_at: string | null
-          created_at: string
-          due_date: string | null
-          id: string
-          link: string | null
-          note: string | null
-          position: number
-          project_id: string
-          stage_type: string
-          status: string
-          title: string
-          updated_at: string
-        }
+          completed_at: string | null;
+          created_at: string;
+          due_date: string | null;
+          id: string;
+          link: string | null;
+          note: string | null;
+          position: number;
+          project_id: string;
+          stage_type: string;
+          status: string;
+          title: string;
+          updated_at: string;
+        };
         Insert: {
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          link?: string | null
-          note?: string | null
-          position?: number
-          project_id: string
-          stage_type?: string
-          status?: string
-          title: string
-          updated_at?: string
-        }
+          completed_at?: string | null;
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          link?: string | null;
+          note?: string | null;
+          position?: number;
+          project_id: string;
+          stage_type?: string;
+          status?: string;
+          title: string;
+          updated_at?: string;
+        };
         Update: {
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          link?: string | null
-          note?: string | null
-          position?: number
-          project_id?: string
-          stage_type?: string
-          status?: string
-          title?: string
-          updated_at?: string
-        }
+          completed_at?: string | null;
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          link?: string | null;
+          note?: string | null;
+          position?: number;
+          project_id?: string;
+          stage_type?: string;
+          status?: string;
+          title?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "client_milestones_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "client_projects"
-            referencedColumns: ["id"]
+            foreignKeyName: "client_milestones_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "client_projects";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       client_projects: {
         Row: {
-          client_email: string
-          created_at: string
-          id: string
-          next_step: string | null
-          start_date: string | null
-          status: string
-          summary: string | null
-          target_date: string | null
-          title: string
-          updated_at: string
-          user_id: string | null
-        }
+          client_email: string;
+          created_at: string;
+          id: string;
+          next_step: string | null;
+          start_date: string | null;
+          status: string;
+          summary: string | null;
+          target_date: string | null;
+          title: string;
+          updated_at: string;
+          user_id: string | null;
+        };
         Insert: {
-          client_email: string
-          created_at?: string
-          id?: string
-          next_step?: string | null
-          start_date?: string | null
-          status?: string
-          summary?: string | null
-          target_date?: string | null
-          title: string
-          updated_at?: string
-          user_id?: string | null
-        }
+          client_email: string;
+          created_at?: string;
+          id?: string;
+          next_step?: string | null;
+          start_date?: string | null;
+          status?: string;
+          summary?: string | null;
+          target_date?: string | null;
+          title: string;
+          updated_at?: string;
+          user_id?: string | null;
+        };
         Update: {
-          client_email?: string
-          created_at?: string
-          id?: string
-          next_step?: string | null
-          start_date?: string | null
-          status?: string
-          summary?: string | null
-          target_date?: string | null
-          title?: string
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          client_email?: string;
+          created_at?: string;
+          id?: string;
+          next_step?: string | null;
+          start_date?: string | null;
+          status?: string;
+          summary?: string | null;
+          target_date?: string | null;
+          title?: string;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       cold_calls: {
         Row: {
-          business_name: string
-          created_at: string
-          created_by: string | null
-          error_message: string | null
-          id: string
-          phone: string
-          prospect_id: string | null
-          redesign_run_id: string | null
-          status: string
-          talking_points: string | null
-          updated_at: string
-          vapi_call_id: string | null
-          website: string | null
-        }
+          business_name: string;
+          created_at: string;
+          created_by: string | null;
+          error_message: string | null;
+          id: string;
+          phone: string;
+          prospect_id: string | null;
+          redesign_run_id: string | null;
+          status: string;
+          talking_points: string | null;
+          updated_at: string;
+          vapi_call_id: string | null;
+          website: string | null;
+        };
         Insert: {
-          business_name: string
-          created_at?: string
-          created_by?: string | null
-          error_message?: string | null
-          id?: string
-          phone: string
-          prospect_id?: string | null
-          redesign_run_id?: string | null
-          status?: string
-          talking_points?: string | null
-          updated_at?: string
-          vapi_call_id?: string | null
-          website?: string | null
-        }
+          business_name: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          id?: string;
+          phone: string;
+          prospect_id?: string | null;
+          redesign_run_id?: string | null;
+          status?: string;
+          talking_points?: string | null;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website?: string | null;
+        };
         Update: {
-          business_name?: string
-          created_at?: string
-          created_by?: string | null
-          error_message?: string | null
-          id?: string
-          phone?: string
-          prospect_id?: string | null
-          redesign_run_id?: string | null
-          status?: string
-          talking_points?: string | null
-          updated_at?: string
-          vapi_call_id?: string | null
-          website?: string | null
-        }
+          business_name?: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          id?: string;
+          phone?: string;
+          prospect_id?: string | null;
+          redesign_run_id?: string | null;
+          status?: string;
+          talking_points?: string | null;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "cold_calls_redesign_run_id_fkey"
-            columns: ["redesign_run_id"]
-            isOneToOne: false
-            referencedRelation: "redesign_runs"
-            referencedColumns: ["id"]
+            foreignKeyName: "cold_calls_redesign_run_id_fkey";
+            columns: ["redesign_run_id"];
+            isOneToOne: false;
+            referencedRelation: "redesign_runs";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       contact_inquiries: {
         Row: {
-          bottleneck: string | null
-          consent_captured_at: string | null
-          created_at: string
-          email: string
-          id: string
-          message: string
-          name: string
-          notes: string | null
-          phone: string | null
-          project_type: string | null
-          sms_marketing_consent: boolean
-          sms_service_consent: boolean
-          status: string
-          website_url: string | null
-        }
+          bottleneck: string | null;
+          consent_captured_at: string | null;
+          created_at: string;
+          email: string;
+          id: string;
+          message: string;
+          name: string;
+          notes: string | null;
+          phone: string | null;
+          project_type: string | null;
+          sms_marketing_consent: boolean;
+          sms_service_consent: boolean;
+          status: string;
+          website_url: string | null;
+        };
         Insert: {
-          bottleneck?: string | null
-          consent_captured_at?: string | null
-          created_at?: string
-          email: string
-          id?: string
-          message: string
-          name: string
-          notes?: string | null
-          phone?: string | null
-          project_type?: string | null
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          status?: string
-          website_url?: string | null
-        }
+          bottleneck?: string | null;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          email: string;
+          id?: string;
+          message: string;
+          name: string;
+          notes?: string | null;
+          phone?: string | null;
+          project_type?: string | null;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          status?: string;
+          website_url?: string | null;
+        };
         Update: {
-          bottleneck?: string | null
-          consent_captured_at?: string | null
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string
-          name?: string
-          notes?: string | null
-          phone?: string | null
-          project_type?: string | null
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          status?: string
-          website_url?: string | null
-        }
-        Relationships: []
-      }
+          bottleneck?: string | null;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          email?: string;
+          id?: string;
+          message?: string;
+          name?: string;
+          notes?: string | null;
+          phone?: string | null;
+          project_type?: string | null;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          status?: string;
+          website_url?: string | null;
+        };
+        Relationships: [];
+      };
       followup_drafts: {
         Row: {
-          body: string
-          created_at: string
-          cta_label: string | null
-          cta_url: string | null
-          error_message: string | null
-          id: string
-          lead_id: string | null
-          model: string | null
-          playbook: string
-          rationale: string | null
-          recipient_email: string
-          recipient_name: string
-          sent_at: string | null
-          source_id: string
-          source_table: string
-          status: string
-          subject: string
-          trigger_key: string
-          updated_at: string
-        }
+          body: string;
+          created_at: string;
+          cta_label: string | null;
+          cta_url: string | null;
+          error_message: string | null;
+          id: string;
+          lead_id: string | null;
+          model: string | null;
+          playbook: string;
+          rationale: string | null;
+          recipient_email: string;
+          recipient_name: string;
+          sent_at: string | null;
+          source_id: string;
+          source_table: string;
+          status: string;
+          subject: string;
+          trigger_key: string;
+          updated_at: string;
+        };
         Insert: {
-          body: string
-          created_at?: string
-          cta_label?: string | null
-          cta_url?: string | null
-          error_message?: string | null
-          id?: string
-          lead_id?: string | null
-          model?: string | null
-          playbook: string
-          rationale?: string | null
-          recipient_email: string
-          recipient_name: string
-          sent_at?: string | null
-          source_id: string
-          source_table: string
-          status?: string
-          subject: string
-          trigger_key: string
-          updated_at?: string
-        }
+          body: string;
+          created_at?: string;
+          cta_label?: string | null;
+          cta_url?: string | null;
+          error_message?: string | null;
+          id?: string;
+          lead_id?: string | null;
+          model?: string | null;
+          playbook: string;
+          rationale?: string | null;
+          recipient_email: string;
+          recipient_name: string;
+          sent_at?: string | null;
+          source_id: string;
+          source_table: string;
+          status?: string;
+          subject: string;
+          trigger_key: string;
+          updated_at?: string;
+        };
         Update: {
-          body?: string
-          created_at?: string
-          cta_label?: string | null
-          cta_url?: string | null
-          error_message?: string | null
-          id?: string
-          lead_id?: string | null
-          model?: string | null
-          playbook?: string
-          rationale?: string | null
-          recipient_email?: string
-          recipient_name?: string
-          sent_at?: string | null
-          source_id?: string
-          source_table?: string
-          status?: string
-          subject?: string
-          trigger_key?: string
-          updated_at?: string
-        }
+          body?: string;
+          created_at?: string;
+          cta_label?: string | null;
+          cta_url?: string | null;
+          error_message?: string | null;
+          id?: string;
+          lead_id?: string | null;
+          model?: string | null;
+          playbook?: string;
+          rationale?: string | null;
+          recipient_email?: string;
+          recipient_name?: string;
+          sent_at?: string | null;
+          source_id?: string;
+          source_table?: string;
+          status?: string;
+          subject?: string;
+          trigger_key?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "followup_drafts_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "followup_drafts_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       onboarding_runs: {
         Row: {
-          amount_cents: number
-          approved_at: string | null
-          client_email: string
-          client_name: string | null
-          created_at: string
-          currency: string
-          error_message: string | null
-          id: string
-          model: string | null
-          plan: Json
-          product_name: string | null
-          project_id: string | null
-          rationale: string | null
-          source_id: string
-          source_table: string
-          status: string
-          trigger_type: string
-          updated_at: string
-          welcome_email_sent_at: string | null
-        }
+          amount_cents: number;
+          approved_at: string | null;
+          client_email: string;
+          client_name: string | null;
+          created_at: string;
+          currency: string;
+          error_message: string | null;
+          id: string;
+          model: string | null;
+          plan: Json;
+          product_name: string | null;
+          project_id: string | null;
+          rationale: string | null;
+          source_id: string;
+          source_table: string;
+          status: string;
+          trigger_type: string;
+          updated_at: string;
+          welcome_email_sent_at: string | null;
+        };
         Insert: {
-          amount_cents?: number
-          approved_at?: string | null
-          client_email: string
-          client_name?: string | null
-          created_at?: string
-          currency?: string
-          error_message?: string | null
-          id?: string
-          model?: string | null
-          plan?: Json
-          product_name?: string | null
-          project_id?: string | null
-          rationale?: string | null
-          source_id: string
-          source_table: string
-          status?: string
-          trigger_type: string
-          updated_at?: string
-          welcome_email_sent_at?: string | null
-        }
+          amount_cents?: number;
+          approved_at?: string | null;
+          client_email: string;
+          client_name?: string | null;
+          created_at?: string;
+          currency?: string;
+          error_message?: string | null;
+          id?: string;
+          model?: string | null;
+          plan?: Json;
+          product_name?: string | null;
+          project_id?: string | null;
+          rationale?: string | null;
+          source_id: string;
+          source_table: string;
+          status?: string;
+          trigger_type: string;
+          updated_at?: string;
+          welcome_email_sent_at?: string | null;
+        };
         Update: {
-          amount_cents?: number
-          approved_at?: string | null
-          client_email?: string
-          client_name?: string | null
-          created_at?: string
-          currency?: string
-          error_message?: string | null
-          id?: string
-          model?: string | null
-          plan?: Json
-          product_name?: string | null
-          project_id?: string | null
-          rationale?: string | null
-          source_id?: string
-          source_table?: string
-          status?: string
-          trigger_type?: string
-          updated_at?: string
-          welcome_email_sent_at?: string | null
-        }
+          amount_cents?: number;
+          approved_at?: string | null;
+          client_email?: string;
+          client_name?: string | null;
+          created_at?: string;
+          currency?: string;
+          error_message?: string | null;
+          id?: string;
+          model?: string | null;
+          plan?: Json;
+          product_name?: string | null;
+          project_id?: string | null;
+          rationale?: string | null;
+          source_id?: string;
+          source_table?: string;
+          status?: string;
+          trigger_type?: string;
+          updated_at?: string;
+          welcome_email_sent_at?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "onboarding_runs_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "client_projects"
-            referencedColumns: ["id"]
+            foreignKeyName: "onboarding_runs_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "client_projects";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       orders: {
         Row: {
-          amount_refunded: number
-          amount_total: number
-          balance_due_cents: number
-          balance_invoice_id: string | null
-          balance_invoice_url: string | null
-          balance_paid_at: string | null
-          balance_paid_cents: number
-          balance_session_id: string | null
-          balance_status: string
-          created_at: string
-          currency: string
-          customer_email: string | null
-          customer_name: string | null
-          emails_sent: boolean
-          environment: string
-          id: string
-          is_deposit: boolean
-          payment_status: string
-          price_id: string | null
-          product_name: string | null
-          purchase_kind: string
-          session_status: string | null
-          stripe_customer_id: string | null
-          stripe_payment_intent_id: string | null
-          stripe_session_id: string
-          stripe_subscription_id: string | null
-          tier_label: string | null
-          updated_at: string
-          user_id: string | null
-        }
+          amount_refunded: number;
+          amount_total: number;
+          balance_due_cents: number;
+          balance_invoice_id: string | null;
+          balance_invoice_url: string | null;
+          balance_paid_at: string | null;
+          balance_paid_cents: number;
+          balance_session_id: string | null;
+          balance_status: string;
+          created_at: string;
+          currency: string;
+          customer_email: string | null;
+          customer_name: string | null;
+          emails_sent: boolean;
+          environment: string;
+          id: string;
+          is_deposit: boolean;
+          payment_status: string;
+          price_id: string | null;
+          product_name: string | null;
+          purchase_kind: string;
+          session_status: string | null;
+          stripe_customer_id: string | null;
+          stripe_payment_intent_id: string | null;
+          stripe_session_id: string;
+          stripe_subscription_id: string | null;
+          tier_label: string | null;
+          updated_at: string;
+          user_id: string | null;
+        };
         Insert: {
-          amount_refunded?: number
-          amount_total?: number
-          balance_due_cents?: number
-          balance_invoice_id?: string | null
-          balance_invoice_url?: string | null
-          balance_paid_at?: string | null
-          balance_paid_cents?: number
-          balance_session_id?: string | null
-          balance_status?: string
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_name?: string | null
-          emails_sent?: boolean
-          environment?: string
-          id?: string
-          is_deposit?: boolean
-          payment_status?: string
-          price_id?: string | null
-          product_name?: string | null
-          purchase_kind?: string
-          session_status?: string | null
-          stripe_customer_id?: string | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id: string
-          stripe_subscription_id?: string | null
-          tier_label?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
+          amount_refunded?: number;
+          amount_total?: number;
+          balance_due_cents?: number;
+          balance_invoice_id?: string | null;
+          balance_invoice_url?: string | null;
+          balance_paid_at?: string | null;
+          balance_paid_cents?: number;
+          balance_session_id?: string | null;
+          balance_status?: string;
+          created_at?: string;
+          currency?: string;
+          customer_email?: string | null;
+          customer_name?: string | null;
+          emails_sent?: boolean;
+          environment?: string;
+          id?: string;
+          is_deposit?: boolean;
+          payment_status?: string;
+          price_id?: string | null;
+          product_name?: string | null;
+          purchase_kind?: string;
+          session_status?: string | null;
+          stripe_customer_id?: string | null;
+          stripe_payment_intent_id?: string | null;
+          stripe_session_id: string;
+          stripe_subscription_id?: string | null;
+          tier_label?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
         Update: {
-          amount_refunded?: number
-          amount_total?: number
-          balance_due_cents?: number
-          balance_invoice_id?: string | null
-          balance_invoice_url?: string | null
-          balance_paid_at?: string | null
-          balance_paid_cents?: number
-          balance_session_id?: string | null
-          balance_status?: string
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_name?: string | null
-          emails_sent?: boolean
-          environment?: string
-          id?: string
-          is_deposit?: boolean
-          payment_status?: string
-          price_id?: string | null
-          product_name?: string | null
-          purchase_kind?: string
-          session_status?: string | null
-          stripe_customer_id?: string | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string
-          stripe_subscription_id?: string | null
-          tier_label?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          amount_refunded?: number;
+          amount_total?: number;
+          balance_due_cents?: number;
+          balance_invoice_id?: string | null;
+          balance_invoice_url?: string | null;
+          balance_paid_at?: string | null;
+          balance_paid_cents?: number;
+          balance_session_id?: string | null;
+          balance_status?: string;
+          created_at?: string;
+          currency?: string;
+          customer_email?: string | null;
+          customer_name?: string | null;
+          emails_sent?: boolean;
+          environment?: string;
+          id?: string;
+          is_deposit?: boolean;
+          payment_status?: string;
+          price_id?: string | null;
+          product_name?: string | null;
+          purchase_kind?: string;
+          session_status?: string | null;
+          stripe_customer_id?: string | null;
+          stripe_payment_intent_id?: string | null;
+          stripe_session_id?: string;
+          stripe_subscription_id?: string | null;
+          tier_label?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
-          city: string | null
-          company: string | null
-          created_at: string
-          email: string | null
-          full_name: string | null
-          id: string
-          notes: string | null
-          onboarding_completed_at: string | null
-          phone: string | null
-          preferred_contact: string
-          stripe_customer_id: string | null
-          time_zone: string | null
-          updated_at: string
-          website: string | null
-        }
+          city: string | null;
+          company: string | null;
+          created_at: string;
+          email: string | null;
+          full_name: string | null;
+          id: string;
+          notes: string | null;
+          onboarding_completed_at: string | null;
+          phone: string | null;
+          preferred_contact: string;
+          stripe_customer_id: string | null;
+          time_zone: string | null;
+          updated_at: string;
+          website: string | null;
+        };
         Insert: {
-          city?: string | null
-          company?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id: string
-          notes?: string | null
-          onboarding_completed_at?: string | null
-          phone?: string | null
-          preferred_contact?: string
-          stripe_customer_id?: string | null
-          time_zone?: string | null
-          updated_at?: string
-          website?: string | null
-        }
+          city?: string | null;
+          company?: string | null;
+          created_at?: string;
+          email?: string | null;
+          full_name?: string | null;
+          id: string;
+          notes?: string | null;
+          onboarding_completed_at?: string | null;
+          phone?: string | null;
+          preferred_contact?: string;
+          stripe_customer_id?: string | null;
+          time_zone?: string | null;
+          updated_at?: string;
+          website?: string | null;
+        };
         Update: {
-          city?: string | null
-          company?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          notes?: string | null
-          onboarding_completed_at?: string | null
-          phone?: string | null
-          preferred_contact?: string
-          stripe_customer_id?: string | null
-          time_zone?: string | null
-          updated_at?: string
-          website?: string | null
-        }
-        Relationships: []
-      }
+          city?: string | null;
+          company?: string | null;
+          created_at?: string;
+          email?: string | null;
+          full_name?: string | null;
+          id?: string;
+          notes?: string | null;
+          onboarding_completed_at?: string | null;
+          phone?: string | null;
+          preferred_contact?: string;
+          stripe_customer_id?: string | null;
+          time_zone?: string | null;
+          updated_at?: string;
+          website?: string | null;
+        };
+        Relationships: [];
+      };
       project_approvals: {
         Row: {
-          client_feedback: string | null
-          client_notified_at: string | null
-          created_at: string
-          decided_at: string | null
-          decided_by_email: string | null
-          decided_by_user_id: string | null
-          id: string
-          milestone_id: string
-          owner_notified_at: string | null
-          project_id: string
-          requested_at: string
-          review_note: string | null
-          review_url: string | null
-          stage_type: string
-          status: string
-          updated_at: string
-        }
+          client_feedback: string | null;
+          client_notified_at: string | null;
+          created_at: string;
+          decided_at: string | null;
+          decided_by_email: string | null;
+          decided_by_user_id: string | null;
+          id: string;
+          milestone_id: string;
+          owner_notified_at: string | null;
+          project_id: string;
+          requested_at: string;
+          review_note: string | null;
+          review_url: string | null;
+          stage_type: string;
+          status: string;
+          updated_at: string;
+        };
         Insert: {
-          client_feedback?: string | null
-          client_notified_at?: string | null
-          created_at?: string
-          decided_at?: string | null
-          decided_by_email?: string | null
-          decided_by_user_id?: string | null
-          id?: string
-          milestone_id: string
-          owner_notified_at?: string | null
-          project_id: string
-          requested_at?: string
-          review_note?: string | null
-          review_url?: string | null
-          stage_type?: string
-          status?: string
-          updated_at?: string
-        }
+          client_feedback?: string | null;
+          client_notified_at?: string | null;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by_email?: string | null;
+          decided_by_user_id?: string | null;
+          id?: string;
+          milestone_id: string;
+          owner_notified_at?: string | null;
+          project_id: string;
+          requested_at?: string;
+          review_note?: string | null;
+          review_url?: string | null;
+          stage_type?: string;
+          status?: string;
+          updated_at?: string;
+        };
         Update: {
-          client_feedback?: string | null
-          client_notified_at?: string | null
-          created_at?: string
-          decided_at?: string | null
-          decided_by_email?: string | null
-          decided_by_user_id?: string | null
-          id?: string
-          milestone_id?: string
-          owner_notified_at?: string | null
-          project_id?: string
-          requested_at?: string
-          review_note?: string | null
-          review_url?: string | null
-          stage_type?: string
-          status?: string
-          updated_at?: string
-        }
+          client_feedback?: string | null;
+          client_notified_at?: string | null;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by_email?: string | null;
+          decided_by_user_id?: string | null;
+          id?: string;
+          milestone_id?: string;
+          owner_notified_at?: string | null;
+          project_id?: string;
+          requested_at?: string;
+          review_note?: string | null;
+          review_url?: string | null;
+          stage_type?: string;
+          status?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "project_approvals_milestone_id_fkey"
-            columns: ["milestone_id"]
-            isOneToOne: false
-            referencedRelation: "client_milestones"
-            referencedColumns: ["id"]
+            foreignKeyName: "project_approvals_milestone_id_fkey";
+            columns: ["milestone_id"];
+            isOneToOne: false;
+            referencedRelation: "client_milestones";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "project_approvals_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "client_projects"
-            referencedColumns: ["id"]
+            foreignKeyName: "project_approvals_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "client_projects";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       project_briefs: {
         Row: {
-          audience: string | null
-          budget: string | null
-          company: string | null
-          consent_captured_at: string | null
-          created_at: string
-          deliverables: string | null
-          email: string
-          extra: string | null
-          goals: string
-          id: string
-          name: string
-          pdf_path: string | null
-          project_links: string | null
-          project_notes: string | null
-          project_status: string
-          project_type: string
-          references_links: string | null
-          sms_marketing_consent: boolean
-          sms_service_consent: boolean
-          stripe_session_id: string | null
-          timeline: string | null
-          user_id: string | null
-        }
+          audience: string | null;
+          budget: string | null;
+          company: string | null;
+          consent_captured_at: string | null;
+          created_at: string;
+          deliverables: string | null;
+          email: string;
+          extra: string | null;
+          goals: string;
+          id: string;
+          name: string;
+          pdf_path: string | null;
+          project_links: string | null;
+          project_notes: string | null;
+          project_status: string;
+          project_type: string;
+          references_links: string | null;
+          sms_marketing_consent: boolean;
+          sms_service_consent: boolean;
+          stripe_session_id: string | null;
+          timeline: string | null;
+          user_id: string | null;
+        };
         Insert: {
-          audience?: string | null
-          budget?: string | null
-          company?: string | null
-          consent_captured_at?: string | null
-          created_at?: string
-          deliverables?: string | null
-          email: string
-          extra?: string | null
-          goals: string
-          id?: string
-          name: string
-          pdf_path?: string | null
-          project_links?: string | null
-          project_notes?: string | null
-          project_status?: string
-          project_type: string
-          references_links?: string | null
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          stripe_session_id?: string | null
-          timeline?: string | null
-          user_id?: string | null
-        }
+          audience?: string | null;
+          budget?: string | null;
+          company?: string | null;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          deliverables?: string | null;
+          email: string;
+          extra?: string | null;
+          goals: string;
+          id?: string;
+          name: string;
+          pdf_path?: string | null;
+          project_links?: string | null;
+          project_notes?: string | null;
+          project_status?: string;
+          project_type: string;
+          references_links?: string | null;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          stripe_session_id?: string | null;
+          timeline?: string | null;
+          user_id?: string | null;
+        };
         Update: {
-          audience?: string | null
-          budget?: string | null
-          company?: string | null
-          consent_captured_at?: string | null
-          created_at?: string
-          deliverables?: string | null
-          email?: string
-          extra?: string | null
-          goals?: string
-          id?: string
-          name?: string
-          pdf_path?: string | null
-          project_links?: string | null
-          project_notes?: string | null
-          project_status?: string
-          project_type?: string
-          references_links?: string | null
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          stripe_session_id?: string | null
-          timeline?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          audience?: string | null;
+          budget?: string | null;
+          company?: string | null;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          deliverables?: string | null;
+          email?: string;
+          extra?: string | null;
+          goals?: string;
+          id?: string;
+          name?: string;
+          pdf_path?: string | null;
+          project_links?: string | null;
+          project_notes?: string | null;
+          project_status?: string;
+          project_type?: string;
+          references_links?: string | null;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          stripe_session_id?: string | null;
+          timeline?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       project_proposals: {
         Row: {
-          balance_cents: number
-          brief_id: string | null
-          client_company: string | null
-          client_email: string
-          client_name: string
-          client_signature_name: string | null
-          client_signed_at: string | null
-          created_at: string
-          deposit_cents: number
-          deposit_paid_at: string | null
-          deposit_paid_cents: number | null
-          deposit_session_id: string | null
-          id: string
-          project_title: string
-          scope_deliverables: string
-          share_token: string
-          status: string
-          terms: string
-          timeline_weeks: string
-          total_price_cents: number
-        }
+          balance_cents: number;
+          brief_id: string | null;
+          client_company: string | null;
+          client_email: string;
+          client_name: string;
+          client_signature_name: string | null;
+          client_signed_at: string | null;
+          created_at: string;
+          deposit_cents: number;
+          deposit_paid_at: string | null;
+          deposit_paid_cents: number | null;
+          deposit_session_id: string | null;
+          id: string;
+          project_title: string;
+          scope_deliverables: string;
+          share_token: string;
+          status: string;
+          terms: string;
+          timeline_weeks: string;
+          total_price_cents: number;
+        };
         Insert: {
-          balance_cents?: number
-          brief_id?: string | null
-          client_company?: string | null
-          client_email: string
-          client_name: string
-          client_signature_name?: string | null
-          client_signed_at?: string | null
-          created_at?: string
-          deposit_cents?: number
-          deposit_paid_at?: string | null
-          deposit_paid_cents?: number | null
-          deposit_session_id?: string | null
-          id?: string
-          project_title: string
-          scope_deliverables: string
-          share_token: string
-          status?: string
-          terms?: string
-          timeline_weeks?: string
-          total_price_cents?: number
-        }
+          balance_cents?: number;
+          brief_id?: string | null;
+          client_company?: string | null;
+          client_email: string;
+          client_name: string;
+          client_signature_name?: string | null;
+          client_signed_at?: string | null;
+          created_at?: string;
+          deposit_cents?: number;
+          deposit_paid_at?: string | null;
+          deposit_paid_cents?: number | null;
+          deposit_session_id?: string | null;
+          id?: string;
+          project_title: string;
+          scope_deliverables: string;
+          share_token: string;
+          status?: string;
+          terms?: string;
+          timeline_weeks?: string;
+          total_price_cents?: number;
+        };
         Update: {
-          balance_cents?: number
-          brief_id?: string | null
-          client_company?: string | null
-          client_email?: string
-          client_name?: string
-          client_signature_name?: string | null
-          client_signed_at?: string | null
-          created_at?: string
-          deposit_cents?: number
-          deposit_paid_at?: string | null
-          deposit_paid_cents?: number | null
-          deposit_session_id?: string | null
-          id?: string
-          project_title?: string
-          scope_deliverables?: string
-          share_token?: string
-          status?: string
-          terms?: string
-          timeline_weeks?: string
-          total_price_cents?: number
-        }
-        Relationships: []
-      }
+          balance_cents?: number;
+          brief_id?: string | null;
+          client_company?: string | null;
+          client_email?: string;
+          client_name?: string;
+          client_signature_name?: string | null;
+          client_signed_at?: string | null;
+          created_at?: string;
+          deposit_cents?: number;
+          deposit_paid_at?: string | null;
+          deposit_paid_cents?: number | null;
+          deposit_session_id?: string | null;
+          id?: string;
+          project_title?: string;
+          scope_deliverables?: string;
+          share_token?: string;
+          status?: string;
+          terms?: string;
+          timeline_weeks?: string;
+          total_price_cents?: number;
+        };
+        Relationships: [];
+      };
       prospects: {
         Row: {
-          address: string | null
-          booked_at: string | null
-          business_name: string
-          category: string | null
-          city: string
-          contact_email: string | null
-          contacted_at: string | null
-          created_at: string
-          draft_body: string | null
-          draft_rationale: string | null
-          draft_status: string
-          draft_subject: string | null
-          has_website: boolean
-          id: string
-          industry: string
-          lat: number | null
-          lead_id: string | null
-          lon: number | null
-          notes: string | null
-          pain_score: number
-          phone: string | null
-          replied_at: string | null
-          report_token: string
-          report_viewed_at: string | null
-          scan_data: Json
-          scanned_at: string | null
-          sent_variant: string | null
-          signals: Json
-          source: string
-          source_ref: string | null
-          status: string
-          updated_at: string
-          variants: Json
-          website: string | null
-          won_at: string | null
-        }
+          address: string | null;
+          booked_at: string | null;
+          business_name: string;
+          category: string | null;
+          city: string;
+          contact_email: string | null;
+          contacted_at: string | null;
+          created_at: string;
+          draft_body: string | null;
+          draft_rationale: string | null;
+          draft_status: string;
+          draft_subject: string | null;
+          has_website: boolean;
+          id: string;
+          industry: string;
+          lat: number | null;
+          lead_id: string | null;
+          lon: number | null;
+          notes: string | null;
+          pain_score: number;
+          phone: string | null;
+          replied_at: string | null;
+          report_token: string;
+          report_viewed_at: string | null;
+          scan_data: Json;
+          scanned_at: string | null;
+          sent_variant: string | null;
+          signals: Json;
+          source: string;
+          source_ref: string | null;
+          status: string;
+          updated_at: string;
+          variants: Json;
+          website: string | null;
+          won_at: string | null;
+        };
         Insert: {
-          address?: string | null
-          booked_at?: string | null
-          business_name: string
-          category?: string | null
-          city?: string
-          contact_email?: string | null
-          contacted_at?: string | null
-          created_at?: string
-          draft_body?: string | null
-          draft_rationale?: string | null
-          draft_status?: string
-          draft_subject?: string | null
-          has_website?: boolean
-          id?: string
-          industry: string
-          lat?: number | null
-          lead_id?: string | null
-          lon?: number | null
-          notes?: string | null
-          pain_score?: number
-          phone?: string | null
-          replied_at?: string | null
-          report_token?: string
-          report_viewed_at?: string | null
-          scan_data?: Json
-          scanned_at?: string | null
-          sent_variant?: string | null
-          signals?: Json
-          source?: string
-          source_ref?: string | null
-          status?: string
-          updated_at?: string
-          variants?: Json
-          website?: string | null
-          won_at?: string | null
-        }
+          address?: string | null;
+          booked_at?: string | null;
+          business_name: string;
+          category?: string | null;
+          city?: string;
+          contact_email?: string | null;
+          contacted_at?: string | null;
+          created_at?: string;
+          draft_body?: string | null;
+          draft_rationale?: string | null;
+          draft_status?: string;
+          draft_subject?: string | null;
+          has_website?: boolean;
+          id?: string;
+          industry: string;
+          lat?: number | null;
+          lead_id?: string | null;
+          lon?: number | null;
+          notes?: string | null;
+          pain_score?: number;
+          phone?: string | null;
+          replied_at?: string | null;
+          report_token?: string;
+          report_viewed_at?: string | null;
+          scan_data?: Json;
+          scanned_at?: string | null;
+          sent_variant?: string | null;
+          signals?: Json;
+          source?: string;
+          source_ref?: string | null;
+          status?: string;
+          updated_at?: string;
+          variants?: Json;
+          website?: string | null;
+          won_at?: string | null;
+        };
         Update: {
-          address?: string | null
-          booked_at?: string | null
-          business_name?: string
-          category?: string | null
-          city?: string
-          contact_email?: string | null
-          contacted_at?: string | null
-          created_at?: string
-          draft_body?: string | null
-          draft_rationale?: string | null
-          draft_status?: string
-          draft_subject?: string | null
-          has_website?: boolean
-          id?: string
-          industry?: string
-          lat?: number | null
-          lead_id?: string | null
-          lon?: number | null
-          notes?: string | null
-          pain_score?: number
-          phone?: string | null
-          replied_at?: string | null
-          report_token?: string
-          report_viewed_at?: string | null
-          scan_data?: Json
-          scanned_at?: string | null
-          sent_variant?: string | null
-          signals?: Json
-          source?: string
-          source_ref?: string | null
-          status?: string
-          updated_at?: string
-          variants?: Json
-          website?: string | null
-          won_at?: string | null
-        }
+          address?: string | null;
+          booked_at?: string | null;
+          business_name?: string;
+          category?: string | null;
+          city?: string;
+          contact_email?: string | null;
+          contacted_at?: string | null;
+          created_at?: string;
+          draft_body?: string | null;
+          draft_rationale?: string | null;
+          draft_status?: string;
+          draft_subject?: string | null;
+          has_website?: boolean;
+          id?: string;
+          industry?: string;
+          lat?: number | null;
+          lead_id?: string | null;
+          lon?: number | null;
+          notes?: string | null;
+          pain_score?: number;
+          phone?: string | null;
+          replied_at?: string | null;
+          report_token?: string;
+          report_viewed_at?: string | null;
+          scan_data?: Json;
+          scanned_at?: string | null;
+          sent_variant?: string | null;
+          signals?: Json;
+          source?: string;
+          source_ref?: string | null;
+          status?: string;
+          updated_at?: string;
+          variants?: Json;
+          website?: string | null;
+          won_at?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "prospects_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "prospects_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       redesign_runs: {
         Row: {
-          angle: string
-          created_at: string
-          created_by: string | null
-          error_message: string | null
-          headline: string | null
-          host: string
-          id: string
-          outreach_body: string | null
-          outreach_subject: string | null
-          scan: Json
-          sections: Json
-          status: string
-          subheadline: string | null
-          treatment: string
-          updated_at: string
-          url: string
-        }
+          angle: string;
+          created_at: string;
+          created_by: string | null;
+          error_message: string | null;
+          headline: string | null;
+          host: string;
+          id: string;
+          outreach_body: string | null;
+          outreach_subject: string | null;
+          scan: Json;
+          sections: Json;
+          status: string;
+          subheadline: string | null;
+          treatment: string;
+          updated_at: string;
+          url: string;
+        };
         Insert: {
-          angle?: string
-          created_at?: string
-          created_by?: string | null
-          error_message?: string | null
-          headline?: string | null
-          host: string
-          id?: string
-          outreach_body?: string | null
-          outreach_subject?: string | null
-          scan?: Json
-          sections?: Json
-          status?: string
-          subheadline?: string | null
-          treatment?: string
-          updated_at?: string
-          url: string
-        }
+          angle?: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          headline?: string | null;
+          host: string;
+          id?: string;
+          outreach_body?: string | null;
+          outreach_subject?: string | null;
+          scan?: Json;
+          sections?: Json;
+          status?: string;
+          subheadline?: string | null;
+          treatment?: string;
+          updated_at?: string;
+          url: string;
+        };
         Update: {
-          angle?: string
-          created_at?: string
-          created_by?: string | null
-          error_message?: string | null
-          headline?: string | null
-          host?: string
-          id?: string
-          outreach_body?: string | null
-          outreach_subject?: string | null
-          scan?: Json
-          sections?: Json
-          status?: string
-          subheadline?: string | null
-          treatment?: string
-          updated_at?: string
-          url?: string
-        }
-        Relationships: []
-      }
+          angle?: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          headline?: string | null;
+          host?: string;
+          id?: string;
+          outreach_body?: string | null;
+          outreach_subject?: string | null;
+          scan?: Json;
+          sections?: Json;
+          status?: string;
+          subheadline?: string | null;
+          treatment?: string;
+          updated_at?: string;
+          url?: string;
+        };
+        Relationships: [];
+      };
       retainer_subscriptions: {
         Row: {
-          cancel_at_period_end: boolean
-          created_at: string
-          current_period_end: string | null
-          current_period_start: string | null
-          customer_email: string | null
-          environment: string
-          id: string
-          latest_invoice_status: string | null
-          price_id: string | null
-          product_name: string | null
-          status: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string
-          updated_at: string
-          user_id: string | null
-        }
+          cancel_at_period_end: boolean;
+          created_at: string;
+          current_period_end: string | null;
+          current_period_start: string | null;
+          customer_email: string | null;
+          environment: string;
+          id: string;
+          latest_invoice_status: string | null;
+          price_id: string | null;
+          product_name: string | null;
+          status: string;
+          stripe_customer_id: string | null;
+          stripe_subscription_id: string;
+          updated_at: string;
+          user_id: string | null;
+        };
         Insert: {
-          cancel_at_period_end?: boolean
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          customer_email?: string | null
-          environment?: string
-          id?: string
-          latest_invoice_status?: string | null
-          price_id?: string | null
-          product_name?: string | null
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id: string
-          updated_at?: string
-          user_id?: string | null
-        }
+          cancel_at_period_end?: boolean;
+          created_at?: string;
+          current_period_end?: string | null;
+          current_period_start?: string | null;
+          customer_email?: string | null;
+          environment?: string;
+          id?: string;
+          latest_invoice_status?: string | null;
+          price_id?: string | null;
+          product_name?: string | null;
+          status?: string;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id: string;
+          updated_at?: string;
+          user_id?: string | null;
+        };
         Update: {
-          cancel_at_period_end?: boolean
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          customer_email?: string | null
-          environment?: string
-          id?: string
-          latest_invoice_status?: string | null
-          price_id?: string | null
-          product_name?: string | null
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          cancel_at_period_end?: boolean;
+          created_at?: string;
+          current_period_end?: string | null;
+          current_period_start?: string | null;
+          customer_email?: string | null;
+          environment?: string;
+          id?: string;
+          latest_invoice_status?: string | null;
+          price_id?: string | null;
+          product_name?: string | null;
+          status?: string;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id?: string;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       showcase_projects: {
         Row: {
-          category: string | null
-          created_at: string
-          description: string
-          id: string
-          is_published: boolean
-          metric: string | null
-          sort_order: number
-          tagline: string | null
-          tags: string[]
-          title: string
-          url: string | null
-        }
+          category: string | null;
+          created_at: string;
+          description: string;
+          id: string;
+          is_published: boolean;
+          metric: string | null;
+          sort_order: number;
+          tagline: string | null;
+          tags: string[];
+          title: string;
+          url: string | null;
+        };
         Insert: {
-          category?: string | null
-          created_at?: string
-          description: string
-          id?: string
-          is_published?: boolean
-          metric?: string | null
-          sort_order?: number
-          tagline?: string | null
-          tags?: string[]
-          title: string
-          url?: string | null
-        }
+          category?: string | null;
+          created_at?: string;
+          description: string;
+          id?: string;
+          is_published?: boolean;
+          metric?: string | null;
+          sort_order?: number;
+          tagline?: string | null;
+          tags?: string[];
+          title: string;
+          url?: string | null;
+        };
         Update: {
-          category?: string | null
-          created_at?: string
-          description?: string
-          id?: string
-          is_published?: boolean
-          metric?: string | null
-          sort_order?: number
-          tagline?: string | null
-          tags?: string[]
-          title?: string
-          url?: string | null
-        }
-        Relationships: []
-      }
+          category?: string | null;
+          created_at?: string;
+          description?: string;
+          id?: string;
+          is_published?: boolean;
+          metric?: string | null;
+          sort_order?: number;
+          tagline?: string | null;
+          tags?: string[];
+          title?: string;
+          url?: string | null;
+        };
+        Relationships: [];
+      };
       subscription_invoices: {
         Row: {
-          amount_due: number
-          amount_paid: number
-          billing_reason: string | null
-          created_at: string
-          currency: string
-          customer_email: string | null
-          description: string | null
-          environment: string
-          hosted_invoice_url: string | null
-          id: string
-          invoice_pdf: string | null
-          period_end: string | null
-          period_start: string | null
-          status: string
-          stripe_customer_id: string | null
-          stripe_invoice_id: string
-          stripe_subscription_id: string | null
-          updated_at: string
-          user_id: string | null
-        }
+          amount_due: number;
+          amount_paid: number;
+          billing_reason: string | null;
+          created_at: string;
+          currency: string;
+          customer_email: string | null;
+          description: string | null;
+          environment: string;
+          hosted_invoice_url: string | null;
+          id: string;
+          invoice_pdf: string | null;
+          period_end: string | null;
+          period_start: string | null;
+          status: string;
+          stripe_customer_id: string | null;
+          stripe_invoice_id: string;
+          stripe_subscription_id: string | null;
+          updated_at: string;
+          user_id: string | null;
+        };
         Insert: {
-          amount_due?: number
-          amount_paid?: number
-          billing_reason?: string | null
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          description?: string | null
-          environment?: string
-          hosted_invoice_url?: string | null
-          id?: string
-          invoice_pdf?: string | null
-          period_end?: string | null
-          period_start?: string | null
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_invoice_id: string
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
+          amount_due?: number;
+          amount_paid?: number;
+          billing_reason?: string | null;
+          created_at?: string;
+          currency?: string;
+          customer_email?: string | null;
+          description?: string | null;
+          environment?: string;
+          hosted_invoice_url?: string | null;
+          id?: string;
+          invoice_pdf?: string | null;
+          period_end?: string | null;
+          period_start?: string | null;
+          status?: string;
+          stripe_customer_id?: string | null;
+          stripe_invoice_id: string;
+          stripe_subscription_id?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
         Update: {
-          amount_due?: number
-          amount_paid?: number
-          billing_reason?: string | null
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          description?: string | null
-          environment?: string
-          hosted_invoice_url?: string | null
-          id?: string
-          invoice_pdf?: string | null
-          period_end?: string | null
-          period_start?: string | null
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_invoice_id?: string
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          amount_due?: number;
+          amount_paid?: number;
+          billing_reason?: string | null;
+          created_at?: string;
+          currency?: string;
+          customer_email?: string | null;
+          description?: string | null;
+          environment?: string;
+          hosted_invoice_url?: string | null;
+          id?: string;
+          invoice_pdf?: string | null;
+          period_end?: string | null;
+          period_start?: string | null;
+          status?: string;
+          stripe_customer_id?: string | null;
+          stripe_invoice_id?: string;
+          stripe_subscription_id?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       user_roles: {
         Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at?: string;
+          id?: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          role?: Database["public"]["Enums"]["app_role"];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       voice_agent_logs: {
         Row: {
-          created_at: string
-          error_message: string | null
-          id: string
-          ok: boolean
-          request_payload: Json
-          result_payload: Json
-          tool_name: string
-          vapi_call_id: string | null
-        }
+          created_at: string;
+          error_message: string | null;
+          id: string;
+          ok: boolean;
+          request_payload: Json;
+          result_payload: Json;
+          tool_name: string;
+          vapi_call_id: string | null;
+        };
         Insert: {
-          created_at?: string
-          error_message?: string | null
-          id?: string
-          ok?: boolean
-          request_payload?: Json
-          result_payload?: Json
-          tool_name: string
-          vapi_call_id?: string | null
-        }
+          created_at?: string;
+          error_message?: string | null;
+          id?: string;
+          ok?: boolean;
+          request_payload?: Json;
+          result_payload?: Json;
+          tool_name: string;
+          vapi_call_id?: string | null;
+        };
         Update: {
-          created_at?: string
-          error_message?: string | null
-          id?: string
-          ok?: boolean
-          request_payload?: Json
-          result_payload?: Json
-          tool_name?: string
-          vapi_call_id?: string | null
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          error_message?: string | null;
+          id?: string;
+          ok?: boolean;
+          request_payload?: Json;
+          result_payload?: Json;
+          tool_name?: string;
+          vapi_call_id?: string | null;
+        };
+        Relationships: [];
+      };
       voice_audit_requests: {
         Row: {
-          consent_to_email: boolean
-          created_at: string
-          email: string
-          full_name: string
-          id: string
-          lead_id: string | null
-          primary_bottleneck: string | null
-          status: string
-          updated_at: string
-          vapi_call_id: string | null
-          website_url: string
-        }
+          consent_to_email: boolean;
+          created_at: string;
+          email: string;
+          full_name: string;
+          id: string;
+          lead_id: string | null;
+          primary_bottleneck: string | null;
+          status: string;
+          updated_at: string;
+          vapi_call_id: string | null;
+          website_url: string;
+        };
         Insert: {
-          consent_to_email?: boolean
-          created_at?: string
-          email: string
-          full_name: string
-          id?: string
-          lead_id?: string | null
-          primary_bottleneck?: string | null
-          status?: string
-          updated_at?: string
-          vapi_call_id?: string | null
-          website_url: string
-        }
+          consent_to_email?: boolean;
+          created_at?: string;
+          email: string;
+          full_name: string;
+          id?: string;
+          lead_id?: string | null;
+          primary_bottleneck?: string | null;
+          status?: string;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website_url: string;
+        };
         Update: {
-          consent_to_email?: boolean
-          created_at?: string
-          email?: string
-          full_name?: string
-          id?: string
-          lead_id?: string | null
-          primary_bottleneck?: string | null
-          status?: string
-          updated_at?: string
-          vapi_call_id?: string | null
-          website_url?: string
-        }
+          consent_to_email?: boolean;
+          created_at?: string;
+          email?: string;
+          full_name?: string;
+          id?: string;
+          lead_id?: string | null;
+          primary_bottleneck?: string | null;
+          status?: string;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website_url?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "voice_audit_requests_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "voice_audit_requests_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       voice_bookings: {
         Row: {
-          amount_paid_cents: number
-          consent_captured_at: string | null
-          created_at: string
-          currency: string
-          email: string
-          full_name: string
-          id: string
-          lead_id: string | null
-          meeting_reference: string | null
-          payment_status: string
-          phone: string | null
-          slot_end: string
-          slot_start: string
-          sms_marketing_consent: boolean
-          sms_service_consent: boolean
-          status: string
-          stripe_session_id: string | null
-          time_zone: string
-          updated_at: string
-          vapi_call_id: string | null
-        }
+          amount_paid_cents: number;
+          consent_captured_at: string | null;
+          created_at: string;
+          currency: string;
+          email: string;
+          full_name: string;
+          id: string;
+          lead_id: string | null;
+          meeting_reference: string | null;
+          payment_status: string;
+          phone: string | null;
+          slot_end: string;
+          slot_start: string;
+          sms_marketing_consent: boolean;
+          sms_service_consent: boolean;
+          status: string;
+          stripe_session_id: string | null;
+          time_zone: string;
+          updated_at: string;
+          vapi_call_id: string | null;
+        };
         Insert: {
-          amount_paid_cents?: number
-          consent_captured_at?: string | null
-          created_at?: string
-          currency?: string
-          email: string
-          full_name: string
-          id?: string
-          lead_id?: string | null
-          meeting_reference?: string | null
-          payment_status?: string
-          phone?: string | null
-          slot_end: string
-          slot_start: string
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          status?: string
-          stripe_session_id?: string | null
-          time_zone?: string
-          updated_at?: string
-          vapi_call_id?: string | null
-        }
+          amount_paid_cents?: number;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          currency?: string;
+          email: string;
+          full_name: string;
+          id?: string;
+          lead_id?: string | null;
+          meeting_reference?: string | null;
+          payment_status?: string;
+          phone?: string | null;
+          slot_end: string;
+          slot_start: string;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          status?: string;
+          stripe_session_id?: string | null;
+          time_zone?: string;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+        };
         Update: {
-          amount_paid_cents?: number
-          consent_captured_at?: string | null
-          created_at?: string
-          currency?: string
-          email?: string
-          full_name?: string
-          id?: string
-          lead_id?: string | null
-          meeting_reference?: string | null
-          payment_status?: string
-          phone?: string | null
-          slot_end?: string
-          slot_start?: string
-          sms_marketing_consent?: boolean
-          sms_service_consent?: boolean
-          status?: string
-          stripe_session_id?: string | null
-          time_zone?: string
-          updated_at?: string
-          vapi_call_id?: string | null
-        }
+          amount_paid_cents?: number;
+          consent_captured_at?: string | null;
+          created_at?: string;
+          currency?: string;
+          email?: string;
+          full_name?: string;
+          id?: string;
+          lead_id?: string | null;
+          meeting_reference?: string | null;
+          payment_status?: string;
+          phone?: string | null;
+          slot_end?: string;
+          slot_start?: string;
+          sms_marketing_consent?: boolean;
+          sms_service_consent?: boolean;
+          status?: string;
+          stripe_session_id?: string | null;
+          time_zone?: string;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "voice_bookings_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "voice_bookings_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       voice_call_records: {
         Row: {
-          created_at: string
-          ended_at: string | null
-          ended_reason: string | null
-          id: string
-          messages: Json
-          raw_payload: Json
-          recording_url: string | null
-          started_at: string | null
-          status: string
-          summary: string | null
-          transcript: string | null
-          updated_at: string
-          vapi_call_id: string
-        }
+          created_at: string;
+          ended_at: string | null;
+          ended_reason: string | null;
+          id: string;
+          messages: Json;
+          raw_payload: Json;
+          recording_url: string | null;
+          started_at: string | null;
+          status: string;
+          summary: string | null;
+          transcript: string | null;
+          updated_at: string;
+          vapi_call_id: string;
+        };
         Insert: {
-          created_at?: string
-          ended_at?: string | null
-          ended_reason?: string | null
-          id?: string
-          messages?: Json
-          raw_payload?: Json
-          recording_url?: string | null
-          started_at?: string | null
-          status?: string
-          summary?: string | null
-          transcript?: string | null
-          updated_at?: string
-          vapi_call_id: string
-        }
+          created_at?: string;
+          ended_at?: string | null;
+          ended_reason?: string | null;
+          id?: string;
+          messages?: Json;
+          raw_payload?: Json;
+          recording_url?: string | null;
+          started_at?: string | null;
+          status?: string;
+          summary?: string | null;
+          transcript?: string | null;
+          updated_at?: string;
+          vapi_call_id: string;
+        };
         Update: {
-          created_at?: string
-          ended_at?: string | null
-          ended_reason?: string | null
-          id?: string
-          messages?: Json
-          raw_payload?: Json
-          recording_url?: string | null
-          started_at?: string | null
-          status?: string
-          summary?: string | null
-          transcript?: string | null
-          updated_at?: string
-          vapi_call_id?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          ended_at?: string | null;
+          ended_reason?: string | null;
+          id?: string;
+          messages?: Json;
+          raw_payload?: Json;
+          recording_url?: string | null;
+          started_at?: string | null;
+          status?: string;
+          summary?: string | null;
+          transcript?: string | null;
+          updated_at?: string;
+          vapi_call_id?: string;
+        };
+        Relationships: [];
+      };
       voice_followups: {
         Row: {
-          created_at: string
-          email: string | null
-          full_name: string | null
-          id: string
-          lead_id: string | null
-          phone: string | null
-          preferred_method: string | null
-          reason: string
-          status: string
-          summary: string
-          updated_at: string
-          urgency: string
-          vapi_call_id: string | null
-        }
+          created_at: string;
+          email: string | null;
+          full_name: string | null;
+          id: string;
+          lead_id: string | null;
+          phone: string | null;
+          preferred_method: string | null;
+          reason: string;
+          status: string;
+          summary: string;
+          updated_at: string;
+          urgency: string;
+          vapi_call_id: string | null;
+        };
         Insert: {
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          lead_id?: string | null
-          phone?: string | null
-          preferred_method?: string | null
-          reason: string
-          status?: string
-          summary: string
-          updated_at?: string
-          urgency?: string
-          vapi_call_id?: string | null
-        }
+          created_at?: string;
+          email?: string | null;
+          full_name?: string | null;
+          id?: string;
+          lead_id?: string | null;
+          phone?: string | null;
+          preferred_method?: string | null;
+          reason: string;
+          status?: string;
+          summary: string;
+          updated_at?: string;
+          urgency?: string;
+          vapi_call_id?: string | null;
+        };
         Update: {
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          lead_id?: string | null
-          phone?: string | null
-          preferred_method?: string | null
-          reason?: string
-          status?: string
-          summary?: string
-          updated_at?: string
-          urgency?: string
-          vapi_call_id?: string | null
-        }
+          created_at?: string;
+          email?: string | null;
+          full_name?: string | null;
+          id?: string;
+          lead_id?: string | null;
+          phone?: string | null;
+          preferred_method?: string | null;
+          reason?: string;
+          status?: string;
+          summary?: string;
+          updated_at?: string;
+          urgency?: string;
+          vapi_call_id?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "voice_followups_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "voice_leads"
-            referencedColumns: ["id"]
+            foreignKeyName: "voice_followups_lead_id_fkey";
+            columns: ["lead_id"];
+            isOneToOne: false;
+            referencedRelation: "voice_leads";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       voice_leads: {
         Row: {
-          budget_range: string | null
-          company_name: string | null
-          consent_to_follow_up: boolean
-          created_at: string
-          email: string | null
-          full_name: string
-          id: string
-          notes: string | null
-          phone: string | null
-          primary_goal: string | null
-          project_type: string
-          source: string
-          stage: string
-          target_audience: string | null
-          timeline: string | null
-          updated_at: string
-          vapi_call_id: string | null
-          website_url: string | null
-        }
+          budget_range: string | null;
+          company_name: string | null;
+          consent_to_follow_up: boolean;
+          created_at: string;
+          email: string | null;
+          full_name: string;
+          id: string;
+          notes: string | null;
+          phone: string | null;
+          primary_goal: string | null;
+          project_type: string;
+          source: string;
+          stage: string;
+          target_audience: string | null;
+          timeline: string | null;
+          updated_at: string;
+          vapi_call_id: string | null;
+          website_url: string | null;
+        };
         Insert: {
-          budget_range?: string | null
-          company_name?: string | null
-          consent_to_follow_up?: boolean
-          created_at?: string
-          email?: string | null
-          full_name: string
-          id?: string
-          notes?: string | null
-          phone?: string | null
-          primary_goal?: string | null
-          project_type?: string
-          source?: string
-          stage?: string
-          target_audience?: string | null
-          timeline?: string | null
-          updated_at?: string
-          vapi_call_id?: string | null
-          website_url?: string | null
-        }
+          budget_range?: string | null;
+          company_name?: string | null;
+          consent_to_follow_up?: boolean;
+          created_at?: string;
+          email?: string | null;
+          full_name: string;
+          id?: string;
+          notes?: string | null;
+          phone?: string | null;
+          primary_goal?: string | null;
+          project_type?: string;
+          source?: string;
+          stage?: string;
+          target_audience?: string | null;
+          timeline?: string | null;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website_url?: string | null;
+        };
         Update: {
-          budget_range?: string | null
-          company_name?: string | null
-          consent_to_follow_up?: boolean
-          created_at?: string
-          email?: string | null
-          full_name?: string
-          id?: string
-          notes?: string | null
-          phone?: string | null
-          primary_goal?: string | null
-          project_type?: string
-          source?: string
-          stage?: string
-          target_audience?: string | null
-          timeline?: string | null
-          updated_at?: string
-          vapi_call_id?: string | null
-          website_url?: string | null
-        }
-        Relationships: []
-      }
-    }
+          budget_range?: string | null;
+          company_name?: string | null;
+          consent_to_follow_up?: boolean;
+          created_at?: string;
+          email?: string | null;
+          full_name?: string;
+          id?: string;
+          notes?: string | null;
+          phone?: string | null;
+          primary_goal?: string | null;
+          project_type?: string;
+          source?: string;
+          stage?: string;
+          target_audience?: string | null;
+          timeline?: string | null;
+          updated_at?: string;
+          vapi_call_id?: string | null;
+          website_url?: string | null;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-      automation_cron_token: { Args: never; Returns: string }
-    }
+      automation_cron_token: { Args: never; Returns: string };
+    };
     Enums: {
-      app_role: "admin" | "client"
-    }
+      app_role: "admin" | "client";
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+    : never;
 
 export const Constants = {
   public: {
@@ -1694,4 +1682,4 @@ export const Constants = {
       app_role: ["admin", "client"],
     },
   },
-} as const
+} as const;

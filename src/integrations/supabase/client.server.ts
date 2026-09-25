@@ -55,7 +55,7 @@ function createSupabaseAdminClient() {
             }
             return () => builder;
           },
-        }
+        },
       );
       return builder;
     };

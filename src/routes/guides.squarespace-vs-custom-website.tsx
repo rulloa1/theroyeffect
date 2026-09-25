@@ -93,17 +93,17 @@ function SquarespaceVsCustomGuide() {
           >
             their pricing page
           </a>
-          . Over three years that's about $684 to $3,564 in subscription fees. Lower tiers also
-          take a cut of your sales in transaction fees, and features most businesses eventually
-          want — pop-ups, commerce integrations, lower card rates — sit behind the pricier plans.
+          . Over three years that's about $684 to $3,564 in subscription fees. Lower tiers also take
+          a cut of your sales in transaction fees, and features most businesses eventually want —
+          pop-ups, commerce integrations, lower card rates — sit behind the pricier plans.
         </GuideParagraph>
         <GuideParagraph>
           <span className="mt-4 block">
             Compare that with a custom design and build: my own published rate is from $8,000
             one-time, with hosting and tooling typically under $50/month after that. On cash alone,
             the builder is cheaper. Which is exactly why the subscription number is the wrong
-            comparison — the real cost of a DIY site is measured in your hours and in the
-            customers who bounced.
+            comparison — the real cost of a DIY site is measured in your hours and in the customers
+            who bounced.
           </span>
         </GuideParagraph>
       </GuideSection>
@@ -112,8 +112,8 @@ function SquarespaceVsCustomGuide() {
         <GuideParagraph>
           A realistic DIY build for someone who hasn't done it before: 20 to 40 hours learning the
           editor, fighting layouts, writing copy, sourcing images and setting up forms and domain
-          records. Value your time at whatever you charge clients — for most owner-run businesses
-          in Houston, those hours alone rival a custom deposit. And the output is still a template
+          records. Value your time at whatever you charge clients — for most owner-run businesses in
+          Houston, those hours alone rival a custom deposit. And the output is still a template
           thousands of other sites share.
         </GuideParagraph>
       </GuideSection>

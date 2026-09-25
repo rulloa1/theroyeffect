@@ -15,8 +15,7 @@ export const Route = createFileRoute("/terms")({
       { property: "og:title", content: "Terms of Service — The Roy Effect" },
       {
         property: "og:description",
-        content:
-          "Project scope, payment terms and the text messaging program for The Roy Effect.",
+        content: "Project scope, payment terms and the text messaging program for The Roy Effect.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theroyeffect.com/terms" },
@@ -57,8 +56,8 @@ function TermsPage() {
           <H>Our services</H>
           <P>
             We provide website design, brand identity, and build services. Scope, price, and
-            timeline for any project are set out in the proposal or invoice we send you. Work
-            begins when payment or the agreed deposit clears.
+            timeline for any project are set out in the proposal or invoice we send you. Work begins
+            when payment or the agreed deposit clears.
           </P>
 
           <H>Payment</H>
@@ -94,17 +93,17 @@ function TermsPage() {
             <li>Carriers: Carriers are not liable for delayed or undelivered messages.</li>
             <li>
               Privacy: Mobile numbers collected for text messaging are handled as described in our
-              Privacy Policy, and are never shared with third parties or affiliates for marketing
-              or promotional purposes.
+              Privacy Policy, and are never shared with third parties or affiliates for marketing or
+              promotional purposes.
             </li>
           </ul>
 
           <H>Your content</H>
           <P>
-            You keep ownership of the logos, photographs, text, and other materials you give us,
-            and you confirm you have the right to use them. You give us permission to use them to
-            do the work, and to show the finished work in our portfolio unless you ask us in
-            writing not to.
+            You keep ownership of the logos, photographs, text, and other materials you give us, and
+            you confirm you have the right to use them. You give us permission to use them to do the
+            work, and to show the finished work in our portfolio unless you ask us in writing not
+            to.
           </P>
 
           <H>Our work</H>

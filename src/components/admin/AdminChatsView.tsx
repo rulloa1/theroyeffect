@@ -56,7 +56,8 @@ export function AdminChatsView({ conversations, onUpdateStatus, date }: Props) {
                   {c.last_message_preview || "—"}
                 </p>
                 <p className="mt-1 font-mono text-[10px] text-white/30">
-                  {[c.contact_email, c.contact_phone].filter(Boolean).join(" · ") || "No contact details yet"}
+                  {[c.contact_email, c.contact_phone].filter(Boolean).join(" · ") ||
+                    "No contact details yet"}
                   {" · "}
                   {date(c.last_message_at)}
                 </p>

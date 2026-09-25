@@ -142,9 +142,7 @@ export function AdminOnboardingView({
                   <ol className="mt-4 space-y-1.5">
                     {milestones.map((m, index) => (
                       <li key={m.title} className="font-mono text-[11px] text-white/60">
-                        <span className="text-white/30">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>{" "}
+                        <span className="text-white/30">{String(index + 1).padStart(2, "0")}</span>{" "}
                         <span className="text-white/85">{m.title}</span>
                         {m.note ? <span className="text-white/45"> — {m.note}</span> : null}
                         <span className="text-white/25"> · day {m.dueInDays}</span>

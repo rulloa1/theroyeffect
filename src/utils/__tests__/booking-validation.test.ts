@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { bookingSlotSchema, formatSlot, SLOT_HOURS_UTC, SLOT_MINUTES } from "@/utils/booking.server";
+import {
+  bookingSlotSchema,
+  formatSlot,
+  SLOT_HOURS_UTC,
+  SLOT_MINUTES,
+} from "@/utils/booking.server";
 
 const futureSlot = () => new Date(Date.now() + 48 * 3600_000).toISOString();
 
@@ -28,10 +33,18 @@ describe("bookingSlotSchema", () => {
 
   it("rejects missing name, bad email, and empty slot", () => {
     expect(() =>
-      bookingSlotSchema.parse({ full_name: "", email: "jane@company.com", slot_start: futureSlot() }),
+      bookingSlotSchema.parse({
+        full_name: "",
+        email: "jane@company.com",
+        slot_start: futureSlot(),
+      }),
     ).toThrow();
     expect(() =>
-      bookingSlotSchema.parse({ full_name: "Jane", email: "not-an-email", slot_start: futureSlot() }),
+      bookingSlotSchema.parse({
+        full_name: "Jane",
+        email: "not-an-email",
+        slot_start: futureSlot(),
+      }),
     ).toThrow();
     expect(() =>
       bookingSlotSchema.parse({ full_name: "Jane", email: "jane@company.com", slot_start: "" }),

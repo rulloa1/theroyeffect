@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Preview,
-  Text,
-} from "@react-email/components";
+import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from "@react-email/components";
 import type { TemplateEntry } from "./registry";
 
 interface Props {
@@ -19,13 +10,7 @@ interface Props {
   notes?: string;
 }
 
-const Email = ({
-  name = "Unknown",
-  email = "—",
-  phone = "—",
-  when = "—",
-  notes,
-}: Props) => (
+const Email = ({ name = "Unknown", email = "—", phone = "—", when = "—", notes }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>New discovery call booking from {name}</Preview>
@@ -57,7 +42,8 @@ const Email = ({
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => `New discovery call booking: ${data?.["name"] ?? "Unknown"}`,
+  subject: (data: Record<string, any>) =>
+    `New discovery call booking: ${data?.["name"] ?? "Unknown"}`,
   displayName: "Booking notification",
   to: "rory@theroyeffect.com",
   previewData: {

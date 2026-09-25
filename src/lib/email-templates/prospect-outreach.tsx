@@ -38,7 +38,9 @@ const Email = ({ businessName, body, reportUrl, topIssue }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>
-      {topIssue ? `${topIssue} — a free site report for ${businessName ?? "your business"}` : "A free site report"}
+      {topIssue
+        ? `${topIssue} — a free site report for ${businessName ?? "your business"}`
+        : "A free site report"}
     </Preview>
     <Body style={main}>
       <Container style={container}>
@@ -60,9 +62,7 @@ const Email = ({ businessName, body, reportUrl, topIssue }: Props) => (
           The Roy Effect · Houston, TX
         </Text>
         <Hr style={{ borderColor: "#eeeeee", margin: "20px 0" }} />
-        <Text style={small}>
-          theroyeffect.com · rory@theroyeffect.com · (281) 323-0450
-        </Text>
+        <Text style={small}>theroyeffect.com · rory@theroyeffect.com · (281) 323-0450</Text>
       </Container>
     </Body>
   </Html>
@@ -70,7 +70,8 @@ const Email = ({ businessName, body, reportUrl, topIssue }: Props) => (
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => (data["subject"] as string) ?? "A quick note about your website",
+  subject: (data: Record<string, any>) =>
+    (data["subject"] as string) ?? "A quick note about your website",
   displayName: "Prospect outreach",
   previewData: {
     businessName: "Bayou City Roofing",

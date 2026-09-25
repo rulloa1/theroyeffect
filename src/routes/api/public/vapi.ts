@@ -61,7 +61,6 @@ export const Route = createFileRoute("/api/public/vapi")({
           return json({ ok: true });
         }
 
-
         const { runTool, logToolCall } = await import("@/lib/vapi/handlers.server");
 
         const results = await Promise.all(

@@ -36,7 +36,6 @@ type Tab = "hot" | "all" | "drafted" | "contacted" | "analytics";
 const painTone = (score: number) =>
   score >= 40 ? "text-[#FF3333]" : score >= 20 ? "text-amber-300" : "text-white/50";
 
-
 export function AdminProspectsView({
   prospects,
   busy,
@@ -72,7 +71,6 @@ export function AdminProspectsView({
     });
   }, [prospects, tab, query]);
 
-
   const pendingScans = prospects.filter((p) => p.website && !p.scanned_at).length;
 
   const startEdit = (p: Prospect) => {
@@ -91,8 +89,8 @@ export function AdminProspectsView({
           <div>
             <p className="font-mono text-xs tracking-widest text-white">PROSPECT FINDER</p>
             <p className="mt-1 max-w-md font-mono text-[10px] leading-relaxed text-white/40">
-              Finds Houston businesses in one trade, checks their websites, and ranks them by how much the site is
-              costing them. Nothing is emailed until you press send.
+              Finds Houston businesses in one trade, checks their websites, and ranks them by how
+              much the site is costing them. Nothing is emailed until you press send.
             </p>
           </div>
         </div>
@@ -141,9 +139,15 @@ export function AdminProspectsView({
       <div className="flex flex-wrap items-center gap-3">
         {(
           [
-            ["hot", `WORTH CONTACTING (${prospects.filter((p) => p.pain_score >= 20 && p.status === "new").length})`],
+            [
+              "hot",
+              `WORTH CONTACTING (${prospects.filter((p) => p.pain_score >= 20 && p.status === "new").length})`,
+            ],
             ["drafted", `DRAFTED (${prospects.filter((p) => p.draft_status === "draft").length})`],
-            ["contacted", `CONTACTED (${prospects.filter((p) => p.draft_status === "sent").length})`],
+            [
+              "contacted",
+              `CONTACTED (${prospects.filter((p) => p.draft_status === "sent").length})`,
+            ],
             ["all", `ALL (${prospects.length})`],
             ["analytics", "PERFORMANCE"],
           ] as [Tab, string][]
@@ -153,7 +157,9 @@ export function AdminProspectsView({
             type="button"
             onClick={() => setTab(key)}
             className={`flex items-center gap-2 px-4 py-2 font-mono text-[10px] tracking-widest ${
-              tab === key ? "bg-white text-black" : "border border-white/10 text-white/50 hover:text-white"
+              tab === key
+                ? "bg-white text-black"
+                : "border border-white/10 text-white/50 hover:text-white"
             }`}
           >
             {key === "analytics" && <BarChart3 className="size-3" />}
@@ -180,7 +186,6 @@ export function AdminProspectsView({
         </p>
       )}
 
-
       <div className="space-y-4">
         {filtered.map((p) => {
           const editing = editingId === p.id;
@@ -189,7 +194,9 @@ export function AdminProspectsView({
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-3">
-                    <h3 className="truncate font-bold tracking-tight text-white">{p.business_name}</h3>
+                    <h3 className="truncate font-bold tracking-tight text-white">
+                      {p.business_name}
+                    </h3>
                     <span className={`font-mono text-xs ${painTone(p.pain_score)}`}>
                       PAIN {p.pain_score}
                     </span>
@@ -245,7 +252,16 @@ export function AdminProspectsView({
                     onChange={(e) => onUpdate(p.id, { status: e.target.value })}
                     className="border border-white/10 bg-black px-2 py-1.5 font-mono text-[10px] text-white"
                   >
-                    {["new", "queued", "contacted", "replied", "meeting", "won", "lost", "skipped"].map((s) => (
+                    {[
+                      "new",
+                      "queued",
+                      "contacted",
+                      "replied",
+                      "meeting",
+                      "won",
+                      "lost",
+                      "skipped",
+                    ].map((s) => (
                       <option key={s} value={s}>
                         {s.toUpperCase()}
                       </option>
@@ -258,20 +274,27 @@ export function AdminProspectsView({
                     className="flex items-center gap-2 border border-white/10 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/70 hover:text-white disabled:opacity-40"
                   >
                     <Sparkles className="size-3" />
-                    {busy === `draft-${p.id}` ? "WRITING…" : p.draft_body ? "REWRITE" : "WRITE EMAIL"}
+                    {busy === `draft-${p.id}`
+                      ? "WRITING…"
+                      : p.draft_body
+                        ? "REWRITE"
+                        : "WRITE EMAIL"}
                   </button>
                   <button
                     type="button"
                     disabled={busy !== null || !p.draft_body}
                     onClick={() => onGenerateVariants(p.id)}
                     className="flex items-center gap-2 border border-white/10 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/70 hover:text-white disabled:opacity-40"
-                    title={p.draft_body ? "Generate two subject/opening variants" : "Write the email first"}
+                    title={
+                      p.draft_body
+                        ? "Generate two subject/opening variants"
+                        : "Write the email first"
+                    }
                   >
                     <FlaskConical className="size-3" />
                     {busy === `variants-${p.id}` ? "TESTING…" : "A/B VARIANTS"}
                   </button>
                 </div>
-
               </div>
 
               <ul className="mt-4 flex flex-wrap gap-2">
@@ -297,7 +320,9 @@ export function AdminProspectsView({
                       <div
                         key={v.key}
                         className={`border p-3 ${
-                          active ? "border-[#FF3333]/60 bg-[#FF3333]/[0.06]" : "border-white/10 bg-black/40"
+                          active
+                            ? "border-[#FF3333]/60 bg-[#FF3333]/[0.06]"
+                            : "border-white/10 bg-black/40"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2">
@@ -309,16 +334,22 @@ export function AdminProspectsView({
                             disabled={busy !== null || p.draft_status === "sent"}
                             onClick={() => onSelectVariant(p.id, v.key)}
                             className={`px-3 py-1 font-mono text-[10px] font-bold tracking-widest disabled:opacity-40 ${
-                              active ? "bg-[#FF3333] text-black" : "border border-white/20 text-white/70"
+                              active
+                                ? "bg-[#FF3333] text-black"
+                                : "border border-white/20 text-white/70"
                             }`}
                           >
                             {active ? "IN USE" : "USE THIS"}
                           </button>
                         </div>
                         <p className="mt-2 font-mono text-xs font-bold text-white">{v.subject}</p>
-                        <p className="mt-1 font-mono text-xs leading-relaxed text-white/60">{v.opening}</p>
+                        <p className="mt-1 font-mono text-xs leading-relaxed text-white/60">
+                          {v.opening}
+                        </p>
                         {v.rationale && (
-                          <p className="mt-2 font-mono text-[10px] italic text-white/35">{v.rationale}</p>
+                          <p className="mt-2 font-mono text-[10px] italic text-white/35">
+                            {v.rationale}
+                          </p>
                         )}
                       </div>
                     );
@@ -326,12 +357,12 @@ export function AdminProspectsView({
                 </div>
               )}
 
-
-
               {(p.draft_body || editing) && (
                 <div className="mt-4 border-t border-white/10 pt-4">
                   {p.draft_rationale && !editing && (
-                    <p className="mb-3 font-mono text-[10px] italic text-white/40">{p.draft_rationale}</p>
+                    <p className="mb-3 font-mono text-[10px] italic text-white/40">
+                      {p.draft_rationale}
+                    </p>
                   )}
                   {editing ? (
                     <div className="space-y-3">

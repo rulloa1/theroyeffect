@@ -34,11 +34,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return (
-    <FirebaseContext.Provider value={{ ready }}>
-      {children}
-    </FirebaseContext.Provider>
-  );
+  return <FirebaseContext.Provider value={{ ready }}>{children}</FirebaseContext.Provider>;
 }
 
 export function useFirebase() {

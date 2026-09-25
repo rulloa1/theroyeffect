@@ -29,20 +29,21 @@ const Email = ({
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your support window wraps up in {String(daysLeft)} {daysLeft === 1 ? "day" : "days"}</Preview>
+    <Preview>
+      Your support window wraps up in {String(daysLeft)} {daysLeft === 1 ? "day" : "days"}
+    </Preview>
     <Body style={main}>
       <Container style={container}>
         <Text style={kicker}>THE ROY EFFECT · SUPPORT WINDOW</Text>
         <Heading style={heading}>Support window closing soon</Heading>
         <Text style={text}>
-          Hi {name}, your 14-day post-launch support window for{" "}
-          <strong>{projectTitle}</strong> wraps up in {daysLeft}{" "}
-          {daysLeft === 1 ? "day" : "days"}.
+          Hi {name}, your 14-day post-launch support window for <strong>{projectTitle}</strong>{" "}
+          wraps up in {daysLeft} {daysLeft === 1 ? "day" : "days"}.
         </Text>
         <Text style={text}>
-          After that, any new work is billed separately. If you'd like ongoing
-          design and build capacity — priority turnaround, weekly sync, and
-          someone who already knows your site — the monthly retainer covers it.
+          After that, any new work is billed separately. If you'd like ongoing design and build
+          capacity — priority turnaround, weekly sync, and someone who already knows your site — the
+          monthly retainer covers it.
         </Text>
         <Section style={{ marginTop: "24px" }}>
           <Button style={button} href={retainerUrl}>

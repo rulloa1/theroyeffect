@@ -202,8 +202,8 @@ function WebsiteAuditChecklistGuide() {
         <GuideParagraph>
           0–3 failures: your site is fundamentally healthy — tune, don't rebuild. 4–7 failures:
           you're leaking enquiries every week, and a focused audit will pay for itself. 8 or more:
-          the site is actively working against the business, and patching individual items will
-          cost more in the long run than fixing the foundation.
+          the site is actively working against the business, and patching individual items will cost
+          more in the long run than fixing the foundation.
         </GuideParagraph>
         <div className="mt-6 border border-white/10 bg-white/[0.02] p-6">
           <p className="font-mono text-xs leading-relaxed text-white/60 md:text-sm">
@@ -211,8 +211,8 @@ function WebsiteAuditChecklistGuide() {
             <a href="/audit" className="text-[#FF3333] underline underline-offset-4">
               free 5-minute video audit
             </a>{" "}
-            — I'll show you exactly which failures are costing the most. If your score also made
-            you curious about budget, here's{" "}
+            — I'll show you exactly which failures are costing the most. If your score also made you
+            curious about budget, here's{" "}
             <a
               href="/guides/houston-website-cost"
               className="text-[#FF3333] underline underline-offset-4"

@@ -117,13 +117,7 @@ export function GuideArticle({
 }
 
 /** Standard section wrapper used inside guide articles. */
-export function GuideSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+export function GuideSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mx-auto mt-20 max-w-4xl px-5 md:mt-28 md:px-10">
       <h2 className="font-display text-3xl uppercase leading-[0.95] text-white md:text-4xl">

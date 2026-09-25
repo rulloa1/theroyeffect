@@ -33,28 +33,31 @@ export function LogoMark({
         height={192}
         decoding="async"
         className={`size-full object-contain transition duration-300 motion-reduce:transition-none ${
-          animated ? "group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_14px_rgba(255,51,51,0.4)]" : ""
+          animated
+            ? "group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_14px_rgba(255,51,51,0.4)]"
+            : ""
         }`}
       />
     </span>
   );
 }
 
-export function Logo({
-  size = "md",
-  className = "",
-  href = "/",
-  interactive = true,
-}: LogoProps) {
+export function Logo({ size = "md", className = "", href = "/", interactive = true }: LogoProps) {
   const content = (
-    <span className={`group inline-flex items-center justify-center select-none ${interactive ? "cursor-pointer" : ""}`}>
+    <span
+      className={`group inline-flex items-center justify-center select-none ${interactive ? "cursor-pointer" : ""}`}
+    >
       <LogoMark className={sizeClasses[size]} animated={interactive} />
     </span>
   );
 
   if (href) {
     return (
-      <Link to={href} className={`inline-flex shrink-0 outline-none ${className}`} aria-label="The Roy Effect home">
+      <Link
+        to={href}
+        className={`inline-flex shrink-0 outline-none ${className}`}
+        aria-label="The Roy Effect home"
+      >
         {content}
       </Link>
     );

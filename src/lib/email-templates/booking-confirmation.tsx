@@ -37,9 +37,7 @@ const Email = ({
           I&apos;ll call you at the scheduled time.
         </Text>
         {notes ? <Text style={text}>Noted: {notes}</Text> : null}
-        <Text style={text}>
-          Please complete the short intake so I can prepare:
-        </Text>
+        <Text style={text}>Please complete the short intake so I can prepare:</Text>
         <Text style={text}>
           <Link href={questionnaire_url} style={link}>
             Complete your intake

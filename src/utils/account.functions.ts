@@ -110,7 +110,12 @@ export const getMyAccount = createServerFn({ method: "GET" })
         )
         .eq("user_id", userId)
         .order("created_at", { ascending: false }),
-      supabase.from("user_roles").select("role").eq("user_id", userId).eq("role", "admin").maybeSingle(),
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle(),
     ]);
 
     const briefsWithUrls: AccountBrief[] = await Promise.all(

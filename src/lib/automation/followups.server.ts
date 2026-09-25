@@ -5,10 +5,7 @@ import {
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { FOLLOWUP_PLAYBOOKS, SITE_URL, type PlaybookKey } from "./playbooks";
-import {
-  clientContextForPrompt,
-  fetchClientContextByEmail,
-} from "./client-context.server";
+import { clientContextForPrompt, fetchClientContextByEmail } from "./client-context.server";
 
 export const JOB_KEY = "followup_autopilot";
 /** Hard cap on drafts generated per run. */
@@ -355,7 +352,11 @@ export async function runFollowupBatch(runner: string): Promise<RunResult> {
         .update({ status: "active", paused_reason: null })
         .eq("job_key", JOB_KEY);
     }
-    result = { ok: true, status: paused && drafted === 0 ? "skipped_paused" : "completed", drafted };
+    result = {
+      ok: true,
+      status: paused && drafted === 0 ? "skipped_paused" : "completed",
+      drafted,
+    };
   } catch (error) {
     if (error instanceof AiGatewayBlockedError) {
       await db

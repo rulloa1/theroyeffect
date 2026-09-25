@@ -79,7 +79,9 @@ export async function generateOutreachDraft(
       prompt: [
         `Business: ${prospect.business_name} — a Houston ${descriptor}.`,
         prospect.address ? `Location: ${prospect.address}` : "",
-        prospect.has_website ? `Their website: ${prospect.website}` : "They have no website listed anywhere.",
+        prospect.has_website
+          ? `Their website: ${prospect.website}`
+          : "They have no website listed anywhere.",
         `Problems found (most severe first):`,
         prospect.signals
           .slice()
@@ -141,7 +143,13 @@ export function parseVariantResponse(raw: string): OutreachVariant[] {
     .map((obj, index) => ({
       key: (index === 0 ? "A" : "B") as "A" | "B",
       subject: pick(obj, ["subject", "subjectLine", "subject_line", "title"]).slice(0, 140),
-      opening: pick(obj, ["opening", "openingSentence", "opening_sentence", "firstSentence", "body"]).slice(0, 400),
+      opening: pick(obj, [
+        "opening",
+        "openingSentence",
+        "opening_sentence",
+        "firstSentence",
+        "body",
+      ]).slice(0, 400),
       rationale: pick(obj, ["rationale", "reason", "why", "angle"]).slice(0, 300),
     }))
     .filter((v) => v.subject && v.opening);
@@ -168,7 +176,9 @@ export async function generateOutreachVariants(prospect: {
       prompt: [
         `Business: ${prospect.business_name} — a Houston ${descriptor}.`,
         prospect.address ? `Location: ${prospect.address}` : "",
-        prospect.has_website ? `Their website: ${prospect.website}` : "They have no website listed anywhere.",
+        prospect.has_website
+          ? `Their website: ${prospect.website}`
+          : "They have no website listed anywhere.",
         "Problems found (most severe first):",
         prospect.signals
           .slice()

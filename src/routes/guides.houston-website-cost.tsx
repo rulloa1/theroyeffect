@@ -44,19 +44,22 @@ const APPROACHES = [
   {
     approach: "DIY builder (Squarespace, Wix)",
     typical: "$20–$50 / month",
-    youGet: "Templates, hosting and a drag-and-drop editor. You supply the time, the copy and the design judgement.",
+    youGet:
+      "Templates, hosting and a drag-and-drop editor. You supply the time, the copy and the design judgement.",
     bestFor: "Pre-revenue ideas and simple brochure sites.",
   },
   {
     approach: "Template freelancer",
     typical: "$1,000–$3,000 one-time",
-    youGet: "An off-the-shelf theme with your logo and colours dropped in. Quality varies enormously at this price.",
+    youGet:
+      "An off-the-shelf theme with your logo and colours dropped in. Quality varies enormously at this price.",
     bestFor: "Businesses that need something passable, fast.",
   },
   {
     approach: "Custom design + build",
     typical: "$5,000–$15,000+ one-time",
-    youGet: "Strategy, custom design, copy shaped around your customers, and a build tuned for speed and search.",
+    youGet:
+      "Strategy, custom design, copy shaped around your customers, and a build tuned for speed and search.",
     bestFor: "Businesses where the website is a primary source of leads.",
   },
 ];
@@ -85,10 +88,26 @@ const DRIVERS = [
 ];
 
 const MY_PRICES = [
-  { name: "Brand Sprint", price: "from $2,500", note: "Logo system, palette, type and brand guidelines for early-stage teams." },
-  { name: "Website / UI-UX design", price: "from $5,000", note: "Full visual design: wireframes, high-fidelity screens, clickable prototype." },
-  { name: "Design + Build", price: "from $8,000", note: "Everything in design, plus the no-code build, CMS, and performance & SEO basics." },
-  { name: "Retainer", price: "$3,000 / month", note: "Ongoing design capacity for teams shipping continuously." },
+  {
+    name: "Brand Sprint",
+    price: "from $2,500",
+    note: "Logo system, palette, type and brand guidelines for early-stage teams.",
+  },
+  {
+    name: "Website / UI-UX design",
+    price: "from $5,000",
+    note: "Full visual design: wireframes, high-fidelity screens, clickable prototype.",
+  },
+  {
+    name: "Design + Build",
+    price: "from $8,000",
+    note: "Everything in design, plus the no-code build, CMS, and performance & SEO basics.",
+  },
+  {
+    name: "Retainer",
+    price: "$3,000 / month",
+    note: "Ongoing design capacity for teams shipping continuously.",
+  },
 ];
 
 function HoustonWebsiteCostGuide() {
@@ -134,19 +153,33 @@ function HoustonWebsiteCostGuide() {
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">APPROACH</th>
-                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">TYPICAL COST</th>
-                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">WHAT YOU GET</th>
-                <th className="py-3 font-mono text-[11px] tracking-widest text-white/40">BEST FOR</th>
+                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">
+                  APPROACH
+                </th>
+                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">
+                  TYPICAL COST
+                </th>
+                <th className="py-3 pr-4 font-mono text-[11px] tracking-widest text-white/40">
+                  WHAT YOU GET
+                </th>
+                <th className="py-3 font-mono text-[11px] tracking-widest text-white/40">
+                  BEST FOR
+                </th>
               </tr>
             </thead>
             <tbody>
               {APPROACHES.map((row) => (
                 <tr key={row.approach} className="border-b border-white/5 align-top">
-                  <td className="py-4 pr-4 font-display text-sm uppercase text-white">{row.approach}</td>
+                  <td className="py-4 pr-4 font-display text-sm uppercase text-white">
+                    {row.approach}
+                  </td>
                   <td className="py-4 pr-4 font-mono text-xs text-[#FF3333]">{row.typical}</td>
-                  <td className="py-4 pr-4 font-mono text-xs leading-relaxed text-white/60">{row.youGet}</td>
-                  <td className="py-4 font-mono text-xs leading-relaxed text-white/60">{row.bestFor}</td>
+                  <td className="py-4 pr-4 font-mono text-xs leading-relaxed text-white/60">
+                    {row.youGet}
+                  </td>
+                  <td className="py-4 font-mono text-xs leading-relaxed text-white/60">
+                    {row.bestFor}
+                  </td>
                 </tr>
               ))}
             </tbody>

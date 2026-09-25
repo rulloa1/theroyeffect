@@ -24,7 +24,15 @@ const slotTime = (iso: string, tz: string) =>
 const stamp = (iso: string | null) =>
   iso ? new Date(iso).toLocaleString("en-US", { timeZone: "America/Chicago" }) : "—";
 
-function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+function Section({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <section className="border-t border-white/10 pt-5">
       <h3 className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-white/50">

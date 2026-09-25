@@ -243,7 +243,12 @@ const notesText = {
   whiteSpace: "pre-wrap" as const,
   margin: "0",
 };
-const notesEmpty = { fontSize: "14px", color: "#9ca3af", margin: "0", fontStyle: "italic" as const };
+const notesEmpty = {
+  fontSize: "14px",
+  color: "#9ca3af",
+  margin: "0",
+  fontStyle: "italic" as const,
+};
 const primaryButton = {
   display: "block",
   width: "100%",

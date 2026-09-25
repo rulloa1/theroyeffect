@@ -37,8 +37,8 @@ const Email = ({
         <Text style={kicker}>THE ROY EFFECT · LAUNCH READINESS</Text>
         <Heading style={heading}>Ready to go live</Heading>
         <Text style={text}>
-          Hi {name}, the build for <strong>{projectTitle}</strong> is complete and
-          tested. We're ready to launch.
+          Hi {name}, the build for <strong>{projectTitle}</strong> is complete and tested. We're
+          ready to launch.
         </Text>
         {goLiveDate ? (
           <Text style={text}>
@@ -49,13 +49,15 @@ const Email = ({
           <Section style={{ marginTop: "16px" }}>
             <Text style={label}>PRE-LAUNCH CHECKLIST</Text>
             {checklist.map((item, i) => (
-              <Text key={i} style={item_}>✓ {item}</Text>
+              <Text key={i} style={item_}>
+                ✓ {item}
+              </Text>
             ))}
           </Section>
         ) : null}
         <Text style={text}>
-          What I need from you: domain DNS access (or let me know if you'd like
-          me to handle it), and any final content changes before we cut over.
+          What I need from you: domain DNS access (or let me know if you'd like me to handle it),
+          and any final content changes before we cut over.
         </Text>
         <Section style={{ marginTop: "24px" }}>
           <Button style={button} href={portalUrl}>

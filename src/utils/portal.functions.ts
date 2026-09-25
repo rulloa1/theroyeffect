@@ -148,8 +148,7 @@ export const getMyPortal = createServerFn({ method: "GET" })
           currency: String(i["currency"] ?? "usd"),
           status: String(i["status"] ?? "open"),
           issued_at: String(i["created_at"] ?? ""),
-          hosted_url:
-            typeof i["hosted_invoice_url"] === "string" ? i["hosted_invoice_url"] : null,
+          hosted_url: typeof i["hosted_invoice_url"] === "string" ? i["hosted_invoice_url"] : null,
           balance_due_cents: 0,
         })),
       ].sort((a, b) => b.issued_at.localeCompare(a.issued_at));
@@ -182,8 +181,18 @@ const projectInput = z.object({
   title: z.string().trim().min(1).max(160),
   summary: z.string().trim().max(2000).optional(),
   status: z.enum(PROJECT_STATUSES).default("onboarding"),
-  start_date: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
-  target_date: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
+  start_date: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .or(z.literal("")),
+  target_date: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .or(z.literal("")),
   next_step: z.string().trim().max(400).optional(),
 });
 
@@ -209,9 +218,7 @@ export const adminCreatePortalProject = createServerFn({ method: "POST" })
 
 export const adminUpdatePortalProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
-    projectInput.partial().extend({ id: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input) => projectInput.partial().extend({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const db = context.supabase as AnyClient;
@@ -252,7 +259,12 @@ const milestoneInput = z.object({
     .optional(),
   status: z.enum(MILESTONE_STATUSES).default("pending"),
   position: z.number().int().min(0).max(999).default(0),
-  due_date: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
+  due_date: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .or(z.literal("")),
 });
 
 export const adminSaveMilestone = createServerFn({ method: "POST" })

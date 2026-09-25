@@ -42,18 +42,20 @@ function StudyCardCompact({ study }: { study: StudyCard }) {
         <div data-tilt-layer="">
           <SiteShot study={study} />
         </div>
-      <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#DFBA73]">
-          Study {study.index} · {study.sector}
-        </p>
-        <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-white">
-          {study.name}
-        </h3>
-        <p className="mt-2 font-sans text-[15px] leading-relaxed text-white/75">{study.summary}</p>
-        <span className="mt-auto inline-flex items-center gap-2 pt-5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-colors group-hover:text-[#DFBA73]">
-          Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
-        </span>
-      </div>
+        <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#DFBA73]">
+            Study {study.index} · {study.sector}
+          </p>
+          <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-white">
+            {study.name}
+          </h3>
+          <p className="mt-2 font-sans text-[15px] leading-relaxed text-white/75">
+            {study.summary}
+          </p>
+          <span className="mt-auto inline-flex items-center gap-2 pt-5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-colors group-hover:text-[#DFBA73]">
+            Read the study <ArrowUpRight className="size-4" aria-hidden="true" />
+          </span>
+        </div>
       </Link>
     </Tilt3D>
   );

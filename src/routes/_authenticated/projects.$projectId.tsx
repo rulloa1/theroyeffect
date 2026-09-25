@@ -1,13 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Circle,
-  ExternalLink,
-  Loader2,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle2, Circle, ExternalLink, Loader2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { getMyPortal, type PortalMilestone, type PortalProject } from "@/utils/portal.functions";
 import { getMyProposals, type ProjectProposal } from "@/utils/proposals.functions";

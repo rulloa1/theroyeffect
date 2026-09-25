@@ -68,7 +68,7 @@ function PricingPage() {
           </Link>
         </div>
       </div>
-       <Pricing mode="checkout" onCommission={() => navigate({ to: "/book" })} />
+      <Pricing mode="checkout" onCommission={() => navigate({ to: "/book" })} />
     </main>
   );
 }
