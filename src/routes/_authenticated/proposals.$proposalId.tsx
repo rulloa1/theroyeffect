@@ -6,11 +6,7 @@ import { AlertCircle, ArrowLeft, Check, FileCheck2, ShieldCheck } from "lucide-r
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Logo } from "@/components/Logo";
-import {
-  downloadMyProposalPdf,
-  getMyProposal,
-  signMyProposal,
-} from "@/utils/proposals.functions";
+import { downloadMyProposalPdf, getMyProposal, signMyProposal } from "@/utils/proposals.functions";
 
 export const Route = createFileRoute("/_authenticated/proposals/$proposalId")({
   head: () => ({
@@ -270,8 +266,8 @@ function PortalProposalPage() {
                   className="mt-1 size-4 border-white/20 bg-[#030014]"
                 />
                 <span className="font-mono text-xs leading-relaxed text-white/80">
-                  I, <strong>{signatureName || "the Client"}</strong>, agree to the scope,
-                  timeline ({proposal.timeline_weeks}) and payment schedule (
+                  I, <strong>{signatureName || "the Client"}</strong>, agree to the scope, timeline
+                  ({proposal.timeline_weeks}) and payment schedule (
                   {money(proposal.total_price_cents)}) set out above.
                 </span>
               </label>

@@ -83,7 +83,10 @@ async function gscFetch(path: string, init?: RequestInit): Promise<unknown> {
   });
   if (!response.ok) {
     const body = await response.text();
-    throw new GscApiError(response.status, `Search Console request failed [${response.status}]: ${body}`);
+    throw new GscApiError(
+      response.status,
+      `Search Console request failed [${response.status}]: ${body}`,
+    );
   }
   return response.json();
 }
@@ -108,7 +111,8 @@ async function resolveSiteUrl(): Promise<string> {
   };
   const target = new URL(SITE_TARGET);
   const matches = (data.siteEntry ?? []).filter(
-    (entry) => entry.permissionLevel !== "siteUnverifiedUser" && coversTarget(entry.siteUrl, target),
+    (entry) =>
+      entry.permissionLevel !== "siteUnverifiedUser" && coversTarget(entry.siteUrl, target),
   );
   if (matches.length === 0) {
     throw new Error("No verified Search Console property covers theroyeffect.com");
@@ -144,7 +148,10 @@ async function inspectUrl(siteUrl: string, url: string): Promise<InspectionResul
   };
 }
 
-async function notifyOwner(subjectLine: string, details: Record<string, string | number | undefined>) {
+async function notifyOwner(
+  subjectLine: string,
+  details: Record<string, string | number | undefined>,
+) {
   // Mirror every alert to Slack; email remains the primary channel.
   const { postSlackAlert } = await import("@/lib/slack/notify.server");
   await postSlackAlert(subjectLine, details);
@@ -219,14 +226,11 @@ export async function runIndexWatch(runner: string): Promise<IndexWatchResult> {
     await db.from("automation_jobs").update(update).eq("job_key", JOB_KEY);
     // Surface persistent config/billing problems to the owner once per distinct message.
     if (job.last_error !== message) {
-      await notifyOwner(
-        pause ? "SEO index watch paused" : "SEO index watch failed",
-        {
-          Problem: message,
-          "Next step": "Fix the issue, then resume the job from the next scheduled run.",
-          "Detected at": new Date().toISOString(),
-        },
-      );
+      await notifyOwner(pause ? "SEO index watch paused" : "SEO index watch failed", {
+        Problem: message,
+        "Next step": "Fix the issue, then resume the job from the next scheduled run.",
+        "Detected at": new Date().toISOString(),
+      });
     }
     return {
       ok: false,
@@ -247,7 +251,10 @@ export async function runIndexWatch(runner: string): Promise<IndexWatchResult> {
       } catch (error) {
         if (error instanceof GscApiError && error.status === 429) {
           // Rate limited: park remaining URLs; the next scheduled run retries.
-          result = await fail("Search Console rate limited the run — will retry on the next schedule.", false);
+          result = await fail(
+            "Search Console rate limited the run — will retry on the next schedule.",
+            false,
+          );
           return result;
         }
         throw error;
@@ -293,7 +300,10 @@ export async function runIndexWatch(runner: string): Promise<IndexWatchResult> {
         .eq("job_key", JOB_KEY);
     }
 
-    await db.from("automation_jobs").update({ state: { urls: urlStates } }).eq("job_key", JOB_KEY);
+    await db
+      .from("automation_jobs")
+      .update({ state: { urls: urlStates } })
+      .eq("job_key", JOB_KEY);
     result = {
       ok: true,
       status: paused ? "skipped_paused" : "completed",
@@ -305,7 +315,10 @@ export async function runIndexWatch(runner: string): Promise<IndexWatchResult> {
     // 401/402/403 from the gateway are terminal until config changes: pause the job.
     const pause = error instanceof GscApiError && [401, 402, 403].includes(error.status);
     // Persist whatever URL progress was made before the failure.
-    await db.from("automation_jobs").update({ state: { urls: urlStates } }).eq("job_key", JOB_KEY);
+    await db
+      .from("automation_jobs")
+      .update({ state: { urls: urlStates } })
+      .eq("job_key", JOB_KEY);
     result = await fail(message, pause);
   } finally {
     await db

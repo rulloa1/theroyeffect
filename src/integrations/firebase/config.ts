@@ -26,7 +26,7 @@ export function getFirebaseConfig(): FirebaseConfig | null {
   const result = firebaseConfigSchema.safeParse(raw);
   if (!result.success) {
     console.warn(
-      `[Firebase] Client config incomplete. Set all VITE_FIREBASE_* environment variables. ${result.error.message}`
+      `[Firebase] Client config incomplete. Set all VITE_FIREBASE_* environment variables. ${result.error.message}`,
     );
     return null;
   }

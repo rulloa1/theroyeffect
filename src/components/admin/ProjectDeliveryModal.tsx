@@ -24,32 +24,48 @@ export interface ProjectDeliveryModalProps {
 
 const CONFIG: Record<
   DeliveryType,
-  { title: string; label: string; icon: typeof Send; needsDesignUrl?: boolean; needsWalkthroughUrl?: boolean; needsGoLiveDate?: boolean; description: string }
+  {
+    title: string;
+    label: string;
+    icon: typeof Send;
+    needsDesignUrl?: boolean;
+    needsWalkthroughUrl?: boolean;
+    needsGoLiveDate?: boolean;
+    description: string;
+  }
 > = {
   "design-approval": {
     title: "Design Approval Request",
     label: "SEND APPROVAL REQUEST",
     icon: Palette,
     needsDesignUrl: true,
-    description: "Sends the design-approval-request email. The client reviews and replies 'approved' or requests changes.",
+    description:
+      "Sends the design-approval-request email. The client reviews and replies 'approved' or requests changes.",
   },
   "launch-ready": {
     title: "Launch Readiness",
     label: "SEND LAUNCH READY",
     icon: Rocket,
     needsGoLiveDate: true,
-    description: "Sends the launch-ready email with go-live date and checklist. Client confirms domain access.",
+    description:
+      "Sends the launch-ready email with go-live date and checklist. Client confirms domain access.",
   },
   handover: {
     title: "Post-Launch Handover",
     label: "SEND HANDOVER",
     icon: CheckCircle2,
     needsWalkthroughUrl: true,
-    description: "Sends the handover email with walkthrough video + access details. Starts the 14-day support window.",
+    description:
+      "Sends the handover email with walkthrough video + access details. Starts the 14-day support window.",
   },
 };
 
-export function ProjectDeliveryModal({ type, project, onClose, onSend }: ProjectDeliveryModalProps) {
+export function ProjectDeliveryModal({
+  type,
+  project,
+  onClose,
+  onSend,
+}: ProjectDeliveryModalProps) {
   const config = CONFIG[type];
   const Icon = config.icon;
 
@@ -83,9 +99,17 @@ export function ProjectDeliveryModal({ type, project, onClose, onSend }: Project
       if (designUrl) payload.designUrl = designUrl;
       if (notes) payload.notes = notes;
       if (goLiveDate) payload.goLiveDate = goLiveDate;
-      if (checklist) payload.checklist = checklist.split("\n").map((s) => s.trim()).filter(Boolean);
+      if (checklist)
+        payload.checklist = checklist
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean);
       if (walkthroughUrl) payload.walkthroughUrl = walkthroughUrl;
-      if (quickStartItems) payload.quickStartItems = quickStartItems.split("\n").map((s) => s.trim()).filter(Boolean);
+      if (quickStartItems)
+        payload.quickStartItems = quickStartItems
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean);
       await onSend(payload);
       onClose();
     } catch {
@@ -99,7 +123,10 @@ export function ProjectDeliveryModal({ type, project, onClose, onSend }: Project
     "mt-1.5 w-full border border-white/15 bg-[#030014] p-3 font-mono text-sm text-white placeholder:text-white/30 focus:border-[#DFBA73] focus:outline-none";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
       <div
         className="relative w-full max-w-lg border border-white/15 bg-[#0a0620] p-6 md:p-8 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}

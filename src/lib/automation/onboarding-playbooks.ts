@@ -14,8 +14,16 @@ export const ONBOARDING_PLAYBOOKS: Record<string, OnboardingPlaybook> = {
     projectTitle: (name) => `${name} — Discovery`,
     milestones: [
       { title: "Discovery call", note: "Paid and scheduled.", dueInDays: 0 },
-      { title: "Kickoff questionnaire", note: "Goals, audience and references collected.", dueInDays: 2 },
-      { title: "Scope recap & proposal", note: "Written scope and price sent for approval.", dueInDays: 5 },
+      {
+        title: "Kickoff questionnaire",
+        note: "Goals, audience and references collected.",
+        dueInDays: 2,
+      },
+      {
+        title: "Scope recap & proposal",
+        note: "Written scope and price sent for approval.",
+        dueInDays: 5,
+      },
     ],
   },
   commission: {
@@ -24,8 +32,16 @@ export const ONBOARDING_PLAYBOOKS: Record<string, OnboardingPlaybook> = {
     projectTitle: (name, product) => `${name} — ${product}`,
     milestones: [
       { title: "Brief received", note: "Project brief submitted and reviewed.", dueInDays: 2 },
-      { title: "Design direction", note: "Type, colour and layout direction presented.", dueInDays: 7 },
-      { title: "Design sign-off", note: "Client approves the design before build starts.", dueInDays: 12 },
+      {
+        title: "Design direction",
+        note: "Type, colour and layout direction presented.",
+        dueInDays: 7,
+      },
+      {
+        title: "Design sign-off",
+        note: "Client approves the design before build starts.",
+        dueInDays: 12,
+      },
       { title: "Build", note: "Approved design built and tested on all screens.", dueInDays: 21 },
       { title: "Launch", note: "Go live, handover and final balance.", dueInDays: 28 },
     ],
@@ -35,7 +51,11 @@ export const ONBOARDING_PLAYBOOKS: Record<string, OnboardingPlaybook> = {
     goal: "Start the care plan with agreed monthly priorities and a first visible win.",
     projectTitle: (name) => `${name} — Retainer`,
     milestones: [
-      { title: "Care plan kickoff", note: "Access, priorities and reporting agreed.", dueInDays: 3 },
+      {
+        title: "Care plan kickoff",
+        note: "Access, priorities and reporting agreed.",
+        dueInDays: 3,
+      },
       { title: "First improvement shipped", note: "First change live on the site.", dueInDays: 10 },
       { title: "Monthly review", note: "What shipped, what's next.", dueInDays: 30 },
     ],

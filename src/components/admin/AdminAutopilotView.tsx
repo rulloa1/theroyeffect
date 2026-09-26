@@ -58,15 +58,16 @@ export function AdminAutopilotView({
         <div className="flex items-start gap-3">
           <Bot className="mt-0.5 size-5 text-[#FF3333]" />
           <div>
-            <p className="font-mono text-[10px] tracking-widest text-white/40">FOLLOW-UP AUTOPILOT</p>
+            <p className="font-mono text-[10px] tracking-widest text-white/40">
+              FOLLOW-UP AUTOPILOT
+            </p>
             <p className="mt-1 text-sm text-white/80">
-              {paused ? "Paused" : "Active"} · scans hourly · last run {date(state?.job?.last_run_at ?? null)} ·{" "}
-              {state?.job?.items_processed ?? 0} drafts written
+              {paused ? "Paused" : "Active"} · scans hourly · last run{" "}
+              {date(state?.job?.last_run_at ?? null)} · {state?.job?.items_processed ?? 0} drafts
+              written
             </p>
             {state?.job?.paused_reason ? (
-              <p className="mt-1 font-mono text-[10px] text-[#FF3333]">
-                {state.job.paused_reason}
-              </p>
+              <p className="mt-1 font-mono text-[10px] text-[#FF3333]">{state.job.paused_reason}</p>
             ) : null}
             {state?.job?.last_error ? (
               <p className="mt-1 font-mono text-[10px] text-yellow-400/80">

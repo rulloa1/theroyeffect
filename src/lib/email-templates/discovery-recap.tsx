@@ -47,14 +47,22 @@ const Email = ({
         <Text style={kicker}>THE ROY EFFECT · CALL RECAP</Text>
         <Heading style={heading}>Recap from our call</Heading>
         <Text style={text}>Hi {name}, great talking today. Here's where I land:</Text>
-        {summary ? <Text style={text}><strong style={strong}>What you're solving:</strong> {summary}</Text> : null}
+        {summary ? (
+          <Text style={text}>
+            <strong style={strong}>What you're solving:</strong> {summary}
+          </Text>
+        ) : null}
         {recommendedTier ? (
           <Text style={text}>
             <strong style={strong}>What I recommend:</strong> {recommendedTier}
             {whyFit ? ` — ${whyFit}` : ""}
           </Text>
         ) : null}
-        {timeline ? <Text style={text}><strong style={strong}>Timeline:</strong> {timeline}</Text> : null}
+        {timeline ? (
+          <Text style={text}>
+            <strong style={strong}>Timeline:</strong> {timeline}
+          </Text>
+        ) : null}
         {investment ? (
           <Text style={text}>
             <strong style={strong}>Investment:</strong> {investment}
@@ -65,7 +73,9 @@ const Email = ({
           <Section style={{ marginTop: "16px" }}>
             <Text style={label}>WHAT'S INCLUDED</Text>
             {includes.map((item, i) => (
-              <Text key={i} style={item_}>— {item}</Text>
+              <Text key={i} style={item_}>
+                — {item}
+              </Text>
             ))}
           </Section>
         ) : null}
@@ -92,7 +102,8 @@ export const template: TemplateEntry = {
   previewData: {
     name: "Marta",
     businessName: "Reyes Roofing",
-    summary: "Your current site loads slowly on mobile and the contact form is buried below the fold. You're getting visits from Google but most bounce before reaching the form.",
+    summary:
+      "Your current site loads slowly on mobile and the contact form is buried below the fold. You're getting visits from Google but most bounce before reaching the form.",
     recommendedTier: "Design + Build",
     whyFit: "you need both the design work and a live, fast site — not just mockups.",
     timeline: "4-5 weeks from kickoff to launch",

@@ -40,8 +40,8 @@ const Email = ({
           Hi {name}, the full design for <strong>{projectTitle}</strong> is ready for your review.
         </Text>
         <Text style={text}>
-          Take a look through every screen. This is the design that will go live —
-          nothing gets built until you approve it, and what you approve is what ships.
+          Take a look through every screen. This is the design that will go live — nothing gets
+          built until you approve it, and what you approve is what ships.
         </Text>
         {notes ? <Text style={text}>{notes}</Text> : null}
         {designUrl ? (
@@ -52,9 +52,12 @@ const Email = ({
           </Section>
         ) : null}
         <Text style={text}>
-          Reply with "approved" if everything looks right, or tell me what to adjust.
-          You can also review it in your{" "}
-          <Link href={portalUrl} style={link}>client portal</Link>.
+          Reply with "approved" if everything looks right, or tell me what to adjust. You can also
+          review it in your{" "}
+          <Link href={portalUrl} style={link}>
+            client portal
+          </Link>
+          .
         </Text>
         <Hr style={hr} />
         <Text style={footer}>Rory Ulloa — Creative Director, theroyeffect.com</Text>
@@ -73,7 +76,8 @@ export const template: TemplateEntry = {
     projectTitle: "Reyes Roofing — Website",
     designUrl: "https://www.figma.com/proto/example",
     portalUrl: "https://www.theroyeffect.com/portal",
-    notes: "I've highlighted the two areas we discussed changing in round 2. Everything else matches the approved direction.",
+    notes:
+      "I've highlighted the two areas we discussed changing in round 2. Everything else matches the approved direction.",
   },
 };
 

@@ -125,12 +125,7 @@ export function ParticleBackground() {
       composer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
       composer.setSize(width, height);
       composer.addPass(new RenderPass(scene, camera));
-      const bloom = new UnrealBloomPass(
-        new THREE.Vector2(width, height),
-        0.8,
-        0.1,
-        1.0,
-      );
+      const bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 0.8, 0.1, 1.0);
       composer.addPass(bloom);
 
       /* ---------------- pointer interaction ---------------- */
@@ -250,10 +245,13 @@ export function ParticleBackground() {
 
       const hero = document.querySelector<HTMLElement>("[data-home-hero]");
       const heroObserver = hero
-        ? new IntersectionObserver(([entry]) => {
-            heroVisible = entry?.isIntersecting ?? false;
-            syncAnimation();
-          }, { threshold: 0.01 })
+        ? new IntersectionObserver(
+            ([entry]) => {
+              heroVisible = entry?.isIntersecting ?? false;
+              syncAnimation();
+            },
+            { threshold: 0.01 },
+          )
         : null;
       if (hero && heroObserver) heroObserver.observe(hero);
 

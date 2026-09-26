@@ -35,10 +35,14 @@ function createSupabaseClient() {
   // Fall back to process.env for SSR (server-side rendering)
   const SUPABASE_URL =
     (typeof import.meta !== "undefined" && import.meta.env?.["VITE_SUPABASE_URL"]) ||
-    (typeof process !== "undefined" ? process.env?.["SUPABASE_URL"] || process.env?.["VITE_SUPABASE_URL"] : undefined);
+    (typeof process !== "undefined"
+      ? process.env?.["SUPABASE_URL"] || process.env?.["VITE_SUPABASE_URL"]
+      : undefined);
   const SUPABASE_PUBLISHABLE_KEY =
     (typeof import.meta !== "undefined" && import.meta.env?.["VITE_SUPABASE_PUBLISHABLE_KEY"]) ||
-    (typeof process !== "undefined" ? process.env?.["SUPABASE_PUBLISHABLE_KEY"] || process.env?.["VITE_SUPABASE_PUBLISHABLE_KEY"] : undefined);
+    (typeof process !== "undefined"
+      ? process.env?.["SUPABASE_PUBLISHABLE_KEY"] || process.env?.["VITE_SUPABASE_PUBLISHABLE_KEY"]
+      : undefined);
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const createMockBuilder = (): any => {
@@ -59,7 +63,7 @@ function createSupabaseClient() {
             }
             return () => builder;
           },
-        }
+        },
       );
       return builder;
     };
@@ -69,8 +73,14 @@ function createSupabaseClient() {
         getSession: async () => ({ data: { session: null }, error: null }),
         getUser: async () => ({ data: { user: null }, error: null }),
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-        signInWithPassword: async () => ({ data: { user: null, session: null }, error: new Error("Supabase not configured") }),
-        signUp: async () => ({ data: { user: null, session: null }, error: new Error("Supabase not configured") }),
+        signInWithPassword: async () => ({
+          data: { user: null, session: null },
+          error: new Error("Supabase not configured"),
+        }),
+        signUp: async () => ({
+          data: { user: null, session: null },
+          error: new Error("Supabase not configured"),
+        }),
         signOut: async () => ({ error: null }),
         resetPasswordForEmail: async () => ({ data: null, error: null }),
         updateUser: async () => ({ data: { user: null }, error: null }),

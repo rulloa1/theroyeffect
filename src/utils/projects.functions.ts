@@ -1,9 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import {
-  DEFAULT_SHOWCASE_PROJECTS,
-  mapShowcaseRow,
-  type PortfolioProject,
-} from "./projects.data";
+import { DEFAULT_SHOWCASE_PROJECTS, mapShowcaseRow, type PortfolioProject } from "./projects.data";
 
 export { DEFAULT_SHOWCASE_PROJECTS };
 export type { PortfolioProject };

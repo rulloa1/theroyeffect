@@ -117,7 +117,11 @@ function PortalLoginPage() {
   };
 
   return (
-    <main id="main" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#030014] px-5 py-24">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="flex min-h-screen items-center justify-center bg-[#030014] px-5 py-24"
+    >
       <Toaster />
       <div className="w-full max-w-md border border-white/10 bg-white/[0.02] p-8">
         <div className="mb-6 flex justify-center border-b border-white/10 pb-6">
@@ -143,7 +147,8 @@ function PortalLoginPage() {
         </button>
 
         <div className="my-6 flex items-center gap-3 font-mono text-[10px] tracking-widest text-white/25">
-          <span className="h-px flex-1 bg-white/10" /> OR <span className="h-px flex-1 bg-white/10" />
+          <span className="h-px flex-1 bg-white/10" /> OR{" "}
+          <span className="h-px flex-1 bg-white/10" />
         </div>
 
         <form onSubmit={submit} className="space-y-3">

@@ -35,7 +35,9 @@ export async function runProspectScan(industryKey: string): Promise<RunSummary> 
       "source_ref",
       found.map((f) => f.sourceRef),
     );
-  const existing = new Set<string>((existingRows ?? []).map((r: { source_ref: string }) => r.source_ref));
+  const existing = new Set<string>(
+    (existingRows ?? []).map((r: { source_ref: string }) => r.source_ref),
+  );
   const fresh = found.filter((f) => !existing.has(f.sourceRef));
 
   let scanned = 0;

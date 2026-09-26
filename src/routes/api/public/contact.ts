@@ -103,9 +103,7 @@ export const Route = createFileRoute("/api/public/contact")({
             consentCapturedAt: submittedAt,
             submittedAt,
             pageUrl,
-            tags: isAudit
-              ? ["website-lead", "audit-request"]
-              : ["website-lead", "contact-form"],
+            tags: isAudit ? ["website-lead", "audit-request"] : ["website-lead", "contact-form"],
           });
         } catch (ghlError) {
           // sendToGhl should never throw, but guard against it defensively.

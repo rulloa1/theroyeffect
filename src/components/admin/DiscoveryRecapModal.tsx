@@ -27,7 +27,12 @@ export interface DiscoveryRecapModalProps {
   ) => Promise<void>;
 }
 
-const TIERS = ["Brand Sprint — $2,500", "Website / UI-UX — $5,000", "Design + Build — $8,000", "Retainer — $3,000/mo"];
+const TIERS = [
+  "Brand Sprint — $2,500",
+  "Website / UI-UX — $5,000",
+  "Design + Build — $8,000",
+  "Retainer — $3,000/mo",
+];
 
 export function DiscoveryRecapModal({ booking, onClose, onSend }: DiscoveryRecapModalProps) {
   const [businessName, setBusinessName] = useState("");
@@ -37,7 +42,9 @@ export function DiscoveryRecapModal({ booking, onClose, onSend }: DiscoveryRecap
   const [timeline, setTimeline] = useState("4-5 weeks from kickoff to launch");
   const [investment, setInvestment] = useState("$8,000");
   const [deposit, setDeposit] = useState("$4,000 deposit");
-  const [includes, setIncludes] = useState("Full responsive design (mobile → desktop)\nNo-code build with CMS, forms & payments\nLaunch, analytics & SEO basics\n14-day post-launch support");
+  const [includes, setIncludes] = useState(
+    "Full responsive design (mobile → desktop)\nNo-code build with CMS, forms & payments\nLaunch, analytics & SEO basics\n14-day post-launch support",
+  );
   const [sending, setSending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,7 +66,10 @@ export function DiscoveryRecapModal({ booking, onClose, onSend }: DiscoveryRecap
         timeline,
         investment,
         deposit,
-        includes.split("\n").map((s) => s.trim()).filter(Boolean),
+        includes
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
       );
       onClose();
     } catch {
@@ -70,7 +80,10 @@ export function DiscoveryRecapModal({ booking, onClose, onSend }: DiscoveryRecap
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
       <div
         className="relative w-full max-w-lg border border-white/15 bg-[#0a0620] p-6 md:p-8 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -126,7 +139,9 @@ export function DiscoveryRecapModal({ booking, onClose, onSend }: DiscoveryRecap
               className="mt-1.5 w-full border border-white/15 bg-[#030014] p-3 font-mono text-sm text-white focus:border-[#DFBA73] focus:outline-none"
             >
               {TIERS.map((t) => (
-                <option key={t} value={t} className="bg-[#030014]">{t}</option>
+                <option key={t} value={t} className="bg-[#030014]">
+                  {t}
+                </option>
               ))}
             </select>
           </div>

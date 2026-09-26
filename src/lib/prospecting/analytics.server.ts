@@ -81,7 +81,10 @@ export async function buildProspectAnalytics(): Promise<ProspectAnalytics> {
     }[]) {
       if (!o.customer_email || o.payment_status !== "paid") continue;
       const key = o.customer_email.toLowerCase();
-      revenueByEmail.set(key, (revenueByEmail.get(key) ?? 0) + (o.amount_total - (o.amount_refunded ?? 0)));
+      revenueByEmail.set(
+        key,
+        (revenueByEmail.get(key) ?? 0) + (o.amount_total - (o.amount_refunded ?? 0)),
+      );
     }
   }
 
@@ -102,7 +105,9 @@ export async function buildProspectAnalytics(): Promise<ProspectAnalytics> {
   };
 
   for (const row of rows) {
-    const revenue = row.contact_email ? (revenueByEmail.get(row.contact_email.toLowerCase()) ?? 0) : 0;
+    const revenue = row.contact_email
+      ? (revenueByEmail.get(row.contact_email.toLowerCase()) ?? 0)
+      : 0;
     bump(overall, row, revenue);
     const keys: [keyof typeof buckets, string][] = [
       ["variant", row.sent_variant ? `Variant ${row.sent_variant}` : "No variant"],

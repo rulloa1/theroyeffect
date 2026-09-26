@@ -58,8 +58,8 @@ function PrivacyPage() {
           </h1>
 
           <P>
-            Last updated: {L.lastUpdated}. This policy explains how {L.legalName}, doing business
-            as {L.dba} (&quot;we&quot;, &quot;us&quot;), collects and uses information at {L.site}.
+            Last updated: {L.lastUpdated}. This policy explains how {L.legalName}, doing business as{" "}
+            {L.dba} (&quot;we&quot;, &quot;us&quot;), collects and uses information at {L.site}.
           </P>
 
           <H>Information we collect</H>
@@ -85,13 +85,13 @@ function PrivacyPage() {
           <H>Mobile information and text messages</H>
           <P>
             No mobile information will be shared with third parties or affiliates for marketing or
-            promotional purposes. All other categories exclude text messaging originator opt-in
-            data and consent; this information will not be shared with any third parties.
+            promotional purposes. All other categories exclude text messaging originator opt-in data
+            and consent; this information will not be shared with any third parties.
           </P>
           <P>
             We text you only where you have given consent. Message frequency varies. Message and
-            data rates may apply. Reply STOP to any message to opt out, or HELP for help. Opting
-            out of text messages does not affect email or phone contact.
+            data rates may apply. Reply STOP to any message to opt out, or HELP for help. Opting out
+            of text messages does not affect email or phone contact.
           </P>
 
           <H>Who we share information with</H>
@@ -110,10 +110,10 @@ function PrivacyPage() {
 
           <H>Keeping and deleting information</H>
           <P>
-            We keep information for as long as we are working together and for as long afterwards
-            as we need it for tax, legal, and record-keeping purposes. You may ask us to delete
-            your information at any time by emailing {L.email}, and we will do so unless we are
-            required to keep it.
+            We keep information for as long as we are working together and for as long afterwards as
+            we need it for tax, legal, and record-keeping purposes. You may ask us to delete your
+            information at any time by emailing {L.email}, and we will do so unless we are required
+            to keep it.
           </P>
 
           <H>Your choices</H>

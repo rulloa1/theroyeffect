@@ -89,7 +89,12 @@ export async function discoverBusinesses(
         results.push({
           sourceRef: `${element.type}/${element.id}`,
           businessName: name,
-          category: clean(tags["shop"]) ?? clean(tags["office"]) ?? clean(tags["craft"]) ?? clean(tags["healthcare"]) ?? clean(tags["amenity"]),
+          category:
+            clean(tags["shop"]) ??
+            clean(tags["office"]) ??
+            clean(tags["craft"]) ??
+            clean(tags["healthcare"]) ??
+            clean(tags["amenity"]),
           address: buildAddress(tags),
           lat: element.lat ?? element.center?.lat ?? null,
           lon: element.lon ?? element.center?.lon ?? null,

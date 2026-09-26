@@ -20,7 +20,8 @@ export const Route = createFileRoute("/site-report/$token")({
       { property: "og:title", content: "Your Website Report | The Roy Effect" },
       {
         property: "og:description",
-        content: "A free, personalized review of what your website is costing you and what to fix first.",
+        content:
+          "A free, personalized review of what your website is costing you and what to fix first.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -34,7 +35,11 @@ export const Route = createFileRoute("/site-report/$token")({
 
 function ReportMessage({ title }: { title: string }) {
   return (
-    <main id="main" tabIndex={-1} className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-6 px-6 text-center">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-6 px-6 text-center"
+    >
       <Logo className="h-8 w-auto" />
       <h1 className="text-2xl font-bold uppercase tracking-tight">{title}</h1>
       <Link
@@ -56,7 +61,13 @@ const SEVERITY = {
 function SiteReportPage() {
   const report = Route.useLoaderData();
   const grade =
-    report.painScore >= 40 ? "Critical" : report.painScore >= 20 ? "Needs work" : report.painScore > 0 ? "Minor issues" : "Looks solid";
+    report.painScore >= 40
+      ? "Critical"
+      : report.painScore >= 20
+        ? "Needs work"
+        : report.painScore > 0
+          ? "Minor issues"
+          : "Looks solid";
 
   return (
     <main id="main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
@@ -70,8 +81,8 @@ function SiteReportPage() {
           {report.businessName}
         </h1>
         <p className="mt-4 max-w-xl text-base text-muted-foreground">
-          I looked at how this {report.industryLabel} shows up online from a customer&apos;s point of view. Here is what
-          I found, in plain English — nothing to sign up for.
+          I looked at how this {report.industryLabel} shows up online from a customer&apos;s point
+          of view. Here is what I found, in plain English — nothing to sign up for.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -98,8 +109,8 @@ function SiteReportPage() {
           {report.signals.length === 0 ? (
             <p className="flex items-start gap-3 rounded-xl border border-border p-5 text-muted-foreground">
               <Check className="mt-0.5 h-5 w-5 text-primary" />
-              No blocking issues turned up in the automated pass. The next win is usually positioning and copy, which
-              needs a human look.
+              No blocking issues turned up in the automated pass. The next win is usually
+              positioning and copy, which needs a human look.
             </p>
           ) : (
             report.signals.map((signal) => {
@@ -126,8 +137,9 @@ function SiteReportPage() {
         <section className="mt-14 rounded-2xl border border-primary/40 bg-primary/5 p-8">
           <h2 className="text-2xl font-black uppercase tracking-tight">Want these fixed?</h2>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            I design and build sites for Houston businesses — usually live within two to three weeks. Start with a free
-            5-minute video teardown where I walk through these findings and what I would do first.
+            I design and build sites for Houston businesses — usually live within two to three
+            weeks. Start with a free 5-minute video teardown where I walk through these findings and
+            what I would do first.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

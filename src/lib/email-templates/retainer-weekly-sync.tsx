@@ -42,7 +42,9 @@ const Email = ({
           <Section style={{ marginTop: "16px" }}>
             <Text style={label}>SHIPPED LAST WEEK</Text>
             {shipped.map((item, i) => (
-              <Text key={i} style={item_}>✓ {item}</Text>
+              <Text key={i} style={item_}>
+                ✓ {item}
+              </Text>
             ))}
           </Section>
         ) : null}
@@ -50,7 +52,9 @@ const Email = ({
           <Section style={{ marginTop: "16px" }}>
             <Text style={label}>IN PROGRESS</Text>
             {inProgress.map((item, i) => (
-              <Text key={i} style={item_}>→ {item}</Text>
+              <Text key={i} style={item_}>
+                → {item}
+              </Text>
             ))}
           </Section>
         ) : null}
@@ -58,7 +62,9 @@ const Email = ({
           <Section style={{ marginTop: "16px" }}>
             <Text style={label}>UP NEXT</Text>
             {upNext.map((item, i) => (
-              <Text key={i} style={item_}>{item}</Text>
+              <Text key={i} style={item_}>
+                {item}
+              </Text>
             ))}
           </Section>
         ) : null}
@@ -70,7 +76,10 @@ const Email = ({
         ) : null}
         <Text style={text}>
           Reply with any changes to priority. Full project status in your{" "}
-          <Link href={portalUrl} style={link}>client portal</Link>.
+          <Link href={portalUrl} style={link}>
+            client portal
+          </Link>
+          .
         </Text>
         <Hr style={hr} />
         <Text style={footer}>Rory Ulloa — Creative Director, theroyeffect.com</Text>

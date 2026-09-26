@@ -238,7 +238,11 @@ export function AdminSignalView({
   const newLeads7d = leads.filter((l) => daysSince(l.created_at) <= 7).length;
 
   const kpis = [
-    { label: "Collected this month", value: money(collectedThisMonth), sub: "Paid orders, net of refunds" },
+    {
+      label: "Collected this month",
+      value: money(collectedThisMonth),
+      sub: "Paid orders, net of refunds",
+    },
     { label: "Open balances", value: money(pendingBalance), sub: "Invoice when work is approved" },
     { label: "New leads · 7 days", value: String(newLeads7d), sub: "Across all sources" },
     { label: "Needs you now", value: String(visible.length), sub: "Items in this queue" },
@@ -250,7 +254,9 @@ export function AdminSignalView({
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="font-mono text-[11px] tracking-[0.22em] text-white/45">ACTION QUEUE</span>
+          <span className="font-mono text-[11px] tracking-[0.22em] text-white/45">
+            ACTION QUEUE
+          </span>
           <div className="ml-auto flex flex-wrap gap-2">
             {chips.map((chip) => (
               <button
@@ -350,7 +356,9 @@ export function AdminSignalView({
               onClick={() => onNavigate("AUTOPILOT")}
               className="min-h-11 w-full bg-[#DFBA73] px-4 py-3 font-mono text-[11px] font-bold tracking-[0.2em] text-black hover:bg-[#F6DC9A]"
             >
-              {pendingDrafts.length > 0 ? `REVIEW ${pendingDrafts.length} DRAFTS` : "OPEN AUTOPILOT"}
+              {pendingDrafts.length > 0
+                ? `REVIEW ${pendingDrafts.length} DRAFTS`
+                : "OPEN AUTOPILOT"}
             </button>
             <button
               type="button"

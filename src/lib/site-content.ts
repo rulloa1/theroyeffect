@@ -81,7 +81,8 @@ export const SHOWCASE_WORK: ShowcaseWorkEntry[] = [
     slug: "responsive-site",
     title: "Responsive service site",
     eyebrow: "STUDIO WORK · DESIGN + BUILD",
-    result: "One brand, three screens. A homepage that reads clearly on a phone and asks for the enquiry.",
+    result:
+      "One brand, three screens. A homepage that reads clearly on a phone and asks for the enquiry.",
     image: "/work/responsive-site.svg",
     alt: "Website shown across laptop, tablet and phone",
   },
@@ -89,7 +90,8 @@ export const SHOWCASE_WORK: ShowcaseWorkEntry[] = [
     slug: "brand-identity",
     title: "Brand identity system",
     eyebrow: "STUDIO WORK · BRAND SYSTEM",
-    result: "Logo, palette and stationery that stay consistent from the website to the business card.",
+    result:
+      "Logo, palette and stationery that stay consistent from the website to the business card.",
     image: "/work/brand-identity.svg",
     alt: "Brand identity stationery and colour system",
   },
@@ -97,7 +99,8 @@ export const SHOWCASE_WORK: ShowcaseWorkEntry[] = [
     slug: "studio-presence",
     title: "Studio presence",
     eyebrow: "STUDIO WORK · CREATIVE DIRECTION",
-    result: "Art direction that makes an owner-run business look established before the first call.",
+    result:
+      "Art direction that makes an owner-run business look established before the first call.",
     image: "/work/studio-presence.svg",
     alt: "Branded studio scene",
   },

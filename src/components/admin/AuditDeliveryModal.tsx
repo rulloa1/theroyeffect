@@ -30,13 +30,18 @@ export function AuditDeliveryModal({ inquiry, onClose, onDeliver }: AuditDeliver
   const [sending, setSending] = useState(false);
 
   const domain = inquiry.website_url
-    ? inquiry.website_url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "")
+    ? inquiry.website_url
+        .replace(/^https?:\/\//, "")
+        .replace(/^www\./, "")
+        .replace(/\/.*$/, "")
     : "";
 
   const openSite = () => {
     if (inquiry.website_url) {
       window.open(
-        inquiry.website_url.startsWith("http") ? inquiry.website_url : `https://${inquiry.website_url}`,
+        inquiry.website_url.startsWith("http")
+          ? inquiry.website_url
+          : `https://${inquiry.website_url}`,
         "_blank",
       );
     }
@@ -54,16 +59,7 @@ export function AuditDeliveryModal({ inquiry, onClose, onDeliver }: AuditDeliver
     }
     setSending(true);
     try {
-      await onDeliver(
-        inquiry.id,
-        inquiry.name,
-        inquiry.email,
-        domain,
-        fix1,
-        fix2,
-        fix3,
-        videoUrl,
-      );
+      await onDeliver(inquiry.id, inquiry.name, inquiry.email, domain, fix1, fix2, fix3, videoUrl);
       onClose();
     } catch {
       // toast handled by caller
@@ -73,27 +69,26 @@ export function AuditDeliveryModal({ inquiry, onClose, onDeliver }: AuditDeliver
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
       <div
         className="relative w-full max-w-lg border border-white/15 bg-[#0a0620] p-6 md:p-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-white/40 hover:text-white"
-        >
+        <button onClick={onClose} className="absolute right-4 top-4 text-white/40 hover:text-white">
           <X className="size-5" />
         </button>
 
-        <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">
-          DELIVER AUDIT
-        </span>
-        <h2 className="mt-2 font-display text-2xl uppercase text-white">
-          5-Minute Audit Delivery
-        </h2>
+        <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">DELIVER AUDIT</span>
+        <h2 className="mt-2 font-display text-2xl uppercase text-white">5-Minute Audit Delivery</h2>
         <p className="mt-2 font-mono text-xs text-white/60">
           Recording for <strong className="text-white">{inquiry.name}</strong> ·{" "}
-          <button onClick={openSite} className="text-[#FF3333] underline inline-flex items-center gap-1">
+          <button
+            onClick={openSite}
+            className="text-[#FF3333] underline inline-flex items-center gap-1"
+          >
             {domain} <ExternalLink className="size-3" />
           </button>
         </p>

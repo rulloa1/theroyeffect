@@ -28,9 +28,9 @@ export function SmsConsent({
           className="mt-0.5 size-4 shrink-0 accent-[#FF3333]"
         />
         <span className="font-mono text-[11px] leading-relaxed text-white/70">
-          Text me about my project — appointment confirmations, reminders, and updates from The
-          Roy Effect. Message frequency varies. Message and data rates may apply. Reply STOP to opt
-          out, HELP for help.
+          Text me about my project — appointment confirmations, reminders, and updates from The Roy
+          Effect. Message frequency varies. Message and data rates may apply. Reply STOP to opt out,
+          HELP for help.
         </span>
       </label>
 
@@ -58,8 +58,8 @@ export function SmsConsent({
         <Link to="/terms" className="underline hover:text-[#FF3333]">
           Terms of Service
         </Link>
-        . The Roy Effect will not share your mobile information with third parties or affiliates
-        for marketing or promotional purposes.
+        . The Roy Effect will not share your mobile information with third parties or affiliates for
+        marketing or promotional purposes.
       </p>
     </div>
   );

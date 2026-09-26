@@ -8,9 +8,14 @@ export interface ProspectAnalyticsPanelProps {
 }
 
 const money = (cents: number) =>
-  (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  (cents / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
 
-const rate = (part: number, whole: number) => (whole === 0 ? "—" : `${Math.round((part / whole) * 100)}%`);
+const rate = (part: number, whole: number) =>
+  whole === 0 ? "—" : `${Math.round((part / whole) * 100)}%`;
 
 function StatTable({ title, rows, hint }: { title: string; rows: FunnelStats[]; hint: string }) {
   return (
@@ -37,8 +42,7 @@ function StatTable({ title, rows, hint }: { title: string; rows: FunnelStats[]; 
                   <td className="border-b border-white/5 py-2 pr-4 text-white">{row.label}</td>
                   <td className="border-b border-white/5 py-2">{row.sent}</td>
                   <td className="border-b border-white/5 py-2">
-                    {row.opened}{" "}
-                    <span className="text-white/30">{rate(row.opened, row.sent)}</span>
+                    {row.opened} <span className="text-white/30">{rate(row.opened, row.sent)}</span>
                   </td>
                   <td className="border-b border-white/5 py-2">
                     {row.replied}{" "}
@@ -70,8 +74,8 @@ export function ProspectAnalyticsPanel({ analytics, busy, onSync }: ProspectAnal
           <div>
             <p className="font-mono text-xs tracking-widest text-white">OUTREACH PERFORMANCE</p>
             <p className="mt-1 max-w-lg font-mono text-[10px] leading-relaxed text-white/40">
-              An open means the prospect viewed their personalized report. Calls and revenue are matched back
-              from your booking calendar and paid orders by email.
+              An open means the prospect viewed their personalized report. Calls and revenue are
+              matched back from your booking calendar and paid orders by email.
             </p>
           </div>
         </div>
@@ -89,7 +93,10 @@ export function ProspectAnalyticsPanel({ analytics, busy, onSync }: ProspectAnal
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           ["EMAILS SENT", String(overall?.sent ?? 0)],
-          ["REPORTS OPENED", `${overall?.opened ?? 0} (${rate(overall?.opened ?? 0, overall?.sent ?? 0)})`],
+          [
+            "REPORTS OPENED",
+            `${overall?.opened ?? 0} (${rate(overall?.opened ?? 0, overall?.sent ?? 0)})`,
+          ],
           ["CALLS BOOKED", String(overall?.booked ?? 0)],
           ["REVENUE", money(overall?.revenueCents ?? 0)],
         ].map(([label, value]) => (

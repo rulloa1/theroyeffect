@@ -50,7 +50,11 @@ function CheckoutReturn() {
   const summary = data && !("error" in data) ? data : null;
 
   return (
-    <main id="main" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#030014] px-5 py-24">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="flex min-h-screen items-center justify-center bg-[#030014] px-5 py-24"
+    >
       <div className="w-full max-w-lg border border-white/10 bg-white/[0.02] p-8">
         <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
           {isLoading ? "VERIFYING…" : verified ? "PAYMENT RECEIVED" : "NO PAYMENT FOUND"}

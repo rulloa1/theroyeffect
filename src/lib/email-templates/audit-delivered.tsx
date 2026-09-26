@@ -41,8 +41,7 @@ const Email = ({
         <Text style={kicker}>THE ROY EFFECT · AUDIT DELIVERED</Text>
         <Heading style={heading}>Your website audit is ready</Heading>
         <Text style={text}>
-          Hi {name}, I recorded a 5-minute teardown of {domain}. Here's what I
-          found:
+          Hi {name}, I recorded a 5-minute teardown of {domain}. Here's what I found:
         </Text>
         <Section style={fixList}>
           {fix1 ? <Text style={fixItem}>1. {fix1}</Text> : null}
@@ -57,8 +56,7 @@ const Email = ({
           </Section>
         ) : null}
         <Text style={text}>
-          If you want me to make these fixes, we can talk. If not, the notes are
-          yours to keep.
+          If you want me to make these fixes, we can talk. If not, the notes are yours to keep.
         </Text>
         <Text style={text}>
           <Link href={bookUrl} style={link}>

@@ -37,8 +37,8 @@ const Email = ({
         <Text style={kicker}>THE ROY EFFECT · LAUNCH COMPLETE</Text>
         <Heading style={heading}>Your site is live</Heading>
         <Text style={text}>
-          Hi {name}, <strong>{projectTitle}</strong> is live. Here's everything
-          you need to manage it.
+          Hi {name}, <strong>{projectTitle}</strong> is live. Here's everything you need to manage
+          it.
         </Text>
         {walkthroughUrl ? (
           <Section style={{ marginTop: "24px" }}>
@@ -51,17 +51,22 @@ const Email = ({
           <Section style={{ marginTop: "20px" }}>
             <Text style={label}>QUICK START</Text>
             {quickStartItems.map((item, i) => (
-              <Text key={i} style={item_}>— {item}</Text>
+              <Text key={i} style={item_}>
+                — {item}
+              </Text>
             ))}
           </Section>
         ) : null}
         <Text style={text}>
           You have access to everything: the CMS, hosting, analytics, and your{" "}
-          <Link href={portalUrl} style={link}>client portal</Link>.
+          <Link href={portalUrl} style={link}>
+            client portal
+          </Link>
+          .
         </Text>
         <Text style={text}>
-          Your 14-day support window started today. If anything breaks or looks
-          off, reply to this email and I'll fix it — no charge.
+          Your 14-day support window started today. If anything breaks or looks off, reply to this
+          email and I'll fix it — no charge.
         </Text>
         <Hr style={hr} />
         <Text style={footer}>Rory Ulloa — Creative Director, theroyeffect.com</Text>

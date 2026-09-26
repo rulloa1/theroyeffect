@@ -50,9 +50,13 @@ async function resolveCallerNumberId(apiKey: string): Promise<string> {
   // A uuid-like ID can be used as-is; anything that looks like a phone number needs resolving.
   if (explicitId && !explicitId.trim().startsWith("+")) return explicitId.trim();
 
-  const outboundNumber = explicitId?.trim().startsWith("+") ? explicitId.trim() : process.env["VAPI_OUTBOUND_NUMBER"]?.trim();
+  const outboundNumber = explicitId?.trim().startsWith("+")
+    ? explicitId.trim()
+    : process.env["VAPI_OUTBOUND_NUMBER"]?.trim();
   if (!outboundNumber) {
-    throw new Error("No calling number configured — set VAPI_OUTBOUND_NUMBER (or VAPI_PHONE_NUMBER_ID).");
+    throw new Error(
+      "No calling number configured — set VAPI_OUTBOUND_NUMBER (or VAPI_PHONE_NUMBER_ID).",
+    );
   }
 
   const response = await fetch(`${VAPI_API}/phone-number`, {
@@ -60,7 +64,9 @@ async function resolveCallerNumberId(apiKey: string): Promise<string> {
   });
   const text = await response.text();
   if (!response.ok) {
-    throw new Error(`Could not look up Vapi phone numbers (${response.status}): ${text.slice(0, 300)}`);
+    throw new Error(
+      `Could not look up Vapi phone numbers (${response.status}): ${text.slice(0, 300)}`,
+    );
   }
 
   let numbers: Array<{ id?: string; number?: string }>;
@@ -70,7 +76,10 @@ async function resolveCallerNumberId(apiKey: string): Promise<string> {
     throw new Error("Vapi returned an unreadable phone-number list.");
   }
 
-  const match = numbers.find((n) => n.number === outboundNumber || n.number === outboundNumber.replace(/^\+1/, "").slice(-10));
+  const match = numbers.find(
+    (n) =>
+      n.number === outboundNumber || n.number === outboundNumber.replace(/^\+1/, "").slice(-10),
+  );
   if (!match?.id) {
     throw new Error(`The calling number ${outboundNumber} is not set up in your Vapi account yet.`);
   }

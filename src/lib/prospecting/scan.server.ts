@@ -233,12 +233,16 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
       mobileFriendly: /<meta[^>]+name=["']viewport["']/i.test(html),
       title: (html.match(/<title[^>]*>([^<]{1,200})<\/title>/i)?.[1] ?? "").trim() || null,
       metaDescription:
-        (html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,300})["']/i)?.[1] ?? "").trim() ||
-        null,
+        (
+          html.match(
+            /<meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,300})["']/i,
+          )?.[1] ?? ""
+        ).trim() || null,
       htmlBytes: html.length,
       hasPhoneLink: lower.includes("tel:"),
       hasEmailLink: lower.includes("mailto:"),
-      hasContactForm: lower.includes("<form") || lower.includes("typeform") || lower.includes("jotform"),
+      hasContactForm:
+        lower.includes("<form") || lower.includes("typeform") || lower.includes("jotform"),
       hasBookingCta: /(book|schedule|appointment|free quote|get a quote|estimate)/i.test(html),
       copyrightYear: yearMatch?.[1] ? Number(yearMatch[1]) : null,
       foundEmail: extractEmail(html),
@@ -259,10 +263,10 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
 }
 
 /** Turns a scan into weighted, human-readable problems. Higher score = more pain. */
-export function scoreProspect(input: {
-  hasWebsite: boolean;
-  scan: ScanResult | null;
-}): { score: number; signals: ProspectSignal[] } {
+export function scoreProspect(input: { hasWebsite: boolean; scan: ScanResult | null }): {
+  score: number;
+  signals: ProspectSignal[];
+} {
   const signals: ProspectSignal[] = [];
   const push = (s: ProspectSignal) => signals.push(s);
 
@@ -270,7 +274,8 @@ export function scoreProspect(input: {
     push({
       code: "no_website",
       label: "No website at all",
-      detail: "We could not find any website listed for this business, so every search for them ends at a competitor.",
+      detail:
+        "We could not find any website listed for this business, so every search for them ends at a competitor.",
       weight: 50,
       severity: "critical",
     });
@@ -302,7 +307,8 @@ export function scoreProspect(input: {
     push({
       code: "not_mobile",
       label: "Not built for phones",
-      detail: "The page has no mobile setup, so it renders zoomed-out on the phones most local customers use.",
+      detail:
+        "The page has no mobile setup, so it renders zoomed-out on the phones most local customers use.",
       weight: 20,
       severity: "critical",
     });
@@ -320,7 +326,8 @@ export function scoreProspect(input: {
     push({
       code: "no_contact_path",
       label: "No easy way to make contact",
-      detail: "There is no contact form or email link on the homepage, so interested visitors have to work for it.",
+      detail:
+        "There is no contact form or email link on the homepage, so interested visitors have to work for it.",
       weight: 14,
       severity: "warning",
     });
@@ -329,7 +336,8 @@ export function scoreProspect(input: {
     push({
       code: "no_tap_to_call",
       label: "Phone number is not tap-to-call",
-      detail: "On a phone, the number cannot be tapped to dial, which loses calls from people ready to book.",
+      detail:
+        "On a phone, the number cannot be tapped to dial, which loses calls from people ready to book.",
       weight: 8,
       severity: "warning",
     });
@@ -347,7 +355,8 @@ export function scoreProspect(input: {
     push({
       code: "weak_title",
       label: "Weak page title for Google",
-      detail: "The title Google shows in search results is missing or too thin to rank for local searches.",
+      detail:
+        "The title Google shows in search results is missing or too thin to rank for local searches.",
       weight: 10,
       severity: "warning",
     });
@@ -356,7 +365,8 @@ export function scoreProspect(input: {
     push({
       code: "no_meta",
       label: "No search description",
-      detail: "Google has no description to show under the listing, so it invents one from stray page text.",
+      detail:
+        "Google has no description to show under the listing, so it invents one from stray page text.",
       weight: 6,
       severity: "info",
     });
@@ -374,7 +384,8 @@ export function scoreProspect(input: {
     push({
       code: "thin",
       label: "Almost no content",
-      detail: "The homepage is nearly empty, which gives Google nothing to rank and visitors nothing to trust.",
+      detail:
+        "The homepage is nearly empty, which gives Google nothing to rank and visitors nothing to trust.",
       weight: 12,
       severity: "warning",
     });

@@ -45,7 +45,6 @@ export interface Prospect {
 const SELECT =
   "id, business_name, industry, category, address, phone, website, contact_email, has_website, pain_score, signals, scanned_at, report_token, report_viewed_at, draft_subject, draft_body, draft_rationale, draft_status, contacted_at, status, notes, created_at, variants, sent_variant, lead_id, replied_at, booked_at, won_at";
 
-
 export const adminListProspects = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ prospects: Prospect[] }> => {
@@ -87,13 +86,16 @@ export const adminDraftOutreach = createServerFn({ method: "POST" })
     await assertAdmin(context as never);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = (context as any).supabase;
-    const { data: prospect, error } = await db.from("prospects").select(SELECT).eq("id", data.id).maybeSingle();
+    const { data: prospect, error } = await db
+      .from("prospects")
+      .select(SELECT)
+      .eq("id", data.id)
+      .maybeSingle();
     if (error || !prospect) throw new Error("Prospect not found");
 
     const { generateOutreachDraft } = await import("@/lib/prospecting/outreach.server");
-    const { fetchClientContextByEmail, clientContextForPrompt } = await import(
-      "@/lib/automation/client-context.server"
-    );
+    const { fetchClientContextByEmail, clientContextForPrompt } =
+      await import("@/lib/automation/client-context.server");
     try {
       // If this prospect is already a client, ground the draft in their real projects.
       const clientCtx = prospect.contact_email
@@ -117,7 +119,10 @@ export const adminDraftOutreach = createServerFn({ method: "POST" })
       return { ok: true as const, ...draft };
     } catch (err) {
       const message = err instanceof Error ? err.message : "Draft failed";
-      await db.from("prospects").update({ draft_status: "failed", notes: message }).eq("id", data.id);
+      await db
+        .from("prospects")
+        .update({ draft_status: "failed", notes: message })
+        .eq("id", data.id);
       throw new Error(message);
     }
   });
@@ -157,7 +162,11 @@ export const adminSendOutreach = createServerFn({ method: "POST" })
     await assertAdmin(context as never);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = (context as any).supabase;
-    const { data: prospect } = await db.from("prospects").select(SELECT).eq("id", data.id).maybeSingle();
+    const { data: prospect } = await db
+      .from("prospects")
+      .select(SELECT)
+      .eq("id", data.id)
+      .maybeSingle();
     if (!prospect) throw new Error("Prospect not found");
     const p = prospect as Prospect;
     if (!p.contact_email) throw new Error("No email address on file for this prospect");
@@ -200,7 +209,6 @@ export const adminSendOutreach = createServerFn({ method: "POST" })
       await ensureLeadForProspect(p);
 
       return { ok: true as const };
-
     } catch (err) {
       const message = err instanceof Error ? err.message : "Send failed";
       await db.from("prospects").update({ draft_status: "failed", notes: message }).eq("id", p.id);
@@ -248,9 +256,8 @@ export const adminUpdateProspect = createServerFn({ method: "POST" })
 
     // Keep the CRM pipeline in step with the prospect's status.
     if (data.status) {
-      const { ensureLeadForProspect, syncLeadStage, STAGE_FOR_STATUS } = await import(
-        "@/lib/prospecting/crm.server"
-      );
+      const { ensureLeadForProspect, syncLeadStage, STAGE_FOR_STATUS } =
+        await import("@/lib/prospecting/crm.server");
       if (STAGE_FOR_STATUS[data.status]) {
         const leadId = await ensureLeadForProspect({
           ...p,
@@ -270,7 +277,11 @@ export const adminGenerateVariants = createServerFn({ method: "POST" })
     await assertAdmin(context as never);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = (context as any).supabase;
-    const { data: prospect } = await db.from("prospects").select(SELECT).eq("id", data.id).maybeSingle();
+    const { data: prospect } = await db
+      .from("prospects")
+      .select(SELECT)
+      .eq("id", data.id)
+      .maybeSingle();
     if (!prospect) throw new Error("Prospect not found");
 
     const { generateOutreachVariants } = await import("@/lib/prospecting/outreach.server");
@@ -292,7 +303,11 @@ export const adminSelectVariant = createServerFn({ method: "POST" })
     await assertAdmin(context as never);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = (context as any).supabase;
-    const { data: prospect } = await db.from("prospects").select(SELECT).eq("id", data.id).maybeSingle();
+    const { data: prospect } = await db
+      .from("prospects")
+      .select(SELECT)
+      .eq("id", data.id)
+      .maybeSingle();
     if (!prospect) throw new Error("Prospect not found");
     const p = prospect as Prospect;
     const variant = (p.variants ?? []).find((v) => v.key === data.key);
@@ -333,4 +348,3 @@ export const adminProspectAnalytics = createServerFn({ method: "GET" })
     const { buildProspectAnalytics } = await import("@/lib/prospecting/analytics.server");
     return buildProspectAnalytics();
   });
-
