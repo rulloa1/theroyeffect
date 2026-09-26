@@ -1,7 +1,6 @@
-import { streamText } from "ai";
 import {
   AiGatewayBlockedError,
-  resolveDraftingProvider,
+  generateDraftText,
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { getIndustry, type ProspectSignal } from "./industries";
@@ -69,12 +68,10 @@ export async function generateOutreachDraft(
   },
   clientContext?: string | null,
 ): Promise<OutreachDraft & { model: string }> {
-  const { provider, model } = resolveDraftingProvider();
   const descriptor = getIndustry(prospect.industry)?.descriptor ?? "local business";
 
   try {
-    const result = streamText({
-      model: provider(model),
+    const { text, model } = await generateDraftText({
       system: SYSTEM,
       prompt: [
         `Business: ${prospect.business_name} — a Houston ${descriptor}.`,
@@ -94,7 +91,6 @@ export async function generateOutreachDraft(
         .filter(Boolean)
         .join("\n"),
     });
-    const text = await result.text;
     return { ...parseOutreachResponse(text), model };
   } catch (error) {
     const status = statusFromAiError(error);
@@ -158,12 +154,10 @@ export async function generateOutreachVariants(prospect: {
   address: string | null;
   signals: ProspectSignal[];
 }): Promise<OutreachVariant[]> {
-  const { provider, model } = resolveDraftingProvider();
   const descriptor = getIndustry(prospect.industry)?.descriptor ?? "local business";
 
   try {
-    const result = streamText({
-      model: provider(model),
+    const { text } = await generateDraftText({
       system: VARIANT_SYSTEM,
       prompt: [
         `Business: ${prospect.business_name} — a Houston ${descriptor}.`,
@@ -179,7 +173,7 @@ export async function generateOutreachVariants(prospect: {
         .filter(Boolean)
         .join("\n"),
     });
-    return parseVariantResponse(await result.text);
+    return parseVariantResponse(text);
   } catch (error) {
     const status = statusFromAiError(error);
     if (status === 402 || status === 403) {

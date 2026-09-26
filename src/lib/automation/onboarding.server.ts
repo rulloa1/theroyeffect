@@ -11,10 +11,9 @@
  *
  * Keyed on (source_table, source_id) so Stripe webhook retries are idempotent.
  */
-import { streamText } from "ai";
 import {
   AiGatewayBlockedError,
-  resolveDraftingProvider,
+  generateDraftText,
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { escapeLikePattern } from "@/lib/sql-like";
@@ -123,12 +122,8 @@ export async function generateKickoffPlan(
   input: OnboardingInput,
 ): Promise<{ plan: KickoffPlan; model: string; rationale: string; aiError?: string }> {
   const play = ONBOARDING_PLAYBOOKS[input.triggerType] ?? ONBOARDING_PLAYBOOKS["commission"]!;
-  let model = "template";
   try {
-    const resolved = resolveDraftingProvider();
-    model = resolved.model;
-    const result = streamText({
-      model: resolved.provider(resolved.model),
+    const { text, model } = await generateDraftText({
       system: SYSTEM,
       prompt: [
         `Purchase type: ${play.label}.`,
@@ -141,7 +136,7 @@ export async function generateKickoffPlan(
         `"kickoffNotes" is written for Rory, not the client: what to prepare before the first touchpoint.`,
       ].join("\n"),
     });
-    const plan = parsePlan(await result.text);
+    const plan = parsePlan(text);
     return { plan, model, rationale: plan.kickoffNotes };
   } catch (error) {
     const status = statusFromAiError(error);

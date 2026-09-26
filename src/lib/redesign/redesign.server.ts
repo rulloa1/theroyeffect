@@ -1,7 +1,6 @@
-import { streamText } from "ai";
 import {
   AiGatewayBlockedError,
-  resolveDraftingProvider,
+  generateDraftText,
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { scanWebsite, type ScanResult } from "@/lib/prospecting/scan.server";
@@ -150,10 +149,8 @@ export async function generateRedesignPitch(input: {
   angle: Angle;
   scan: ScanResult;
 }): Promise<RedesignPitch> {
-  const { provider, model } = resolveDraftingProvider();
   try {
-    const result = streamText({
-      model: provider(model),
+    const { text } = await generateDraftText({
       system: SYSTEM,
       prompt: [
         `Prospect website: ${input.finalUrl} (${input.host})`,
@@ -165,7 +162,7 @@ export async function generateRedesignPitch(input: {
           .join("\n"),
       ].join("\n"),
     });
-    return parseRedesignResponse(await result.text);
+    return parseRedesignResponse(text);
   } catch (error) {
     const status = statusFromAiError(error);
     if (status === 402 || status === 403) {

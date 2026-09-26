@@ -1,7 +1,6 @@
-import { streamText } from "ai";
 import {
   AiGatewayBlockedError,
-  resolveDraftingProvider,
+  generateDraftText,
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { FOLLOWUP_PLAYBOOKS, SITE_URL, type PlaybookKey } from "./playbooks";
@@ -245,12 +244,10 @@ export function parseDraftResponse(raw: string): Omit<GeneratedDraft, "model"> {
 
 /** Calls the AI gateway to draft one follow-up. Throws AiGatewayBlockedError on 402/403. */
 export async function generateDraft(candidate: Candidate): Promise<GeneratedDraft> {
-  const { provider, model } = resolveDraftingProvider();
   const play = FOLLOWUP_PLAYBOOKS[candidate.playbook];
 
   try {
-    const result = streamText({
-      model: provider(model),
+    const { text, model } = await generateDraftText({
       system: SYSTEM,
       prompt: [
         `Situation: ${play.label}.`,
@@ -262,7 +259,6 @@ export async function generateDraft(candidate: Candidate): Promise<GeneratedDraf
         `Write the subject line (under 60 characters, no colon-heavy clickbait), the email body, and a one-sentence rationale explaining to Rory why this send makes sense now.`,
       ].join("\n"),
     });
-    const text = await result.text;
     return { ...parseDraftResponse(text), model };
   } catch (error) {
     const status = statusFromAiError(error);
