@@ -44,6 +44,12 @@ export function Tilt3D({ children, className, max = 7, lift = 18 }: Tilt3DProps)
       current.ry += (target.ry - current.ry) * 0.14;
       const settled =
         Math.abs(current.rx - target.rx) < 0.02 && Math.abs(current.ry - target.ry) < 0.02;
+      // Easing only approaches the target, so snap once close — otherwise a
+      // released card never reaches exactly 0 and keeps its lift forever.
+      if (settled) {
+        current.rx = target.rx;
+        current.ry = target.ry;
+      }
       if (!enabled || (!hovering && settled && current.rx === 0 && current.ry === 0)) {
         inner.style.transform = "";
         for (const layer of layers) layer.style.transform = "";
