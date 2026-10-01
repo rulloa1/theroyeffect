@@ -57,3 +57,52 @@ export const adminAnalyzeOpportunity = createServerFn({ method: "POST" })
       scanOk: r.scan ? r.scan.reachable : null,
     };
   });
+
+/** Saves an analyzed business as a lead in the CRM pipeline (reuses an existing lead by email). */
+export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        business: z.string().trim().min(1).max(200),
+        url: z.string().trim().max(300).nullable(),
+        email: z.string().trim().email().nullable(),
+        offer: z.string().trim().max(300),
+        notes: z.string().max(4000),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }): Promise<{ leadId: string; existing: boolean }> => {
+    await assertAdmin(context as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { escapeLikePattern } = await import("@/lib/sql-like");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as any;
+    const email = data.email?.toLowerCase() ?? null;
+    if (email) {
+      const { data: found } = await db
+        .from("voice_leads")
+        .select("id")
+        .ilike("email", escapeLikePattern(email))
+        .maybeSingle();
+      if (found?.id) return { leadId: found.id as string, existing: true };
+    }
+    const { data: created, error } = await db
+      .from("voice_leads")
+      .insert({
+        full_name: data.business,
+        company_name: data.business,
+        email,
+        website_url: data.url,
+        project_type: "website",
+        primary_goal: `Opportunity: ${data.offer}`,
+        notes: data.notes,
+        consent_to_follow_up: false,
+        stage: "new",
+        source: "deal_finder",
+      })
+      .select("id")
+      .single();
+    if (error || !created) throw new Error(error?.message ?? "Could not save the lead");
+    return { leadId: created.id as string, existing: false };
+  });
