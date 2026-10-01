@@ -72,8 +72,8 @@ const offer = (v: unknown): OpportunityOffer => {
 };
 
 export async function analyzeOpportunity(input: {
-  businessName?: string;
-  url?: string;
+  businessName?: string | undefined;
+  url?: string | undefined;
 }): Promise<OpportunityReport> {
   let scan: ScanResult | null = null;
   let finalUrl: string | null = null;
