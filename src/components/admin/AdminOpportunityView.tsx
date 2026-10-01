@@ -60,11 +60,23 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
         <div className="mt-6 grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
           <label className="block">
             <span className={label}>BUSINESS NAME</span>
-            <input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Bayou City Plumbing" maxLength={200} />
+            <input
+              className={input}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Bayou City Plumbing"
+              maxLength={200}
+            />
           </label>
           <label className="block">
             <span className={label}>WEBSITE</span>
-            <input className={input} value={url} onChange={(e) => setUrl(e.target.value)} placeholder="example.com" maxLength={300} />
+            <input
+              className={input}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="example.com"
+              maxLength={300}
+            />
           </label>
           <button
             type="submit"
@@ -83,19 +95,27 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
             <span className={label}>{report.url ?? "NO WEBSITE"}</span>
             <h3 className="mt-2 font-display text-3xl uppercase text-white">{report.business}</h3>
             {report.scanOk === false && (
-              <p className="mt-2 font-mono text-xs text-amber-300">The website couldn’t be loaded — analysis is based on the name only.</p>
+              <p className="mt-2 font-mono text-xs text-amber-300">
+                The website couldn’t be loaded — analysis is based on the name only.
+              </p>
             )}
             <p className="mt-3 font-mono text-sm leading-relaxed text-white/70">{report.summary}</p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="border border-[#DFBA73]/50 bg-[#DFBA73]/[0.06] p-6">
-              <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">SELL THIS</span>
+              <span className="font-mono text-[10px] tracking-widest text-[#DFBA73]">
+                SELL THIS
+              </span>
               <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
-                <h4 className="font-display text-2xl uppercase text-white">{report.primary.service}</h4>
+                <h4 className="font-display text-2xl uppercase text-white">
+                  {report.primary.service}
+                </h4>
                 <span className="font-mono text-lg text-[#DFBA73]">{report.primary.price}</span>
               </div>
-              <p className="mt-3 font-mono text-xs leading-relaxed text-white/70">{report.primary.why}</p>
+              <p className="mt-3 font-mono text-xs leading-relaxed text-white/70">
+                {report.primary.why}
+              </p>
               {report.upsells.length > 0 && (
                 <div className="mt-6 space-y-3 border-t border-white/10 pt-4">
                   <span className={label}>UPSELL</span>
@@ -120,7 +140,9 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
               <span className={label}>WHAT I FOUND</span>
               <ul className="mt-3 space-y-2">
                 {report.findings.map((f) => (
-                  <li key={f} className="font-mono text-xs leading-relaxed text-white/75">— {f}</li>
+                  <li key={f} className="font-mono text-xs leading-relaxed text-white/75">
+                    — {f}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -129,25 +151,35 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="border border-white/10 p-6">
               <div className="flex items-center justify-between">
-                <span className={label}>OUTREACH EMAIL{report.contactEmail ? ` → ${report.contactEmail}` : ""}</span>
+                <span className={label}>
+                  OUTREACH EMAIL{report.contactEmail ? ` → ${report.contactEmail}` : ""}
+                </span>
                 <CopyButton text={`${report.emailSubject}\n\n${report.emailBody}`} />
               </div>
               <p className="mt-3 font-mono text-sm text-white">{report.emailSubject}</p>
-              <p className="mt-3 whitespace-pre-wrap font-mono text-xs leading-relaxed text-white/70">{report.emailBody}</p>
+              <p className="mt-3 whitespace-pre-wrap font-mono text-xs leading-relaxed text-white/70">
+                {report.emailBody}
+              </p>
             </div>
             <div className="border border-white/10 p-6">
               <div className="flex items-center justify-between">
                 <span className={label}>COLD CALL SCRIPT</span>
                 <div className="flex gap-4">
                   {onCall && (
-                    <button type="button" onClick={() => onCall(report)} className="font-mono text-[10px] tracking-widest text-[#FF3333] hover:text-white">
+                    <button
+                      type="button"
+                      onClick={() => onCall(report)}
+                      className="font-mono text-[10px] tracking-widest text-[#FF3333] hover:text-white"
+                    >
                       CALL →
                     </button>
                   )}
                   <CopyButton text={report.callScript} />
                 </div>
               </div>
-              <p className="mt-3 whitespace-pre-wrap font-mono text-xs leading-relaxed text-white/70">{report.callScript}</p>
+              <p className="mt-3 whitespace-pre-wrap font-mono text-xs leading-relaxed text-white/70">
+                {report.callScript}
+              </p>
             </div>
           </div>
         </div>

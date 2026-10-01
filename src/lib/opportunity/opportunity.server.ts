@@ -36,7 +36,8 @@ Reply ONLY with JSON:
 {"summary": string (2 sentences about the business), "findings": string[] (3-6 specific gaps), "primary": {"service": string, "price": string, "why": string}, "upsells": [{"service": string, "price": string, "why": string}] (1-2), "moneyAngle": string (why this pays for itself, 2-3 sentences), "email": {"subject": string, "body": string}, "callScript": string (30-second cold call opener + one discovery question)}`;
 
 function describe(scan: ScanResult): string[] {
-  if (!scan.reachable) return [`Website could not be loaded: ${scan.errorMessage ?? "unknown error"}`];
+  if (!scan.reachable)
+    return [`Website could not be loaded: ${scan.errorMessage ?? "unknown error"}`];
   return [
     `Title: ${scan.title ?? "none"}`,
     `Meta description: ${scan.metaDescription ?? "missing"}`,
@@ -53,7 +54,11 @@ function describe(scan: ScanResult): string[] {
 }
 
 function parse(raw: string) {
-  const cleaned = raw.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const cleaned = raw
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   const start = cleaned.indexOf("{");
   const end = cleaned.lastIndexOf("}");
   if (start === -1 || end === -1) throw new Error("The AI returned no analysis. Try again.");
@@ -86,7 +91,9 @@ export async function analyzeOpportunity(input: {
       `Business name: ${input.businessName?.trim() || "not given"}`,
       `Website: ${finalUrl ?? "none given"}`,
       scan
-        ? `Scan findings:\n${describe(scan).map((l) => `- ${l}`).join("\n")}`
+        ? `Scan findings:\n${describe(scan)
+            .map((l) => `- ${l}`)
+            .join("\n")}`
         : "No website scanned — base the analysis on the business name and type only, and note that having no site may itself be the opportunity.",
     ].join("\n"),
   });
@@ -98,7 +105,9 @@ export async function analyzeOpportunity(input: {
     url: finalUrl,
     scan,
     summary: str(obj["summary"]),
-    findings: Array.isArray(obj["findings"]) ? (obj["findings"] as unknown[]).map((f) => str(f)).filter(Boolean) : [],
+    findings: Array.isArray(obj["findings"])
+      ? (obj["findings"] as unknown[]).map((f) => str(f)).filter(Boolean)
+      : [],
     primary: offer(obj["primary"]),
     upsells: Array.isArray(obj["upsells"]) ? (obj["upsells"] as unknown[]).map(offer) : [],
     moneyAngle: str(obj["moneyAngle"]),
