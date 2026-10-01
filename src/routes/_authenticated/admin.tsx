@@ -59,6 +59,7 @@ import { AdminPortalView } from "@/components/admin/AdminPortalView";
 import { AdminOnboardingView } from "@/components/admin/AdminOnboardingView";
 import { AdminSignalView } from "@/components/admin/AdminSignalView";
 import { AdminRedesignView } from "@/components/admin/AdminRedesignView";
+import { AdminOpportunityView } from "@/components/admin/AdminOpportunityView";
 import { AdminColdCallsView, type ColdCallPrefill } from "@/components/admin/AdminColdCallsView";
 import {
   adminListColdCalls,
@@ -160,6 +161,7 @@ type MainView =
   | "PORTFOLIO"
   | "CLIENTPORTAL"
   | "REDESIGN"
+  | "OPPORTUNITY"
   | "COLDCALLS"
   | "FINANCIALS";
 
@@ -1146,6 +1148,7 @@ function AdminPage() {
             },
             { id: "PORTFOLIO", label: "PORTFOLIO MANAGER", icon: Eye },
             { id: "CLIENTPORTAL", label: "CLIENT PORTAL", icon: FolderKanban },
+            { id: "OPPORTUNITY", label: "DEAL FINDER", icon: DollarSign },
             {
               id: "REDESIGN",
               label: `REDESIGN & PITCH (${(redesignData?.runs ?? []).length})`,
@@ -1189,6 +1192,19 @@ function AdminPage() {
               onStart={startColdCall}
               onDelete={removeColdCall}
               date={date}
+            />
+          )}
+
+          {currentView === "OPPORTUNITY" && (
+            <AdminOpportunityView
+              onCall={(r) => {
+                setColdCallPrefill({
+                  businessName: r.business,
+                  website: r.url,
+                  talkingPoints: r.callScript,
+                });
+                setCurrentView("COLDCALLS");
+              }}
             />
           )}
 
