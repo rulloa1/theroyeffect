@@ -1197,6 +1197,31 @@ function AdminPage() {
 
           {currentView === "OPPORTUNITY" && (
             <AdminOpportunityView
+              onLeadSaved={() =>
+                void queryClient.invalidateQueries({ queryKey: ["admin-pipeline"] })
+              }
+              onProposal={(r) => {
+                const cents = Number(
+                  (r.primary.price.match(/[\d,]+/)?.[0] ?? "").replace(/,/g, ""),
+                );
+                setProposalForm({
+                  clientName: r.business,
+                  clientEmail: r.contactEmail ?? "",
+                  clientCompany: r.business,
+                  projectTitle: `${r.primary.service} — ${r.business}`,
+                  scopeDeliverables: [
+                    `• ${r.primary.service}`,
+                    ...r.upsells.map((u) => `• Optional: ${u.service} (${u.price})`),
+                    "",
+                    ...r.findings.map((f) => `Addresses: ${f}`),
+                  ].join("\n"),
+                  timelineWeeks: "2–3 Weeks",
+                  totalPriceDollars: cents > 0 ? cents : 5000,
+                  terms: DEFAULT_TERMS,
+                });
+                setEditingProposalId(null);
+                setIsProposalModalOpen(true);
+              }}
               onCall={(r) => {
                 setColdCallPrefill({
                   businessName: r.business,

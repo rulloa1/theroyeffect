@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Copy, Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
-import { adminAnalyzeOpportunity, type OpportunityReportDto } from "@/utils/opportunity.functions";
+import {
+  adminAnalyzeOpportunity,
+  adminSaveOpportunityLead,
+  type OpportunityReportDto,
+} from "@/utils/opportunity.functions";
 
 function CopyButton({ text }: { text: string }) {
   const [done, setDone] = useState(false);
@@ -22,8 +26,52 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityReportDto) => void }) {
+export function AdminOpportunityView({
+  onCall,
+  onProposal,
+  onLeadSaved,
+}: {
+  onCall?: (r: OpportunityReportDto) => void;
+  onProposal?: (r: OpportunityReportDto) => void;
+  onLeadSaved?: () => void;
+}) {
   const analyze = useServerFn(adminAnalyzeOpportunity);
+  const saveLead = useServerFn(adminSaveOpportunityLead);
+  const [saving, setSaving] = useState(false);
+  const [savedFor, setSavedFor] = useState<string | null>(null);
+
+  const pushLead = async (r: OpportunityReportDto) => {
+    setSaving(true);
+    try {
+      const res = await saveLead({
+        data: {
+          business: r.business,
+          url: r.url,
+          email: r.contactEmail,
+          offer: `${r.primary.service} (${r.primary.price})`,
+          notes: [
+            "Sourced by Deal Finder",
+            `Sell: ${r.primary.service} — ${r.primary.price}`,
+            ...r.upsells.map((u) => `Upsell: ${u.service} — ${u.price}`),
+            "",
+            "Findings:",
+            ...r.findings.map((f) => `- ${f}`),
+            "",
+            `Why it pays: ${r.moneyAngle}`,
+          ]
+            .join("\n")
+            .slice(0, 4000),
+        },
+      });
+      setSavedFor(r.business);
+      toast.success(res.existing ? "Already in your pipeline" : "Added to your pipeline");
+      onLeadSaved?.();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save the lead");
+    } finally {
+      setSaving(false);
+    }
+  };
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,6 +85,7 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
     }
     setLoading(true);
     try {
+      setSavedFor(null);
       setReport(await analyze({ data: { businessName: name.trim(), url: url.trim() } }));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Analysis failed");
@@ -100,6 +149,29 @@ export function AdminOpportunityView({ onCall }: { onCall?: (r: OpportunityRepor
               </p>
             )}
             <p className="mt-3 font-mono text-sm leading-relaxed text-white/70">{report.summary}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {onProposal && (
+                <button
+                  type="button"
+                  onClick={() => onProposal(report)}
+                  className="bg-[#DFBA73] px-5 py-2.5 font-mono text-xs font-bold tracking-widest text-black"
+                >
+                  CREATE PROPOSAL
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={saving || savedFor === report.business}
+                onClick={() => void pushLead(report)}
+                className="border border-white/20 px-5 py-2.5 font-mono text-xs tracking-widest text-white hover:border-white/50 disabled:opacity-50"
+              >
+                {savedFor === report.business
+                  ? "IN PIPELINE ✓"
+                  : saving
+                    ? "SAVING…"
+                    : "ADD TO PIPELINE"}
+              </button>
+            </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
