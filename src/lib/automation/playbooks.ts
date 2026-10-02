@@ -35,7 +35,32 @@ export const FOLLOWUP_PLAYBOOKS = {
     ctaLabel: "Finish your booking",
     ctaPath: "/pricing",
   },
+  prospect_intro: {
+    label: "Deal Finder prospect, first touch",
+    goal: "Cold first email to a business owner I have never spoken to. Name one specific gap from my findings, say plainly what I would fix and why it earns them money, and ask for a short call. Do not pretend we have spoken.",
+    ctaLabel: "Book a 15-minute call",
+    ctaPath: "/book",
+  },
+  prospect_bump: {
+    label: "Deal Finder prospect, second touch",
+    goal: "Short, polite follow-up to my earlier email that got no reply. Add one new, different finding, keep it under 70 words, and ask if a quick call is worth it.",
+    ctaLabel: "Book a 15-minute call",
+    ctaPath: "/book",
+  },
+  prospect_breakup: {
+    label: "Deal Finder prospect, final touch",
+    goal: "Last, respectful note: I will stop emailing, the offer stands, and they can reply any time. Under 50 words, no pressure.",
+    ctaLabel: "See services and pricing",
+    ctaPath: "/pricing",
+  },
 } as const;
+
+/** Days after the previous sent touch before the next Deal Finder touch is drafted. */
+export const PROSPECT_SEQUENCE = [
+  { playbook: "prospect_intro", afterDays: 0 },
+  { playbook: "prospect_bump", afterDays: 4 },
+  { playbook: "prospect_breakup", afterDays: 10 },
+] as const;
 
 export type PlaybookKey = keyof typeof FOLLOWUP_PLAYBOOKS;
 

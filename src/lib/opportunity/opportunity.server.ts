@@ -21,6 +21,7 @@ export interface OpportunityReport {
   emailBody: string;
   callScript: string;
   contactEmail: string | null;
+  contactPhone: string | null;
 }
 
 const SYSTEM = `You are Rory Ulloa's sales strategist at The Roy Effect, a Houston studio that sells:
@@ -116,5 +117,6 @@ export async function analyzeOpportunity(input: {
     emailBody: str(email["body"]),
     callScript: str(obj["callScript"]),
     contactEmail: scan?.foundEmail ?? null,
+    contactPhone: scan?.foundPhone ?? null,
   };
 }

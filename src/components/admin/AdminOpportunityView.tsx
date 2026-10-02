@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Copy, Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
 import {
   adminAnalyzeOpportunity,
   adminSaveOpportunityLead,
+  adminListCallsDue,
+  type CallDue,
   type OpportunityReportDto,
 } from "@/utils/opportunity.functions";
 
@@ -30,13 +33,21 @@ export function AdminOpportunityView({
   onCall,
   onProposal,
   onLeadSaved,
+  onCallLead,
 }: {
+  onCallLead?: (c: CallDue) => void;
   onCall?: (r: OpportunityReportDto) => void;
   onProposal?: (r: OpportunityReportDto) => void;
   onLeadSaved?: () => void;
 }) {
   const analyze = useServerFn(adminAnalyzeOpportunity);
   const saveLead = useServerFn(adminSaveOpportunityLead);
+  const listCallsDue = useServerFn(adminListCallsDue);
+  const callsDue = useQuery({
+    queryKey: ["admin-calls-due"],
+    queryFn: () => listCallsDue(),
+    retry: false,
+  });
   const [saving, setSaving] = useState(false);
   const [savedFor, setSavedFor] = useState<string | null>(null);
 
@@ -48,6 +59,7 @@ export function AdminOpportunityView({
           business: r.business,
           url: r.url,
           email: r.contactEmail,
+          phone: r.contactPhone,
           offer: `${r.primary.service} (${r.primary.price})`,
           notes: [
             "Sourced by Deal Finder",
@@ -66,6 +78,7 @@ export function AdminOpportunityView({
       setSavedFor(r.business);
       toast.success(res.existing ? "Already in your pipeline" : "Added to your pipeline");
       onLeadSaved?.();
+      void callsDue.refetch();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not save the lead");
     } finally {
@@ -137,6 +150,41 @@ export function AdminOpportunityView({
           </button>
         </div>
       </form>
+
+      <div className="border border-white/10 p-6">
+        <span className="font-mono text-[10px] tracking-widest text-white/50">
+          CALLS DUE ({callsDue.data?.calls.length ?? 0})
+        </span>
+        <p className="mt-2 font-mono text-xs text-white/60">
+          Pipeline businesses with a phone number that haven&apos;t been called yet. Follow-up
+          emails are drafted automatically in Follow-up Autopilot for you to approve.
+        </p>
+        <ul className="mt-4 divide-y divide-white/10">
+          {(callsDue.data?.calls ?? []).map((c) => (
+            <li key={c.leadId} className="flex flex-wrap items-center justify-between gap-3 py-3">
+              <div className="font-mono text-xs text-white">
+                {c.business}
+                <span className="ml-3 text-white/50">{c.phone}</span>
+                <span className="ml-3 text-white/40">
+                  {c.emailsSent} email{c.emailsSent === 1 ? "" : "s"} sent
+                </span>
+              </div>
+              {onCallLead && (
+                <button
+                  type="button"
+                  onClick={() => onCallLead(c)}
+                  className="font-mono text-[10px] tracking-widest text-[#FF3333] hover:text-white"
+                >
+                  CALL →
+                </button>
+              )}
+            </li>
+          ))}
+          {!callsDue.data?.calls.length && (
+            <li className="py-3 font-mono text-xs text-white/40">Nothing to call right now.</li>
+          )}
+        </ul>
+      </div>
 
       {report && (
         <div className="space-y-6">

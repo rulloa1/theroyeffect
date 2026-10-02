@@ -126,7 +126,10 @@ export async function fetchClientContextByEmail(
 
   for (const p of projectList) {
     const key = p.client_email.trim().toLowerCase();
-    const entry = map.get(key) ?? { projects: [], latestProposal: latestProposalByEmail.get(key) ?? null };
+    const entry = map.get(key) ?? {
+      projects: [],
+      latestProposal: latestProposalByEmail.get(key) ?? null,
+    };
     const ms = milestonesByProject.get(p.id);
     entry.projects.push({
       title: p.title,
