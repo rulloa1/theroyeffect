@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/site";
 import ogImageAsset from "@/assets/og-preview.jpg.asset.json";
 import { HomeNav } from "@/components/home/HomeNav";
 import { CustomCursor } from "@/components/home/CustomCursor";
-import { HeroExperience } from "@/components/home/experience/HeroExperience";
+import { HomeHero } from "@/components/home/HomeHero";
 import { Services } from "@/components/home/sections/Services";
 import { EffectProcess } from "@/components/home/sections/EffectProcess";
 import { SelectedWork } from "@/components/home/sections/SelectedWork";
@@ -92,12 +92,9 @@ function Home() {
   return (
     <main id="main" tabIndex={-1} className="home">
       {/* First focusable element: keyboard users can bypass the pinned sequence. */}
-      <a href="#services" className="xp-skip">
-        Skip the intro
-      </a>
       <HomeNav />
       <CustomCursor />
-      <HeroExperience />
+      <HomeHero />
       <div id="experience-end" aria-hidden="true" />
       <Services />
       <EffectProcess />
