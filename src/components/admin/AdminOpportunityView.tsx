@@ -48,6 +48,7 @@ export function AdminOpportunityView({
           business: r.business,
           url: r.url,
           email: r.contactEmail,
+          phone: r.contactPhone,
           offer: `${r.primary.service} (${r.primary.price})`,
           notes: [
             "Sourced by Deal Finder",

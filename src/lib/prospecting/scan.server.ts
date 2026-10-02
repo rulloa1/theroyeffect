@@ -16,6 +16,7 @@ export interface ScanResult {
   hasBookingCta: boolean;
   copyrightYear: number | null;
   foundEmail: string | null;
+  foundPhone?: string | null;
   errorMessage: string | null;
 }
 
@@ -39,6 +40,14 @@ const EMPTY: ScanResult = {
 };
 
 const BAD_EMAIL = /(example|sentry|wixpress|\.png|\.jpg|\.webp|\.gif|godaddy|domain)/i;
+
+function extractPhone(html: string): string | null {
+  const m = html.match(/href=["']tel:([+\d\s().-]{7,25})["']/i);
+  if (!m?.[1]) return null;
+  const digits = m[1].replace(/[^\d+]/g, "");
+  if (digits.replace(/\D/g, "").length < 10) return null;
+  return digits.startsWith("+") ? digits : digits.length === 10 ? `+1${digits}` : `+${digits}`;
+}
 
 function extractEmail(html: string): string | null {
   const matches = html.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) ?? [];
@@ -242,6 +251,7 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
       hasBookingCta: /(book|schedule|appointment|free quote|get a quote|estimate)/i.test(html),
       copyrightYear: yearMatch?.[1] ? Number(yearMatch[1]) : null,
       foundEmail: extractEmail(html),
+      foundPhone: extractPhone(html),
       errorMessage: response.ok ? null : `Site returned ${response.status}`,
     };
   } catch (error) {

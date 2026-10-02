@@ -3,7 +3,7 @@ import {
   generateDraftText,
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
-import { FOLLOWUP_PLAYBOOKS, SITE_URL, type PlaybookKey } from "./playbooks";
+import { FOLLOWUP_PLAYBOOKS, PROSPECT_SEQUENCE, SITE_URL, type PlaybookKey } from "./playbooks";
 import {
   clientContextForPrompt,
   fetchClientContextByEmail,
@@ -66,6 +66,59 @@ export async function findCandidates(limit = BATCH_SIZE): Promise<Candidate[]> {
         notes: l.notes,
       },
     });
+  }
+
+  // Deal Finder prospects: a 3-touch cold sequence. Each touch is drafted only
+  // after the previous one was approved and sent, and stops once the lead moves
+  // past "contacted" (replied, booked, won, lost).
+  const { data: prospects } = await db
+    .from("voice_leads")
+    .select("*")
+    .eq("source", "deal_finder")
+    .in("stage", ["new", "contacted"])
+    .not("email", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (prospects?.length) {
+    const { data: prior } = await db
+      .from("followup_drafts")
+      .select("lead_id, playbook, status, sent_at")
+      .in(
+        "lead_id",
+        prospects.map((p: { id: string }) => p.id),
+      )
+      .in(
+        "playbook",
+        PROSPECT_SEQUENCE.map((s) => s.playbook),
+      );
+    for (const l of prospects) {
+      const mine = (prior ?? []).filter((d: { lead_id: string }) => d.lead_id === l.id);
+      if (mine.some((d: { status: string }) => d.status === "draft" || d.status === "failed")) continue;
+      const sent = mine.filter((d: { status: string }) => d.status === "sent");
+      const step = PROSPECT_SEQUENCE[sent.length];
+      if (!step) continue;
+      if (mine.some((d: { playbook: string }) => d.playbook === step.playbook)) continue; // dismissed
+      const lastSent = sent
+        .map((d: { sent_at: string | null }) => (d.sent_at ? Date.parse(d.sent_at) : 0))
+        .sort((a: number, b: number) => b - a)[0];
+      if (lastSent && Date.now() - lastSent < step.afterDays * 86_400_000) continue;
+      out.push({
+        playbook: step.playbook,
+        triggerKey: `${step.playbook}:${l.id}`,
+        leadId: l.id,
+        sourceTable: "voice_leads",
+        sourceId: l.id,
+        recipientName: l.company_name || l.full_name,
+        recipientEmail: l.email as string,
+        context: {
+          business: l.company_name,
+          website: l.website_url,
+          offer: l.primary_goal,
+          findings: l.notes,
+          relationship: "Cold prospect. We have never spoken. Address the business owner or team, not a first name.",
+        },
+      });
+    }
   }
 
   const { data: inquiries } = await db

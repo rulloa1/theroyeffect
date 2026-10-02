@@ -21,6 +21,7 @@ export interface OpportunityReportDto {
   emailBody: string;
   callScript: string;
   contactEmail: string | null;
+  contactPhone: string | null;
   scanOk: boolean | null;
 }
 
@@ -54,6 +55,7 @@ export const adminAnalyzeOpportunity = createServerFn({ method: "POST" })
       emailBody: r.emailBody,
       callScript: r.callScript,
       contactEmail: r.contactEmail,
+      contactPhone: r.contactPhone,
       scanOk: r.scan ? r.scan.reachable : null,
     };
   });
@@ -67,6 +69,7 @@ export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
         business: z.string().trim().min(1).max(200),
         url: z.string().trim().max(300).nullable(),
         email: z.string().trim().email().nullable(),
+        phone: z.string().trim().max(30).nullable().optional(),
         offer: z.string().trim().max(300),
         notes: z.string().max(4000),
       })
@@ -85,7 +88,10 @@ export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
         .select("id")
         .ilike("email", escapeLikePattern(email))
         .maybeSingle();
-      if (found?.id) return { leadId: found.id as string, existing: true };
+      if (found?.id) {
+        if (data.phone) await db.from("voice_leads").update({ phone: data.phone }).eq("id", found.id).is("phone", null);
+        return { leadId: found.id as string, existing: true };
+      }
     }
     const { data: created, error } = await db
       .from("voice_leads")
@@ -93,6 +99,7 @@ export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
         full_name: data.business,
         company_name: data.business,
         email,
+        phone: data.phone || null,
         website_url: data.url,
         project_type: "website",
         primary_goal: `Opportunity: ${data.offer}`,
