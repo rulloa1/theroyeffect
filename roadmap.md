@@ -54,3 +54,6 @@
 - [x] Make The Effect stages advance with page scroll and remove the homepage Houston location block.
 
 - [ ] Design taste pass (design-taste-frontend) — waiting on which page/section the user wants
+
+- [x] Design pass: homepage top section (Cinematic Space Noir)
+- [ ] Design pass: rest of homepage sections, dashboard, other pages (same brand, fresh look)
