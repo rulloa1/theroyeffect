@@ -88,6 +88,7 @@ export async function analyzeOpportunity(input: {
   const { text } = await generateDraftText({
     system: SYSTEM,
     prompt: [
+      `Current year: ${new Date().getFullYear()} (a footer year equal to this is up to date)`,
       `Business name: ${input.businessName?.trim() || "not given"}`,
       `Website: ${finalUrl ?? "none given"}`,
       scan
