@@ -417,4 +417,4 @@
 @media (max-width:900px){.hh-inner{margin:0 auto}.hh-shade{background:linear-gradient(to top,var(--background) 10%,color-mix(in oklab,var(--background) 75%,transparent) 55%,color-mix(in oklab,var(--background) 55%,transparent))}}
 @media (max-width:520px){.hh-eyebrow{letter-spacing:.14em;font-size:.62rem}.hh-ctas{flex-direction:column}.hh-btn{width:100%}}
 @media (prefers-reduced-motion:reduce){.hh-inner,.hh-title em,.hh-btn--primary{animation:none}.hh-arrow,.hh-poster{transition:none}}
-:root[data-motion-paused="true"] .hh-inner,:root[data-motion-paused="true"] .hh-title em,:root[data-motion-paused="true"] .hh-btn--primary{animation:none}
+:root[data-motion="paused"] .hh-inner,:root[data-motion="paused"] .hh-title em,:root[data-motion="paused"] .hh-btn--primary{animation:none}
