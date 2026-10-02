@@ -29,3 +29,8 @@ build_target: existing TanStack Start homepage (not a standalone site/ folder) �
 - [ ] GATE 2 — asset handoff
 - [ ] 6 Build
 - [ ] 7 Audit
+
+## Update — Gate 1 approved
+- Brief approved. Animation background: BLACK (#000000) — overrides the white-frame default so frames blend into the dark site.
+- Stage 5 complete: prompts at /mnt/documents/prompts.html.
+- Gate 2: waiting on user's video (3–6s, 16:9, first frame on black).
