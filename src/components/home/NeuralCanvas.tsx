@@ -90,10 +90,11 @@ export default function NeuralCanvas({ className = "hh-canvas", accentColor }: N
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       rect = host.getBoundingClientRect();
       if (reseed) seed();
-      else for (const p of particles) {
-        p.x = Math.min(p.x, w);
-        p.y = Math.min(p.y, h);
-      }
+      else
+        for (const p of particles) {
+          p.x = Math.min(p.x, w);
+          p.y = Math.min(p.y, h);
+        }
       if (still) draw();
     };
 
@@ -144,10 +145,24 @@ export default function NeuralCanvas({ className = "hh-canvas", accentColor }: N
         }
         p.x += p.vx * dt;
         p.y += p.vy * dt;
-        if (p.x < 0) { p.x = 0; p.vx = Math.abs(p.vx); p.dx = Math.abs(p.dx); }
-        else if (p.x > w) { p.x = w; p.vx = -Math.abs(p.vx); p.dx = -Math.abs(p.dx); }
-        if (p.y < 0) { p.y = 0; p.vy = Math.abs(p.vy); p.dy = Math.abs(p.dy); }
-        else if (p.y > h) { p.y = h; p.vy = -Math.abs(p.vy); p.dy = -Math.abs(p.dy); }
+        if (p.x < 0) {
+          p.x = 0;
+          p.vx = Math.abs(p.vx);
+          p.dx = Math.abs(p.dx);
+        } else if (p.x > w) {
+          p.x = w;
+          p.vx = -Math.abs(p.vx);
+          p.dx = -Math.abs(p.dx);
+        }
+        if (p.y < 0) {
+          p.y = 0;
+          p.vy = Math.abs(p.vy);
+          p.dy = Math.abs(p.dy);
+        } else if (p.y > h) {
+          p.y = h;
+          p.vy = -Math.abs(p.vy);
+          p.dy = -Math.abs(p.dy);
+        }
       }
       if (Math.random() < dt * 0.35) spawnPulse();
       for (const pl of pulses) {
