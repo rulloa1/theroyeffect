@@ -418,3 +418,30 @@
 @media (max-width:520px){.hh-eyebrow{letter-spacing:.14em;font-size:.62rem}.hh-ctas{flex-direction:column}.hh-btn{width:100%}}
 @media (prefers-reduced-motion:reduce){.hh-inner,.hh-title em,.hh-btn--primary{animation:none}.hh-arrow,.hh-poster{transition:none}}
 :root[data-motion="paused"] .hh-inner,:root[data-motion="paused"] .hh-title em,:root[data-motion="paused"] .hh-btn--primary{animation:none}
+
+/* ---- Emblem scroll (The Effect, layer by layer) ---- */
+.emblem-scroll{position:relative;height:350vh;background:#000}
+.emblem-scroll.is-still{height:auto}
+.emblem-scroll__stage{position:sticky;top:0;height:100vh;overflow:hidden}
+.emblem-scroll.is-still .emblem-scroll__stage{position:relative;height:auto;min-height:100vh}
+.emblem-scroll__canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.emblem-scroll__head{position:absolute;top:clamp(80px,12vh,140px);left:clamp(20px,5vw,72px);z-index:1;max-width:28rem}
+.emblem-scroll__kicker{font-family:var(--font-mono,"IBM Plex Mono",monospace);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold,#dfba73);margin:0 0 .5rem}
+.emblem-scroll__head h2{font-family:var(--font-display,"Space Grotesk",sans-serif);font-size:clamp(2rem,4.5vw,3.5rem);line-height:1.05;margin:0;color:var(--ink,#f2efe9)}
+.emblem-scroll__cards{position:absolute;right:clamp(20px,5vw,72px);bottom:clamp(40px,10vh,110px);z-index:1;list-style:none;margin:0;padding:0;display:grid;gap:.75rem;width:min(22rem,40vw)}
+.emblem-scroll__cards li{display:grid;grid-template-columns:auto 1fr;gap:.15rem .75rem;padding:1rem 1.25rem;border-radius:20px;background:rgba(10,10,10,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:.35;transform:translateX(12px);transition:opacity .4s ease,transform .4s ease,border-color .4s ease}
+.emblem-scroll__cards li.is-active{opacity:1;transform:none;border-color:rgba(255,51,51,.55)}
+.emblem-scroll__num{font-family:var(--font-mono,"IBM Plex Mono",monospace);font-size:.75rem;color:#ff3333;grid-row:span 2;padding-top:.2rem}
+.emblem-scroll__cards strong{font-family:var(--font-display,"Space Grotesk",sans-serif);font-size:1.05rem;color:var(--ink,#f2efe9)}
+.emblem-scroll__desc{font-size:.9rem;line-height:1.45;color:rgba(242,239,233,.72)}
+.emblem-scroll.is-still .emblem-scroll__cards{position:relative;right:auto;bottom:auto;margin:60vh auto 3rem;width:min(40rem,90vw)}
+@media (max-width:1024px){.emblem-scroll{height:300vh}}
+@media (max-width:640px){
+  .emblem-scroll{height:250vh}
+  .emblem-scroll__cards{left:16px;right:16px;bottom:1.5vh;width:auto;gap:.4rem}
+  .emblem-scroll__cards li{padding:.55rem .9rem;display:none}
+  .emblem-scroll__cards li.is-active{display:grid}
+  .emblem-scroll__desc{display:none}
+  .emblem-scroll.is-still .emblem-scroll__cards li{display:grid}
+  .emblem-scroll.is-still .emblem-scroll__desc{display:block}
+}
