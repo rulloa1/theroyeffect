@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles } from "lucide-react";
 import posterSrc from "@/assets/hero-poster.jpg";
 
-const HeroConstellation = lazy(() => import("./HeroConstellation"));
+const NeuralCanvas = lazy(() => import("./NeuralCanvas"));
 
 /**
  * Hero video source. No studio footage exists yet — set this to a hosted
@@ -62,7 +62,7 @@ export function HomeHero() {
 
       {mounted && (
         <Suspense fallback={null}>
-          <HeroConstellation />
+          <NeuralCanvas />
         </Suspense>
       )}
       <div className="hh-grain" aria-hidden="true" />
