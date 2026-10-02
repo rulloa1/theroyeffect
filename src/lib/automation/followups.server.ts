@@ -4,10 +4,7 @@ import {
   statusFromAiError,
 } from "@/lib/ai-gateway.server";
 import { FOLLOWUP_PLAYBOOKS, PROSPECT_SEQUENCE, SITE_URL, type PlaybookKey } from "./playbooks";
-import {
-  clientContextForPrompt,
-  fetchClientContextByEmail,
-} from "./client-context.server";
+import { clientContextForPrompt, fetchClientContextByEmail } from "./client-context.server";
 
 export const JOB_KEY = "followup_autopilot";
 /** Hard cap on drafts generated per run. */
@@ -93,7 +90,8 @@ export async function findCandidates(limit = BATCH_SIZE): Promise<Candidate[]> {
       );
     for (const l of prospects) {
       const mine = (prior ?? []).filter((d: { lead_id: string }) => d.lead_id === l.id);
-      if (mine.some((d: { status: string }) => d.status === "draft" || d.status === "failed")) continue;
+      if (mine.some((d: { status: string }) => d.status === "draft" || d.status === "failed"))
+        continue;
       const sent = mine.filter((d: { status: string }) => d.status === "sent");
       const step = PROSPECT_SEQUENCE[sent.length];
       if (!step) continue;
@@ -115,7 +113,8 @@ export async function findCandidates(limit = BATCH_SIZE): Promise<Candidate[]> {
           website: l.website_url,
           offer: l.primary_goal,
           findings: l.notes,
-          relationship: "Cold prospect. We have never spoken. Address the business owner or team, not a first name.",
+          relationship:
+            "Cold prospect. We have never spoken. Address the business owner or team, not a first name.",
         },
       });
     }
@@ -404,7 +403,11 @@ export async function runFollowupBatch(runner: string): Promise<RunResult> {
         .update({ status: "active", paused_reason: null })
         .eq("job_key", JOB_KEY);
     }
-    result = { ok: true, status: paused && drafted === 0 ? "skipped_paused" : "completed", drafted };
+    result = {
+      ok: true,
+      status: paused && drafted === 0 ? "skipped_paused" : "completed",
+      drafted,
+    };
   } catch (error) {
     if (error instanceof AiGatewayBlockedError) {
       await db

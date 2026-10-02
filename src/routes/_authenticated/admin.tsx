@@ -1197,6 +1197,15 @@ function AdminPage() {
 
           {currentView === "OPPORTUNITY" && (
             <AdminOpportunityView
+              onCallLead={(c) => {
+                setColdCallPrefill({
+                  businessName: c.business,
+                  phone: c.phone,
+                  website: c.website,
+                  talkingPoints: [c.offer, c.notes].filter(Boolean).join("\n\n").slice(0, 2000),
+                });
+                setCurrentView("COLDCALLS");
+              }}
               onLeadSaved={() =>
                 void queryClient.invalidateQueries({ queryKey: ["admin-pipeline"] })
               }

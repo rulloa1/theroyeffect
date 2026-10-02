@@ -52,3 +52,5 @@
 - [x] Complete launch-audit batch 1 homepage and shared-component polish in preview.
 - Launch-audit batch 2: /audit rebuilt on the site tokens with inline validation, self-hosted fonts with metric-matched fallbacks, skip link + main landmarks, tokenised 404/error screens, og:site_name fix.
 - [x] Make The Effect stages advance with page scroll and remove the homepage Houston location block.
+
+- [ ] Design taste pass (design-taste-frontend) — waiting on which page/section the user wants

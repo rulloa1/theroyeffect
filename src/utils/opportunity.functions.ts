@@ -89,7 +89,12 @@ export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
         .ilike("email", escapeLikePattern(email))
         .maybeSingle();
       if (found?.id) {
-        if (data.phone) await db.from("voice_leads").update({ phone: data.phone }).eq("id", found.id).is("phone", null);
+        if (data.phone)
+          await db
+            .from("voice_leads")
+            .update({ phone: data.phone })
+            .eq("id", found.id)
+            .is("phone", null);
         return { leadId: found.id as string, existing: true };
       }
     }
@@ -112,4 +117,73 @@ export const adminSaveOpportunityLead = createServerFn({ method: "POST" })
       .single();
     if (error || !created) throw new Error(error?.message ?? "Could not save the lead");
     return { leadId: created.id as string, existing: false };
+  });
+
+export interface CallDue {
+  leadId: string;
+  business: string;
+  phone: string;
+  website: string | null;
+  offer: string | null;
+  notes: string | null;
+  emailsSent: number;
+}
+
+/** Deal Finder leads with a phone number that have not been called yet. */
+export const adminListCallsDue = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ calls: CallDue[] }> => {
+    await assertAdmin(context as never);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = (context as any).supabase;
+    const { data: leads } = await db
+      .from("voice_leads")
+      .select("id, company_name, full_name, phone, website_url, primary_goal, notes")
+      .eq("source", "deal_finder")
+      .in("stage", ["new", "contacted"])
+      .not("phone", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    const rows = (leads ?? []) as {
+      id: string;
+      company_name: string | null;
+      full_name: string;
+      phone: string;
+      website_url: string | null;
+      primary_goal: string | null;
+      notes: string | null;
+    }[];
+    if (!rows.length) return { calls: [] };
+    const [{ data: called }, { data: sent }] = await Promise.all([
+      db
+        .from("cold_calls")
+        .select("phone")
+        .in(
+          "phone",
+          rows.map((r) => r.phone),
+        ),
+      db
+        .from("followup_drafts")
+        .select("lead_id")
+        .eq("status", "sent")
+        .in(
+          "lead_id",
+          rows.map((r) => r.id),
+        ),
+    ]);
+    const calledSet = new Set(((called ?? []) as { phone: string }[]).map((c) => c.phone));
+    const sentList = ((sent ?? []) as { lead_id: string }[]).map((s) => s.lead_id);
+    return {
+      calls: rows
+        .filter((r) => !calledSet.has(r.phone))
+        .map((r) => ({
+          leadId: r.id,
+          business: r.company_name || r.full_name,
+          phone: r.phone,
+          website: r.website_url,
+          offer: r.primary_goal,
+          notes: r.notes,
+          emailsSent: sentList.filter((id) => id === r.id).length,
+        })),
+    };
   });
