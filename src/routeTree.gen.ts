@@ -38,6 +38,7 @@ import { Route as GuidesSquarespaceVsCustomWebsiteRouteImport } from './routes/g
 import { Route as GuidesWebsiteAuditChecklistRouteImport } from './routes/guides.website-audit-checklist'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as ProposalTokenRouteImport } from './routes/proposal.$token'
+import { Route as RedesignIndexRouteImport } from './routes/redesign.index'
 import { Route as RedesignTokenRouteImport } from './routes/redesign.$token'
 import { Route as SiteReportTokenRouteImport } from './routes/site-report.$token'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
@@ -205,6 +206,11 @@ const ProposalTokenRoute = ProposalTokenRouteImport.update({
   path: '/proposal/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedesignIndexRoute = RedesignIndexRouteImport.update({
+  id: '/redesign/',
+  path: '/redesign/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RedesignTokenRoute = RedesignTokenRouteImport.update({
   id: '/redesign/$token',
   path: '/redesign/$token',
@@ -332,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
+  '/redesign/': typeof RedesignIndexRoute
   '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
@@ -379,6 +386,7 @@ export interface FileRoutesByTo {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
+  '/redesign': typeof RedesignIndexRoute
   '/work': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
@@ -428,6 +436,7 @@ export interface FileRoutesById {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/work/$slug': typeof WorkSlugRoute
+  '/redesign/': typeof RedesignIndexRoute
   '/work/': typeof WorkIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
@@ -477,6 +486,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
+    | '/redesign/'
     | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
@@ -524,6 +534,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
+    | '/redesign'
     | '/work'
     | '/.mcp/invoke-tool/$tool'
     | '/projects/$projectId'
@@ -572,6 +583,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/work/$slug'
+    | '/redesign/'
     | '/work/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/projects/$projectId'
@@ -617,6 +629,7 @@ export interface RootRouteChildren {
   RedesignTokenRoute: typeof RedesignTokenRoute
   SiteReportTokenRoute: typeof SiteReportTokenRoute
   WorkSlugRoute: typeof WorkSlugRoute
+  RedesignIndexRoute: typeof RedesignIndexRoute
   WorkIndexRoute: typeof WorkIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicBriefIntakeRoute: typeof ApiPublicBriefIntakeRoute
@@ -836,6 +849,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProposalTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/redesign/': {
+      id: '/redesign/'
+      path: '/redesign'
+      fullPath: '/redesign/'
+      preLoaderRoute: typeof RedesignIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/redesign/$token': {
       id: '/redesign/$token'
       path: '/redesign/$token'
@@ -1009,6 +1029,7 @@ const rootRouteChildren: RootRouteChildren = {
   RedesignTokenRoute: RedesignTokenRoute,
   SiteReportTokenRoute: SiteReportTokenRoute,
   WorkSlugRoute: WorkSlugRoute,
+  RedesignIndexRoute: RedesignIndexRoute,
   WorkIndexRoute: WorkIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicBriefIntakeRoute: ApiPublicBriefIntakeRoute,
