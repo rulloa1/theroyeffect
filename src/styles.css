@@ -268,6 +268,51 @@
   pointer-events: none;
 }
 
+/* Studio dashboard: compact command navigation with room for working data. */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.admin-header-actions { justify-content: flex-end; }
+.admin-utility-link {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: .5rem .85rem;
+  color: var(--ink-muted);
+  font-size: .78rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--dur-micro), color var(--dur-micro);
+}
+.admin-utility-link:hover { border-color: var(--ink-faint); color: var(--ink); }
+.admin-dashboard :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.admin-overview-item { min-width: 0; }
+.admin-overview-item:not(:last-child) { border-right: 1px solid var(--line); padding-left: 1.25rem; }
+.admin-overview-item:first-child { padding-left: 0; }
+.admin-overview-item:last-child { padding-left: 1.25rem; }
+.admin-tabs { scrollbar-width: thin; scrollbar-color: var(--ink-faint) transparent; }
+.admin-tab { height: auto; min-height: 3.25rem; white-space: nowrap; letter-spacing: 0; }
+.admin-dashboard .admin-signal button { letter-spacing: 0; }
+@media (max-width: 767px) {
+  .admin-header { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .admin-header-actions { justify-content: flex-start; }
+  .admin-overview-item:nth-child(2) { border-right: 0; }
+  .admin-overview-item:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .admin-overview-item:nth-child(3) { padding-left: 0; }
+  .admin-overview-item { min-height: 8.5rem; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-overview-item:nth-child(2) { border-right: 0; }
+  .admin-overview-item:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .admin-overview-item:nth-child(3) { padding-left: 0; }
+}
+
 .particle-background {
   background-color: #030014;
   background-image:

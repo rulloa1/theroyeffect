@@ -57,3 +57,4 @@
 
 - [x] Design pass: homepage top section (Cinematic Space Noir)
 - [ ] Design pass: rest of homepage sections, dashboard, other pages (same brand, fresh look)
+- [x] Design pass: studio dashboard overview and Signal Hub hierarchy (preview only)
