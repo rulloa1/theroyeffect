@@ -50,6 +50,7 @@ import { Route as ApiPublicBriefIntakeRouteImport } from './routes/api/public/br
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicLeadconnectorRouteImport } from './routes/api/public/leadconnector'
 import { Route as ApiPublicVapiRouteImport } from './routes/api/public/vapi'
+import { Route as ApiPublicAutomationDailyLeadsRouteImport } from './routes/api/public/automation/daily-leads'
 import { Route as ApiPublicAutomationDeliveryRouteImport } from './routes/api/public/automation/delivery'
 import { Route as ApiPublicAutomationFollowupsRouteImport } from './routes/api/public/automation/followups'
 import { Route as ApiPublicAutomationGscIndexWatchRouteImport } from './routes/api/public/automation/gsc-index-watch'
@@ -269,6 +270,12 @@ const ApiPublicVapiRoute = ApiPublicVapiRouteImport.update({
   path: '/api/public/vapi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAutomationDailyLeadsRoute =
+  ApiPublicAutomationDailyLeadsRouteImport.update({
+    id: '/api/public/automation/daily-leads',
+    path: '/api/public/automation/daily-leads',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicAutomationDeliveryRoute =
   ApiPublicAutomationDeliveryRouteImport.update({
     id: '/api/public/automation/delivery',
@@ -347,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/daily-leads': typeof ApiPublicAutomationDailyLeadsRoute
   '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
@@ -395,6 +403,7 @@ export interface FileRoutesByTo {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/daily-leads': typeof ApiPublicAutomationDailyLeadsRoute
   '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
@@ -445,6 +454,7 @@ export interface FileRoutesById {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/leadconnector': typeof ApiPublicLeadconnectorRoute
   '/api/public/vapi': typeof ApiPublicVapiRoute
+  '/api/public/automation/daily-leads': typeof ApiPublicAutomationDailyLeadsRoute
   '/api/public/automation/delivery': typeof ApiPublicAutomationDeliveryRoute
   '/api/public/automation/followups': typeof ApiPublicAutomationFollowupsRoute
   '/api/public/automation/gsc-index-watch': typeof ApiPublicAutomationGscIndexWatchRoute
@@ -495,6 +505,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/daily-leads'
     | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/daily-leads'
     | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
@@ -592,6 +604,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/leadconnector'
     | '/api/public/vapi'
+    | '/api/public/automation/daily-leads'
     | '/api/public/automation/delivery'
     | '/api/public/automation/followups'
     | '/api/public/automation/gsc-index-watch'
@@ -636,6 +649,7 @@ export interface RootRouteChildren {
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicLeadconnectorRoute: typeof ApiPublicLeadconnectorRoute
   ApiPublicVapiRoute: typeof ApiPublicVapiRoute
+  ApiPublicAutomationDailyLeadsRoute: typeof ApiPublicAutomationDailyLeadsRoute
   ApiPublicAutomationDeliveryRoute: typeof ApiPublicAutomationDeliveryRoute
   ApiPublicAutomationFollowupsRoute: typeof ApiPublicAutomationFollowupsRoute
   ApiPublicAutomationGscIndexWatchRoute: typeof ApiPublicAutomationGscIndexWatchRoute
@@ -933,6 +947,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicVapiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/automation/daily-leads': {
+      id: '/api/public/automation/daily-leads'
+      path: '/api/public/automation/daily-leads'
+      fullPath: '/api/public/automation/daily-leads'
+      preLoaderRoute: typeof ApiPublicAutomationDailyLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/automation/delivery': {
       id: '/api/public/automation/delivery'
       path: '/api/public/automation/delivery'
@@ -1036,6 +1057,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicLeadconnectorRoute: ApiPublicLeadconnectorRoute,
   ApiPublicVapiRoute: ApiPublicVapiRoute,
+  ApiPublicAutomationDailyLeadsRoute: ApiPublicAutomationDailyLeadsRoute,
   ApiPublicAutomationDeliveryRoute: ApiPublicAutomationDeliveryRoute,
   ApiPublicAutomationFollowupsRoute: ApiPublicAutomationFollowupsRoute,
   ApiPublicAutomationGscIndexWatchRoute: ApiPublicAutomationGscIndexWatchRoute,
