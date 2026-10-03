@@ -56,6 +56,8 @@ const runSchema = z.object({
   angle: z.enum(["lost_enquiries", "looks_dated", "slow_on_mobile"]),
   // Honeypot: real visitors never fill this; bots that do are turned away.
   company: z.string().max(0).optional(),
+  // Where the approved pitch should go; falls back to an address found on the site.
+  email: z.string().trim().email().max(200).optional(),
 });
 
 /**
@@ -88,10 +90,31 @@ export const runPublicRedesign = createServerFn({ method: "POST" })
         sections: result.pitch.sections,
         outreach_subject: result.pitch.outreachSubject,
         outreach_body: result.pitch.outreachBody,
-        contact_email: result.scan.foundEmail ?? null,
+        contact_email: data.email ?? result.scan.foundEmail ?? null,
       })
-      .select("share_token")
+      .select("id, share_token")
       .single();
     if (error) throw new Error(error.message);
+
+    // Nothing goes to the visitor yet: Rory reviews the draft in the portal
+    // and sends it from the Redesign tab. A notify failure never blocks the run.
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("brief-notification", "rory@theroyeffect.com", {
+        templateData: {
+          name: `Redesign pitch: ${result.host}`,
+          email: data.email ?? result.scan.foundEmail ?? undefined,
+          websiteUrl: result.finalUrl,
+          projectType: "Redesign pitch awaiting approval",
+          message: `A new redesign pitch for ${result.host} is waiting in your portal. Review it, then send it from Admin > Redesign: https://theroyeffect.com/admin`,
+          notes: `Subject: ${result.pitch.outreachSubject}`,
+          submittedAt: new Date().toISOString(),
+        },
+        idempotencyKey: `redesign-approval-${row.id}`,
+        ...(data.email ? { replyTo: data.email } : {}),
+      });
+    } catch (notifyError) {
+      console.error("redesign approval notify failed", notifyError);
+    }
     return { token: row.share_token as string };
   });
