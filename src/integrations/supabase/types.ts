@@ -991,16 +991,21 @@ export type Database = {
       redesign_runs: {
         Row: {
           angle: string
+          contact_email: string | null
           created_at: string
           created_by: string | null
           error_message: string | null
           headline: string | null
           host: string
           id: string
+          lead_id: string | null
           outreach_body: string | null
           outreach_subject: string | null
           scan: Json
           sections: Json
+          sent_at: string | null
+          share_token: string
+          share_viewed_at: string | null
           status: string
           subheadline: string | null
           treatment: string
@@ -1009,16 +1014,21 @@ export type Database = {
         }
         Insert: {
           angle?: string
+          contact_email?: string | null
           created_at?: string
           created_by?: string | null
           error_message?: string | null
           headline?: string | null
           host: string
           id?: string
+          lead_id?: string | null
           outreach_body?: string | null
           outreach_subject?: string | null
           scan?: Json
           sections?: Json
+          sent_at?: string | null
+          share_token?: string
+          share_viewed_at?: string | null
           status?: string
           subheadline?: string | null
           treatment?: string
@@ -1027,16 +1037,21 @@ export type Database = {
         }
         Update: {
           angle?: string
+          contact_email?: string | null
           created_at?: string
           created_by?: string | null
           error_message?: string | null
           headline?: string | null
           host?: string
           id?: string
+          lead_id?: string | null
           outreach_body?: string | null
           outreach_subject?: string | null
           scan?: Json
           sections?: Json
+          sent_at?: string | null
+          share_token?: string
+          share_viewed_at?: string | null
           status?: string
           subheadline?: string | null
           treatment?: string
