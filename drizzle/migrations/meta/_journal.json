@@ -29,6 +29,13 @@
       "when": 1789920000000,
       "tag": "0003_add_redesign_pitch_delivery",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791029214879,
+      "tag": "0004_apply_redesign_pitch_delivery",
+      "breakpoints": true
     }
   ]
 }
