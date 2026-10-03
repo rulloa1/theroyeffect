@@ -20,6 +20,7 @@ import { template as postLaunchHandover } from "./post-launch-handover";
 import { template as retainerWeeklySync } from "./retainer-weekly-sync";
 import { template as supportWindowClosing } from "./support-window-closing";
 import { template as redesignPitch } from "./redesign-pitch";
+import { template as dailyLeads } from "./daily-leads";
 
 export interface TemplateEntry {
   component: ComponentType<any>;
@@ -43,6 +44,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "booking-notification": bookingNotification,
   "brief-confirmation": briefConfirmation,
   "brief-notification": briefNotification,
+  "daily-leads": dailyLeads,
   "client-welcome": clientWelcome,
   "order-confirmation": orderConfirmation,
   "order-notification": orderNotification,
