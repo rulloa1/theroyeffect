@@ -71,9 +71,7 @@ function RedesignGeneratorPage() {
     >
       <header className="border-b border-[var(--line)] px-[var(--gutter)] py-5">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <a href="https://theroyeffect.com" aria-label="The Roy Effect home">
-            <Logo className="h-7 w-auto" />
-          </a>
+          <Logo className="h-7 w-auto" />
           <a
             href="https://theroyeffect.com"
             className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--gold)]"
