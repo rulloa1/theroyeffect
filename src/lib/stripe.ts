@@ -22,6 +22,10 @@ export function getStripe(): Promise<Stripe | null> {
   return stripePromise;
 }
 
+/**
+ * Never throws: pages call this during render, so a missing key must not
+ * blank the screen. Checkout itself still fails loudly via getStripe().
+ */
 export function getStripeEnvironment(): StripeEnv {
-  return paymentsEnvironment();
+  return clientToken?.startsWith("pk_live_") ? "live" : "sandbox";
 }
