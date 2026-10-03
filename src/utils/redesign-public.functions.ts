@@ -49,3 +49,49 @@ export const getPublicRedesign = createServerFn({ method: "GET" })
       sections: Array.isArray(row.sections) ? (row.sections as RedesignSectionDto[]) : [],
     };
   });
+
+const runSchema = z.object({
+  url: z.string().min(3).max(300),
+  treatment: z.enum(["cinematic", "cinematic_3d", "editorial"]),
+  angle: z.enum(["lost_enquiries", "looks_dated", "slow_on_mobile"]),
+  // Honeypot: real visitors never fill this; bots that do are turned away.
+  company: z.string().max(0).optional(),
+});
+
+/**
+ * Public entry to the redesign generator: scans the submitted site, drafts the
+ * pitch, stores the run and returns its share token so the visitor lands on
+ * their concept page. Runs on the service-role client; the only write is the
+ * run row itself.
+ */
+export const runPublicRedesign = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => runSchema.parse(input))
+  .handler(async ({ data }): Promise<{ token: string }> => {
+    if (data.company) throw new Error("That submission did not look human.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { runRedesign } = await import("@/lib/redesign/redesign.server");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as any;
+
+    const result = await runRedesign(data);
+    const { data: row, error } = await db
+      .from("redesign_runs")
+      .insert({
+        url: result.finalUrl,
+        host: result.host,
+        treatment: data.treatment,
+        angle: data.angle,
+        status: "draft",
+        scan: result.scan,
+        headline: result.pitch.headline,
+        subheadline: result.pitch.subheadline,
+        sections: result.pitch.sections,
+        outreach_subject: result.pitch.outreachSubject,
+        outreach_body: result.pitch.outreachBody,
+        contact_email: result.scan.foundEmail ?? null,
+      })
+      .select("share_token")
+      .single();
+    if (error) throw new Error(error.message);
+    return { token: row.share_token as string };
+  });
