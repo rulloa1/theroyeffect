@@ -54,8 +54,6 @@ const runSchema = z.object({
   url: z.string().min(3).max(300),
   treatment: z.enum(["cinematic", "cinematic_3d", "editorial"]),
   angle: z.enum(["lost_enquiries", "looks_dated", "slow_on_mobile"]),
-  // Honeypot: real visitors never fill this; bots that do are turned away.
-  company: z.string().max(500).optional(),
   // Where the approved pitch should go; falls back to an address found on the site.
   email: z.string().trim().email().max(200).optional(),
 });
@@ -69,7 +67,15 @@ const runSchema = z.object({
 export const runPublicRedesign = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => runSchema.parse(input))
   .handler(async ({ data }): Promise<{ token: string }> => {
-    if (data.company) throw new Error("That submission did not look human.");
+    // Rate limits instead of a hidden-field trap: browser autofill kept filling
+    // the trap and turning away real visitors.
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { requireRateLimit, clientIp } = await import("@/lib/http/public-endpoint");
+    const ip = clientIp(getRequest());
+    const limited =
+      (await requireRateLimit(`redesign:ip:${ip}`, { limit: 3, windowSeconds: 3600 })) ??
+      (await requireRateLimit("redesign:all", { limit: 40, windowSeconds: 86400 }));
+    if (limited) throw new Error("Too many redesigns requested. Please try again in an hour.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { runRedesign } = await import("@/lib/redesign/redesign.server");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

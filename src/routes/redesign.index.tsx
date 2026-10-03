@@ -43,7 +43,6 @@ function RedesignGeneratorPage() {
   const [url, setUrl] = useState("");
   const [treatment, setTreatment] = useState<RedesignTreatment>("cinematic_3d");
   const [angle, setAngle] = useState<RedesignAngle>("lost_enquiries");
-  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +54,7 @@ function RedesignGeneratorPage() {
     setError(null);
     try {
       const { token } = await runPublicRedesign({
-        data: { url: url.trim(), treatment, angle, company: company || undefined, email: email.trim() || undefined },
+        data: { url: url.trim(), treatment, angle, email: email.trim() || undefined },
       });
       await navigate({ to: "/redesign/$token", params: { token } });
     } catch (err) {
@@ -139,17 +138,6 @@ function RedesignGeneratorPage() {
               className="mt-2 w-full border border-[var(--line)] bg-transparent px-5 py-4 font-mono text-sm text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus:border-[var(--furnace)] focus:outline-none"
             />
 
-            {/* Honeypot — hidden from people, visible to bots. */}
-            <input
-              type="text"
-              name="rx_confirm_field"
-              value={company}
-              onChange={(event) => setCompany(event.target.value)}
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              className="absolute left-[-9999px] h-0 w-0 opacity-0"
-            />
 
             <fieldset className="mt-8">
               <legend className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--ink-faint)]">
