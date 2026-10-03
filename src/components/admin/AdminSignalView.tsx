@@ -4,6 +4,7 @@ import type { CrmLead } from "@/utils/crm.functions";
 import type { ProjectProposal } from "@/utils/proposals.functions";
 import type { OnboardingRun } from "@/utils/onboarding.functions";
 import type { FollowupDraft } from "@/utils/automation.functions";
+import { Button } from "@/components/ui/button";
 
 export type SignalLane = "MONEY" | "LEADS" | "DELIVERY";
 
@@ -44,15 +45,15 @@ const daysSince = (value: string | null | undefined) =>
   value ? (Date.now() - new Date(value).getTime()) / 86_400_000 : 0;
 
 const accentText = {
-  red: "text-[#FF3333]",
-  gold: "text-[#DFBA73]",
-  white: "text-white",
+  red: "text-primary",
+  gold: "text-[var(--gold)]",
+  white: "text-foreground",
 } as const;
 
 const accentBorder = {
-  red: "border-[#FF3333]/40",
-  gold: "border-[#DFBA73]/40",
-  white: "border-white/10",
+  red: "border-primary/40",
+  gold: "border-[var(--gold)]/40",
+  white: "border-border",
 } as const;
 
 export interface AdminSignalViewProps {
@@ -247,24 +248,26 @@ export function AdminSignalView({
   const chips: (SignalLane | "ALL")[] = ["ALL", "MONEY", "LEADS", "DELIVERY"];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <div className="flex min-w-0 flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="font-mono text-[11px] tracking-[0.22em] text-white/45">ACTION QUEUE</span>
-          <div className="ml-auto flex flex-wrap gap-2">
+    <div className="admin-signal grid gap-10 xl:grid-cols-[minmax(0,1fr)_290px]">
+      <div className="flex min-w-0 flex-col gap-0">
+        <div className="mb-4 flex flex-wrap items-center gap-4">
+          <h2 className="font-display text-2xl font-semibold text-foreground">Action queue</h2>
+          <div className="ml-auto flex flex-wrap gap-1" aria-label="Filter action queue">
             {chips.map((chip) => (
-              <button
+              <Button
                 key={chip}
                 type="button"
                 onClick={() => setLane(chip)}
-                className={`min-h-11 px-4 py-2 font-mono text-[11px] tracking-[0.2em] transition-colors ${
+                aria-pressed={lane === chip}
+                variant="ghost"
+                className={`min-h-10 rounded-sm border px-3 py-2 font-sans text-xs font-semibold transition-colors ${
                   lane === chip
-                    ? "bg-white text-black"
-                    : "border border-white/15 text-white/60 hover:border-white/40 hover:text-white"
+                    ? "border-border bg-foreground text-background hover:bg-foreground/90 hover:text-background"
+                    : "border-transparent text-foreground/65 hover:border-border hover:bg-card hover:text-foreground"
                 }`}
               >
-                {chip}
-              </button>
+                {chip === "ALL" ? "All" : chip === "MONEY" ? "Money" : chip === "LEADS" ? "Leads" : "Delivery"}
+              </Button>
             ))}
           </div>
         </div>
@@ -272,15 +275,15 @@ export function AdminSignalView({
         {visible.map((signal) => (
           <article
             key={signal.id}
-            className={`border bg-white/[0.02] p-6 ${accentBorder[signal.accent]}`}
+            className={`mb-3 rounded-sm border bg-card p-5 md:p-6 ${accentBorder[signal.accent]}`}
           >
             <div className="flex flex-wrap items-center gap-3">
               <span
-                className={`font-mono text-[10px] tracking-[0.2em] ${accentText[signal.accent]}`}
+                className={`font-mono text-[11px] font-semibold ${accentText[signal.accent]}`}
               >
                 {signal.tag}
               </span>
-              <span className="font-mono text-[10px] tracking-[0.2em] text-white/40">
+              <span className="font-mono text-[11px] text-foreground/60">
                 {signal.age}
               </span>
               {signal.amount && (
@@ -289,77 +292,80 @@ export function AdminSignalView({
                 </span>
               )}
             </div>
-            <h3 className="mt-3 font-display text-2xl uppercase leading-tight text-white">
+            <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-foreground">
               {signal.title}
             </h3>
-            <p className="mt-2 max-w-2xl font-mono text-[15px] leading-[1.6] text-white/75">
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-foreground/75">
               {signal.body}
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <button
+              <Button
                 type="button"
                 onClick={() => onNavigate(signal.target)}
-                className="min-h-11 bg-[#FF3333] px-5 py-3 font-mono text-[11px] font-bold tracking-[0.2em] text-black hover:bg-[#FF5555]"
+                className="min-h-10 rounded-sm bg-primary px-4 text-xs font-semibold text-primary-foreground hover:bg-primary/90"
               >
                 {signal.action}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={() => setSnoozed((prev) => [...prev, signal.id])}
-                className="min-h-11 border border-white/18 px-5 py-3 font-mono text-[11px] tracking-[0.2em] text-white/70 hover:border-white hover:text-white"
+                variant="outline"
+                className="min-h-10 rounded-sm border-border bg-transparent px-4 text-xs font-semibold text-foreground/75 hover:bg-muted hover:text-foreground"
               >
-                SNOOZE
-              </button>
+                Snooze
+              </Button>
             </div>
           </article>
         ))}
 
         {visible.length === 0 && (
-          <div className="border border-dashed border-white/15 px-6 py-14 text-center">
-            <p className="font-display text-2xl uppercase text-white/70">Queue clear</p>
-            <p className="mt-2 font-mono text-[13px] text-white/45">
+          <div className="rounded-sm border border-dashed border-border bg-card/40 px-6 py-14 text-center">
+            <p className="font-display text-2xl text-foreground">Queue clear</p>
+            <p className="mt-2 text-sm text-foreground/70">
               Nothing needs you in this filter.
             </p>
           </div>
         )}
       </div>
 
-      <aside className="flex min-w-0 flex-col gap-3">
+      <aside className="flex min-w-0 flex-col gap-0">
+        <h2 className="mb-4 font-display text-2xl font-semibold text-foreground">At a glance</h2>
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="border border-white/10 bg-white/[0.02] p-5">
+          <div key={kpi.label} className="border-t border-border py-4">
             <div className="flex items-baseline justify-between gap-3">
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
+              <span className="text-xs text-foreground/70">
                 {kpi.label}
               </span>
-              <span className="font-display text-2xl text-white">{kpi.value}</span>
+              <span className="font-display text-2xl font-semibold text-foreground">{kpi.value}</span>
             </div>
-            <span className="mt-2 block font-mono text-[11px] text-white/40">{kpi.sub}</span>
+            <span className="mt-1 block text-xs text-foreground/60">{kpi.sub}</span>
           </div>
         ))}
 
-        <div className="border border-[#DFBA73]/30 bg-[#DFBA73]/[0.06] p-5">
-          <span className="font-mono text-[10px] tracking-[0.22em] text-[#F6DC9A]">AUTOPILOT</span>
-          <p className="mt-2 font-mono text-[13px] leading-[1.7] text-white/70">
+        <div className="mt-5 rounded-sm border border-[var(--gold)]/30 bg-[var(--gold)]/[0.05] p-5">
+          <span className="font-display text-base font-semibold text-[var(--gold)]">Autopilot</span>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/75">
             {pendingDrafts.length > 0
               ? `${pendingDrafts.length} follow-up draft${pendingDrafts.length === 1 ? "" : "s"} waiting. Approve in one pass.`
               : "No drafts waiting. Run a scan to look for quiet leads."}
           </p>
           <div className="mt-4 flex flex-col gap-2">
-            <button
+            <Button
               type="button"
               onClick={() => onNavigate("AUTOPILOT")}
-              className="min-h-11 w-full bg-[#DFBA73] px-4 py-3 font-mono text-[11px] font-bold tracking-[0.2em] text-black hover:bg-[#F6DC9A]"
+              className="min-h-10 w-full rounded-sm bg-[var(--gold)] px-4 text-xs font-semibold text-background hover:bg-[var(--gold)]/90"
             >
               {pendingDrafts.length > 0 ? `REVIEW ${pendingDrafts.length} DRAFTS` : "OPEN AUTOPILOT"}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={onRunAutopilot}
               disabled={autopilotBusy}
-              className="min-h-11 w-full border border-white/18 px-4 py-3 font-mono text-[11px] tracking-[0.2em] text-white/70 hover:border-white hover:text-white disabled:opacity-50"
+              variant="outline"
+              className="min-h-10 w-full rounded-sm border-border bg-transparent px-4 text-xs font-semibold text-foreground/75 hover:bg-muted hover:text-foreground"
             >
               {autopilotBusy ? "SCANNING…" : "RUN SCAN NOW"}
-            </button>
+            </Button>
           </div>
         </div>
       </aside>
