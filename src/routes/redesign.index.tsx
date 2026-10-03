@@ -53,10 +53,15 @@ function RedesignGeneratorPage() {
     setBusy(true);
     setError(null);
     try {
-      const { token } = await runPublicRedesign({
+      const result = await runPublicRedesign({
         data: { url: url.trim(), treatment, angle, email: email.trim() || undefined },
       });
-      await navigate({ to: "/redesign/$token", params: { token } });
+      if ("error" in result) {
+        setError(result.error);
+        setBusy(false);
+        return;
+      }
+      await navigate({ to: "/redesign/$token", params: { token: result.token } });
     } catch (err) {
       setError(err instanceof Error ? err.message : "The redesign run failed. Try again.");
       setBusy(false);

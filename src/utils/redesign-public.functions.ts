@@ -66,7 +66,7 @@ const runSchema = z.object({
  */
 export const runPublicRedesign = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => runSchema.parse(input))
-  .handler(async ({ data }): Promise<{ token: string }> => {
+  .handler(async ({ data }): Promise<{ token: string } | { error: string }> => {
     // Rate limits instead of a hidden-field trap: browser autofill kept filling
     // the trap and turning away real visitors.
     const { getRequest } = await import("@tanstack/react-start/server");
@@ -75,13 +75,28 @@ export const runPublicRedesign = createServerFn({ method: "POST" })
     const limited =
       (await requireRateLimit(`redesign:ip:${ip}`, { limit: 3, windowSeconds: 3600 })) ??
       (await requireRateLimit("redesign:all", { limit: 40, windowSeconds: 86400 }));
-    if (limited) throw new Error("Too many redesigns requested. Please try again in an hour.");
+    if (limited) return { error: "Too many redesigns requested. Please try again in an hour." };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { runRedesign } = await import("@/lib/redesign/redesign.server");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = supabaseAdmin as any;
 
-    const result = await runRedesign(data);
+    // Bad addresses are an expected visitor mistake: return a message for the
+    // form instead of throwing.
+    let result: Awaited<ReturnType<typeof runRedesign>>;
+    try {
+      result = await runRedesign(data);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      if (/could not be resolved|not a valid URL/i.test(message)) {
+        return { error: "We couldn't find that website. Check the spelling of the address and try again." };
+      }
+      if (/not allowed|http and https|credentials/i.test(message)) {
+        return { error: "That address can't be scanned. Try your business's public website." };
+      }
+      console.error("public redesign failed", err);
+      return { error: "We couldn't reach that website just now. Try again in a minute." };
+    }
     const { data: row, error } = await db
       .from("redesign_runs")
       .insert({
