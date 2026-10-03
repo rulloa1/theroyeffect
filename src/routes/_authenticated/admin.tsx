@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 
 import {
   adminDeletePortfolioProject,
@@ -1019,94 +1020,89 @@ function AdminPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030014] px-5 py-16 md:px-10">
+    <main className="admin-dashboard min-h-screen bg-background px-5 pb-20 pt-6 md:px-10 md:pt-10">
       <Toaster />
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1440px]">
         {/* Top Header */}
-        <Logo variant="compact" size="md" href="/" className="mb-6" />
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-8">
-          <div>
-            <span className="font-mono text-[10px] tracking-widest text-[#FF3333]">
-              STUDIO COMMAND HUB
-            </span>
-            <h1 className="mt-2 font-display text-3xl uppercase leading-[0.9] text-white sm:text-5xl md:text-6xl">
-              DASHBOARD
-            </h1>
-            <p className="mt-2 font-mono text-xs text-white/50">
-              Manage client projects, review inbound messages, update portfolio work & billing.
-            </p>
+        <div className="admin-header border-b border-border pb-6">
+          <div className="admin-brand flex items-center gap-4">
+            <Logo variant="compact" size="md" href="/" />
+            <div>
+              <span className="font-mono text-[10px] font-semibold text-primary">STUDIO COMMAND HUB</span>
+              <h1 className="font-display text-3xl font-bold leading-tight text-foreground sm:text-4xl">Dashboard</h1>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="admin-header-actions flex flex-wrap gap-2">
             <Link
               to="/briefs"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-white hover:text-white"
+              className="admin-utility-link"
             >
-              PROJECT BRIEFS
+              Project briefs
             </Link>
             <Link
               to="/account"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-white hover:text-white"
+              className="admin-utility-link"
             >
-              ← CLIENT ACCOUNT
+              Client account
             </Link>
             <Link
               to="/"
-              className="border border-white/15 px-4 py-2.5 font-mono text-[11px] tracking-widest text-white/70 transition-colors hover:border-[#FF3333] hover:text-[#FF3333]"
+              className="admin-utility-link"
             >
-              LIVE SITE ↗
+              Live site ↗
             </Link>
           </div>
         </div>
 
         {/* Quick KPI Stat Cards */}
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
+        <div className="admin-overview mt-6 grid grid-cols-2 border-y border-border lg:grid-cols-4">
+          <div className="admin-overview-item py-5 pr-4">
+            <span className="font-mono text-[11px] text-foreground/70">
               Active Projects
             </span>
-            <p className="mt-2 font-display text-3xl text-white">{activeProjectsCount}</p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
+            <p className="mt-1 font-display text-4xl font-semibold leading-none text-foreground">{activeProjectsCount}</p>
+            <span className="mt-2 block text-xs text-foreground/60">
               Commissions & Retainers
             </span>
           </div>
 
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
+          <div className="admin-overview-item py-5 pr-4">
+            <span className="font-mono text-[11px] text-foreground/70">
               New Inquiries
             </span>
-            <p className="mt-2 font-display text-3xl text-[#FF3333]">{unreadInquiriesCount}</p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
+            <p className="mt-1 font-display text-4xl font-semibold leading-none text-primary">{unreadInquiriesCount}</p>
+            <span className="mt-2 block text-xs text-foreground/60">
               {unreadInquiriesCount === 0 ? "Inbox up to date" : "Unread client messages"}
             </span>
           </div>
 
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
+          <div className="admin-overview-item py-5 pr-4">
+            <span className="font-mono text-[11px] text-foreground/70">
               Pending Balances
             </span>
-            <p className="mt-2 font-display text-3xl text-white">
+            <p className="mt-1 font-display text-4xl font-semibold leading-none text-foreground">
               {money(pendingBalanceTotal, "USD")}
             </p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
+            <span className="mt-2 block text-xs text-foreground/60">
               Awaiting project completion
             </span>
           </div>
 
-          <div className="border border-white/10 bg-white/[0.02] p-5">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
+          <div className="admin-overview-item py-5 pr-4">
+            <span className="font-mono text-[11px] text-foreground/70">
               Showcase Work
             </span>
-            <p className="mt-2 font-display text-3xl text-white">
+            <p className="mt-1 font-display text-4xl font-semibold leading-none text-foreground">
               {(portfolioData?.projects ?? []).length}
             </p>
-            <span className="mt-1 block font-mono text-[10px] text-white/40">
+            <span className="mt-2 block text-xs text-foreground/60">
               Live portfolio items
             </span>
           </div>
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="mt-10 flex flex-wrap gap-3 border-b border-white/10 pb-4">
+        <nav aria-label="Dashboard views" className="admin-tabs mt-8 flex gap-1 overflow-x-auto border-b border-border pb-0">
           {[
             { id: "SIGNAL", label: "SIGNAL HUB", icon: Radar },
             { id: "PROJECTS", label: "CURRENT PROJECTS", icon: Briefcase },
@@ -1159,19 +1155,21 @@ function AdminPage() {
             const Icon = tab.icon;
             const isActive = currentView === tab.id;
             return (
-              <button
+              <Button
                 key={tab.id}
                 type="button"
                 onClick={() => setCurrentView(tab.id as MainView)}
-                className={`flex items-center gap-2 px-5 py-3 font-mono text-xs tracking-widest transition-all ${
+                aria-current={isActive ? "page" : undefined}
+                variant="ghost"
+                className={`admin-tab flex shrink-0 items-center gap-2 rounded-none border-b-2 px-4 py-3 font-sans text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-[#FF3333] font-bold text-black shadow-lg"
-                    : "border border-white/10 bg-white/[0.02] text-white/60 hover:border-white/30 hover:text-white"
+                    ? "border-primary bg-primary/10 text-foreground"
+                    : "border-transparent text-foreground/65 hover:bg-card hover:text-foreground"
                 }`}
               >
                 <Icon className="size-3.5" />
                 {tab.label}
-              </button>
+              </Button>
             );
           })}
         </div>
