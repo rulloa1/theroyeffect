@@ -142,7 +142,7 @@ function RedesignGeneratorPage() {
             {/* Honeypot — hidden from people, visible to bots. */}
             <input
               type="text"
-              name="company"
+              name="rx_confirm_field"
               value={company}
               onChange={(event) => setCompany(event.target.value)}
               tabIndex={-1}
