@@ -55,7 +55,7 @@ const runSchema = z.object({
   treatment: z.enum(["cinematic", "cinematic_3d", "editorial"]),
   angle: z.enum(["lost_enquiries", "looks_dated", "slow_on_mobile"]),
   // Honeypot: real visitors never fill this; bots that do are turned away.
-  company: z.string().max(0).optional(),
+  company: z.string().max(500).optional(),
   // Where the approved pitch should go; falls back to an address found on the site.
   email: z.string().trim().email().max(200).optional(),
 });
