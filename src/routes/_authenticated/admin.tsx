@@ -1172,7 +1172,7 @@ function AdminPage() {
               </Button>
             );
           })}
-        </div>
+        </nav>
 
         {ordersError && (
           <p className="mt-10 font-mono text-xs text-amber-300">
