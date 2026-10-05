@@ -19,6 +19,7 @@ const GUIDE_LINKS = [
   { label: "Houston website cost", to: "/guides/houston-website-cost" },
   { label: "Squarespace vs custom", to: "/guides/squarespace-vs-custom-website" },
   { label: "Connect an AI assistant", to: "/connect" },
+  { label: "Studio tool", to: "/studio" },
 ];
 
 export function SiteFooter() {
