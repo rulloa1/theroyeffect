@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 
 const TITLE = "The Roy Effect Studio";
 const DESCRIPTION =
   "The Roy Effect Studio (also called Queue Commander) is The Roy Effect's tool for scheduling and publishing Rory Ulloa's own short videos to his YouTube channel and Facebook Page.";
 
-const PRIVACY_URL = "https://rulloa1.github.io/3d/privacy/";
-const TERMS_URL = "https://rulloa1.github.io/3d/terms/";
+const PRIVACY_URL = "/studio/privacy";
+const TERMS_URL = "/studio/terms";
 
 export const Route = createFileRoute("/studio")({
   head: () => ({
@@ -88,7 +87,6 @@ function StudioPage() {
           </ul>
         </article>
       </main>
-      <SiteFooter />
     </div>
   );
 }
