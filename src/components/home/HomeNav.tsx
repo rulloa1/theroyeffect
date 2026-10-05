@@ -23,6 +23,11 @@ const LINKS = [
   { label: "Contact", href: "#contact", internal: false },
 ] as const;
 
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
+] as const;
+
 /**
  * Minimal floating navigation. Transparent over the cinematic opening, then a
  * dark floating bar once the visitor is past it (watched via a sentinel, not
@@ -107,6 +112,14 @@ export function HomeNav() {
             )}
           </nav>
 
+          <nav aria-label="Legal" className="home-nav-legal">
+            {LEGAL_LINKS.map((link) => (
+              <Link key={link.label} to={link.href} className="home-link home-link--legal">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
           <div className="flex items-center gap-2">
             <Link to="/brief" className="home-btn home-btn--primary home-nav-cta" data-magnetic>
               Start a project
@@ -162,6 +175,12 @@ export function HomeNav() {
             <Link to="/brief" onClick={() => setOpen(false)} className="!text-[var(--home-red)]">
               Start a project
             </Link>
+            <div aria-hidden className="home-sheet-divider" />
+            {LEGAL_LINKS.map((link) => (
+              <Link key={link.label} to={link.href} onClick={() => setOpen(false)}>
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
       ) : null}
