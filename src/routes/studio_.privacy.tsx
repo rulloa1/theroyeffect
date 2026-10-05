@@ -151,7 +151,19 @@ function StudioPrivacyPage() {
             carry out an action you asked for.
           </P>
 
-          <H2>3. Google API Services User Data Policy and Limited Use</H2>
+          <H2>3. AI-assisted content suggestions</H2>
+          <P>
+            The Roy Effect Studio sends aggregate performance statistics for the owner's own videos
+            (such as views, watch time, average view duration, likes, comments and shares) to an AI
+            language model service, which generates topic, script and caption suggestions for future
+            videos. Only these statistics and the app's own video titles and captions are sent. No
+            Google account credentials, tokens or other Google user data are sent. This data is not
+            used to develop, improve or train generalized AI or machine-learning models, and its use
+            complies with the Google API Services User Data Policy, including the Limited Use
+            requirements.
+          </P>
+
+          <H2>4. Google API Services User Data Policy and Limited Use</H2>
           <P>
             The App's use and transfer to any other app of information received from Google APIs
             will follow the{" "}
@@ -204,14 +216,14 @@ function StudioPrivacyPage() {
             .
           </P>
 
-          <H2>4. Storage and security of tokens</H2>
+          <H2>5. Storage and security of tokens</H2>
           <P>
             OAuth access and refresh tokens are stored securely, kept out of public code and logs,
             and protected with access controls. They are used only to carry out the actions
             described in this policy. Connections to Google and Meta use encrypted HTTPS.
           </P>
 
-          <H2>5. Data retention and deletion</H2>
+          <H2>6. Data retention and deletion</H2>
           <P>
             We keep tokens and queue data only while an account is connected and the data is needed
             to provide the App's features. When an account is disconnected or access is revoked, its
@@ -232,7 +244,7 @@ function StudioPrivacyPage() {
             (Facebook) integration.
           </P>
 
-          <H2>6. How to revoke access</H2>
+          <H2>7. How to revoke access</H2>
           <ul className="mt-4 list-disc space-y-2 pl-5 font-mono text-sm leading-relaxed text-white/70">
             <li>
               <strong className="text-white">Google / YouTube:</strong> go to{" "}
@@ -265,19 +277,19 @@ function StudioPrivacyPage() {
             delete any remaining data, as described above.
           </P>
 
-          <H2>7. Children</H2>
+          <H2>8. Children</H2>
           <P>
             The App is not intended for children under 13 and does not knowingly collect information
             from them.
           </P>
 
-          <H2>8. Changes to this policy</H2>
+          <H2>9. Changes to this policy</H2>
           <P>
             We may update this policy from time to time. Changes will be posted on this page with a
             new effective date.
           </P>
 
-          <H2>9. Contact</H2>
+          <H2>10. Contact</H2>
           <P>Questions or requests about this Privacy Policy:</P>
           <ul className="mt-4 list-disc space-y-2 pl-5 font-mono text-sm leading-relaxed text-white/70">
             <li>
