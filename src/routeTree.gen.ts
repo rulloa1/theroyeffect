@@ -43,6 +43,7 @@ import { Route as RedesignIndexRouteImport } from './routes/redesign.index'
 import { Route as RedesignTokenRouteImport } from './routes/redesign.$token'
 import { Route as SiteReportTokenRouteImport } from './routes/site-report.$token'
 import { Route as StudioPrivacyRouteImport } from './routes/studio_.privacy'
+import { Route as StudioTermsRouteImport } from './routes/studio_.terms'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
@@ -234,6 +235,11 @@ const StudioPrivacyRoute = StudioPrivacyRouteImport.update({
   path: '/studio/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudioTermsRoute = StudioTermsRouteImport.update({
+  id: '/studio_/terms',
+  path: '/studio/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkIndexRoute = WorkIndexRouteImport.update({
   id: '/work/',
   path: '/work/',
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/studio/privacy': typeof StudioPrivacyRoute
+  '/studio/terms': typeof StudioTermsRoute
   '/work/$slug': typeof WorkSlugRoute
   '/redesign/': typeof RedesignIndexRoute
   '/work/': typeof WorkIndexRoute
@@ -409,6 +416,7 @@ export interface FileRoutesByTo {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/studio/privacy': typeof StudioPrivacyRoute
+  '/studio/terms': typeof StudioTermsRoute
   '/work/$slug': typeof WorkSlugRoute
   '/redesign': typeof RedesignIndexRoute
   '/work': typeof WorkIndexRoute
@@ -462,6 +470,7 @@ export interface FileRoutesById {
   '/redesign/$token': typeof RedesignTokenRoute
   '/site-report/$token': typeof SiteReportTokenRoute
   '/studio_/privacy': typeof StudioPrivacyRoute
+  '/studio_/terms': typeof StudioTermsRoute
   '/work/$slug': typeof WorkSlugRoute
   '/redesign/': typeof RedesignIndexRoute
   '/work/': typeof WorkIndexRoute
@@ -515,6 +524,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/studio/privacy'
+    | '/studio/terms'
     | '/work/$slug'
     | '/redesign/'
     | '/work/'
@@ -566,6 +576,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/studio/privacy'
+    | '/studio/terms'
     | '/work/$slug'
     | '/redesign'
     | '/work'
@@ -618,6 +629,7 @@ export interface FileRouteTypes {
     | '/redesign/$token'
     | '/site-report/$token'
     | '/studio_/privacy'
+    | '/studio_/terms'
     | '/work/$slug'
     | '/redesign/'
     | '/work/'
@@ -667,6 +679,7 @@ export interface RootRouteChildren {
   RedesignTokenRoute: typeof RedesignTokenRoute
   SiteReportTokenRoute: typeof SiteReportTokenRoute
   StudioPrivacyRoute: typeof StudioPrivacyRoute
+  StudioTermsRoute: typeof StudioTermsRoute
   WorkSlugRoute: typeof WorkSlugRoute
   RedesignIndexRoute: typeof RedesignIndexRoute
   WorkIndexRoute: typeof WorkIndexRoute
@@ -924,6 +937,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/studio_/terms': {
+      id: '/studio_/terms'
+      path: '/studio/terms'
+      fullPath: '/studio/terms'
+      preLoaderRoute: typeof StudioTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/work/': {
       id: '/work/'
       path: '/work'
@@ -1091,6 +1111,7 @@ const rootRouteChildren: RootRouteChildren = {
   RedesignTokenRoute: RedesignTokenRoute,
   SiteReportTokenRoute: SiteReportTokenRoute,
   StudioPrivacyRoute: StudioPrivacyRoute,
+  StudioTermsRoute: StudioTermsRoute,
   WorkSlugRoute: WorkSlugRoute,
   RedesignIndexRoute: RedesignIndexRoute,
   WorkIndexRoute: WorkIndexRoute,
