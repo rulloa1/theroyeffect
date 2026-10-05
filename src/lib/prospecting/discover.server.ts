@@ -1,4 +1,4 @@
-import { HOUSTON_BBOX, getIndustry } from "./industries";
+import { getCity, getIndustry } from "./industries";
 
 const OVERPASS_ENDPOINTS = [
   "https://overpass-api.de/api/interpreter",
@@ -53,15 +53,16 @@ function buildAddress(tags: Record<string, string>): string | null {
   return parts.length ? parts.join(", ") : null;
 }
 
-/** Queries OpenStreetMap for Houston-area businesses in one industry. */
+/** Queries OpenStreetMap for businesses in one industry within a city (Houston by default). */
 export async function discoverBusinesses(
   industryKey: string,
   limit = 60,
+  cityKey?: string,
 ): Promise<DiscoveredBusiness[]> {
   const industry = getIndustry(industryKey);
   if (!industry) throw new Error(`Unknown industry: ${industryKey}`);
 
-  const [south, west, north, east] = HOUSTON_BBOX;
+  const [south, west, north, east] = getCity(cityKey).bbox;
   const bbox = `${south},${west},${north},${east}`;
   const clauses = industry.filters.map((f) => `nwr${f}(${bbox});`).join("\n  ");
   const query = `[out:json][timeout:60];\n(\n  ${clauses}\n);\nout center ${Math.min(limit * 4, 400)};`;

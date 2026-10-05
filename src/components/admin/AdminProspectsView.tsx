@@ -19,7 +19,7 @@ export interface AdminProspectsViewProps {
   prospects: Prospect[];
   busy: string | null;
   analytics: ProspectAnalytics | undefined;
-  onFind: (industry: string) => Promise<void>;
+  onFind: (industry: string, city?: string) => Promise<void>;
   onScanPending: () => Promise<void>;
   onDraft: (id: string) => Promise<void>;
   onSaveDraft: (id: string, subject: string, body: string, email: string | null) => Promise<void>;
@@ -53,6 +53,7 @@ export function AdminProspectsView({
   date,
 }: AdminProspectsViewProps) {
   const [industry, setIndustry] = useState(INDUSTRIES[0]?.key ?? "");
+  const [city, setCity] = useState<string>(CITIES[0].key);
   const [tab, setTab] = useState<Tab>("hot");
   const [query, setQuery] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -91,17 +92,34 @@ export function AdminProspectsView({
           <div>
             <p className="font-mono text-xs tracking-widest text-white">PROSPECT FINDER</p>
             <p className="mt-1 max-w-md font-mono text-[10px] leading-relaxed text-white/40">
-              Finds Houston businesses in one trade, checks their websites, and ranks them by how much the site is
+              Finds businesses in one trade and city, checks their websites, and ranks them by how much the site is
               costing them. Nothing is emailed until you press send.
             </p>
           </div>
         </div>
 
         <label className="flex flex-col gap-1">
+          <span className="font-mono text-[10px] tracking-widest text-white/40">CITY</span>
+          <select
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            aria-label="City"
+            className="border border-white/10 bg-black px-3 py-2 font-mono text-xs text-white"
+          >
+            {CITIES.map((c) => (
+              <option key={c.key} value={c.key}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] tracking-widest text-white/40">INDUSTRY</span>
           <select
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
+            aria-label="Industry"
             className="border border-white/10 bg-black px-3 py-2 font-mono text-xs text-white"
           >
             {INDUSTRY_GROUPS.map((group) => (
@@ -119,7 +137,7 @@ export function AdminProspectsView({
         <button
           type="button"
           disabled={busy !== null}
-          onClick={() => onFind(industry)}
+          onClick={() => onFind(industry, city)}
           className="flex items-center gap-2 bg-[#FF3333] px-5 py-2.5 font-mono text-xs font-bold tracking-widest text-black disabled:opacity-50"
         >
           <Search className="size-3.5" />
