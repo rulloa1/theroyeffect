@@ -11,7 +11,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import { INDUSTRIES, INDUSTRY_GROUPS } from "@/lib/prospecting/industries";
+import { CITIES, INDUSTRIES, INDUSTRY_GROUPS } from "@/lib/prospecting/industries";
 import type { Prospect, ProspectAnalytics } from "@/utils/prospects.functions";
 import { ProspectAnalyticsPanel } from "./ProspectAnalyticsPanel";
 
