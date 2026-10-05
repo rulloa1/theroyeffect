@@ -272,6 +272,8 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
   }
 }
 
+const BOT_BLOCK_CODES = new Set([401, 403, 406, 429, 503]);
+
 /** Turns a scan into weighted, human-readable problems. Higher score = more pain. */
 export function scoreProspect(input: { hasWebsite: boolean; scan: ScanResult | null }): {
   score: number;
