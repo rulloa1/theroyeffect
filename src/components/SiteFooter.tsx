@@ -175,13 +175,13 @@ export function SiteFooter() {
               to="/privacy"
               className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-[var(--ink-muted)] transition-colors hover:text-[var(--ink)] focus-visible:outline-none focus-visible:text-[var(--ink)]"
             >
-              PRIVACY
+              PRIVACY POLICY
             </Link>
             <Link
               to="/terms"
               className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-[var(--ink-muted)] transition-colors hover:text-[var(--ink)] focus-visible:outline-none focus-visible:text-[var(--ink)]"
             >
-              TERMS
+              TERMS OF SERVICE
             </Link>
           </nav>
         </div>

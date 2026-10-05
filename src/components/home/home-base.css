@@ -201,6 +201,32 @@
 .home-nav-links a:hover {
   color: #fff;
 }
+.home-nav-legal {
+  display: none;
+  gap: 1.4rem;
+}
+.home-nav-legal a {
+  font-family: var(--font-home-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.3s var(--home-ease);
+}
+.home-nav-legal a:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+.home-sheet-divider {
+  margin: 1.1rem 0 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.home-sheet-legal-link {
+  font-family: var(--font-home-mono) !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
 .home-nav-cta {
   padding: 0.8rem 1.2rem;
   border-radius: 999px;
@@ -222,6 +248,9 @@
 }
 @media (min-width: 960px) {
   .home-nav-links {
+    display: flex;
+  }
+  .home-nav-legal {
     display: flex;
   }
   .home-nav-menu {
