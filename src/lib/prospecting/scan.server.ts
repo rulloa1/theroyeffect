@@ -272,6 +272,8 @@ export async function scanWebsite(rawUrl: string): Promise<ScanResult> {
   }
 }
 
+const BOT_BLOCK_CODES = new Set([401, 403, 406, 429, 503]);
+
 /** Turns a scan into weighted, human-readable problems. Higher score = more pain. */
 export function scoreProspect(input: { hasWebsite: boolean; scan: ScanResult | null }): {
   score: number;
@@ -293,6 +295,11 @@ export function scoreProspect(input: { hasWebsite: boolean; scan: ScanResult | n
   }
 
   const scan = input.scan;
+  // Bot protection (Cloudflare etc.) answers automated checks with these codes even when
+  // the site works fine for people. Treat as "could not check", never as "site is down".
+  if (scan && !scan.reachable && scan.statusCode !== null && BOT_BLOCK_CODES.has(scan.statusCode)) {
+    return { score: 0, signals };
+  }
   if (!scan || !scan.reachable) {
     push({
       code: "site_down",

@@ -139,6 +139,19 @@ export const getIndustry = (key: string) => INDUSTRIES.find((i) => i.key === key
 /** Greater Houston bounding box: south, west, north, east. */
 export const HOUSTON_BBOX = [29.52, -95.79, 30.11, -95.01] as const;
 
+/** Search areas for the Deal Finder. Bounding boxes are south, west, north, east. */
+export const CITIES = [
+  { key: "houston", label: "Houston, TX", bbox: HOUSTON_BBOX },
+  { key: "austin", label: "Austin, TX", bbox: [30.1, -97.94, 30.52, -97.56] as const },
+  { key: "san_antonio", label: "San Antonio, TX", bbox: [29.25, -98.73, 29.67, -98.3] as const },
+  { key: "dallas", label: "Dallas, TX", bbox: [32.62, -97.0, 33.02, -96.55] as const },
+  { key: "fort_worth", label: "Fort Worth, TX", bbox: [32.6, -97.5, 32.95, -97.15] as const },
+] as const;
+
+export type CityKey = (typeof CITIES)[number]["key"];
+export const CITY_KEYS = CITIES.map((c) => c.key) as [CityKey, ...CityKey[]];
+export const getCity = (key: string | undefined) => CITIES.find((c) => c.key === key) ?? CITIES[0];
+
 export interface ProspectSignal {
   code: string;
   label: string;

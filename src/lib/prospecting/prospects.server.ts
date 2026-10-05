@@ -20,13 +20,13 @@ export interface RunSummary {
   skippedExisting: number;
 }
 
-/** Discovers Houston businesses in one industry, scans their sites, and stores scored prospects. */
-export async function runProspectScan(industryKey: string): Promise<RunSummary> {
+/** Discovers businesses in one industry and city (Houston by default), scans their sites, and stores scored prospects. */
+export async function runProspectScan(industryKey: string, cityKey?: string): Promise<RunSummary> {
   const industry = getIndustry(industryKey);
   if (!industry) throw new Error("Unknown industry");
   const db = await admin();
 
-  const found = await discoverBusinesses(industryKey, DISCOVER_LIMIT);
+  const found = await discoverBusinesses(industryKey, DISCOVER_LIMIT, cityKey);
 
   const { data: existingRows } = await db
     .from("prospects")

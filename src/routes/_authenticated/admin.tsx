@@ -660,10 +660,10 @@ function AdminPage() {
     }
   };
 
-  const findProspectsFor = async (industry: string) => {
+  const findProspectsFor = async (industry: string, city?: string) => {
     setBusy("find");
     try {
-      const result = await findProspects({ data: { industry } });
+      const result = await findProspects({ data: { industry, city } });
       toast.success(
         `Found ${result.found} businesses — ${result.added} new, ${result.scanned} sites checked.`,
       );

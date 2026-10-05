@@ -1,8 +1,10 @@
-import { HOUSTON_BBOX, getIndustry } from "./industries";
+import { getCity, getIndustry } from "./industries";
 
 const OVERPASS_ENDPOINTS = [
   "https://overpass-api.de/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
   "https://overpass.kumi.systems/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ];
 
 export interface DiscoveredBusiness {
@@ -53,26 +55,35 @@ function buildAddress(tags: Record<string, string>): string | null {
   return parts.length ? parts.join(", ") : null;
 }
 
-/** Queries OpenStreetMap for Houston-area businesses in one industry. */
+/** Queries OpenStreetMap for businesses in one industry within a city (Houston by default). */
 export async function discoverBusinesses(
   industryKey: string,
   limit = 60,
+  cityKey?: string,
 ): Promise<DiscoveredBusiness[]> {
   const industry = getIndustry(industryKey);
   if (!industry) throw new Error(`Unknown industry: ${industryKey}`);
 
-  const [south, west, north, east] = HOUSTON_BBOX;
+  const [south, west, north, east] = getCity(cityKey).bbox;
   const bbox = `${south},${west},${north},${east}`;
   const clauses = industry.filters.map((f) => `nwr${f}(${bbox});`).join("\n  ");
   const query = `[out:json][timeout:60];\n(\n  ${clauses}\n);\nout center ${Math.min(limit * 4, 400)};`;
 
   let lastError: unknown = null;
-  for (const endpoint of OVERPASS_ENDPOINTS) {
+  // Two passes: the public mirrors often return 429/504 under load and recover in seconds.
+  const attempts = [...OVERPASS_ENDPOINTS, ...OVERPASS_ENDPOINTS];
+  for (const endpoint of attempts) {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          // overpass-api.de rejects requests without an identifying User-Agent (HTTP 406).
+          "User-Agent": "TheRoyEffect-ProspectFinder/1.0 (rory@theroyeffect.com)",
+        },
         body: new URLSearchParams({ data: query }).toString(),
+        signal: AbortSignal.timeout(25_000),
       });
       if (!response.ok) throw new Error(`Overpass ${response.status}`);
       const payload = (await response.json()) as { elements?: OverpassElement[] };

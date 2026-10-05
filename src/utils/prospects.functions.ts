@@ -64,11 +64,13 @@ export const adminListProspects = createServerFn({ method: "GET" })
 
 export const adminFindProspects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ industry: z.string().min(1) }).parse(input))
+  .inputValidator((input: unknown) =>
+    z.object({ industry: z.string().min(1), city: z.string().min(1).max(40).optional() }).parse(input),
+  )
   .handler(async ({ data, context }) => {
     await assertAdmin(context as never);
     const { runProspectScan } = await import("@/lib/prospecting/prospects.server");
-    return runProspectScan(data.industry);
+    return runProspectScan(data.industry, data.city);
   });
 
 export const adminScanPending = createServerFn({ method: "POST" })
