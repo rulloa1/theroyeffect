@@ -177,7 +177,12 @@ export function HomeNav() {
             </Link>
             <div aria-hidden className="home-sheet-divider" />
             {LEGAL_LINKS.map((link) => (
-              <Link key={link.label} to={link.href} onClick={() => setOpen(false)}>
+              <Link
+                key={link.label}
+                to={link.href}
+                onClick={() => setOpen(false)}
+                className="home-sheet-legal-link"
+              >
                 {link.label}
               </Link>
             ))}
