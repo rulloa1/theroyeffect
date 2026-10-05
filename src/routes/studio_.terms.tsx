@@ -1,6 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 
 const TITLE = "The Roy Effect Studio — Terms of Service";
@@ -177,7 +176,6 @@ function StudioTermsPage() {
           </ul>
         </article>
       </main>
-      <SiteFooter />
     </div>
   );
 }
