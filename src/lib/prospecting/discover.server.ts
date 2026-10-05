@@ -70,12 +70,20 @@ export async function discoverBusinesses(
   const query = `[out:json][timeout:60];\n(\n  ${clauses}\n);\nout center ${Math.min(limit * 4, 400)};`;
 
   let lastError: unknown = null;
-  for (const endpoint of OVERPASS_ENDPOINTS) {
+  // Two passes: the public mirrors often return 429/504 under load and recover in seconds.
+  const attempts = [...OVERPASS_ENDPOINTS, ...OVERPASS_ENDPOINTS];
+  for (const endpoint of attempts) {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          // overpass-api.de rejects requests without an identifying User-Agent (HTTP 406).
+          "User-Agent": "TheRoyEffect-ProspectFinder/1.0 (rory@theroyeffect.com)",
+        },
         body: new URLSearchParams({ data: query }).toString(),
+        signal: AbortSignal.timeout(25_000),
       });
       if (!response.ok) throw new Error(`Overpass ${response.status}`);
       const payload = (await response.json()) as { elements?: OverpassElement[] };
